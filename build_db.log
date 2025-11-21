@@ -1,0 +1,13 @@
+2025-11-21 14:07:48,125 - INFO - >>> Starting Master DB Builder
+2025-11-21 14:07:48,126 - INFO - ========= STARTING NBA DATA ETL SCRIPT =========
+2025-11-21 14:07:48,126 - INFO - Creating Player ID Map...
+2025-11-21 14:07:48,138 - INFO - --- Starting: process_master_player_stats ---
+2025-11-21 14:07:48,301 - INFO - Saved master_player_stats.csv
+2025-11-21 14:07:48,301 - INFO - --- Starting: process_master_team_stats ---
+2025-11-21 14:07:48,522 - INFO - Saved master_team_stats.csv
+2025-11-21 14:07:48,522 - INFO - --- Starting: process_master_box_scores ---
+2025-11-21 14:07:48,551 - INFO - --- Calculating Historical Usage Vacancy ---
+2025-11-21 14:07:48,675 - INFO - Saved master_box_scores.csv (4457 rows)
+2025-11-21 14:07:48,675 - INFO - --- Starting: process_vs_opponent_stats ---
+2025-11-21 14:07:48,706 - INFO - Saved master_vs_opponent.csv
+2025-11-21 14:07:48,707 - INFO - ========= ETL COMPLETE. TIME: 0 days 00:00:00.581860 =========
