@@ -1,45 +1,45 @@
-2025-11-21 14:28:09,481 - INFO - >>> Starting Model Training Pipeline
-2025-11-21 14:28:09,827 - INFO - Training PTS...
-2025-11-21 14:28:19,767 - INFO - [PTS] Accuracy: 48.7%
-2025-11-21 14:28:19,801 - INFO - Saved models for PTS
-2025-11-21 14:28:19,807 - INFO - Training REB...
-2025-11-21 14:28:30,651 - INFO - [REB] Accuracy: 57.5%
-2025-11-21 14:28:30,671 - INFO - Saved models for REB
-2025-11-21 14:28:30,675 - INFO - Training AST...
-2025-11-21 14:28:40,123 - INFO - [AST] Accuracy: 54.9%
-2025-11-21 14:28:40,143 - INFO - Saved models for AST
-2025-11-21 14:28:40,146 - INFO - Training FG3M...
-2025-11-21 14:28:50,979 - INFO - [FG3M] Accuracy: 57.7%
-2025-11-21 14:28:51,017 - INFO - Saved models for FG3M
-2025-11-21 14:28:51,019 - INFO - Training STL...
-2025-11-21 14:28:57,802 - INFO - [STL] Accuracy: 48.7%
-2025-11-21 14:28:57,823 - INFO - Saved models for STL
-2025-11-21 14:28:57,824 - WARNING - Skipping BLK: Insufficient data (51 rows)
-2025-11-21 14:28:57,826 - INFO - Training TOV...
-2025-11-21 14:29:02,786 - INFO - [TOV] Accuracy: 54.1%
-2025-11-21 14:29:02,801 - INFO - Saved models for TOV
-2025-11-21 14:29:02,804 - INFO - Training PRA...
-2025-11-21 14:29:12,798 - INFO - [PRA] Accuracy: 53.4%
-2025-11-21 14:29:12,817 - INFO - Saved models for PRA
-2025-11-21 14:29:12,819 - INFO - Training PR...
-2025-11-21 14:29:19,401 - INFO - [PR] Accuracy: 48.3%
-2025-11-21 14:29:19,418 - INFO - Saved models for PR
-2025-11-21 14:29:19,420 - INFO - Training PA...
-2025-11-21 14:29:25,079 - INFO - [PA] Accuracy: 55.3%
-2025-11-21 14:29:25,095 - INFO - Saved models for PA
-2025-11-21 14:29:25,098 - INFO - Training RA...
-2025-11-21 14:29:33,380 - INFO - [RA] Accuracy: 53.3%
-2025-11-21 14:29:33,398 - INFO - Saved models for RA
-2025-11-21 14:29:33,400 - WARNING - Skipping STK: Insufficient data (22 rows)
-2025-11-21 14:29:33,401 - INFO - Training FANTASY_PTS...
-2025-11-21 14:29:38,787 - INFO - [FANTASY_PTS] Accuracy: 48.8%
-2025-11-21 14:29:38,803 - INFO - Saved models for FANTASY_PTS
-2025-11-21 14:29:38,804 - WARNING - Skipping Q1_PTS: Insufficient data (0 rows)
-2025-11-21 14:29:38,805 - WARNING - Skipping Q1_REB: Insufficient data (0 rows)
-2025-11-21 14:29:38,805 - WARNING - Skipping Q1_AST: Insufficient data (0 rows)
-2025-11-21 14:29:38,805 - WARNING - Skipping Q1_PRA: Insufficient data (0 rows)
-2025-11-21 14:29:38,806 - WARNING - Skipping 1H_PTS: Insufficient data (0 rows)
-2025-11-21 14:29:38,806 - WARNING - Skipping 1H_REB: Insufficient data (0 rows)
-2025-11-21 14:29:38,806 - WARNING - Skipping 1H_AST: Insufficient data (0 rows)
-2025-11-21 14:29:38,807 - WARNING - Skipping 1H_PRA: Insufficient data (0 rows)
-2025-11-21 14:29:38,807 - INFO - <<< Training Complete >>>
+2025-11-21 16:09:49,156 - INFO - >>> Starting Model Training Pipeline
+2025-11-21 16:09:49,512 - INFO - Training PTS...
+2025-11-21 16:09:55,872 - INFO - [PTS] Accuracy: 48.1%
+2025-11-21 16:09:55,890 - INFO - Saved models for PTS
+2025-11-21 16:09:55,896 - INFO - Training REB...
+2025-11-21 16:10:02,496 - INFO - [REB] Accuracy: 61.0%
+2025-11-21 16:10:02,514 - INFO - Saved models for REB
+2025-11-21 16:10:02,518 - INFO - Training AST...
+2025-11-21 16:10:08,238 - INFO - [AST] Accuracy: 52.4%
+2025-11-21 16:10:08,255 - INFO - Saved models for AST
+2025-11-21 16:10:08,259 - INFO - Training FG3M...
+2025-11-21 16:10:13,663 - INFO - [FG3M] Accuracy: 50.6%
+2025-11-21 16:10:13,679 - INFO - Saved models for FG3M
+2025-11-21 16:10:13,682 - INFO - Training STL...
+2025-11-21 16:10:18,812 - INFO - [STL] Accuracy: 53.8%
+2025-11-21 16:10:18,836 - INFO - Saved models for STL
+2025-11-21 16:10:18,841 - WARNING - Skipping BLK: Insufficient data (51 rows)
+2025-11-21 16:10:18,843 - INFO - Training TOV...
+2025-11-21 16:10:22,725 - INFO - [TOV] Accuracy: 45.9%
+2025-11-21 16:10:22,738 - INFO - Saved models for TOV
+2025-11-21 16:10:22,744 - INFO - Training PRA...
+2025-11-21 16:10:29,344 - INFO - [PRA] Accuracy: 49.5%
+2025-11-21 16:10:29,361 - INFO - Saved models for PRA
+2025-11-21 16:10:29,364 - INFO - Training PR...
+2025-11-21 16:10:34,085 - INFO - [PR] Accuracy: 56.7%
+2025-11-21 16:10:34,101 - INFO - Saved models for PR
+2025-11-21 16:10:34,104 - INFO - Training PA...
+2025-11-21 16:10:38,600 - INFO - [PA] Accuracy: 55.3%
+2025-11-21 16:10:38,615 - INFO - Saved models for PA
+2025-11-21 16:10:38,618 - INFO - Training RA...
+2025-11-21 16:10:44,385 - INFO - [RA] Accuracy: 51.0%
+2025-11-21 16:10:44,402 - INFO - Saved models for RA
+2025-11-21 16:10:44,404 - WARNING - Skipping STK: Insufficient data (22 rows)
+2025-11-21 16:10:44,406 - INFO - Training FANTASY_PTS...
+2025-11-21 16:10:48,640 - INFO - [FANTASY_PTS] Accuracy: 51.2%
+2025-11-21 16:10:48,655 - INFO - Saved models for FANTASY_PTS
+2025-11-21 16:10:48,656 - WARNING - Skipping Q1_PTS: Insufficient data (0 rows)
+2025-11-21 16:10:48,656 - WARNING - Skipping Q1_REB: Insufficient data (0 rows)
+2025-11-21 16:10:48,657 - WARNING - Skipping Q1_AST: Insufficient data (0 rows)
+2025-11-21 16:10:48,657 - WARNING - Skipping Q1_PRA: Insufficient data (0 rows)
+2025-11-21 16:10:48,657 - WARNING - Skipping 1H_PTS: Insufficient data (0 rows)
+2025-11-21 16:10:48,658 - WARNING - Skipping 1H_REB: Insufficient data (0 rows)
+2025-11-21 16:10:48,658 - WARNING - Skipping 1H_AST: Insufficient data (0 rows)
+2025-11-21 16:10:48,659 - WARNING - Skipping 1H_PRA: Insufficient data (0 rows)
+2025-11-21 16:10:48,659 - INFO - <<< Training Complete >>>

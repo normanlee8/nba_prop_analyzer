@@ -21,22 +21,37 @@ MIN_SAMPLES = 200
 def get_feature_cols(prop_cat, all_columns):
     """
     Determines which columns to use for training based on definitions.
+    Includes Phase 3 Filtering Logic.
     """
     # 1. Start with Base Features
     relevant = feat_defs.BASE_FEATURE_COLS.copy()
     
-    # 2. Add Rank Columns dynamically found in the CSV
+    # 2. Add Rank/Team Columns dynamically found in the CSV
+    # --- PHASE 3: FEATURE PRUNING ---
+    # Only include rank/team columns that are statistically relevant to this prop
+    keywords = feat_defs.RELEVANT_KEYWORDS.get(prop_cat, [])
+    
     rank_cols = [
         c for c in all_columns 
         if ('_RANK' in c or 'TEAM_' in c or 'OPP_' in c)
         and c not in relevant
         and 'NAME' not in c and 'ABBREV' not in c and 'DATE' not in c
-        and c not in ['TEAM_MISSING_USG', 'TEAM_MISSING_MIN']
+        and c not in ['TEAM_MISSING_USG', 'TEAM_MISSING_MIN', 'MISSING_USG_G', 'MISSING_USG_F']
     ]
-    relevant.extend(rank_cols)
+
+    # Filter rank columns based on keywords (e.g. only keep 'REB' ranks for Rebound props)
+    if keywords:
+        filtered_ranks = [
+            c for c in rank_cols 
+            if any(k in c for k in keywords) 
+            or 'PACE' in c or 'EFF' in c # Always keep Pace/Efficiency
+        ]
+        relevant.extend(filtered_ranks)
+    else:
+        # Fallback if prop not in map
+        relevant.extend(rank_cols)
     
     # 3. Filter VS_OPP and HIST features based on the specific prop
-    # (Logic ported from original train_model.py)
     allowed_suffixes = feat_defs.PROP_FEATURE_MAP.get(prop_cat, [])
     final_features = set(relevant)
     
@@ -58,20 +73,26 @@ def get_feature_cols(prop_cat, all_columns):
     return list(final_features)
 
 def backfill_missing_cols(df, cols):
-    """Ensures all feature columns exist, filling with defaults."""
+    """Ensures all feature columns exist, letting Imputer handle values."""
+    # --- PHASE 3: FIX IMPUTATION BIAS ---
+    # Removed hardcoded defaults (like GAMES_IN_L5 = 2). 
+    # Now defaulting to NaN so the statistical imputer (Median) handles it.
     for col in cols:
         if col not in df.columns:
-            if 'IS_B2B' in col: df[col] = 0
-            elif 'GAMES_IN_L5' in col: df[col] = 2
-            elif 'TEAM_MISSING' in col: df[col] = 0.0
-            elif 'L10_STD_DEV' in col: df[col] = 0.0
-            else: df[col] = np.nan # Let imputer handle it
+            df[col] = np.nan 
     return df
 
 def train_single_prop(df, prop_cat):
     """Trains models for a specific prop category."""
     logging.info(f"Training {prop_cat}...")
     
+    # --- FIX 1: LEAKAGE PREVENTION (PHASE 1) ---
+    if 'GAME_DATE' in df.columns:
+        df['GAME_DATE'] = pd.to_datetime(df['GAME_DATE'])
+        df = df.sort_values(by='GAME_DATE', ascending=True).reset_index(drop=True)
+    else:
+        logging.warning(f"[{prop_cat}] 'GAME_DATE' missing. Split might leak data!")
+
     # Select and Prepare Features
     feature_list = get_feature_cols(prop_cat, df.columns)
     df = backfill_missing_cols(df, feature_list)
@@ -92,7 +113,9 @@ def train_single_prop(df, prop_cat):
     y_clf_train, y_clf_val = y_clf.iloc[:split_idx], y_clf.iloc[split_idx:]
     
     # Pipeline
-    hist_cols = [c for c in X.columns if 'HIST_' in c or 'VS_OPP_' in c or c.startswith('Q')]
+    # Hist/Team cols use Constant=0 imputation (missing data = no history)
+    # Base/Season cols use Median imputation (missing data = average player)
+    hist_cols = [c for c in X.columns if 'HIST_' in c or 'VS_OPP_' in c or c.startswith('Q') or 'DVP_' in c]
     base_cols = [c for c in X.columns if c not in hist_cols]
     
     preprocessor = ColumnTransformer([

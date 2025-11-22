@@ -1,9 +1,7 @@
 import pandas as pd
 import numpy as np
-import sys
 import logging
 import re
-import io
 from pathlib import Path
 from rapidfuzz import process, fuzz
 from unidecode import unidecode
@@ -242,11 +240,17 @@ def process_master_team_stats(data_dir, player_id_map, output_dir):
         logging.error(f"Error merging team stats: {e}")
 
 def calculate_historical_vacancy(bs_df, player_df):
-    logging.info("--- Calculating Historical Usage Vacancy ---")
+    logging.info("--- Calculating Historical Usage Vacancy (Split G/F) ---")
     usg_col = 'USG_PROXY' if 'USG_PROXY' in player_df.columns else 'USG%'
     if usg_col not in player_df.columns: return bs_df
 
     player_usg_map = player_df[['PLAYER_ID', usg_col]].drop_duplicates(subset=['PLAYER_ID']).set_index('PLAYER_ID')[usg_col].to_dict()
+    
+    # Map IDs to Position Group (G vs F)
+    pos_map = player_df[['PLAYER_ID', 'Pos']].set_index('PLAYER_ID')['Pos'].to_dict()
+    def is_guard(pid):
+        pos = str(pos_map.get(pid, ''))
+        return 1 if ('G' in pos) else 0
     
     bs_df = bs_df.sort_values('GAME_DATE')
     vacancy_records = []
@@ -264,21 +268,33 @@ def calculate_historical_vacancy(bs_df, player_df):
         team_ids = min_matrix.columns
         team_usgs = np.array([player_usg_map.get(pid, 0.0) for pid in team_ids])
         
+        # Create Position Masks
+        is_guard_mask = np.array([is_guard(pid) for pid in team_ids])
+        is_front_mask = 1 - is_guard_mask
+        
         missing_usg = (is_missing.astype(float) * team_usgs).sum(axis=1)
         missing_min = (is_missing.astype(float) * rolling_mins).sum(axis=1)
         
+        # NEW: Split Vacancy
+        missing_usg_g = (is_missing.astype(float) * (team_usgs * is_guard_mask)).sum(axis=1)
+        missing_usg_f = (is_missing.astype(float) * (team_usgs * is_front_mask)).sum(axis=1)
+        
         vacancy_records.append(pd.DataFrame({
             'Game_ID': min_matrix.index, 'TEAM_ABBREVIATION': team,
-            'TEAM_MISSING_USG': missing_usg, 'TEAM_MISSING_MIN': missing_min
+            'TEAM_MISSING_USG': missing_usg, 'TEAM_MISSING_MIN': missing_min,
+            'MISSING_USG_G': missing_usg_g, 'MISSING_USG_F': missing_usg_f
         }))
 
     if vacancy_records:
         full_vacancy = pd.concat(vacancy_records, ignore_index=True)
         bs_df = pd.merge(bs_df, full_vacancy, on=['Game_ID', 'TEAM_ABBREVIATION'], how='left')
-        bs_df[['TEAM_MISSING_USG', 'TEAM_MISSING_MIN']] = bs_df[['TEAM_MISSING_USG', 'TEAM_MISSING_MIN']].fillna(0.0).round(2)
+        cols = ['TEAM_MISSING_USG', 'TEAM_MISSING_MIN', 'MISSING_USG_G', 'MISSING_USG_F']
+        bs_df[cols] = bs_df[cols].fillna(0.0).round(2)
     else:
         bs_df['TEAM_MISSING_USG'] = 0.0
         bs_df['TEAM_MISSING_MIN'] = 0.0
+        bs_df['MISSING_USG_G'] = 0.0
+        bs_df['MISSING_USG_F'] = 0.0
     return bs_df
 
 def process_master_box_scores(data_dir, player_id_map, output_dir):
@@ -295,6 +311,13 @@ def process_master_box_scores(data_dir, player_id_map, output_dir):
         id_map = player_id_map[['PLAYER_ID', 'PLAYER_NAME', 'TEAM_ABBREVIATION', 'Player_Clean']].drop_duplicates(subset=['PLAYER_ID'])
         bs_df = pd.merge(bs_df, id_map, on='PLAYER_ID', how='left')
         
+        # NEW: Merge Position from Master Player Stats
+        player_stats_path = output_dir / "master_player_stats.csv"
+        if player_stats_path.exists():
+            p_stats = pd.read_csv(player_stats_path, usecols=['PLAYER_ID', 'Pos'])
+            p_stats.drop_duplicates(subset=['PLAYER_ID'], inplace=True)
+            bs_df = pd.merge(bs_df, p_stats, on='PLAYER_ID', how='left')
+
         for col in ['PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 'FGM', 'FGA', 'FTA', 'MIN']:
             if col in bs_df.columns: bs_df[col] = pd.to_numeric(bs_df[col], errors='coerce').fillna(0)
         
@@ -310,8 +333,20 @@ def process_master_box_scores(data_dir, player_id_map, output_dir):
         usg_num = (bs_df['FGA'] + 0.44 * bs_df['FTA'] + bs_df['TOV'])
         bs_df['USG_PROXY'] = np.where(bs_df['MIN'] > 0, usg_num / bs_df['MIN'], 0.0)
 
+        # --- FIX 2: PER 36 NORMALIZATION ---
+        per_36_cols = ['PTS', 'REB', 'AST', 'PRA', 'FG3M', 'STL', 'BLK', 'TOV']
+        for col in per_36_cols:
+            if col in bs_df.columns:
+                bs_df[f'{col}_PER36'] = np.where(bs_df['MIN'] > 0, (bs_df[col] / bs_df['MIN']) * 36, 0.0).round(2)
+
         if (output_dir / "master_player_stats.csv").exists():
             bs_df = calculate_historical_vacancy(bs_df, pd.read_csv(output_dir / "master_player_stats.csv"))
+        
+        # NEW: Add Opponent Abbrev here so we don't have to do it later
+        def get_opponent(matchup):
+            if not isinstance(matchup, str): return "UNKNOWN"
+            return matchup.split(" vs. ")[-1] if " vs. " in matchup else matchup.split(" @ ")[-1] if " @ " in matchup else "UNKNOWN"
+        bs_df['OPPONENT_ABBREV'] = bs_df['MATCHUP'].apply(get_opponent)
         
         bs_df.to_csv(output_dir / "master_box_scores.csv", index=False)
         logging.info(f"Saved master_box_scores.csv ({len(bs_df)} rows)")
@@ -324,11 +359,12 @@ def process_vs_opponent_stats(data_dir, output_dir):
         if not (output_dir / "master_box_scores.csv").exists(): return
         df = pd.read_csv(output_dir / "master_box_scores.csv", low_memory=False)
         
-        def get_opponent(matchup):
-            if not isinstance(matchup, str): return "UNKNOWN"
-            return matchup.split(" vs. ")[-1] if " vs. " in matchup else matchup.split(" @ ")[-1] if " @ " in matchup else "UNKNOWN"
-
-        df['OPPONENT_ABBREV'] = df['MATCHUP'].apply(get_opponent)
+        # Check if OPPONENT_ABBREV exists (it should from process_master_box_scores now)
+        if 'OPPONENT_ABBREV' not in df.columns:
+            def get_opponent(matchup):
+                if not isinstance(matchup, str): return "UNKNOWN"
+                return matchup.split(" vs. ")[-1] if " vs. " in matchup else matchup.split(" @ ")[-1] if " @ " in matchup else "UNKNOWN"
+            df['OPPONENT_ABBREV'] = df['MATCHUP'].apply(get_opponent)
         
         agg_cols = {k: 'mean' for k in ['PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 'PRA', 'PR', 'PA', 'RA', 'FANTASY_PTS', 'MIN'] if k in df.columns}
         if 'Game_ID' in df.columns: agg_cols['Game_ID'] = 'count'
@@ -340,6 +376,51 @@ def process_vs_opponent_stats(data_dir, output_dir):
         logging.info("Saved master_vs_opponent.csv")
     except Exception as e:
         logging.error(f"Error in process_vs_opponent_stats: {e}")
+
+def process_dvp_stats(output_dir):
+    """Calculates Defense vs Position stats based on master_box_scores."""
+    logging.info("--- Starting: process_dvp_stats ---")
+    try:
+        bs_path = output_dir / "master_box_scores.csv"
+        if not bs_path.exists(): return
+
+        df = pd.read_csv(bs_path, low_memory=False)
+        
+        # Ensure we have Position and Matchup info
+        if 'Pos' not in df.columns or 'OPPONENT_ABBREV' not in df.columns:
+            logging.warning("Missing Pos or OPPONENT_ABBREV in box scores. Skipping DvP.")
+            return
+
+        # Clean Position: "PG-SG" -> "PG"
+        df['Primary_Pos'] = df['Pos'].astype(str).apply(lambda x: x.split('-')[0] if x else 'UNKNOWN')
+        df = df[df['Primary_Pos'].isin(['PG', 'SG', 'SF', 'PF', 'C'])] # Filter weird data
+
+        # Calculate stats allowed by Opponent + Position
+        stat_cols = ['PTS', 'REB', 'AST', 'FG3M', 'PRA', 'PR', 'PA', 'RA', 'STL', 'BLK', 'TOV']
+        # Use Per 36 metrics if available for better accuracy
+        agg_dict = {}
+        for col in stat_cols:
+            if f'{col}_PER36' in df.columns:
+                agg_dict[f'{col}_PER36'] = 'mean' # Use normalized stats for DvP if available
+            elif col in df.columns:
+                agg_dict[col] = 'mean'
+        
+        if not agg_dict: return
+
+        dvp_df = df.groupby(['OPPONENT_ABBREV', 'Primary_Pos']).agg(agg_dict).reset_index()
+        
+        # Rename columns to DVP_{STAT}
+        rename_map = {}
+        for col in agg_dict.keys():
+            base_stat = col.replace('_PER36', '')
+            rename_map[col] = f"DVP_{base_stat}"
+            
+        dvp_df.rename(columns=rename_map, inplace=True)
+
+        dvp_df.round(2).to_csv(output_dir / "master_dvp_stats.csv", index=False)
+        logging.info("Saved master_dvp_stats.csv")
+    except Exception as e:
+        logging.error(f"Error in process_dvp_stats: {e}")
 
 def main():
     start_time = pd.Timestamp.now()
@@ -358,6 +439,7 @@ def main():
     process_master_team_stats(DATA_DIR, player_id_map, OUTPUT_DIR)
     process_master_box_scores(DATA_DIR, player_id_map, OUTPUT_DIR)
     process_vs_opponent_stats(DATA_DIR, OUTPUT_DIR)
+    process_dvp_stats(OUTPUT_DIR) # <--- NEW Phase 2 Call
 
     end_time = pd.Timestamp.now()
     logging.info(f"========= ETL COMPLETE. TIME: {end_time - start_time} =========")

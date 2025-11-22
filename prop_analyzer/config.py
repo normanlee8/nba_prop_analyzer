@@ -29,6 +29,18 @@ MASTER_TEAM_FILE = DATA_DIR / "master_team_stats.csv"
 MASTER_BOX_SCORES_FILE = DATA_DIR / "master_box_scores.csv"
 MASTER_VS_OPP_FILE = DATA_DIR / "master_vs_opponent.csv"
 
+# --- NEW: ODDS API CONFIG ---
+# Get a free key at https://the-odds-api.com/
+ODDS_API_KEY = "082486d25139c715fef49236b58234a6"  # <--- PASTE YOUR KEY INSIDE THESE QUOTES
+ODDS_SPORTSBOOKS = "draftkings,fanduel,mgm,caesars,betrivers" # Books to check
+ODDS_MARKETS = [
+    "player_points", "player_rebounds", "player_assists", 
+    "player_threes", "player_points_rebounds_assists", 
+    "player_points_rebounds", "player_points_assists", 
+    "player_rebounds_assists", "player_steals", "player_blocks", 
+    "player_turnovers"
+]
+
 # --- THRESHOLDS ---
 # Pre-game Logic
 MIN_PROB_FOR_S_TIER = 0.58

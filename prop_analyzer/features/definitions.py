@@ -24,11 +24,20 @@ HIST_FEATURES = [
     'HIST_VS_OPP_USG_PROXY_AVG'
 ]
 
+DVP_FEATURES = [
+    'DVP_PTS', 'DVP_REB', 'DVP_AST', 'DVP_FG3M', 'DVP_PRA', 
+    'DVP_PR', 'DVP_PA', 'DVP_RA', 'DVP_STL', 'DVP_BLK', 'DVP_TOV'
+]
+
+VACANCY_FEATURES = [
+    'MISSING_USG_G', 'MISSING_USG_F'
+]
+
 BASE_FEATURE_COLS = [
     'Prop Line', 'SZN Avg', 'L3 Avg', 'L5 EWMA', 'Loc Avg', 'CoV %',
     'SZN Games', 'Selected Std Dev', 'Days Rest',
     'L10_STD_DEV', 'GAMES_IN_L5', 'IS_B2B',
-    'TEAM_MISSING_USG', 'TEAM_MISSING_MIN',
+    'TEAM_MISSING_USG', 'TEAM_MISSING_MIN', # Legacy
     'SZN_TS_PCT', 'SZN_EFG_PCT', 'SZN_USG_PROXY',
     'L5_TS_PCT', 'L5_EFG_PCT', 'L5_USG_PROXY',
     'LOC_TS_PCT', 'LOC_EFG_PCT', 'LOC_USG_PROXY',
@@ -36,9 +45,26 @@ BASE_FEATURE_COLS = [
     'PBP_OnCourt_PlusMinus', 'PBP_OnCourt_USG_PCT',
     'PBP_OnCourt_TOV_PCT', 'PBP_OnCourt_3PAr',
     'SEASON_TS_PLUS', 'SEASON_eFG_PLUS', 'SEASON_FGA_PCT_3P',
-] + HIST_FEATURES + VS_OPP_FEATURES + QUARTER_FEATURES
+] + HIST_FEATURES + VS_OPP_FEATURES + QUARTER_FEATURES + DVP_FEATURES + VACANCY_FEATURES
 
-# Defines which features are relevant for which prop type
+# --- PHASE 3: FEATURE PRUNING LOGIC ---
+# Only allow Rank/Team columns that contain these keywords for the specific prop
+RELEVANT_KEYWORDS = {
+    'PTS': ['PTS', 'OFF', 'DEF', 'PACE', 'TS', 'EFG', 'FGM', 'FGA'],
+    'REB': ['REB', 'OFF', 'DEF', 'PACE'],
+    'AST': ['AST', 'OFF', 'PACE', 'TOV', 'FGM'],
+    'FG3M': ['FG3', '3P', 'OFF', 'PACE'],
+    'STL': ['STL', 'TOV', 'PACE', 'DEF'],
+    'BLK': ['BLK', 'DEF', 'PACE', 'FGA'],
+    'TOV': ['TOV', 'STL', 'DEF', 'PACE'],
+    'PRA': ['PTS', 'REB', 'AST', 'OFF', 'DEF', 'PACE'],
+    'PR': ['PTS', 'REB', 'OFF', 'DEF', 'PACE'],
+    'PA': ['PTS', 'AST', 'OFF', 'DEF', 'PACE'],
+    'RA': ['REB', 'AST', 'OFF', 'DEF', 'PACE'],
+    'FANTASY_PTS': ['PTS', 'REB', 'AST', 'STL', 'BLK', 'TOV', 'OFF', 'DEF', 'PACE'],
+}
+
+# Defines which features are relevant for which prop type (Legacy map)
 PROP_FEATURE_MAP = {
     'PTS': ['PTS', 'FANTASY_PTS', 'PRA', 'PR', 'PA'],
     'REB': ['REB', 'FANTASY_PTS', 'PRA', 'PR', 'RA'],
