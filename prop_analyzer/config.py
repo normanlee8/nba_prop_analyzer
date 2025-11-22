@@ -14,9 +14,14 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
 INPUT_DIR.mkdir(parents=True, exist_ok=True)
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+(INPUT_DIR / "records").mkdir(parents=True, exist_ok=True)
 
 # Specific File Paths
+# Input text file for copy-pasting props
+INPUT_PROPS_TXT = INPUT_DIR / "props_input.txt"
+# Parsed CSV for analysis
 PROPS_FILE = INPUT_DIR / "props_today.csv"
+# Final results
 PROCESSED_OUTPUT = OUTPUT_DIR / "processed_props.csv"
 
 # Master Data Files
@@ -24,16 +29,17 @@ MASTER_PLAYER_FILE = DATA_DIR / "master_player_stats.csv"
 MASTER_TEAM_FILE = DATA_DIR / "master_team_stats.csv"
 MASTER_BOX_SCORES_FILE = DATA_DIR / "master_box_scores.csv"
 MASTER_VS_OPP_FILE = DATA_DIR / "master_vs_opponent.csv"
+MASTER_DVP_FILE = DATA_DIR / "master_dvp_stats.csv"
 
 # --- THRESHOLDS ---
 # Pre-game Logic
-MIN_PROB_FOR_S_TIER = 0.58
+MIN_PROB_FOR_S_TIER = 0.585
 MIN_EDGE_FOR_S_TIER = 1.5
-MIN_EDGE_FOR_A_TIER = 0.08
+MIN_EDGE_FOR_A_TIER = 1.0
 
 # Live Logic
 LIVE_MIN_PROB_THRESHOLD = 0.65
-LIVE_BLOWOUT_THRESHOLD = 18
+LIVE_BLOWOUT_THRESHOLD = 20
 
 # Feature Engineering
 BAYESIAN_PRIOR_WEIGHT = 12

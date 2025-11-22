@@ -90,7 +90,7 @@ def sniff_file_type(filepath):
     try:
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
             line = f.readline()
-            if 'Team' in line and '202' in line: return 'teamrankings'
+            if 'Team' in line and '20' in line: return 'teamrankings'
             if 'TEAM_ID' in line and 'TEAM_NAME' in line: return 'nba_api'
         return None 
     except: return None
@@ -209,8 +209,19 @@ def process_master_team_stats(data_dir, player_id_map, output_dir):
             metric_name = get_metric_from_filename(filepath.name)
             if not metric_name: continue
             
-            val_col = df.columns[-1] if '202' in df.columns[-1] else None
-            if not val_col: continue
+            # --- IMPROVED COLUMN SELECTION ---
+            # Find all columns that look like years (e.g., "2025", "2026")
+            year_cols = [col for col in df.columns if re.match(r'202\d', str(col))]
+            
+            if year_cols:
+                # Pick the largest year (Current Season)
+                val_col = max(year_cols, key=lambda x: int(x))
+            else:
+                # Fallback to default index if no year found (e.g. maybe "Value")
+                val_col = df.columns[2] if len(df.columns) > 2 else None
+
+            if not val_col: 
+                continue
 
             df['TEAM_ABBREVIATION'] = df['Team'].map(TEAM_NAME_MAP)
             df = df[df['TEAM_ABBREVIATION'].notna()]
@@ -391,9 +402,20 @@ def process_dvp_stats(output_dir):
             logging.warning("Missing Pos or OPPONENT_ABBREV in box scores. Skipping DvP.")
             return
 
-        # Clean Position: "PG-SG" -> "PG"
-        df['Primary_Pos'] = df['Pos'].astype(str).apply(lambda x: x.split('-')[0] if x else 'UNKNOWN')
-        df = df[df['Primary_Pos'].isin(['PG', 'SG', 'SF', 'PF', 'C'])] # Filter weird data
+        # --- IMPROVED POSITION NORMALIZATION ---
+        def normalize_pos(pos):
+            if not isinstance(pos, str): return 'UNKNOWN'
+            p = pos.split('-')[0].upper().strip()
+            # Map Generics to Standard
+            if p == 'G': return 'SG'
+            if p == 'F': return 'PF'
+            return p
+        
+        df['Primary_Pos'] = df['Pos'].apply(normalize_pos)
+        
+        # Filter strictly for standard 5 positions to keep DvP clean
+        valid_positions = ['PG', 'SG', 'SF', 'PF', 'C']
+        df = df[df['Primary_Pos'].isin(valid_positions)]
 
         # Calculate stats allowed by Opponent + Position
         stat_cols = ['PTS', 'REB', 'AST', 'FG3M', 'PRA', 'PR', 'PA', 'RA', 'STL', 'BLK', 'TOV']

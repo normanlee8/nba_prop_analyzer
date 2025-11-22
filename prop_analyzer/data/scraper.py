@@ -9,6 +9,8 @@ import concurrent.futures
 from pathlib import Path
 from datetime import datetime
 from bs4 import BeautifulSoup, Comment
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from nba_api.stats.static import players
 
 # Import project config
@@ -25,11 +27,31 @@ except ImportError as e:
     print(f"Failed to import a module from 'nba-api': {e}")
     sys.exit(1)
 
-# --- CONFIGURATION ---
-CURRENT_SEASON_NBA_API = "2025-26"
-CURRENT_SEASON_BBALL_REF = 2026
+# --- DYNAMIC CONFIGURATION ---
+
+def get_current_season_info():
+    """
+    Dynamically calculates the current NBA season string and end year
+    based on the current date.
+    Rules:
+    - Oct, Nov, Dec -> Season started this year (e.g., Nov 2025 -> 2025-26)
+    - Jan - Sept -> Season started last year (e.g., Feb 2026 -> 2025-26)
+    """
+    now = datetime.now()
+    if now.month >= 10:
+        start_year = now.year
+        end_year = now.year + 1
+    else:
+        start_year = now.year - 1
+        end_year = now.year
+    
+    # Format: "2025-26"
+    season_str = f"{start_year}-{str(end_year)[-2:]}"
+    return season_str, end_year
+
+CURRENT_SEASON_NBA_API, CURRENT_SEASON_BBALL_REF = get_current_season_info()
 MAX_WORKERS = 10 
-NBA_API_TIMEOUT = 30
+NBA_API_TIMEOUT = 45 
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36'
@@ -235,6 +257,23 @@ MASTER_FILE_MAP = {
     "NBA Team General Stats.csv": ("nba_api", "team_general_summary"),
 }
 
+def create_robust_session():
+    """
+    Creates a requests session with automatic retries and backoff.
+    """
+    session = requests.Session()
+    retry_strategy = Retry(
+        total=4,
+        backoff_factor=1, # Sleep 1s, 2s, 4s...
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["GET", "POST"]
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("https://", adapter)
+    session.mount("http://", adapter)
+    session.headers.update(HEADERS)
+    return session
+
 def save_clean_csv(df, filename):
     try:
         # Use centralized data directory
@@ -256,7 +295,7 @@ def scrape_daily_injuries(session):
     filename = "daily_injuries.csv"
     
     try:
-        response = session.get(url)
+        response = session.get(url, timeout=20)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -272,6 +311,7 @@ def scrape_daily_injuries(session):
             team_abbr = "UNK"
             team_name = "UNKNOWN"
             
+            # Try to find team name, safely
             team_header = table.find_previous(class_="TeamLogoNameLockup-name")
             if team_header:
                 raw_team_name = team_header.get_text(strip=True)
@@ -286,6 +326,7 @@ def scrape_daily_injuries(session):
                     continue 
                 
                 name_cell = cols[0]
+                # Robust check for player name
                 long_name_span = name_cell.find('span', class_=lambda x: x and 'long' in x)
                 
                 if long_name_span:
@@ -342,7 +383,7 @@ def scrape_teamrankings(session, slug, filename):
     logging.info(f"Fetching [TeamRankings] {filename}...")
     url = f"https://www.teamrankings.com/nba/stat/{slug}"
     try:
-        response = session.get(url)
+        response = session.get(url, timeout=20)
         response.raise_for_status() 
         
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -358,30 +399,42 @@ def scrape_teamrankings(session, slug, filename):
             
         df = dfs[0]
         
+        # Flatten MultiIndex if present
         if isinstance(df.columns, pd.MultiIndex):
              df.columns = [col[1] if len(col) > 1 else col[0] for col in df.columns]
         else:
             df.columns = [str(col) for col in df.columns]
 
         if len(df.columns) >= 8:
-            curr_year = datetime.now().year
-            curr_year_col = next((c for c in df.columns if str(curr_year) in str(c)), None)
-            last_year_col = next((c for c in df.columns if str(curr_year - 1) in str(c)), None)
+            # Dynamic Season Selection
+            # We want the column that represents the *current* season.
+            # TeamRankings usually labels the current season col with the Ending Year (e.g. "2026")
+            curr_year_target = str(CURRENT_SEASON_BBALL_REF)
+            prev_year_target = str(CURRENT_SEASON_BBALL_REF - 1)
             
-            cols_to_keep = [0, 1]
-            if curr_year_col: cols_to_keep.append(df.columns.get_loc(curr_year_col))
-            else: cols_to_keep.append(2)
+            curr_year_col = next((c for c in df.columns if curr_year_target in str(c)), None)
+            last_year_col = next((c for c in df.columns if prev_year_target in str(c)), None)
+            
+            cols_to_keep = [0, 1] # Rank, Team
 
-            cols_to_keep.extend([3, 4, 5, 6])
+            if curr_year_col: 
+                cols_to_keep.append(df.columns.get_loc(curr_year_col))
+            else: 
+                # Fallback: The first data column (Index 2) is usually current
+                cols_to_keep.append(2)
 
-            if last_year_col: cols_to_keep.append(df.columns.get_loc(last_year_col))
+            cols_to_keep.extend([3, 4, 5, 6]) # Last 3, Last 1, Home, Away
+
+            if last_year_col: 
+                cols_to_keep.append(df.columns.get_loc(last_year_col))
             else:
+                # Fallback: 8th column usually previous year
                 if len(df.columns) > 7: cols_to_keep.append(7)
 
             df = df.iloc[:, cols_to_keep]
 
-            if len(df.columns) == 8:
-                df.columns = ["Rank", "Team", "2025", "Last 3", "Last 1", "Home", "Away", "2024"]
+            # Rename dynamically
+            df.columns = ["Rank", "Team", str(CURRENT_SEASON_BBALL_REF), "Last 3", "Last 1", "Home", "Away", str(CURRENT_SEASON_BBALL_REF - 1)]
         else:
             df.columns = [str(c) for c in df.columns]
 
@@ -393,17 +446,18 @@ def scrape_teamrankings(session, slug, filename):
     except Exception as e:
         logging.error(f"Failed to scrape {url}: {e}")
     finally:
-        time.sleep(3) 
+        time.sleep(1.5) # Politeness delay
 
 def scrape_bball_ref(session, url, table_id, filename):
     logging.info(f"Fetching [BBall-Ref] {filename}...")
     try:
-        response = session.get(url)
+        response = session.get(url, timeout=30)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.content, 'html.parser')
         table = soup.find('table', id=table_id)
         
+        # Handle comments (BBallRef hides tables in comments)
         if not table:
             comment = soup.find(string=lambda text: isinstance(text, Comment) and table_id in text)
             if comment:
@@ -434,7 +488,7 @@ def scrape_bball_ref(session, url, table_id, filename):
     except Exception as e:
         logging.error(f"Failed to scrape {url}: {e}", exc_info=True)
     finally:
-        time.sleep(3) 
+        time.sleep(2) 
 
 def fetch_and_save(filename, api_class, **kwargs):
     try:
@@ -445,7 +499,7 @@ def fetch_and_save(filename, api_class, **kwargs):
         logging.error(f"Failed to fetch or save {filename}: {e}")
 
 def scrape_nba_api_stats():
-    logging.info("--- Fetching all nba-api data ---")
+    logging.info(f"--- Fetching all nba-api data (Season: {CURRENT_SEASON_NBA_API}) ---")
     try:
         logging.info("Fetching Player Box Scores (full season) sequentially to respect rate limits...")
         all_players = players.get_players()
@@ -511,9 +565,10 @@ def scrape_nba_api_stats():
 
 def main():
     logging.info("========= STARTING NBA DATA SCRAPER =========")
+    logging.info(f"Target Season: {CURRENT_SEASON_NBA_API} (Ending Year: {CURRENT_SEASON_BBALL_REF})")
     
-    session = requests.Session()
-    session.headers.update(HEADERS)
+    # Use Robust Session
+    session = create_robust_session()
 
     scrape_daily_injuries(session)
 

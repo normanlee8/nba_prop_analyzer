@@ -31,7 +31,11 @@ def predict_prop(model_cache, prop_category, feature_vector_dict):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         
-        X_scaled = preprocessor.transform(aligned_vector)
+        try:
+            X_scaled = preprocessor.transform(aligned_vector)
+        except Exception as e:
+            # Fallback if scaling fails (e.g. feature mismatch)
+            return None
 
         # 3. Predict Quantiles (Edge)
         q20_lgbm = models['q20']['lgbm'].predict(X_scaled)[0]
@@ -43,6 +47,7 @@ def predict_prop(model_cache, prop_category, feature_vector_dict):
         pred_upper = (q80_lgbm + q80_xgb) / 2
         
         # 4. Predict Probability (Classifier)
+        # This is the most important metric for "Win %"
         prob_over = 0.5
         if models['clf']:
             # [:, 1] is probability of class 1 (Over)
@@ -57,44 +62,79 @@ def predict_prop(model_cache, prop_category, feature_vector_dict):
 def determine_tier(prop_line, pred_lower, pred_upper, prob_over, injury_status='ACTIVE'):
     """
     Calculates the Edge, Score, and Tier based on predictions.
+    Crucial Update: Now checks for Divergence between Classifier (Prob) and Regression (Edge).
     """
     median_pred = (pred_lower + pred_upper) / 2
-    edge = median_pred - prop_line
+    regression_edge = median_pred - prop_line
     
-    if edge > 0:
-        best_pick = 'Over'
+    # 1. Determine "Signal" from the Classifier
+    if prob_over >= 0.50:
+        model_pick = 'Over'
         win_prob = prob_over
     else:
-        best_pick = 'Under'
+        model_pick = 'Under'
         win_prob = 1.0 - prob_over
 
-    score = abs(edge)
-    
-    # Tiering Logic
-    is_high_confidence_prob = (win_prob >= cfg.MIN_PROB_FOR_S_TIER)
-    
-    if score >= cfg.MIN_EDGE_FOR_S_TIER:
-        tier = 'S Tier' if is_high_confidence_prob else 'A Tier'
-    elif score >= (prop_line * cfg.MIN_EDGE_FOR_A_TIER):
-        tier = 'A Tier' if is_high_confidence_prob else 'B Tier'
-    elif score > 0:
-        tier = 'C Tier'
+    # 2. Determine "Direction" from the Regression
+    if regression_edge > 0:
+        reg_pick = 'Over'
     else:
-        tier = 'C Tier' # Negative edge case, though score is abs()
+        reg_pick = 'Under'
+
+    # 3. Divergence Check
+    # If Classifier says Over (60%) but Regression says Under (Proj < Line), we have a problem.
+    is_divergent = (model_pick != reg_pick)
+    
+    # 4. Scoring Logic
+    # We use the Regression Edge magnitude for potential payout value, 
+    # but the Classifier Probability for confidence.
+    score = abs(regression_edge)
+    
+    # 5. Tiering Logic
+    tier = 'C Tier' # Default
+    
+    # Thresholds
+    S_TIER_PROB = cfg.MIN_PROB_FOR_S_TIER # e.g., 0.58
+    S_TIER_EDGE = cfg.MIN_EDGE_FOR_S_TIER # e.g., 1.5
+    
+    A_TIER_PROB = 0.555
+    A_TIER_EDGE = 1.0
+    
+    if is_divergent:
+        # Penalize divergence heavily. 
+        # Even if prob is high, if the math says negative edge, it's risky.
+        tier = 'C Tier'
+        # Override the pick to follow the Classifier (usually smarter), but mark it low confidence
+        best_pick = model_pick
+    else:
+        best_pick = model_pick
         
-    # Low probability override
-    if win_prob < 0.45:
-         tier = 'C Tier'
-         
-    # Downgrade GTD (Game Time Decision)
-    if injury_status == 'GTD' and tier == 'S Tier':
-        tier = 'A Tier'
+        # Standard Tiering (Convergent Signals)
+        if win_prob >= S_TIER_PROB and score >= S_TIER_EDGE:
+            tier = 'S Tier'
+        elif win_prob >= S_TIER_PROB and score >= A_TIER_EDGE:
+            tier = 'A Tier' # High prob, decent edge
+        elif win_prob >= A_TIER_PROB and score >= S_TIER_EDGE:
+            tier = 'A Tier' # Good prob, huge edge
+        elif win_prob >= A_TIER_PROB:
+            tier = 'B Tier'
+        elif score >= S_TIER_EDGE:
+            tier = 'B Tier' # Low prob, massive edge (Value play)
+        else:
+            tier = 'C Tier'
+
+    # 6. Injury Downgrades
+    if injury_status == 'GTD' and tier in ['S Tier', 'A Tier']:
+        tier = 'B Tier'
+    elif injury_status in ['OUT', 'DOUBTFUL']:
+        tier = 'Void'
 
     return {
         'Best Pick': best_pick,
         'Tier': tier,
         'Score': round(score, 2),
-        'Edge': round(edge, 2),
+        'Edge': round(regression_edge, 2),
         'Win_Prob': win_prob,
-        'Median_Proj': median_pred
+        'Median_Proj': median_pred,
+        'Is_Divergent': is_divergent
     }

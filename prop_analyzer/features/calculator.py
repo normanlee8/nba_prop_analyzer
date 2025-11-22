@@ -127,57 +127,61 @@ def get_schedule_fatigue_metrics(player_id, box_scores_df, prop_game_date):
     return {'games_in_l5': len(recent), 'is_b2b': is_b2b}
 
 def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
+    """
+    Calculates the total missing Usage and Minutes for a team based on the injury report.
+    Returns: (missing_usg, missing_min, missing_usg_g, missing_usg_f)
+    """
     if inj_df is None or inj_df.empty or full_roster_df is None or full_roster_df.empty:
-        return 0.0, 0.0
+        return 0.0, 0.0, 0.0, 0.0
 
     # 1. Filter Injuries for this Team
     team_injuries = inj_df[inj_df['Team'] == team_abbr] if 'Team' in inj_df.columns else pd.DataFrame()
     if team_injuries.empty or 'Status_Clean' not in team_injuries.columns:
-        return 0.0, 0.0
+        return 0.0, 0.0, 0.0, 0.0
 
     out_players = team_injuries[team_injuries['Status_Clean'].isin(['OUT', 'DOUBTFUL'])]
     if out_players.empty:
-        return 0.0, 0.0
+        return 0.0, 0.0, 0.0, 0.0
 
     # 2. Filter Roster for this Team
     team_roster = full_roster_df[full_roster_df['TEAM_ABBREVIATION'] == team_abbr].copy()
     if team_roster.empty: 
-        return 0.0, 0.0
+        return 0.0, 0.0, 0.0, 0.0
     
-    # 3. Dynamic Column Selection (The Fix)
+    # 3. Dynamic Column Selection
     # Determine Usage Column
-    if 'USG_PROXY' in team_roster.columns:
-        usg_col = 'USG_PROXY'
-    elif 'USG%' in team_roster.columns:
-        usg_col = 'USG%'
-    elif 'SEASON_USG' in team_roster.columns: # Fallback
-        usg_col = 'SEASON_USG'
+    if 'USG_PROXY' in team_roster.columns: usg_col = 'USG_PROXY'
+    elif 'USG%' in team_roster.columns: usg_col = 'USG%'
+    elif 'SEASON_USG' in team_roster.columns: usg_col = 'SEASON_USG'
     else:
-        # Last resort: Construct roughly if columns exist, else 0
         usg_col = 'USG_TEMP'
-        team_roster[usg_col] = 0.20 # Default league avg usage
+        team_roster[usg_col] = 0.20
 
     # Determine Minutes Column
-    if 'HOME_MIN' in team_roster.columns:
-        min_col = 'HOME_MIN'
-    elif 'Home_MIN' in team_roster.columns:
-        min_col = 'Home_MIN'
-    elif 'SEASON_MIN' in team_roster.columns:
-        min_col = 'SEASON_MIN'
-    elif 'MIN' in team_roster.columns:
-        min_col = 'MIN'
+    if 'HOME_MIN' in team_roster.columns: min_col = 'HOME_MIN'
+    elif 'Home_MIN' in team_roster.columns: min_col = 'Home_MIN'
+    elif 'SEASON_MIN' in team_roster.columns: min_col = 'SEASON_MIN'
+    elif 'MIN' in team_roster.columns: min_col = 'MIN'
     else:
         min_col = 'MIN_TEMP'
         team_roster[min_col] = 0.0
+        
+    # Determine Position Column (For Split Vacancy)
+    pos_col = 'Pos' if 'Pos' in team_roster.columns else None
 
     # 4. Create Lookup Map
     team_roster['match_name'] = team_roster['clean_name'].fillna('')
-    # Select only the columns we resolved above
-    roster_map = team_roster.set_index('match_name')[[usg_col, min_col]].to_dict('index')
+    
+    cols_to_pull = [usg_col, min_col]
+    if pos_col: cols_to_pull.append(pos_col)
+    
+    roster_map = team_roster.set_index('match_name')[cols_to_pull].to_dict('index')
     roster_names = list(roster_map.keys())
     
     missing_usg = 0.0
     missing_min = 0.0
+    missing_usg_g = 0.0
+    missing_usg_f = 0.0
     
     for _, row in out_players.iterrows():
         p_name = str(row.get('Player', ''))
@@ -191,7 +195,18 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
             avg_min = float(stats.get(min_col, 0))
             # Only count vacancy if the player plays significant minutes
             if avg_min > 12.0:
-                missing_usg += float(stats.get(usg_col, 0))
+                u_val = float(stats.get(usg_col, 0))
+                
+                missing_usg += u_val
                 missing_min += avg_min
+                
+                # Split Logic
+                if pos_col:
+                    raw_pos = str(stats.get(pos_col, '')).upper()
+                    # Heuristic: If position contains 'G', it's a Guard. Else Forward/Center
+                    if 'G' in raw_pos:
+                        missing_usg_g += u_val
+                    else:
+                        missing_usg_f += u_val
 
-    return round(missing_usg, 2), round(missing_min, 2)
+    return round(missing_usg, 2), round(missing_min, 2), round(missing_usg_g, 2), round(missing_usg_f, 2)

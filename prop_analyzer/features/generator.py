@@ -31,7 +31,7 @@ def get_historical_vs_opponent_stats(box_scores_df, player_id, opponent_team_abb
 def build_feature_vector(player_data, player_id, prop_category, prop_line, 
                          player_team_abbr, opponent_team_abbr, is_home, prop_game_date,
                          box_scores_df, team_stats_df, vs_opp_df, full_roster_df=None,
-                         dvp_df=None): # <--- Added dvp_df argument
+                         dvp_df=None): 
     
     # 1. Base Metrics
     player_metrics = calc.calculate_player_metrics(
@@ -48,6 +48,8 @@ def build_feature_vector(player_data, player_id, prop_category, prop_line,
 
     # 4. Vacancy Logic (Updated for Split)
     prop_date_dt = pd.to_datetime(prop_game_date).normalize()
+    
+    # Look for historical record first (Training/Backtest Mode)
     current_game_record = box_scores_df[(box_scores_df['PLAYER_ID'] == player_id) & (box_scores_df['GAME_DATE'] == prop_date_dt)]
     
     # Default values
@@ -55,17 +57,17 @@ def build_feature_vector(player_data, player_id, prop_category, prop_line,
     vac_g, vac_f = 0.0, 0.0
 
     if not current_game_record.empty and 'TEAM_MISSING_USG' in current_game_record.columns:
-        # Historical Mode (Training)
+        # Historical Mode: Use pre-calculated values from box scores
         missing_usg = current_game_record.iloc[0]['TEAM_MISSING_USG']
         missing_min = current_game_record.iloc[0]['TEAM_MISSING_MIN']
         if 'MISSING_USG_G' in current_game_record.columns:
             vac_g = current_game_record.iloc[0]['MISSING_USG_G']
             vac_f = current_game_record.iloc[0]['MISSING_USG_F']
     else:
-        # Live Mode (To be updated in calc, for now we use legacy calc fallback)
+        # Live Mode: Calculate dynamically using Injury Report
+        # Now unpacks 4 values to match updated calculator.py
         inj_df = loader.get_cached_injury_data()
-        missing_usg, missing_min = calc.calculate_live_vacancy(player_team_abbr, full_roster_df, inj_df)
-        # Note: Live split vacancy not implemented in Phase 2 yet, defaulting to 0
+        missing_usg, missing_min, vac_g, vac_f = calc.calculate_live_vacancy(player_team_abbr, full_roster_df, inj_df)
 
     # 5. Feature Construction
     features = {
@@ -83,8 +85,8 @@ def build_feature_vector(player_data, player_id, prop_category, prop_line,
         'Days Rest': days_rest,
         'TEAM_MISSING_USG': missing_usg,
         'TEAM_MISSING_MIN': missing_min,
-        'MISSING_USG_G': vac_g, # New
-        'MISSING_USG_F': vac_f, # New
+        'MISSING_USG_G': vac_g, 
+        'MISSING_USG_F': vac_f,
         'SZN_TS_PCT': player_metrics['szn_avg_ts'], 'SZN_EFG_PCT': player_metrics['szn_avg_efg'], 'SZN_USG_PROXY': player_metrics['szn_avg_usg'],
         'L5_TS_PCT': player_metrics['l5_avg_ts'], 'L5_EFG_PCT': player_metrics['l5_avg_efg'], 'L5_USG_PROXY': player_metrics['l5_avg_usg'],
         'LOC_TS_PCT': player_metrics['loc_avg_ts'], 'LOC_EFG_PCT': player_metrics['loc_avg_efg'], 'LOC_USG_PROXY': player_metrics['loc_avg_usg'],
@@ -123,7 +125,7 @@ def build_feature_vector(player_data, player_id, prop_category, prop_line,
     if not opponent_team_row.empty:
         for col, val in opponent_team_row.items(): features[f'OPP_{col}'] = val
 
-    # 9. Inject DvP (Defense vs Position) - NEW
+    # 9. Inject DvP (Defense vs Position)
     if dvp_df is not None:
         # Get Player Position (Simple)
         pos = str(player_data.get('Pos', 'PG')).split('-')[0]

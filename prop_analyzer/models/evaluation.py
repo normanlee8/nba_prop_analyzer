@@ -4,69 +4,123 @@ from prop_analyzer import config as cfg
 from prop_analyzer.utils import text
 
 def calculate_derived_stats(df):
+    """
+    Calculates composite stats (PRA, PA, etc.) from raw box score columns.
+    Includes Quarters and Halves.
+    """
     # Derived Quarter Stats
     for q in ['Q1', 'Q2', 'Q3', 'Q4']:
         pts, reb, ast = f'{q}_PTS', f'{q}_REB', f'{q}_AST'
+        # Only calculate if all components exist (prevent partial sums)
         if pts in df.columns and reb in df.columns and ast in df.columns:
             df[f'{q}_PRA'] = df[pts] + df[reb] + df[ast]
             df[f'{q}_PR'] = df[pts] + df[reb]
             df[f'{q}_PA'] = df[pts] + df[ast]
             df[f'{q}_RA'] = df[reb] + df[ast]
 
-    # Derived Halves
-    for stat in ['PTS', 'REB', 'AST', 'PRA', 'PR', 'PA', 'RA']:
-        if f'Q1_{stat}' in df.columns and f'Q2_{stat}' in df.columns:
-            df[f'1H_{stat}'] = df[f'Q1_{stat}'] + df[f'Q2_{stat}']
+    # Derived Halves (1H = Q1 + Q2)
+    base_stats = ['PTS', 'REB', 'AST', 'PRA', 'PR', 'PA', 'RA', 'STL', 'BLK', 'TOV', 'FG3M']
+    for stat in base_stats:
+        q1_col = f'Q1_{stat}'
+        q2_col = f'Q2_{stat}'
+        
+        # For composite stats like Q1_PRA, they might have just been created above.
+        # Ensure they exist before summing.
+        if q1_col in df.columns and q2_col in df.columns:
+            df[f'1H_{stat}'] = df[q1_col] + df[q2_col]
+            
     return df
 
 def check_prop_row(row):
-    # Logic to compare prediction vs actual
+    """
+    Compares the prediction against the actual value to determine correctness.
+    """
+    # Resolve actual column name
     prop_cat_clean = str(row.get('Prop Category', '')).strip()
+    # Use the map to find the DB column name (e.g. 'Points' -> 'PTS')
     prop_map_lookup = cfg.MASTER_PROP_MAP.get(prop_cat_clean, prop_cat_clean)
     
     try:
         line = float(row['Prop Line'])
-        actual = float(row.get(prop_map_lookup, row.get(prop_cat_clean))) # Try mapped then raw
-    except:
+        # Try getting the mapped column first (e.g. 'PTS'), then fallback to raw
+        actual = row.get(prop_map_lookup)
+        if pd.isna(actual):
+            actual = row.get(prop_cat_clean)
+            
+        if actual is not None:
+            actual = float(actual)
+    except (ValueError, TypeError):
         return pd.Series([None, 'Error', None])
         
-    if pd.isna(actual): return pd.Series([None, 'Missing Data', None])
+    if pd.isna(actual): 
+        return pd.Series([None, 'Missing Data', None])
     
-    res = 'Push'
-    if actual > line: res = 'Over'
-    elif actual < line: res = 'Under'
+    # Determine Result
+    if actual > line: 
+        res = 'Over'
+    elif actual < line: 
+        res = 'Under'
+    else:
+        res = 'Push'
     
+    # Determine Correctness
+    # Best Pick: 'Over' or 'Under'
     correctness = 'Incorrect'
-    if res == row['Best Pick']: correctness = 'Correct'
-    elif res == 'Push': correctness = 'Push'
+    if res == 'Push':
+        correctness = 'Push'
+    elif res == row['Best Pick']:
+        correctness = 'Correct'
     
     return pd.Series([actual, res, correctness])
 
 def grade_predictions():
+    logging.info("--- Grading Predictions vs Actuals ---")
+    
     # 1. Load Data
     try:
+        if not cfg.PROCESSED_OUTPUT.exists():
+            logging.warning("No processed props file found to grade.")
+            return
+            
         df_props = pd.read_csv(cfg.PROCESSED_OUTPUT)
-        df_box = pd.read_csv(cfg.MASTER_BOX_SCORES_FILE)
-    except FileNotFoundError:
-        logging.error("Missing processed props or master box scores.")
+        
+        if not cfg.MASTER_BOX_SCORES_FILE.exists():
+            logging.warning("No master box scores found. Cannot grade.")
+            return
+            
+        df_box = pd.read_csv(cfg.MASTER_BOX_SCORES_FILE, low_memory=False)
+    except Exception as e:
+        logging.error(f"Error loading files for grading: {e}")
         return
 
-    # 2. Prep
-    df_props = df_props.dropna(subset=['Score']).copy()
+    if df_props.empty:
+        logging.warning("Props file is empty.")
+        return
+
+    # 2. Prep & Normalize
+    # Filter out rows without scores/predictions if any
+    if 'Score' in df_props.columns:
+        df_props = df_props.dropna(subset=['Score']).copy()
+    
+    # Create join keys
     df_props['join_player'] = df_props['Player Name'].apply(text.preprocess_name_for_fuzzy_match)
-    # Normalize Matchup/Date
+    # Assume 'GAME_DATE' in props is YYYY-MM-DD
     df_props['join_date'] = pd.to_datetime(df_props['GAME_DATE']).dt.strftime('%Y-%m-%d')
     
     df_box['join_player'] = df_box['PLAYER_NAME'].apply(text.preprocess_name_for_fuzzy_match)
     df_box['join_date'] = pd.to_datetime(df_box['GAME_DATE']).dt.strftime('%Y-%m-%d')
     
+    # Calculate derived stats on the box scores so we can grade things like "1H Points"
     df_box = calculate_derived_stats(df_box)
 
     # 3. Merge
+    # Inner join would lose props we can't find box scores for. Left join keeps them so we see "Missing Data".
     df_merged = pd.merge(
-        df_props, df_box, 
+        df_props, 
+        df_box, 
         on=['join_player', 'join_date'], 
-        how='left', suffixes=('', '_box')
+        how='left', 
+        suffixes=('', '_box')
     )
 
     # 4. Grade
@@ -74,7 +128,9 @@ def grade_predictions():
     df_merged[cols] = df_merged.apply(check_prop_row, axis=1)
     
     # --- SORTING LOGIC ---
+    # Sort by Tier (S -> A -> B) then by Win Probability
     tier_order = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
+    
     if 'Tier' in df_merged.columns:
         df_merged['sort_idx'] = df_merged['Tier'].map(tier_order).fillna(99)
         
@@ -88,16 +144,19 @@ def grade_predictions():
         df_merged = df_merged.sort_values(by=sort_cols, ascending=ascending_order)
         df_merged = df_merged.drop(columns=['sort_idx'])
 
-    # 5. Save
+    # 5. Save Results
     out_file = cfg.OUTPUT_DIR / "prop_check_results.csv"
-    df_merged.to_csv(out_file, index=False)
-    logging.info(f"Graded results saved to {out_file}")
+    try:
+        df_merged.to_csv(out_file, index=False)
+        logging.info(f"Graded results saved to {out_file}")
+    except Exception as e:
+        logging.error(f"Failed to save grading results: {e}")
     
-    # 6. Summary Report
-    # Filter strictly for Correct/Incorrect (Exclude Pushes/Errors)
+    # 6. Performance Summary Report
+    # Filter strictly for Correct/Incorrect (Exclude Pushes/Missing)
     graded = df_merged[df_merged['Correctness'].isin(['Correct', 'Incorrect'])]
     
-    def print_stat_line(subset, label):
+    def log_accuracy(subset, label):
         total = len(subset)
         if total > 0:
             correct = len(subset[subset['Correctness'] == 'Correct'])
@@ -109,46 +168,14 @@ def grade_predictions():
     logging.info("-" * 40)
     logging.info("PERFORMANCE SUMMARY")
     
-    # Overall Stats
-    print_stat_line(graded, "Total props")
+    log_accuracy(graded, "Total Graded Props")
     
     # S-Tier Stats
-    s_tier_props = graded[graded['Tier'] == 'S Tier']
-    print_stat_line(s_tier_props, "S-Tier props")
+    if 'Tier' in graded.columns:
+        s_tier = graded[graded['Tier'] == 'S Tier']
+        log_accuracy(s_tier, "S-Tier Props")
+        
+        a_tier = graded[graded['Tier'] == 'A Tier']
+        log_accuracy(a_tier, "A-Tier Props")
     
     logging.info("-" * 40)
-
-    # 2. Prep
-    df_props = df_props.dropna(subset=['Score']).copy()
-    df_props['join_player'] = df_props['Player Name'].apply(text.preprocess_name_for_fuzzy_match)
-    # Normalize Matchup/Date logic as needed... simplified here:
-    df_props['join_date'] = pd.to_datetime(df_props['GAME_DATE']).dt.strftime('%Y-%m-%d')
-    
-    df_box['join_player'] = df_box['PLAYER_NAME'].apply(text.preprocess_name_for_fuzzy_match)
-    df_box['join_date'] = pd.to_datetime(df_box['GAME_DATE']).dt.strftime('%Y-%m-%d')
-    
-    df_box = calculate_derived_stats(df_box)
-
-    # 3. Merge
-    # Note: In a real scenario, you might want to merge on Matchup too, 
-    # but Player + Date is usually unique enough for NBA
-    df_merged = pd.merge(
-        df_props, df_box, 
-        on=['join_player', 'join_date'], 
-        how='left', suffixes=('', '_box')
-    )
-
-    # 4. Grade
-    cols = ['Actual Value', 'Result (O/U/P)', 'Correctness']
-    df_merged[cols] = df_merged.apply(check_prop_row, axis=1)
-    
-    # 5. Save
-    out_file = cfg.OUTPUT_DIR / "prop_check_results.csv"
-    df_merged.to_csv(out_file, index=False)
-    logging.info(f"Graded results saved to {out_file}")
-    
-    # 6. Summary
-    graded = df_merged[df_merged['Correctness'].isin(['Correct', 'Incorrect'])]
-    if len(graded) > 0:
-        acc = (len(graded[graded['Correctness']=='Correct']) / len(graded)) * 100
-        logging.info(f"Accuracy on {len(graded)} props: {acc:.2f}%")

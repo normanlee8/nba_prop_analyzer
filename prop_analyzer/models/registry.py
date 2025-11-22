@@ -1,94 +1,83 @@
-import os
 import joblib
 import logging
+import pandas as pd
 from pathlib import Path
 from prop_analyzer import config as cfg
 
-def get_model_paths(prop_cat):
-    """Returns a dict of file paths for a specific prop category."""
-    base = cfg.MODEL_DIR
-    return {
-        'scaler': base / f"scaler_{prop_cat}.pkl",
-        'features': base / f"features_{prop_cat}.pkl",
-        'lgbm_q20': base / f"model_{prop_cat}_lgbm_q20.pkl",
-        'xgb_q20': base / f"model_{prop_cat}_xgb_q20.pkl",
-        'lgbm_q80': base / f"model_{prop_cat}_lgbm_q80.pkl",
-        'xgb_q80': base / f"model_{prop_cat}_xgb_q80.pkl",
-        'clf': base / f"model_{prop_cat}_clf.pkl"
-    }
-
-def save_artifacts(prop_cat, artifacts):
+def get_model_path(prop_category):
     """
-    Saves trained models and preprocessors to disk.
-    artifacts: dict containing 'scaler', 'features', 'q20', 'q80', 'clf'
+    Returns the standard file path for a prop's model artifacts.
     """
-    paths = get_model_paths(prop_cat)
-    
-    # Create directory if not exists
-    cfg.MODEL_DIR.mkdir(parents=True, exist_ok=True)
+    # Sanitize prop name just in case (e.g. 3PM -> FG3M is handled in mapping, but safety first)
+    clean_cat = prop_category.replace(' ', '_').upper()
+    return cfg.MODEL_DIR / f"model_{clean_cat}.pkl"
 
+def save_artifacts(prop_category, artifacts):
+    """
+    Saves the trained model dictionary (scaler, features, models) to disk.
+    """
     try:
-        joblib.dump(artifacts['scaler'], paths['scaler'])
-        joblib.dump(artifacts['features'], paths['features'])
+        path = get_model_path(prop_category)
+        # Ensure directory exists
+        path.parent.mkdir(parents=True, exist_ok=True)
         
-        joblib.dump(artifacts['q20']['lgbm'], paths['lgbm_q20'])
-        joblib.dump(artifacts['q20']['xgb'], paths['xgb_q20'])
-        
-        joblib.dump(artifacts['q80']['lgbm'], paths['lgbm_q80'])
-        joblib.dump(artifacts['q80']['xgb'], paths['xgb_q80'])
-        
-        joblib.dump(artifacts['clf'], paths['clf'])
-        logging.info(f"Saved models for {prop_cat}")
+        joblib.dump(artifacts, path)
+        logging.info(f"Saved artifacts for {prop_category} to {path.name}")
+        return True
     except Exception as e:
-        logging.error(f"Failed to save artifacts for {prop_cat}: {e}")
+        logging.error(f"Failed to save artifacts for {prop_category}: {e}")
+        return False
 
-def load_model_cache(model_dir=None):
+def load_artifacts(prop_category):
     """
-    Loads ALL models into memory. 
-    Returns a dictionary: { 'PTS': { ...models... }, 'REB': { ... } }
+    Loads a specific prop model. Returns None if not found or corrupt.
     """
-    if model_dir is None:
-        model_dir = cfg.MODEL_DIR
+    path = get_model_path(prop_category)
+    if not path.exists():
+        return None
         
-    model_cache = {}
-    if not model_dir.exists():
-        logging.error(f"Model directory not found: {model_dir}")
+    try:
+        artifacts = joblib.load(path)
+        # Basic validation
+        if not isinstance(artifacts, dict):
+            logging.warning(f"Model file for {prop_category} is invalid format.")
+            return None
+            
+        required_keys = ['scaler', 'features', 'q20', 'q80', 'clf']
+        if not all(k in artifacts for k in required_keys):
+            logging.warning(f"Model file for {prop_category} missing keys: {required_keys}")
+            # Phase 3 compatibility: We might still return it if it has partials, 
+            # but inference checks keys. Let's return it and let inference handle/fail.
+            
+        return artifacts
+    except Exception as e:
+        logging.warning(f"Error loading model for {prop_category}: {e}")
         return None
 
-    # Find all categories based on feature files
-    prop_categories = set()
-    for f in os.listdir(model_dir):
-        if f.startswith('features_') and f.endswith('.pkl'):
-            cat = f.replace('features_', '').replace('.pkl', '')
-            prop_categories.add(cat)
-
-    if not prop_categories:
-        logging.warning(f"No models found in {model_dir}")
-        return None
-
-    logging.info(f"Loading models for {len(prop_categories)} categories...")
+def load_model_cache(props_to_load=None):
+    """
+    Loads all available models into memory for batch analysis.
+    Args:
+        props_to_load (list): Optional list of specific props to load. 
+                              If None, loads everything in SUPPORTED_PROPS.
+    Returns:
+        dict: { 'PTS': artifacts_dict, 'REB': ... }
+    """
+    logging.info("Loading model cache...")
     
-    for prop_cat in prop_categories:
-        paths = get_model_paths(prop_cat)
-        try:
-            # Check if essential files exist
-            if not paths['features'].exists(): continue
-
-            cache_entry = {
-                'scaler': joblib.load(paths['scaler']),
-                'features': joblib.load(paths['features']),
-                'q20': {
-                    'lgbm': joblib.load(paths['lgbm_q20']),
-                    'xgb': joblib.load(paths['xgb_q20'])
-                },
-                'q80': {
-                    'lgbm': joblib.load(paths['lgbm_q80']),
-                    'xgb': joblib.load(paths['xgb_q80'])
-                },
-                'clf': joblib.load(paths['clf']) if paths['clf'].exists() else None
-            }
-            model_cache[prop_cat] = cache_entry
-        except Exception as e:
-            logging.error(f"Error loading {prop_cat}: {e}")
-
-    return model_cache
+    if props_to_load is None:
+        props_to_load = cfg.SUPPORTED_PROPS
+        
+    cache = {}
+    loaded_count = 0
+    
+    for prop in props_to_load:
+        artifacts = load_artifacts(prop)
+        if artifacts:
+            cache[prop] = artifacts
+            loaded_count += 1
+            
+    if loaded_count == 0:
+        logging.warning("No models loaded! Ensure you have run training first.")
+        
+    return cache

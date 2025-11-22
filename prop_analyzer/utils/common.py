@@ -1,53 +1,84 @@
 import logging
 import sys
+from pathlib import Path
 from datetime import datetime
 
-def setup_logging(name="prop_analyzer", log_file=None, level=logging.INFO):
+def setup_logging(name=None, level=logging.INFO):
     """
-    Sets up a standardized logger for the application.
+    Configures standard logging for the application.
+    Logs to console and a file in the local directory.
     """
-    logger = logging.getLogger()
+    # Create logs directory if it doesn't exist
+    log_dir = Path("logs")
+    log_dir.mkdir(exist_ok=True)
     
-    # Clear existing handlers to avoid duplicates if called multiple times
-    if logger.hasHandlers():
-        logger.handlers.clear()
+    # Determine log filename
+    if name:
+        filename = log_dir / f"{name}.log"
+    else:
+        filename = log_dir / "app.log"
         
-    logger.setLevel(level)
+    # Formatting
+    log_format = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    date_format = "%Y-%m-%d %H:%M:%S"
     
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    # Handlers
+    handlers = [
+        logging.StreamHandler(sys.stdout), # Console
+        logging.FileHandler(filename, encoding='utf-8') # File
+    ]
     
-    # Console Handler
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
+    # Configure
+    logging.basicConfig(
+        level=level,
+        format=log_format,
+        datefmt=date_format,
+        handlers=handlers,
+        force=True # Overwrite any existing config
+    )
     
-    # File Handler (optional)
-    if log_file:
-        file_handler = logging.FileHandler(log_file, mode='w')
-        file_handler.setFormatter(formatter)
-        logger.addHandler(file_handler)
-        
-    return logger
+    logging.info(f"Logging initialized. Writing to {filename}")
 
 def get_nba_season_id(date_obj):
     """
-    Determines the NBA Season ID (e.g., 22025) for a given date.
-    NBA Seasons typically start in October.
+    Returns the NBA API Season ID string for a given date.
+    Format: '2' + Year (e.g., '22025' for the 2025-26 Regular Season).
+    
+    Logic:
+    - If month is Oct (10) or later, the season started this year.
+    - If month is before Oct, the season started the previous year.
     """
     if isinstance(date_obj, str):
         try:
             date_obj = datetime.strptime(date_obj, "%Y-%m-%d")
         except:
-            return 22025 # Fallback
+            # Fallback to current date if parsing fails
+            date_obj = datetime.now()
             
-    year = date_obj.year
-    month = date_obj.month
-    
-    # If month is Oct (10), Nov (11), Dec (12), the season started in this year.
-    # NBA API Format: 2 + Year (e.g., 2025-26 Season -> 22025)
-    if month >= 9: # September buffers preseason
-        season_year = year
+    # NBA Season cutover usually happens in October
+    if date_obj.month >= 10:
+        season_start_year = date_obj.year
     else:
-        season_year = year - 1
+        season_start_year = date_obj.year - 1
         
-    return int(f"2{season_year}")
+    # '2' prefix denotes Regular Season in NBA API
+    return f"2{season_start_year}"
+
+def get_season_year_str(date_obj):
+    """
+    Returns the season string like '2025-26' for filenames.
+    """
+    if isinstance(date_obj, str):
+        try:
+            date_obj = datetime.strptime(date_obj, "%Y-%m-%d")
+        except:
+            date_obj = datetime.now()
+
+    if date_obj.month >= 10:
+        start = date_obj.year
+        end = date_obj.year + 1
+    else:
+        start = date_obj.year - 1
+        end = date_obj.year
+        
+    return f"{start}-{str(end)[-2:]}"

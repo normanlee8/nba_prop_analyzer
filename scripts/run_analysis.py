@@ -23,8 +23,6 @@ except ImportError:
     sys.exit(1)
 
 # --- CONFIGURATION ---
-
-# Manually map nicknames/short names to Official DB Names
 PROP_NAME_FIX_MAP = {
     'Cam Johnson': 'Cameron Johnson', 
     'Deuce McBride': 'Miles McBride',
@@ -39,96 +37,115 @@ PROP_NAME_FIX_MAP = {
     'GG Jackson': 'GG Jackson II'
 }
 
-# --- GAME CONTEXT HELPERS ---
+# --- LIVE DATA MANAGER ---
 
-def get_daily_game_context():
+class LiveGameManager:
     """
-    Fetches the day's schedule and returns a map:
-    Team_Abbrev -> {GameID, Status, Opponent, IsHome, Period, Clock}
-    Status Codes: 1=Scheduled, 2=Live, 3=Final
+    Centralizes all interactions with the NBA Live API.
     """
-    logging.info("Fetching daily schedule from NBA API...")
-    try:
-        board = scoreboard.ScoreBoard()
-        games = board.games.get_dict()
-        
-        context_map = {}
-        
-        for g in games:
-            gid = g['gameId']
-            status = g['gameStatus'] # 1: Pre, 2: Live, 3: Final
-            period = g.get('period', 0)
-            clock = g.get('gameClock', '')
-            
-            h_team = g['homeTeam']['teamTricode']
-            a_team = g['awayTeam']['teamTricode']
-            
-            # Map Home Team
-            context_map[h_team] = {
-                'GameID': gid, 'Status': status, 'Opp': a_team, 
-                'IsHome': True, 'Period': period, 'Clock': clock
-            }
-            
-            # Map Away Team
-            context_map[a_team] = {
-                'GameID': gid, 'Status': status, 'Opp': h_team, 
-                'IsHome': False, 'Period': period, 'Clock': clock
-            }
-            
-        return context_map
-    except Exception as e:
-        logging.error(f"Failed to fetch scoreboard: {e}")
-        return {}
+    def __init__(self):
+        self.board = None
+        self.games = {}
+        self.context_map = {}
 
-def get_live_player_box(game_id, player_id):
-    """Fetches current stats for a specific player in a live game."""
-    try:
-        box = boxscore.BoxScore(game_id=game_id)
-        data = box.game.get_dict()
-        # Check both rosters
-        all_players = data['homeTeam']['players'] + data['awayTeam']['players']
-        
-        for p in all_players:
-            if p['personId'] == player_id:
-                stats = p['statistics']
-                # Parse Minutes "PT24M30.00S" or "24:30"
-                min_str = stats.get('minutes', 'PT00M00.00S')
-                minutes = 0.0
-                if ':' in min_str:
-                    m, s = min_str.split(':')
-                    minutes = int(m) + (int(s)/60)
-                elif 'M' in min_str:
-                    match = re.search(r'PT(\d+)M', min_str)
-                    if match: minutes = int(match.group(1))
-                    match_s = re.search(r'M(\d+)\.', min_str)
-                    if match_s: minutes += int(match_s.group(1))/60
-
-                return {
-                    'MIN': minutes, 
-                    'PTS': stats['points'], 
-                    'REB': stats['reboundsTotal'],
-                    'AST': stats['assists'], 
-                    'FG3M': stats['threePointersMade'],
-                    'STL': stats['steals'], 
-                    'BLK': stats['blocks'], 
-                    'TOV': stats['turnovers']
+    def fetch_daily_context(self):
+        logging.info("Fetching daily schedule from NBA API...")
+        try:
+            self.board = scoreboard.ScoreBoard()
+            self.games = self.board.games.get_dict()
+            self.context_map = {}
+            
+            for g in self.games:
+                gid = g['gameId']
+                status = g['gameStatus'] # 1: Pre, 2: Live, 3: Final
+                period = g.get('period', 0)
+                clock = g.get('gameClock', '')
+                
+                h_team = g['homeTeam']['teamTricode']
+                a_team = g['awayTeam']['teamTricode']
+                
+                # Map Home Team
+                self.context_map[h_team] = {
+                    'GameID': gid, 'Status': status, 'Opp': a_team, 
+                    'IsHome': True, 'Period': period, 'Clock': clock
                 }
-        return None
-    except:
-        return None
+                
+                # Map Away Team
+                self.context_map[a_team] = {
+                    'GameID': gid, 'Status': status, 'Opp': h_team, 
+                    'IsHome': False, 'Period': period, 'Clock': clock
+                }
+            return self.context_map
+        except Exception as e:
+            logging.error(f"Failed to fetch scoreboard: {e}")
+            return {}
 
-def calculate_live_projection(current_val, minutes_played, avg_minutes):
-    """Projects final stat based on current pace and average rotation."""
-    if minutes_played < 1.0: return current_val # Too early to project
+    def get_live_player_stats(self, game_id, player_id):
+        """Fetches current stats for a specific player in a live game."""
+        try:
+            box = boxscore.BoxScore(game_id=game_id)
+            data = box.game.get_dict()
+            # Check both rosters
+            all_players = data['homeTeam']['players'] + data['awayTeam']['players']
+            
+            for p in all_players:
+                if p['personId'] == player_id:
+                    stats = p['statistics']
+                    # Parse Minutes "PT24M30.00S" or "24:30"
+                    min_str = stats.get('minutes', 'PT00M00.00S')
+                    minutes = 0.0
+                    if ':' in min_str:
+                        m, s = min_str.split(':')
+                        minutes = int(m) + (int(s)/60)
+                    elif 'M' in min_str:
+                        match = re.search(r'PT(\d+)M', min_str)
+                        if match: minutes = int(match.group(1))
+                        match_s = re.search(r'M(\d+)\.', min_str)
+                        if match_s: minutes += int(match_s.group(1))/60
+
+                    return {
+                        'MIN': minutes, 
+                        'PTS': stats['points'], 
+                        'REB': stats['reboundsTotal'],
+                        'AST': stats['assists'], 
+                        'FG3M': stats['threePointersMade'],
+                        'STL': stats['steals'], 
+                        'BLK': stats['blocks'], 
+                        'TOV': stats['turnovers']
+                    }
+            return None
+        except:
+            return None
+
+def calculate_blended_live_projection(baseline_proj, current_val, minutes_played, avg_minutes):
+    """
+    Uses Bayesian Decay to blend Pre-Game Projection with Live Pace.
+    Prevents wild swings early in the game.
+    """
+    if minutes_played <= 0: return baseline_proj
     
-    # If they've already played their average minutes, assume they are done or close to it
-    if minutes_played >= avg_minutes: 
-        return current_val 
+    # Cap minutes to avoid division by zero or negative remaining
+    avg_minutes = max(avg_minutes, 15.0) 
+    minutes_played = min(minutes_played, avg_minutes)
+    
+    # Calculate Game Progress (0.0 to 1.0)
+    progress = minutes_played / avg_minutes
+    
+    # Live Pace (Extrapolated)
+    live_pace = (current_val / minutes_played) * avg_minutes
+    
+    # Weighting: Trust baseline early, trust live pace late
+    # We use a sigmoid-like weight or simple linear weight
+    # Let's use linear for simplicity but start trusting live after 5 mins
+    if minutes_played < 5.0:
+        weight_live = 0.1
+    else:
+        weight_live = progress
         
-    # Simple linear projection: (Current / Mins) * Avg_Mins
-    return (current_val / minutes_played) * avg_minutes
+    blended = (baseline_proj * (1 - weight_live)) + (live_pace * weight_live)
+    return blended
 
-# --- CORE ANALYZER ---
+# --- MAIN ANALYZER ---
 
 def main():
     common.setup_logging(name="unified_analyzer")
@@ -154,15 +171,12 @@ def main():
         return
         
     try:
-        # Supporting standard CSV input
         props_df = pd.read_csv(cfg.PROPS_FILE)
-        # Ensure minimal columns exist
         req_cols = ['Player Name', 'Prop Category', 'Prop Line']
         if not all(col in props_df.columns for col in req_cols):
             logging.error(f"Input CSV must contain columns: {req_cols}")
             return
 
-        # --- APPLY NAME FIXES HERE ---
         logging.info("Applying name corrections...")
         props_df['Player Name'] = props_df['Player Name'].replace(PROP_NAME_FIX_MAP)
         
@@ -170,24 +184,24 @@ def main():
         logging.critical(f"Error reading props file: {e}")
         return
 
-    # 3. Build Game Context
-    context_map = get_daily_game_context()
+    # 3. Init Live Manager & Context
+    live_manager = LiveGameManager()
+    context_map = live_manager.fetch_daily_context()
+    
     if not context_map:
-        logging.warning("Context map empty. Assuming all games are PRE-GAME (Status 1).")
+        logging.warning("Context map empty. Assuming all games are PRE-GAME.")
 
     # 4. Optimize Box Score Loading
     relevant_ids = []
     player_lookup = {}
     
-    # Pre-scan players to bulk load data
     for name in props_df['Player Name'].unique():
         p_data = text.fuzzy_match_player(name, player_stats)
         if p_data is not None: 
             relevant_ids.append(p_data['PLAYER_ID'])
             player_lookup[name] = p_data
         else:
-            # Log this clearly so user knows exactly who failed even after fixes
-            logging.warning(f"Player not found in DB (Check Fix Map): {name}")
+            logging.warning(f"Player not found in DB: {name}")
             
     box_scores = loader.load_box_scores(relevant_ids)
 
@@ -201,7 +215,6 @@ def main():
         prop_cat_raw = row['Prop Category']
         line = float(row['Prop Line'])
         
-        # Normalize Prop Category
         prop_cat = cfg.MASTER_PROP_MAP.get(prop_cat_raw, prop_cat_raw)
         if prop_cat not in cfg.SUPPORTED_PROPS: 
             continue
@@ -214,24 +227,21 @@ def main():
         team = p_data['TEAM_ABBREVIATION']
         
         # --- DETERMINE STATUS ---
-        # Default to Pre-Game if team not in context
         game_ctx = context_map.get(team, {'Status': 1, 'GameID': None, 'Opp': 'UNK', 'IsHome': True, 'Period': 0, 'Clock': ''})
         status = game_ctx['Status'] # 1: Pre, 2: Live, 3: Final
         
-        if status == 3:
-            continue # Skip finalized games
+        if status == 3: continue # Skip finalized
 
-        # --- FETCH LIVE STATS (If Status == 2) ---
+        # --- FETCH LIVE STATS ---
         live_stats = None
         curr_val = 0.0
         minutes_played = 0.0
         
         if status == 2 and game_ctx['GameID']:
-            live_stats = get_live_player_box(game_ctx['GameID'], pid)
-            
+            live_stats = live_manager.get_live_player_stats(game_ctx['GameID'], pid)
             if live_stats:
                 minutes_played = live_stats['MIN']
-                # Calculate Composite Stats
+                # Composite logic
                 if prop_cat in live_stats: curr_val = live_stats[prop_cat]
                 elif prop_cat == 'PRA': curr_val = live_stats['PTS'] + live_stats['REB'] + live_stats['AST']
                 elif prop_cat == 'PR': curr_val = live_stats['PTS'] + live_stats['REB']
@@ -240,7 +250,6 @@ def main():
                 elif prop_cat == 'STK': curr_val = live_stats['STL'] + live_stats['BLK']
 
         # --- FEATURE GENERATION ---
-        # Generate features as if pre-game to get model baseline
         features, _, _ = generator.build_feature_vector(
             p_data, pid, prop_cat, line,
             team, game_ctx['Opp'], 
@@ -250,47 +259,31 @@ def main():
         )
 
         # --- PREDICTION ---
+        # Inference now returns 'prob_over' from the CLASSIFIER
         model_out = inference.predict_prop(model_cache, prop_cat, features)
         if not model_out: continue
 
-        # Baseline Projection from Model
         baseline_proj = (model_out['q20'] + model_out['q80']) / 2
-        q20 = model_out['q20']
-        q80 = model_out['q80']
         
         # --- LIVE ADJUSTMENT ---
+        final_proj = baseline_proj
         if status == 2 and live_stats:
             avg_min = p_data.get('MIN', 30.0)
             if pd.isna(avg_min): avg_min = 30.0
             
-            pace_proj = calculate_live_projection(curr_val, minutes_played, avg_min)
-            
-            # Weighting based on game progress
-            game_progress = min(minutes_played / avg_min, 1.0)
-            
-            # Blended Projections
-            baseline_proj = (baseline_proj * (1 - game_progress)) + (pace_proj * game_progress)
-            
-            # Tighten confidence intervals as game progresses
-            q20 = (q20 * (1 - game_progress)) + (pace_proj * 0.9 * game_progress)
-            q80 = (q80 * (1 - game_progress)) + (pace_proj * 1.1 * game_progress)
+            # Use blended projection instead of linear extrapolation
+            final_proj = calculate_blended_live_projection(baseline_proj, curr_val, minutes_played, avg_min)
 
-        # --- RECALCULATE WIN PROBABILITY ---
-        # Triangle Distribution Logic based on new Q20/Q80
-        if line < q20:
-            win_prob = 0.80 + (0.20 * (1 - (line/q20)))
-        elif line > q80:
-            win_prob = 0.20 * (q80/line)
-        else:
-            range_width = q80 - q20
-            if range_width == 0: range_width = 0.1
-            position = (line - q20) / range_width
-            win_prob = 0.80 - (0.60 * position)
-            
-        win_prob = max(0.0, min(1.0, win_prob))
-
-        metrics = inference.determine_tier(line, q20, q80, win_prob)
+        # --- TIER DETERMINATION ---
+        # We pass the Raw Model Probability into determine_tier
+        # The logic inside determine_tier handles the "Divergence" check
+        metrics = inference.determine_tier(line, model_out['q20'], model_out['q80'], model_out['prob_over'])
         
+        # Visual flag for divergent models (Classifier says Over, Regression says Under)
+        tier_display = metrics['Tier']
+        if metrics.get('Is_Divergent', False):
+            tier_display += "*"
+
         res = {
             'Status': 'LIVE' if status == 2 else 'PRE',
             'Game': f"{team} vs {game_ctx['Opp']}",
@@ -299,11 +292,11 @@ def main():
             'Prop': prop_cat,
             'Line': line,
             'Curr': int(curr_val) if status == 2 else 0,
-            'Proj': round(baseline_proj, 1),
-            'Edge': round(baseline_proj - line, 1),
+            'Proj': round(final_proj, 1),
+            'Edge': round(final_proj - line, 1),
             'Win%': metrics['Win_Prob'],
             'Pick': metrics['Best Pick'],
-            'Tier': metrics['Tier']
+            'Tier': tier_display
         }
         results.append(res)
 
@@ -314,16 +307,21 @@ def main():
 
     df = pd.DataFrame(results)
     
-    # Sort: Status (Live first), then Tier, then Win%
-    tier_order = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
-    df['sort_idx'] = df['Tier'].map(tier_order).fillna(99)
-    
+    # Clean sorting
+    def sort_tier(t):
+        t = t.replace('*', '') # Ignore divergence flag for sorting
+        if t == 'S Tier': return 0
+        if t == 'A Tier': return 1
+        if t == 'B Tier': return 2
+        return 3
+        
+    df['sort_idx'] = df['Tier'].apply(sort_tier)
     df.sort_values(by=['Status', 'sort_idx', 'Win%'], ascending=[True, True, False], inplace=True)
 
     print("\n" + "="*120)
     print(f"UNIFIED NBA PROP REPORT | {len(df)} Props Analyzed")
     print("="*120)
-    print(f"{'Sts':<4} | {'Game':<9} | {'Qtr':<3} | {'Player':<20} | {'Prop':<6} | {'Line':>5} | {'Curr':>4} | {'Proj':>5} | {'Edge':>5} | {'Win%':>6} | {'Pick':<5} | {'Tier':<5}")
+    print(f"{'Sts':<4} | {'Game':<9} | {'Qtr':<3} | {'Player':<20} | {'Prop':<6} | {'Line':>5} | {'Curr':>4} | {'Proj':>5} | {'Edge':>5} | {'Win%':>6} | {'Pick':<5} | {'Tier':<6}")
     print("-" * 120)
 
     for _, row in df.head(50).iterrows():
@@ -340,9 +338,10 @@ def main():
             f"{row['Edge']:>5.1f} | "
             f"{win_prob_str:>6} | "
             f"{row['Pick']:<5} | "
-            f"{row['Tier']:<5}"
+            f"{row['Tier']:<6}"
         )
     print("="*120)
+    print("* = Divergent Model Signal (Lower Confidence)")
     
     # Save
     df.drop(columns=['sort_idx'], inplace=True)

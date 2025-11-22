@@ -1,51 +1,51 @@
 import re
-import logging
 from unidecode import unidecode
 from rapidfuzz import process, fuzz
 
 def preprocess_name_for_fuzzy_match(name):
     """
-    Standardizes player names for fuzzy matching (removes suffixes, accents, etc.).
+    Normalizes player names for better fuzzy matching.
+    Removes accents, suffixes (Jr, III), and punctuation.
     """
-    if not name or str(name).lower() == 'nan':
-        return name
-        
-    # Remove suffixes like Jr., Sr., II, III, IV
-    name = re.sub(r'\s+(jr|sr|ii|iii|iv|v)\.?$', '', str(name), flags=re.IGNORECASE)
+    if not isinstance(name, str): return ""
+    
+    # 1. Transliterate to ASCII (Dončić -> Doncic) and Lowercase
     name = unidecode(name).lower()
-    name = re.sub(r'[^a-z0-9\s]', '', name)
-    name = ' '.join(name.split())
     
-    return name
+    # 2. Remove common suffixes
+    # Matches " jr", " sr", " iii", " ii", " iv" at end of string or word boundary
+    name = re.sub(r'\b(jr|sr|ii|iii|iv)\b', '', name)
+    
+    # 3. Remove special chars (punctuation)
+    name = re.sub(r'[^\w\s]', '', name)
+    
+    # 4. Collapse whitespace
+    return " ".join(name.split())
 
-def fuzzy_match_player(player_name, player_stats_df):
+def fuzzy_match_player(input_name, player_df, threshold=85):
     """
-    Matches a raw player name string to a row in the master player dataframe.
-    Requires 'processed_name' column to exist in player_stats_df.
+    Finds the best match for a player name in the master dataframe.
+    Returns the player row (Series) or None.
     """
-    if player_stats_df is None or player_stats_df.empty:
+    if player_df is None or player_df.empty:
         return None
         
-    # Create processed list if not present (safety check)
-    if 'processed_name' not in player_stats_df.columns:
-        player_stats_df['processed_name'] = player_stats_df['clean_name'].apply(preprocess_name_for_fuzzy_match)
-
-    choices_series = player_stats_df['processed_name'].dropna()
-    choices_list = choices_series.tolist()
+    clean_input = preprocess_name_for_fuzzy_match(input_name)
     
-    clean_input = preprocess_name_for_fuzzy_match(player_name)
+    # Use the pre-processed column if available for speed
+    choices = player_df['processed_name'].tolist() if 'processed_name' in player_df.columns else player_df['clean_name'].tolist()
     
-    if not choices_list:
-        return None
-
-    match = process.extractOne(clean_input, choices_list, scorer=fuzz.token_sort_ratio, score_cutoff=90)
+    match = process.extractOne(clean_input, choices, scorer=fuzz.token_sort_ratio)
     
-    if match:
-        matched_processed_name, score, _ = match
-        # Find the index in the original DF
-        original_index = choices_series[choices_series == matched_processed_name].index[0]
-        player_data = player_stats_df.loc[original_index]
-        return player_data
-    else:
-        logging.debug(f"No sufficient fuzzy match found for player: {player_name}")
-        return None
+    if match and match[1] >= threshold:
+        # Find the row corresponding to the matched name
+        # Note: We map back to the original dataframe index
+        matched_name = match[0]
+        # We need to find which index this corresponds to. 
+        # If we used a list, we rely on position or string match.
+        # Safer to filter df:
+        col = 'processed_name' if 'processed_name' in player_df.columns else 'clean_name'
+        row = player_df[player_df[col] == matched_name].iloc[0]
+        return row
+        
+    return None

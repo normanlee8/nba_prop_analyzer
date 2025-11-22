@@ -3,61 +3,83 @@ import pandas as pd
 import logging
 from pathlib import Path
 
+# Add project root to path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from prop_analyzer import config as cfg
 from prop_analyzer.models import training
-from prop_analyzer.features import definitions
-from prop_analyzer.utils.common import setup_logging
-
-MASTER_TRAIN_FILE = "master_training_dataset.csv"
-
-def load_training_dataset():
-    # Try multiple locations
-    paths = [
-        cfg.DATA_DIR / MASTER_TRAIN_FILE,
-        Path(MASTER_TRAIN_FILE)
-    ]
-    for p in paths:
-        if p.exists():
-            return pd.read_csv(p, low_memory=False)
-    return None
+from prop_analyzer.utils import common
 
 def main():
-    setup_logging(name="training", log_file="training.log")
-    logging.info(">>> Starting Model Training Pipeline")
+    common.setup_logging(name="train_models")
+    logging.info(">>> STARTING MODEL TRAINING PIPELINE")
 
-    df = load_training_dataset()
-    if df is None:
-        logging.critical(f"FATAL: {MASTER_TRAIN_FILE} not found.")
+    # 1. Load Training Data
+    train_file = cfg.DATA_DIR / "master_training_dataset.csv"
+    if not train_file.exists():
+        logging.critical(f"Training dataset not found at {train_file}")
+        logging.critical("Please run 'scripts/run_build_db.py' first.")
         return
 
-    # Clean Data
-    df = df.dropna(subset=['Actual Value', 'Prop Line'])
-    df['Actual Value'] = pd.to_numeric(df['Actual Value'], errors='coerce')
-    df['Prop Line'] = pd.to_numeric(df['Prop Line'], errors='coerce')
-
-    # Filter for minimum games if column exists
-    if 'SZN Games' in df.columns:
-        df = df[df['SZN Games'] >= 5]
-
-    # Train loop
-    props_to_train = definitions.PROP_FEATURE_MAP.keys()
-    
-    for prop_cat in props_to_train:
-        # Filter dataset for this specific prop type
-        prop_df = df[df['Prop Category'] == prop_cat].copy()
+    try:
+        logging.info(f"Loading dataset: {train_file}")
+        df = pd.read_csv(train_file, low_memory=False)
         
-        if len(prop_df) < 100:
-            logging.warning(f"Skipping {prop_cat}: Insufficient data ({len(prop_df)} rows)")
-            continue
+        if df.empty:
+            logging.critical("Training dataset is empty.")
+            return
             
-        try:
-            training.train_single_prop(prop_df, prop_cat)
-        except Exception as e:
-            logging.error(f"Failed to train {prop_cat}: {e}")
+        logging.info(f"Loaded {len(df)} rows of training data.")
+        
+    except Exception as e:
+        logging.critical(f"Failed to load training data: {e}")
+        return
 
-    logging.info("<<< Training Complete >>>")
+    # 2. Filter Props based on Dataset Availability
+    # We strictly train only what exists in the columns.
+    available_cols = set(df.columns)
+    
+    # Intersection: Config vs Actual Data
+    props_to_train = [p for p in cfg.SUPPORTED_PROPS if p in available_cols]
+    skipped_props = [p for p in cfg.SUPPORTED_PROPS if p not in available_cols]
+
+    if skipped_props:
+        logging.info(f"Note: {len(skipped_props)} props excluded from training (Historical data not available).")
+        logging.info(f"Excluded: {', '.join(skipped_props)}")
+
+    logging.info(f"Proceeding to train models for {len(props_to_train)} props...")
+
+    # 3. Train Models
+    successful = 0
+    failed = 0
+    
+    for prop in props_to_train:
+        logging.info(f"--- Training Model: {prop} ---")
+        
+        # Create specific dataframe for this prop
+        prop_df = df.dropna(subset=[prop]).copy()
+        prop_df['Actual Value'] = prop_df[prop]
+        
+        # Create Dummy Prop Line for Classifier Context
+        # (Simulates "Over/Under" logic using a rolling average as the line)
+        if 'SZN_AVG' not in prop_df.columns:
+             prop_df['Prop Line'] = prop_df[prop].rolling(window=5, min_periods=1).mean().shift(1)
+             # Drop the initial rows where rolling avg is NaN
+             prop_df.dropna(subset=['Prop Line'], inplace=True)
+        
+        if prop_df.empty:
+            logging.warning(f"Skipping {prop}: No valid rows after preprocessing.")
+            failed += 1
+            continue
+
+        try:
+            training.train_single_prop(prop_df, prop)
+            successful += 1
+        except Exception as e:
+            logging.error(f"Failed to train {prop}: {e}", exc_info=True)
+            failed += 1
+
+    logging.info(f"<<< TRAINING COMPLETE. Success: {successful}, Failed: {failed}")
 
 if __name__ == "__main__":
     main()
