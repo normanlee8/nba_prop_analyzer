@@ -227,10 +227,38 @@ def main():
         team = p_data['TEAM_ABBREVIATION']
         
         # --- DETERMINE STATUS ---
+        # 1. Try to get context from NBA API
         game_ctx = context_map.get(team, {'Status': 1, 'GameID': None, 'Opp': 'UNK', 'IsHome': True, 'Period': 0, 'Clock': ''})
-        status = game_ctx['Status'] # 1: Pre, 2: Live, 3: Final
+        status = game_ctx['Status']
         
-        if status == 3: continue # Skip finalized
+        # 2. FALLBACK: If API says "UNK", grab Opponent from your CSV Input
+        opp_abbr = game_ctx['Opp']
+        is_home = game_ctx['IsHome']
+
+        if opp_abbr == 'UNK':
+            # Try to read 'Opponent' column if it exists (from parser.py)
+            if 'Opponent' in row and pd.notna(row['Opponent']):
+                opp_abbr = row['Opponent']
+            
+            # Or try parsing the 'Matchup' column (e.g., "NYK @ BOS")
+            if 'Matchup' in row and isinstance(row['Matchup'], str) and '@' in row['Matchup']:
+                try:
+                    away_t, home_t = row['Matchup'].split(' @ ')
+                    if team == home_t:
+                        is_home = True
+                        opp_abbr = away_t
+                    elif team == away_t:
+                        is_home = False
+                        opp_abbr = home_t
+                except:
+                    pass
+
+        # If it is STILL 'UNK' after fallback, skip it to avoid bad data
+        if opp_abbr == 'UNK':
+            logging.warning(f"Could not determine opponent for {player_name}. Skipping.")
+            continue
+        
+        if status == 3: continue # Skip finalized games
 
         # --- FETCH LIVE STATS ---
         live_stats = None
@@ -250,16 +278,17 @@ def main():
                 elif prop_cat == 'STK': curr_val = live_stats['STL'] + live_stats['BLK']
 
         # --- FEATURE GENERATION ---
+        # CRITICAL FIX: Pass the corrected 'opp_abbr' and 'is_home' variables here
         features, _, _ = generator.build_feature_vector(
             p_data, pid, prop_cat, line,
-            team, game_ctx['Opp'], 
-            game_ctx['IsHome'], datetime.now().strftime('%Y-%m-%d'),
+            team, opp_abbr,      # <--- Use the corrected variable!
+            is_home,             # <--- Use the corrected variable!
+            datetime.now().strftime('%Y-%m-%d'),
             box_scores, team_stats, vs_opp_df, full_roster_df=player_stats,
             dvp_df=dvp_df 
         )
 
         # --- PREDICTION ---
-        # Inference now returns 'prob_over' from the CLASSIFIER
         model_out = inference.predict_prop(model_cache, prop_cat, features)
         if not model_out: continue
 
@@ -270,23 +299,18 @@ def main():
         if status == 2 and live_stats:
             avg_min = p_data.get('MIN', 30.0)
             if pd.isna(avg_min): avg_min = 30.0
-            
-            # Use blended projection instead of linear extrapolation
             final_proj = calculate_blended_live_projection(baseline_proj, curr_val, minutes_played, avg_min)
 
         # --- TIER DETERMINATION ---
-        # We pass the Raw Model Probability into determine_tier
-        # The logic inside determine_tier handles the "Divergence" check
         metrics = inference.determine_tier(line, model_out['q20'], model_out['q80'], model_out['prob_over'])
         
-        # Visual flag for divergent models (Classifier says Over, Regression says Under)
         tier_display = metrics['Tier']
         if metrics.get('Is_Divergent', False):
             tier_display += "*"
 
         res = {
             'Status': 'LIVE' if status == 2 else 'PRE',
-            'Game': f"{team} vs {game_ctx['Opp']}",
+            'Game': f"{team} vs {opp_abbr}", # <--- Update display to show real opponent
             'Qtr': f"Q{game_ctx['Period']}" if status == 2 else "-",
             'Player': p_data['PLAYER_NAME'],
             'Prop': prop_cat,
