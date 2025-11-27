@@ -1,36 +1,13 @@
 import pandas as pd
 import numpy as np
 from datetime import timedelta
+from rapidfuzz import process, fuzz
 from prop_analyzer import config as cfg
 from prop_analyzer.utils.common import get_nba_season_id
-
-# Mapping verbose prop names to Database Column headers
-DB_COL_MAP = {
-    'POINTS': 'PTS',
-    'REBOUNDS': 'REB',
-    'ASSISTS': 'AST',
-    'POINTS + REBOUNDS + ASSISTS': 'PRA',
-    'PTS + REB + AST': 'PRA',
-    'POINTS + REBOUNDS': 'PR',
-    'POINTS + ASSISTS': 'PA',
-    'REBOUNDS + ASSISTS': 'RA',
-    'THREE POINTERS MADE': 'FG3M',
-    '3-PT MADE': 'FG3M',
-    'BLOCKS': 'BLK',
-    'STEALS': 'STL',
-    'TURNOVERS': 'TOV',
-    'FANTASY POINTS': 'FANTASY_PTS',
-    # Quarter/Half props are usually handled by proxy_map logic below, 
-    # but we map the suffix here just in case
-}
+from prop_analyzer.utils.text import preprocess_name_for_fuzzy_match
 
 def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, prop_game_date):
-    # 1. Normalize Prop Category to DB Column (e.g., "POINTS + REBOUNDS" -> "PR")
-    # We default to the upper case version of the input if not in map
-    clean_prop = DB_COL_MAP.get(prop_category.upper(), prop_category.upper())
-
-    # 2. Map sub-game props to full game stats for historical averaging
-    # (e.g., We predict Q1 Points based on full game PTS trends if Q1 data isn't dense)
+    # Map sub-game props to full game props for trend analysis
     proxy_map = {
         'Q1_PTS': 'PTS', 'Q1_REB': 'REB', 'Q1_AST': 'AST', 'Q1_PRA': 'PRA',
         'Q2_PTS': 'PTS', 'Q2_REB': 'REB', 'Q2_AST': 'AST',
@@ -38,20 +15,7 @@ def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, p
         'Q4_PTS': 'PTS', 'Q4_REB': 'REB', 'Q4_AST': 'AST',
         '1H_PTS': 'PTS', '1H_REB': 'REB', '1H_AST': 'AST', '1H_PRA': 'PRA',
     }
-    
-    # If it's a specific period prop, use the proxy map, otherwise use the clean DB column
-    prop_col = proxy_map.get(prop_category, clean_prop)
-
-    # Defaults structure
-    defaults = {
-        'szn_avg': 0, 'l3_avg': 0, 'l5_avg': 0, 'l10_std_dev': 0, 
-        'szn_std_dev': 0, 'cov_pct': 0, 'season_games': 0,
-        'szn_avg_ts': 0, 'l5_avg_ts': 0, 'loc_avg_ts': 0,
-        'szn_avg_efg': 0, 'l5_avg_efg': 0, 'loc_avg_efg': 0,
-        'szn_avg_usg': 0, 'l5_avg_usg': 0, 'loc_avg_usg': 0,
-        'loc_avg': 0,
-        'prop_col': prop_col # Useful for debugging
-    }
+    prop_col = proxy_map.get(prop_category, prop_category)
 
     # Filter for Player & Date
     player_history = box_scores_df[box_scores_df['PLAYER_ID'] == player_id].copy()
@@ -66,20 +30,17 @@ def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, p
         season_start = prop_date_dt - timedelta(days=270)
         player_season_df = player_history[player_history['GAME_DATE'] > season_start].copy()
 
-    # CRITICAL CHECK: Does the column exist?
+    defaults = {
+        'szn_avg': 0, 'l3_avg': 0, 'l5_avg': 0, 'l10_std_dev': 0, 
+        'szn_std_dev': 0, 'cov_pct': 0, 'season_games': 0,
+        'szn_avg_ts': 0, 'l5_avg_ts': 0, 'loc_avg_ts': 0,
+        'szn_avg_efg': 0, 'l5_avg_efg': 0, 'loc_avg_efg': 0,
+        'szn_avg_usg': 0, 'l5_avg_usg': 0, 'loc_avg_usg': 0,
+        'loc_avg': 0
+    }
+
     if prop_col not in player_season_df.columns:
-        # If we can't find 'PRA', we try to build it dynamically if components exist
-        if prop_col == 'PRA' and {'PTS', 'REB', 'AST'}.issubset(player_season_df.columns):
-            player_season_df['PRA'] = player_season_df['PTS'] + player_season_df['REB'] + player_season_df['AST']
-        elif prop_col == 'PR' and {'PTS', 'REB'}.issubset(player_season_df.columns):
-            player_season_df['PR'] = player_season_df['PTS'] + player_season_df['REB']
-        elif prop_col == 'PA' and {'PTS', 'AST'}.issubset(player_season_df.columns):
-            player_season_df['PA'] = player_season_df['PTS'] + player_season_df['AST']
-        elif prop_col == 'RA' and {'REB', 'AST'}.issubset(player_season_df.columns):
-            player_season_df['RA'] = player_season_df['REB'] + player_season_df['AST']
-        else:
-            # If still missing, return 0s
-            return defaults
+        return {'prop_col': prop_col} | defaults
     
     player_season_df.dropna(subset=[prop_col], inplace=True)
     player_season_df.sort_values(by='GAME_DATE', ascending=False, inplace=True)
@@ -166,12 +127,14 @@ def get_schedule_fatigue_metrics(player_id, box_scores_df, prop_game_date):
     return {'games_in_l5': len(recent), 'is_b2b': is_b2b}
 
 def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
-    # ... (No changes needed to vacancy logic) ...
-    # Keep existing code for calculate_live_vacancy
-    # Copying purely to maintain file integrity if you copy-paste the whole block
+    """
+    Calculates the total missing Usage and Minutes for a team based on the injury report.
+    Returns: (missing_usg, missing_min, missing_usg_g, missing_usg_f)
+    """
     if inj_df is None or inj_df.empty or full_roster_df is None or full_roster_df.empty:
         return 0.0, 0.0, 0.0, 0.0
 
+    # 1. Filter Injuries for this Team
     team_injuries = inj_df[inj_df['Team'] == team_abbr] if 'Team' in inj_df.columns else pd.DataFrame()
     if team_injuries.empty or 'Status_Clean' not in team_injuries.columns:
         return 0.0, 0.0, 0.0, 0.0
@@ -180,10 +143,13 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
     if out_players.empty:
         return 0.0, 0.0, 0.0, 0.0
 
+    # 2. Filter Roster for this Team
     team_roster = full_roster_df[full_roster_df['TEAM_ABBREVIATION'] == team_abbr].copy()
     if team_roster.empty: 
         return 0.0, 0.0, 0.0, 0.0
     
+    # 3. Dynamic Column Selection
+    # Determine Usage Column
     if 'USG_PROXY' in team_roster.columns: usg_col = 'USG_PROXY'
     elif 'USG%' in team_roster.columns: usg_col = 'USG%'
     elif 'SEASON_USG' in team_roster.columns: usg_col = 'SEASON_USG'
@@ -191,6 +157,7 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
         usg_col = 'USG_TEMP'
         team_roster[usg_col] = 0.20
 
+    # Determine Minutes Column
     if 'HOME_MIN' in team_roster.columns: min_col = 'HOME_MIN'
     elif 'Home_MIN' in team_roster.columns: min_col = 'Home_MIN'
     elif 'SEASON_MIN' in team_roster.columns: min_col = 'SEASON_MIN'
@@ -199,8 +166,10 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
         min_col = 'MIN_TEMP'
         team_roster[min_col] = 0.0
         
+    # Determine Position Column (For Split Vacancy)
     pos_col = 'Pos' if 'Pos' in team_roster.columns else None
 
+    # 4. Create Lookup Map
     team_roster['match_name'] = team_roster['clean_name'].fillna('')
     
     cols_to_pull = [usg_col, min_col]
@@ -214,9 +183,6 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
     missing_usg_g = 0.0
     missing_usg_f = 0.0
     
-    from rapidfuzz import process, fuzz
-    from prop_analyzer.utils.text import preprocess_name_for_fuzzy_match
-
     for _, row in out_players.iterrows():
         p_name = str(row.get('Player', ''))
         clean_inj_name = preprocess_name_for_fuzzy_match(p_name)
@@ -227,14 +193,17 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
             stats = roster_map[matched_name]
             
             avg_min = float(stats.get(min_col, 0))
+            # Only count vacancy if the player plays significant minutes
             if avg_min > 12.0:
                 u_val = float(stats.get(usg_col, 0))
                 
                 missing_usg += u_val
                 missing_min += avg_min
                 
+                # Split Logic
                 if pos_col:
                     raw_pos = str(stats.get(pos_col, '')).upper()
+                    # Heuristic: If position contains 'G', it's a Guard. Else Forward/Center
                     if 'G' in raw_pos:
                         missing_usg_g += u_val
                     else:

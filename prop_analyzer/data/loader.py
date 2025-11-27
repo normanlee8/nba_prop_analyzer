@@ -11,26 +11,31 @@ _INJURY_WARNING_SHOWN = False
 def load_static_data():
     """
     Loads master player and team stats.
-    Returns: (player_stats_df, team_stats_df, league_pace_avg)
+    For inference, we typically want the LATEST season's averages.
     """
     logging.info("--- Loading Static Data Files ---")
     try:
-        if not cfg.MASTER_PLAYER_FILE.exists():
-            logging.error(f"File not found: {cfg.MASTER_PLAYER_FILE}")
+        # Find latest master_player_stats file
+        files = sorted(cfg.DATA_DIR.glob("master_player_stats_*.csv"))
+        if not files:
+            logging.error("No master_player_stats files found.")
             return None, None, 100.0
-
-        player_stats_df = pd.read_csv(cfg.MASTER_PLAYER_FILE)
+            
+        latest_file = files[-1]
+        # logging.info(f"Using {latest_file.name} for player stats.")
+        player_stats_df = pd.read_csv(latest_file)
+        
         if 'clean_name' in player_stats_df.columns:
             player_stats_df['processed_name'] = player_stats_df['clean_name'].apply(preprocess_name_for_fuzzy_match)
         
-        if cfg.MASTER_TEAM_FILE.exists():
-            team_stats_df = pd.read_csv(cfg.MASTER_TEAM_FILE)
+        # Find latest master_team_stats file
+        team_files = sorted(cfg.DATA_DIR.glob("master_team_stats_*.csv"))
+        if team_files:
+            team_stats_df = pd.read_csv(team_files[-1])
             if 'TEAM_ABBREVIATION' in team_stats_df.columns:
-                # If duplicate teams exist due to multiple seasons, drop dupes keeping last (latest)
                 team_stats_df = team_stats_df.drop_duplicates(subset=['TEAM_ABBREVIATION'], keep='last')
                 team_stats_df.set_index('TEAM_ABBREVIATION', inplace=True)
         else:
-            logging.warning(f"File not found: {cfg.MASTER_TEAM_FILE}")
             team_stats_df = pd.DataFrame()
         
         pace_col = team_stats_df.get('Possessions per Game')
@@ -43,27 +48,37 @@ def load_static_data():
 
 def load_box_scores(player_ids=None):
     """
-    Loads box scores, optionally filtering for specific players (for optimization).
+    Loads ALL master_box_scores_*.csv files and combines them.
+    This gives the model the full multi-season history it needs.
     """
     try:
-        if not cfg.MASTER_BOX_SCORES_FILE.exists():
-            logging.warning("master_box_scores.csv not found.")
+        # Glob all season files
+        files = sorted(cfg.DATA_DIR.glob("master_box_scores_*.csv"))
+        if not files:
+            logging.warning("No master_box_scores files found.")
             return None
 
-        if player_ids is not None:
-            chunks = []
-            id_set = set(player_ids)
-            for chunk in pd.read_csv(cfg.MASTER_BOX_SCORES_FILE, chunksize=50000, low_memory=False):
-                filtered = chunk[chunk['PLAYER_ID'].isin(id_set)]
-                if not filtered.empty:
-                    chunks.append(filtered)
-            
-            if not chunks: return pd.DataFrame()
-            box_scores_df = pd.concat(chunks)
-        else:
-            box_scores_df = pd.read_csv(cfg.MASTER_BOX_SCORES_FILE, low_memory=False)
+        dfs = []
+        for f in files:
+            try:
+                # Memory Optimization: Read in chunks if filtering
+                if player_ids is not None:
+                    id_set = set(player_ids)
+                    chunks = []
+                    for chunk in pd.read_csv(f, chunksize=50000, low_memory=False):
+                        filtered = chunk[chunk['PLAYER_ID'].isin(id_set)]
+                        if not filtered.empty:
+                            chunks.append(filtered)
+                    if chunks:
+                        dfs.append(pd.concat(chunks))
+                else:
+                    dfs.append(pd.read_csv(f, low_memory=False))
+            except Exception as e:
+                logging.warning(f"Failed to read {f}: {e}")
+
+        if not dfs: return None
         
-        if box_scores_df.empty: return None
+        box_scores_df = pd.concat(dfs, ignore_index=True)
 
         box_scores_df['GAME_DATE'] = pd.to_datetime(box_scores_df['GAME_DATE'], errors='coerce').dt.normalize()
         box_scores_df.dropna(subset=['GAME_DATE'], inplace=True)
@@ -94,16 +109,13 @@ def get_cached_injury_data():
     if _INJURY_CACHE is not None: 
         return _INJURY_CACHE
     
-    # SEARCH LOGIC: Find daily_injuries.csv in the latest season folder
     search_paths = []
     
-    # 1. Try to find season folders like "2025-26"
     if cfg.DATA_DIR.exists():
         season_folders = sorted([f for f in cfg.DATA_DIR.iterdir() if f.is_dir() and re.match(r'\d{4}-\d{2}', f.name)], reverse=True)
         if season_folders:
-            search_paths.append(season_folders[0] / "daily_injuries.csv") # Check latest season first
+            search_paths.append(season_folders[0] / "daily_injuries.csv")
     
-    # 2. Fallbacks
     search_paths.append(cfg.DATA_DIR / "daily_injuries.csv")
     search_paths.append(Path("daily_injuries.csv"))
     
@@ -116,7 +128,6 @@ def get_cached_injury_data():
                         lambda x: 'OUT' if 'out' in str(x).lower() else 'GTD' if 'question' in str(x).lower() else 'UNKNOWN'
                     )
                 _INJURY_CACHE = df
-                # logging.info(f"Loaded injury report from {p}")
                 return df
             except Exception as e:
                 logging.warning(f"Failed to read injury file {p}: {e}")

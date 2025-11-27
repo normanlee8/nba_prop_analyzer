@@ -12,7 +12,7 @@ from prop_analyzer.features import generator
 from prop_analyzer.models import inference
 from prop_analyzer.utils import common
 
-def print_pretty_table(df, title="TOP 20 DISCOVERED PICKS"):
+def print_pretty_table(df, title="TOP 20 DISCOVERED EDGES"):
     """
     Prints a DataFrame in a clean, grid-like format using | and =.
     """

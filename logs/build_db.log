@@ -1,317 +1,85 @@
-2025-11-22 03:19:21 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-22 03:19:21 [INFO] root: >>> STARTING DATABASE BUILD PIPELINE
-2025-11-22 03:19:21 [INFO] root: Step 1: Running ETL Process...
-2025-11-22 03:19:21 [INFO] root: Creating Player ID Map...
-2025-11-22 03:19:21 [INFO] root: --- Starting: process_master_player_stats ---
-2025-11-22 03:19:21 [INFO] root: Saved master_player_stats.csv
-2025-11-22 03:19:21 [INFO] root: --- Starting: process_master_team_stats ---
-2025-11-22 03:19:21 [INFO] root: Saved master_team_stats.csv
-2025-11-22 03:19:21 [INFO] root: --- Starting: process_master_box_scores ---
-2025-11-22 03:19:21 [INFO] root: --- Calculating Historical Usage Vacancy (Split G/F) ---
-2025-11-22 03:19:21 [INFO] root: Saved master_box_scores.csv (4634 rows)
-2025-11-22 03:19:21 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-22 03:19:22 [INFO] root: Saved master_vs_opponent.csv
-2025-11-22 03:19:22 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-22 03:19:22 [INFO] root: Saved master_dvp_stats.csv
-2025-11-22 03:19:22 [INFO] root: Step 2: Building Master Training Dataset...
-2025-11-22 03:19:22 [INFO] root: --- Building Master Training Dataset ---
-2025-11-22 03:19:22 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-22 03:19:22 [INFO] root: Merging Team Stats...
-2025-11-22 03:19:22 [INFO] root: Saved master_training_dataset.csv with 4613 rows and 574 features.
-2025-11-22 03:19:22 [INFO] root: Step 3: Validating Database...
-2025-11-22 03:19:22 [INFO] root: SUCCESS: Database built with 4634 records.
-2025-11-22 03:19:22 [INFO] root: <<< DATABASE BUILD COMPLETE
-2025-11-22 03:30:33 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-22 03:30:33 [INFO] root: >>> STARTING DATABASE BUILD PIPELINE
-2025-11-22 03:30:33 [INFO] root: Step 1: Running ETL Process...
-2025-11-22 03:30:33 [INFO] root: Creating Player ID Map...
-2025-11-22 03:30:33 [INFO] root: --- Starting: process_master_player_stats ---
-2025-11-22 03:30:34 [INFO] root: Saved master_player_stats.csv
-2025-11-22 03:30:34 [INFO] root: --- Starting: process_master_team_stats ---
-2025-11-22 03:30:34 [INFO] root: Saved master_team_stats.csv
-2025-11-22 03:30:34 [INFO] root: --- Starting: process_master_box_scores ---
-2025-11-22 03:30:34 [INFO] root: --- Calculating Historical Usage Vacancy (Split G/F) ---
-2025-11-22 03:30:34 [INFO] root: Saved master_box_scores.csv (4634 rows)
-2025-11-22 03:30:34 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-22 03:30:34 [INFO] root: Saved master_vs_opponent.csv
-2025-11-22 03:30:34 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-22 03:30:34 [INFO] root: Saved master_dvp_stats.csv
-2025-11-22 03:30:34 [INFO] root: Step 2: Building Master Training Dataset...
-2025-11-22 03:30:34 [INFO] root: --- Building Master Training Dataset ---
-2025-11-22 03:30:34 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-22 03:30:34 [CRITICAL] root: Dataset creation failed: incompatible index of inserted column with frame index
-Traceback (most recent call last):
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 12714, in _reindex_for_setitem
-    reindexed_value = value.reindex(index)._values
-                      ~~~~~~~~~~~~~^^^^^^^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/series.py", line 5172, in reindex
-    return super().reindex(
-           ~~~~~~~~~~~~~~~^
-        index=index,
-        ^^^^^^^^^^^^
-    ...<5 lines>...
-        tolerance=tolerance,
-        ^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/generic.py", line 5632, in reindex
-    return self._reindex_axes(
-           ~~~~~~~~~~~~~~~~~~^
-        axes, level, limit, tolerance, method, fill_value, copy
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ).__finalize__(self, method="reindex")
-    ^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/generic.py", line 5655, in _reindex_axes
-    new_index, indexer = ax.reindex(
-                         ~~~~~~~~~~^
-        labels, level=level, limit=limit, tolerance=tolerance, method=method
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/indexes/base.py", line 4440, in reindex
-    target = self._wrap_reindex_result(target, indexer, preserve_names)
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/indexes/multi.py", line 2736, in _wrap_reindex_result
-    target = MultiIndex.from_tuples(target)
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/indexes/multi.py", line 223, in new_meth
-    return meth(self_or_cls, *args, **kwargs)
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/indexes/multi.py", line 618, in from_tuples
-    arrays = list(lib.tuples_to_object_array(tuples).T)
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
-  File "pandas/_libs/lib.pyx", line 3056, in pandas._libs.lib.tuples_to_object_array
-ValueError: Buffer dtype mismatch, expected 'Python object' but got 'long'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_build_db.py", line 43, in main
-    dataset.create_training_dataset(output_path=cfg.DATA_DIR / "master_training_dataset.csv")
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/data/dataset.py", line 132, in create_training_dataset
-    bs_df = add_rolling_features(bs_df)
-  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/data/dataset.py", line 74, in add_rolling_features
-    df[f'{col}_SZN_AVG'] = grouped[col].expanding().mean().shift(1)
-    ~~^^^^^^^^^^^^^^^^^^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 4322, in __setitem__
-    self._set_item(key, value)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 4535, in _set_item
-    value, refs = self._sanitize_column(value)
-                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 5285, in _sanitize_column
-    return _reindex_for_setitem(value, self.index)
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 12721, in _reindex_for_setitem
-    raise TypeError(
-        "incompatible index of inserted column with frame index"
-    ) from err
-TypeError: incompatible index of inserted column with frame index
-2025-11-22 03:30:51 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-22 03:30:51 [INFO] root: >>> STARTING DATABASE BUILD PIPELINE
-2025-11-22 03:30:51 [INFO] root: Step 1: Running ETL Process...
-2025-11-22 03:30:51 [INFO] root: Creating Player ID Map...
-2025-11-22 03:30:51 [INFO] root: --- Starting: process_master_player_stats ---
-2025-11-22 03:30:51 [INFO] root: Saved master_player_stats.csv
-2025-11-22 03:30:51 [INFO] root: --- Starting: process_master_team_stats ---
-2025-11-22 03:30:51 [INFO] root: Saved master_team_stats.csv
-2025-11-22 03:30:51 [INFO] root: --- Starting: process_master_box_scores ---
-2025-11-22 03:30:51 [INFO] root: --- Calculating Historical Usage Vacancy (Split G/F) ---
-2025-11-22 03:30:51 [INFO] root: Saved master_box_scores.csv (4634 rows)
-2025-11-22 03:30:51 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-22 03:30:51 [INFO] root: Saved master_vs_opponent.csv
-2025-11-22 03:30:51 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-22 03:30:51 [INFO] root: Saved master_dvp_stats.csv
-2025-11-22 03:30:51 [INFO] root: Step 2: Building Master Training Dataset...
-2025-11-22 03:30:51 [INFO] root: --- Building Master Training Dataset ---
-2025-11-22 03:30:51 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-22 03:30:51 [CRITICAL] root: Dataset creation failed: incompatible index of inserted column with frame index
-Traceback (most recent call last):
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 12714, in _reindex_for_setitem
-    reindexed_value = value.reindex(index)._values
-                      ~~~~~~~~~~~~~^^^^^^^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/series.py", line 5172, in reindex
-    return super().reindex(
-           ~~~~~~~~~~~~~~~^
-        index=index,
-        ^^^^^^^^^^^^
-    ...<5 lines>...
-        tolerance=tolerance,
-        ^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/generic.py", line 5632, in reindex
-    return self._reindex_axes(
-           ~~~~~~~~~~~~~~~~~~^
-        axes, level, limit, tolerance, method, fill_value, copy
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ).__finalize__(self, method="reindex")
-    ^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/generic.py", line 5655, in _reindex_axes
-    new_index, indexer = ax.reindex(
-                         ~~~~~~~~~~^
-        labels, level=level, limit=limit, tolerance=tolerance, method=method
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/indexes/base.py", line 4440, in reindex
-    target = self._wrap_reindex_result(target, indexer, preserve_names)
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/indexes/multi.py", line 2736, in _wrap_reindex_result
-    target = MultiIndex.from_tuples(target)
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/indexes/multi.py", line 223, in new_meth
-    return meth(self_or_cls, *args, **kwargs)
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/indexes/multi.py", line 618, in from_tuples
-    arrays = list(lib.tuples_to_object_array(tuples).T)
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
-  File "pandas/_libs/lib.pyx", line 3056, in pandas._libs.lib.tuples_to_object_array
-ValueError: Buffer dtype mismatch, expected 'Python object' but got 'long'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_build_db.py", line 43, in main
-    dataset.create_training_dataset(output_path=cfg.DATA_DIR / "master_training_dataset.csv")
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/data/dataset.py", line 132, in create_training_dataset
-    bs_df = add_rolling_features(bs_df)
-  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/data/dataset.py", line 74, in add_rolling_features
-    df[f'{col}_SZN_AVG'] = grouped[col].expanding().mean().shift(1)
-    ~~^^^^^^^^^^^^^^^^^^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 4322, in __setitem__
-    self._set_item(key, value)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 4535, in _set_item
-    value, refs = self._sanitize_column(value)
-                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 5285, in _sanitize_column
-    return _reindex_for_setitem(value, self.index)
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 12721, in _reindex_for_setitem
-    raise TypeError(
-        "incompatible index of inserted column with frame index"
-    ) from err
-TypeError: incompatible index of inserted column with frame index
-2025-11-22 03:34:32 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-22 03:34:32 [INFO] root: >>> STARTING DATABASE BUILD PIPELINE
-2025-11-22 03:34:32 [INFO] root: Step 1: Running ETL Process...
-2025-11-22 03:34:32 [INFO] root: Creating Player ID Map...
-2025-11-22 03:34:32 [INFO] root: --- Starting: process_master_player_stats ---
-2025-11-22 03:34:32 [INFO] root: Saved master_player_stats.csv
-2025-11-22 03:34:32 [INFO] root: --- Starting: process_master_team_stats ---
-2025-11-22 03:34:32 [INFO] root: Saved master_team_stats.csv
-2025-11-22 03:34:32 [INFO] root: --- Starting: process_master_box_scores ---
-2025-11-22 03:34:32 [INFO] root: --- Calculating Historical Usage Vacancy (Split G/F) ---
-2025-11-22 03:34:32 [INFO] root: Saved master_box_scores.csv (4634 rows)
-2025-11-22 03:34:32 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-22 03:34:33 [INFO] root: Saved master_vs_opponent.csv
-2025-11-22 03:34:33 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-22 03:34:33 [INFO] root: Saved master_dvp_stats.csv
-2025-11-22 03:34:33 [INFO] root: Step 2: Building Master Training Dataset...
-2025-11-22 03:34:33 [INFO] root: --- Building Master Training Dataset ---
-2025-11-22 03:34:33 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-22 03:34:33 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-22 03:34:33 [INFO] root: Merging Team Stats...
-2025-11-22 03:34:34 [INFO] root: Saved master_training_dataset.csv with 4613 rows and 641 features.
-2025-11-22 03:34:34 [INFO] root: Step 3: Validating Database...
-2025-11-22 03:34:34 [INFO] root: SUCCESS: Database built with 4634 records.
-2025-11-22 03:34:34 [INFO] root: <<< DATABASE BUILD COMPLETE
-2025-11-22 03:38:23 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-22 03:38:23 [INFO] root: >>> STARTING ETL PIPELINE (Master Files)
-2025-11-22 03:38:23 [INFO] root: Step 1: Creating Master Files...
-2025-11-22 03:38:23 [INFO] root: Creating Player ID Map...
-2025-11-22 03:38:23 [INFO] root: --- Starting: process_master_player_stats ---
-2025-11-22 03:38:23 [INFO] root: Saved master_player_stats.csv
-2025-11-22 03:38:23 [INFO] root: --- Starting: process_master_team_stats ---
-2025-11-22 03:38:23 [INFO] root: Saved master_team_stats.csv
-2025-11-22 03:38:23 [INFO] root: --- Starting: process_master_box_scores ---
-2025-11-22 03:38:23 [INFO] root: --- Calculating Historical Usage Vacancy (Split G/F) ---
-2025-11-22 03:38:23 [INFO] root: Saved master_box_scores.csv (4634 rows)
-2025-11-22 03:38:23 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-22 03:38:23 [INFO] root: Saved master_vs_opponent.csv
-2025-11-22 03:38:23 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-22 03:38:23 [INFO] root: Saved master_dvp_stats.csv
-2025-11-22 03:38:23 [INFO] root: ETL Process Complete.
-2025-11-22 03:38:23 [INFO] root: Next Step: Run 'scripts/run_update_db.py' to build the training dataset.
-2025-11-22 03:38:23 [INFO] root: <<< ETL PIPELINE COMPLETE
-2025-11-22 14:52:19 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-22 14:52:19 [INFO] root: >>> STARTING ETL PIPELINE (Master Files)
-2025-11-22 14:52:19 [INFO] root: Step 1: Creating Master Files...
-2025-11-22 14:52:19 [INFO] root: Creating Player ID Map...
-2025-11-22 14:52:19 [INFO] root: --- Starting: process_master_player_stats ---
-2025-11-22 14:52:19 [INFO] root: Saved master_player_stats.csv
-2025-11-22 14:52:19 [INFO] root: --- Starting: process_master_team_stats ---
-2025-11-22 14:52:20 [INFO] root: Saved master_team_stats.csv
-2025-11-22 14:52:20 [INFO] root: --- Starting: process_master_box_scores ---
-2025-11-22 14:52:20 [INFO] root: --- Calculating Historical Usage Vacancy (Split G/F) ---
-2025-11-22 14:52:20 [INFO] root: Saved master_box_scores.csv (4634 rows)
-2025-11-22 14:52:20 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-22 14:52:20 [INFO] root: Saved master_vs_opponent.csv
-2025-11-22 14:52:20 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-22 14:52:20 [INFO] root: Saved master_dvp_stats.csv
-2025-11-22 14:52:20 [INFO] root: ETL Process Complete.
-2025-11-22 14:52:20 [INFO] root: Next Step: Run 'scripts/run_update_db.py' to build the training dataset.
-2025-11-22 14:52:20 [INFO] root: <<< ETL PIPELINE COMPLETE
-2025-11-23 01:38:01 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-23 01:38:01 [INFO] root: >>> STARTING ETL PIPELINE (Master Files)
-2025-11-23 01:38:01 [INFO] root: Step 1: Creating Master Files...
-2025-11-23 01:38:01 [INFO] root: Creating Player ID Map...
-2025-11-23 01:38:01 [INFO] root: --- Starting: process_master_player_stats ---
-2025-11-23 01:38:01 [INFO] root: Saved master_player_stats.csv
-2025-11-23 01:38:01 [INFO] root: --- Starting: process_master_team_stats ---
-2025-11-23 01:38:01 [INFO] root: Saved master_team_stats.csv
-2025-11-23 01:38:01 [INFO] root: --- Starting: process_master_box_scores ---
-2025-11-23 01:38:01 [INFO] root: --- Calculating Historical Usage Vacancy (Split G/F) ---
-2025-11-23 01:38:02 [INFO] root: Saved master_box_scores.csv (4767 rows)
-2025-11-23 01:38:02 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-23 01:38:02 [INFO] root: Saved master_vs_opponent.csv
-2025-11-23 01:38:02 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-23 01:38:02 [INFO] root: Saved master_dvp_stats.csv
-2025-11-23 01:38:02 [INFO] root: ETL Process Complete.
-2025-11-23 01:38:02 [INFO] root: Next Step: Run 'scripts/run_update_db.py' to build the training dataset.
-2025-11-23 01:38:02 [INFO] root: <<< ETL PIPELINE COMPLETE
-2025-11-26 12:04:34 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-26 12:04:34 [INFO] root: >>> STARTING ETL PIPELINE (Master Files)
-2025-11-26 12:04:34 [INFO] root: Step 1: Creating Master Files...
-2025-11-26 12:04:34 [INFO] root: Creating Player ID Map...
-2025-11-26 12:04:34 [INFO] root: --- Starting: process_master_player_stats ---
-2025-11-26 12:04:34 [INFO] root: Saved master_player_stats.csv
-2025-11-26 12:04:34 [INFO] root: --- Starting: process_master_team_stats ---
-2025-11-26 12:04:34 [INFO] root: Saved master_team_stats.csv
-2025-11-26 12:04:34 [INFO] root: --- Starting: process_master_box_scores ---
-2025-11-26 12:04:34 [INFO] root: --- Calculating Historical Usage Vacancy (Split G/F) ---
-2025-11-26 12:04:34 [INFO] root: Saved master_box_scores.csv (5164 rows)
-2025-11-26 12:04:34 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-26 12:04:34 [INFO] root: Saved master_vs_opponent.csv
-2025-11-26 12:04:34 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-26 12:04:34 [INFO] root: Saved master_dvp_stats.csv
-2025-11-26 12:04:34 [INFO] root: ETL Process Complete.
-2025-11-26 12:04:34 [INFO] root: Next Step: Run 'scripts/run_update_db.py' to build the training dataset.
-2025-11-26 12:04:34 [INFO] root: <<< ETL PIPELINE COMPLETE
-2025-11-27 01:44:50 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-27 01:44:50 [INFO] root: >>> STARTING ETL PIPELINE (Master Files)
-2025-11-27 01:44:50 [INFO] root: Step 1: Creating Master Files...
-2025-11-27 01:44:50 [CRITICAL] root: ETL Failed: create_player_id_map() missing 1 required positional argument: 'season_folders'
-Traceback (most recent call last):
-  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_build_db.py", line 20, in main
-    player_id_map = etl.create_player_id_map(cfg.DATA_DIR)
-TypeError: create_player_id_map() missing 1 required positional argument: 'season_folders'
-2025-11-27 01:47:54 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-27 01:47:54 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-27 01:47:54 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-27 01:47:54 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-27 01:47:54 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-27 01:47:54 [INFO] root: --- Starting: process_master_player_stats (Multi-Season) ---
-2025-11-27 01:47:55 [INFO] root: Saved master_player_stats.csv
-2025-11-27 01:47:55 [INFO] root: --- Starting: process_master_team_stats (Multi-Season) ---
-2025-11-27 01:47:55 [INFO] root: Saved master_team_stats.csv
-2025-11-27 01:47:55 [INFO] root: --- Starting: process_master_box_scores (Multi-Season) ---
-2025-11-27 01:47:56 [INFO] root: --- Calculating Historical Usage Vacancy (Split G/F) ---
-2025-11-27 01:47:56 [INFO] root: Saved master_box_scores.csv (31636 rows)
-2025-11-27 01:47:56 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-27 01:47:56 [INFO] root: Saved master_vs_opponent.csv
-2025-11-27 01:47:56 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-27 01:47:56 [INFO] root: Calculating DvP using only latest season data: 2025-26
-2025-11-27 01:47:56 [INFO] root: Saved master_dvp_stats.csv
-2025-11-27 01:47:56 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-27 01:47:56 [INFO] root: --- Building Master Training Dataset ---
-2025-11-27 01:47:56 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-27 01:47:57 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-27 01:47:57 [INFO] root: Merging Team Stats...
-2025-11-27 01:48:20 [INFO] root: Saved master_training_dataset.csv with 126056 rows and 642 features.
-2025-11-27 01:48:20 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
+2025-11-27 14:43:03 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-11-27 14:43:03 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
+2025-11-27 14:43:03 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-11-27 14:43:03 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-11-27 14:43:03 [INFO] root: Creating Player ID Map across all seasons...
+2025-11-27 14:43:03 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-11-27 14:43:04 [INFO] root: Saved master_player_stats_2024-25.csv
+2025-11-27 14:43:04 [INFO] root: Saved master_player_stats_2025-26.csv
+2025-11-27 14:43:04 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-11-27 14:43:04 [INFO] root: Saved master_team_stats_2024-25.csv
+2025-11-27 14:43:04 [INFO] root: Saved master_team_stats_2025-26.csv
+2025-11-27 14:43:04 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-11-27 14:43:04 [INFO] root: --- Calculating Historical Usage Vacancy ---
+2025-11-27 14:43:05 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
+2025-11-27 14:43:05 [INFO] root: --- Calculating Historical Usage Vacancy ---
+2025-11-27 14:43:05 [INFO] root: Saved master_box_scores_2025-26.csv (5330 rows)
+2025-11-27 14:43:05 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-11-27 14:43:05 [INFO] root: Saved master_vs_opponent.csv
+2025-11-27 14:43:05 [INFO] root: --- Starting: process_dvp_stats ---
+2025-11-27 14:43:05 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
+2025-11-27 14:43:05 [INFO] root: Saved master_dvp_stats.csv
+2025-11-27 14:43:05 [INFO] root: Step 2: Building Final Training Dataset...
+2025-11-27 14:43:05 [INFO] root: --- Building Master Training Dataset ---
+2025-11-27 14:43:05 [INFO] root: --- Loading Static Data Files ---
+2025-11-27 14:43:05 [INFO] root: Calculating historical rolling features (this may take a moment)...
+2025-11-27 14:43:05 [INFO] root: Merging Defense vs Position (DVP) stats...
+2025-11-27 14:43:06 [INFO] root: Merging Team Stats...
+2025-11-27 14:46:11 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-11-27 14:46:11 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
+2025-11-27 14:46:11 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-11-27 14:46:11 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-11-27 14:46:11 [INFO] root: Creating Player ID Map across all seasons...
+2025-11-27 14:46:11 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-11-27 14:46:12 [INFO] root: Saved master_player_stats_2024-25.csv
+2025-11-27 14:46:12 [INFO] root: Saved master_player_stats_2025-26.csv
+2025-11-27 14:46:12 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-11-27 14:46:12 [INFO] root: Saved master_team_stats_2024-25.csv
+2025-11-27 14:46:12 [INFO] root: Saved master_team_stats_2025-26.csv
+2025-11-27 14:46:12 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-11-27 14:46:12 [INFO] root: --- Calculating Historical Usage Vacancy ---
+2025-11-27 14:46:13 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
+2025-11-27 14:46:13 [INFO] root: --- Calculating Historical Usage Vacancy ---
+2025-11-27 14:46:13 [INFO] root: Saved master_box_scores_2025-26.csv (5330 rows)
+2025-11-27 14:46:13 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-11-27 14:46:13 [INFO] root: Saved master_vs_opponent.csv
+2025-11-27 14:46:13 [INFO] root: --- Starting: process_dvp_stats ---
+2025-11-27 14:46:13 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
+2025-11-27 14:46:13 [INFO] root: Saved master_dvp_stats.csv
+2025-11-27 14:46:13 [INFO] root: Step 2: Building Final Training Dataset...
+2025-11-27 14:46:13 [INFO] root: --- Building Master Training Dataset ---
+2025-11-27 14:46:13 [INFO] root: --- Loading Static Data Files ---
+2025-11-27 14:46:13 [INFO] root: Calculating historical rolling features (this may take a moment)...
+2025-11-27 14:46:13 [INFO] root: Merging Defense vs Position (DVP) stats...
+2025-11-27 14:46:14 [INFO] root: Merging Team Stats...
+2025-11-27 14:46:19 [INFO] root: Saved master_training_dataset.csv with 31514 rows and 642 features.
+2025-11-27 14:46:19 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
+2025-11-27 14:47:37 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-11-27 14:47:37 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
+2025-11-27 14:47:37 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-11-27 14:47:37 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-11-27 14:47:37 [INFO] root: Creating Player ID Map across all seasons...
+2025-11-27 14:47:37 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-11-27 14:47:37 [INFO] root: Saved master_player_stats_2024-25.csv
+2025-11-27 14:47:37 [INFO] root: Saved master_player_stats_2025-26.csv
+2025-11-27 14:47:37 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-11-27 14:47:37 [INFO] root: Saved master_team_stats_2024-25.csv
+2025-11-27 14:47:38 [INFO] root: Saved master_team_stats_2025-26.csv
+2025-11-27 14:47:38 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-11-27 14:47:38 [INFO] root: --- Calculating Historical Usage Vacancy ---
+2025-11-27 14:47:38 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
+2025-11-27 14:47:38 [INFO] root: --- Calculating Historical Usage Vacancy ---
+2025-11-27 14:47:38 [INFO] root: Saved master_box_scores_2025-26.csv (5330 rows)
+2025-11-27 14:47:38 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-11-27 14:47:38 [INFO] root: Saved master_vs_opponent.csv
+2025-11-27 14:47:38 [INFO] root: --- Starting: process_dvp_stats ---
+2025-11-27 14:47:38 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
+2025-11-27 14:47:38 [INFO] root: Saved master_dvp_stats.csv
+2025-11-27 14:47:38 [INFO] root: Step 2: Building Final Training Dataset...
+2025-11-27 14:47:38 [INFO] root: --- Building Master Training Dataset ---
+2025-11-27 14:47:38 [INFO] root: --- Loading Static Data Files ---
+2025-11-27 14:47:39 [INFO] root: Calculating historical rolling features (this may take a moment)...
+2025-11-27 14:47:39 [INFO] root: Merging Defense vs Position (DVP) stats...
+2025-11-27 14:47:39 [INFO] root: Merging Team Stats...
+2025-11-27 14:47:45 [INFO] root: Saved master_training_dataset.csv with 31514 rows and 642 features.
+2025-11-27 14:47:45 [INFO] root: <<< DATABASE BUILD COMPLETE >>>

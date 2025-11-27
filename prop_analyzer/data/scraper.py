@@ -5,6 +5,7 @@ import logging
 import sys
 import re
 import io
+import random
 import concurrent.futures
 from pathlib import Path
 from datetime import datetime
@@ -30,13 +31,7 @@ except ImportError as e:
 # --- DYNAMIC CONFIGURATION ---
 
 def get_season_config():
-    """
-    Determines the current live season and the previous completed season.
-    Returns a list of season configuration dictionaries.
-    """
     now = datetime.now()
-    # If we are in Oct/Nov/Dec, the season started this year (e.g., Nov 2025 -> 2025-26)
-    # If we are in Jan-Sept, the season started last year (e.g., Feb 2026 -> 2025-26)
     if now.month >= 10:
         current_start_year = now.year
     else:
@@ -46,38 +41,38 @@ def get_season_config():
     prev_start_year = current_start_year - 1
     prev_end_year = current_start_year
 
-    # Format Season Strings
-    curr_season_str = f"{current_start_year}-{str(current_end_year)[-2:]}" # "2025-26"
-    prev_season_str = f"{prev_start_year}-{str(prev_end_year)[-2:]}"       # "2024-25"
+    curr_season_str = f"{current_start_year}-{str(current_end_year)[-2:]}"
+    prev_season_str = f"{prev_start_year}-{str(prev_end_year)[-2:]}"
 
     return [
         {
             "id": "last_season",
-            "season_str": prev_season_str,      # "2024-25"
-            "bball_ref_year": prev_end_year,    # 2025
+            "season_str": prev_season_str,
+            "bball_ref_year": prev_end_year,
             "is_current": False,
-            # For TeamRankings, we use a date just after the finals to get full season stats
             "tr_date_param": f"{prev_end_year}-07-01" 
         },
         {
             "id": "current_season",
-            "season_str": curr_season_str,      # "2025-26"
-            "bball_ref_year": current_end_year, # 2026
+            "season_str": curr_season_str,
+            "bball_ref_year": current_end_year,
             "is_current": True,
-            "tr_date_param": None               # Live data
+            "tr_date_param": None
         }
     ]
 
-MAX_WORKERS = 10 
-NBA_API_TIMEOUT = 30 # Reduced timeout to fail faster if stuck
+MAX_WORKERS = 5 # Reduced threads to be nicer to servers
+NBA_API_TIMEOUT = 60 # Increased timeout for slow responses
 
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
     'Referer': 'https://www.nba.com/',
-    'Origin': 'https://www.nba.com/'
+    'Origin': 'https://www.nba.com/',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Connection': 'keep-alive'
 }
 
-# --- MAPPINGS ---
+# --- MAPPINGS (Preserved) ---
 TEAM_NAME_MAP = {
     "Atlanta": "ATL", "Atlanta Hawks": "ATL",
     "Boston": "BOS", "Boston Celtics": "BOS",
@@ -283,8 +278,8 @@ def create_robust_session():
     """
     session = requests.Session()
     retry_strategy = Retry(
-        total=4,
-        backoff_factor=1,
+        total=5,
+        backoff_factor=2, # Slower backoff (1s, 2s, 4s, 8s, 16s)
         status_forcelist=[429, 500, 502, 503, 504],
         allowed_methods=["GET", "POST"]
     )
@@ -304,16 +299,12 @@ def save_clean_csv(df, filename, output_dir):
         logging.error(f"FAILED to save {filename}: {e}")
 
 def scrape_daily_injuries(session, output_dir):
-    """
-    Scrapes the daily injury report from CBS Sports. 
-    Only runs for the CURRENT season/day.
-    """
     logging.info("--- Scraping Daily Injury Report (CBS Sports) ---")
     url = "https://www.cbssports.com/nba/injuries/"
     filename = "daily_injuries.csv"
     
     try:
-        response = session.get(url, timeout=20)
+        response = session.get(url, timeout=30)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -399,14 +390,13 @@ def scrape_teamrankings(session, slug, filename, season_cfg, output_dir):
     
     url = f"https://www.teamrankings.com/nba/stat/{slug}"
     
-    # Add date parameter for past seasons to get a historical snapshot
     if season_cfg['tr_date_param']:
         url += f"?date={season_cfg['tr_date_param']}"
         
     logging.info(f"Fetching [TeamRankings] {filename} for {season_cfg['season_str']}...")
 
     try:
-        response = session.get(url, timeout=20)
+        response = session.get(url, timeout=30)
         response.raise_for_status() 
         
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -428,14 +418,8 @@ def scrape_teamrankings(session, slug, filename, season_cfg, output_dir):
             df.columns = [str(col) for col in df.columns]
 
         if len(df.columns) >= 8:
-            # For TeamRankings, the "Current" column is dynamic based on the view date
-            # We assume the first data column (index 2) is the target season stat
             cols_to_keep = [0, 1, 2, 3, 4, 5, 6] # Rank, Team, [SeasonStat], Last 3, Last 1, Home, Away
-            
-            # Use .copy() to prevent SettingWithCopyWarning
             df = df.iloc[:, cols_to_keep].copy()
-
-            # Standardize Header
             season_year = season_cfg['bball_ref_year']
             df.columns = ["Rank", "Team", str(season_year), "Last 3", "Last 1", "Home", "Away"]
         else:
@@ -450,15 +434,14 @@ def scrape_teamrankings(session, slug, filename, season_cfg, output_dir):
     except Exception as e:
         logging.error(f"Failed to scrape {url}: {e}")
     finally:
-        time.sleep(1.0) 
+        time.sleep(1.0 + random.random()) # Random 1-2s delay
 
 def scrape_bball_ref(session, url_template, table_id, filename, season_cfg, output_dir):
-    # Inject year into URL (e.g., 2025 or 2026)
     url = url_template.replace("{YEAR}", str(season_cfg['bball_ref_year']))
     logging.info(f"Fetching [BBall-Ref] {filename} for {season_cfg['season_str']}...")
     
     try:
-        response = session.get(url, timeout=30)
+        response = session.get(url, timeout=45)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -494,14 +477,23 @@ def scrape_bball_ref(session, url_template, table_id, filename, season_cfg, outp
     except Exception as e:
         logging.error(f"Failed to scrape {url}: {e}", exc_info=True)
     finally:
-        time.sleep(2) 
+        time.sleep(3) # Politeness
 
 def fetch_and_save(filename, api_class, output_dir, **kwargs):
-    try:
-        data = api_class(timeout=NBA_API_TIMEOUT, **kwargs)
-        save_clean_csv(data.get_data_frames()[0], filename, output_dir)
-    except Exception as e:
-        logging.error(f"Failed to fetch or save {filename}: {e}")
+    # Retry wrapper for Generic API calls
+    retries = 3
+    for attempt in range(retries):
+        try:
+            data = api_class(timeout=NBA_API_TIMEOUT, **kwargs)
+            save_clean_csv(data.get_data_frames()[0], filename, output_dir)
+            return
+        except Exception as e:
+            if attempt < retries - 1:
+                wait_time = (attempt + 1) * 5
+                logging.warning(f"Timeout for {filename}. Retrying in {wait_time}s...")
+                time.sleep(wait_time)
+            else:
+                logging.error(f"Failed to fetch {filename} after {retries} attempts: {e}")
 
 def scrape_nba_api_stats(season_cfg, output_dir):
     target_season = season_cfg['season_str']
@@ -514,35 +506,48 @@ def scrape_nba_api_stats(season_cfg, output_dir):
         active_players = [p for p in all_players if p['is_active']]
         total_active = len(active_players)
         
-        # LOGGING FIX 1: Log total players found immediately
         logging.info(f"Found {total_active} active players. Starting sequential scrape...")
         
         all_logs = []
 
         for i, player in enumerate(active_players):
-            # LOGGING FIX 2: Log every 10 players so you see movement
             if (i + 1) % 10 == 0:
                 logging.info(f"  Scraped {i + 1}/{total_active} player box scores ({player['full_name']})...")
-                
-            try:
-                # IMPORTANT: Pass Headers explicitly if nba_api supports it for endpoints,
-                # otherwise rely on default behavior but catch timeouts aggressively.
-                log = PlayerGameLog(
-                    player_id=player['id'],
-                    season=target_season,
-                    season_type_all_star="Regular Season",
-                    timeout=NBA_API_TIMEOUT
-                )
-                df = log.get_data_frames()[0]
-                if not df.empty:
-                    all_logs.append(df)
-                
-                # Sleep a bit to prevent 429 Rate Limit
-                time.sleep(0.5) 
+            
+            # --- RETRY LOGIC FOR INDIVIDUAL PLAYERS ---
+            max_retries = 3
+            success = False
+            
+            for attempt in range(max_retries):
+                try:
+                    # Random sleep before request to act human
+                    time.sleep(random.uniform(0.6, 1.2))
+                    
+                    log = PlayerGameLog(
+                        player_id=player['id'],
+                        season=target_season,
+                        season_type_all_star="Regular Season",
+                        timeout=NBA_API_TIMEOUT
+                    )
+                    df = log.get_data_frames()[0]
+                    if not df.empty:
+                        all_logs.append(df)
+                    success = True
+                    break # Success, exit retry loop
+                    
+                except Exception as e:
+                    if attempt < max_retries - 1:
+                        # Exponential backoff: 5s, 10s...
+                        wait = (attempt + 1) * 5
+                        # logging.warning(f"Timeout for {player['full_name']}. Retrying in {wait}s...")
+                        time.sleep(wait)
+                    else:
+                        logging.warning(f"Error scraping {player['full_name']} after retries: {e}")
+            
+            # Safety: If we failed 3 times, maybe pause longer for the *next* player
+            if not success:
+                time.sleep(10)
 
-            except Exception as e:
-                logging.warning(f"Error scraping {player['full_name']}: {e}")
-                
         if not all_logs:
             box_scores_df = pd.DataFrame() 
         else:
@@ -552,6 +557,8 @@ def scrape_nba_api_stats(season_cfg, output_dir):
         
         logging.info("Fetching remaining Player and Team Stats (parallel)...")
         
+        # Parallel execution can trigger rate limits too fast. 
+        # Reduced max_workers to 5 in constants.
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             futures = []
             
@@ -584,26 +591,20 @@ def scrape_nba_api_stats(season_cfg, output_dir):
         logging.error(f"CRITICAL FAILURE in nba-api section: {e}", exc_info=True)
 
 def should_skip_season_file(output_dir, filename, is_current_season):
-    """
-    Cache Check Logic:
-    If it's a past season and the file already exists, we SKIP scraping.
-    """
     if is_current_season:
-        return False # Always scrape current season
+        return False 
     
     file_path = output_dir / filename
     if file_path.exists() and file_path.stat().st_size > 0:
-        return True # Cache hit
+        return True 
     
     return False
 
 def main():
-    # Capture start time
     start_time = time.time()
     
     logging.info("========= STARTING NBA DATA SCRAPER (MULTI-SEASON) =========")
     
-    # Use Robust Session
     session = create_robust_session()
     
     seasons_to_scrape = get_season_config()
@@ -612,19 +613,16 @@ def main():
         season_str = season_cfg['season_str']
         is_current = season_cfg['is_current']
         
-        # Define output directory for this season
         output_dir = cfg.DATA_DIR / season_str
         output_dir.mkdir(parents=True, exist_ok=True)
         
         logging.info(f"--- Processing Season: {season_str} (Live: {is_current}) ---")
         
-        # 1. Injuries (Current Season Only)
         if is_current:
             scrape_daily_injuries(session, output_dir)
             
-        # 2. Basketball Reference
         logging.info("--- Checking Basketball-Reference Files ---")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
             futures = []
             for filename, (source, data) in MASTER_FILE_MAP.items():
                 if source == 'bball_ref':
@@ -638,14 +636,11 @@ def main():
             for future in concurrent.futures.as_completed(futures):
                 future.result() 
                 
-        # 3. NBA API
-        # Only check a representative file to decide if we skip the whole API batch for past seasons
         if should_skip_season_file(output_dir, "NBA Team General Stats.csv", is_current):
             logging.info("Skipping NBA API stats (Cached)")
         else:
             scrape_nba_api_stats(season_cfg, output_dir)
         
-        # 4. TeamRankings
         logging.info("--- Checking TeamRankings Files ---")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             futures = []
@@ -655,7 +650,6 @@ def main():
                 filename = f"NBA Team {sanitized_name}.csv"
                 
                 if should_skip_season_file(output_dir, filename, is_current):
-                    # logging.info(f"Skipping cached file: {filename}")
                     continue
                 
                 futures.append(executor.submit(scrape_teamrankings, session, slug, filename, season_cfg, output_dir))
@@ -665,7 +659,6 @@ def main():
             
     session.close()
     
-    # Calculate Total Duration
     elapsed_time = time.time() - start_time
     minutes = int(elapsed_time // 60)
     seconds = int(elapsed_time % 60)

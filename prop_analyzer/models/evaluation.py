@@ -24,8 +24,6 @@ def calculate_derived_stats(df):
         q1_col = f'Q1_{stat}'
         q2_col = f'Q2_{stat}'
         
-        # For composite stats like Q1_PRA, they might have just been created above.
-        # Ensure they exist before summing.
         if q1_col in df.columns and q2_col in df.columns:
             df[f'1H_{stat}'] = df[q1_col] + df[q2_col]
             
@@ -35,20 +33,23 @@ def check_prop_row(row):
     """
     Compares the prediction against the actual value to determine correctness.
     """
-    # Resolve Prop Category (Handle 'Prop' or 'Prop Category')
-    prop_cat_raw = row.get('Prop', row.get('Prop Category', ''))
-    prop_cat_clean = str(prop_cat_raw).strip()
+    # --- FIX: Support New Column Names ---
+    # Try 'Prop' (New) first, then 'Prop Category' (Old)
+    prop_cat = row.get('Prop') if 'Prop' in row else row.get('Prop Category', '')
+    prop_cat_clean = str(prop_cat).strip()
     
-    # Use the map to find the DB column name (e.g. 'Points' -> 'PTS')
+    # Map to DB Column (e.g. Points -> PTS)
     prop_map_lookup = cfg.MASTER_PROP_MAP.get(prop_cat_clean, prop_cat_clean)
     
     try:
-        # Handle 'Line' or 'Prop Line'
-        line = float(row.get('Line', row.get('Prop Line', 0)))
+        # Try 'Line' (New) first, then 'Prop Line' (Old)
+        line_val = row.get('Line') if 'Line' in row else row.get('Prop Line')
+        line = float(line_val)
         
-        # Try getting the mapped column first (e.g. 'PTS'), then fallback to raw
+        # Get Actual
         actual = row.get(prop_map_lookup)
         if pd.isna(actual):
+            # Fallback if map lookup failed
             actual = row.get(prop_cat_clean)
             
         if actual is not None:
@@ -68,13 +69,13 @@ def check_prop_row(row):
         res = 'Push'
     
     # Determine Correctness
-    # Best Pick: 'Over' or 'Under' (Handle 'Pick' or 'Best Pick')
-    pick = row.get('Pick', row.get('Best Pick', ''))
+    # Support 'Pick' (New) or 'Best Pick' (Old)
+    my_pick = row.get('Pick') if 'Pick' in row else row.get('Best Pick')
     
     correctness = 'Incorrect'
     if res == 'Push':
         correctness = 'Push'
-    elif res == pick:
+    elif res == my_pick:
         correctness = 'Correct'
     
     return pd.Series([actual, res, correctness])
@@ -84,11 +85,17 @@ def grade_predictions():
     
     # 1. Load Data
     try:
-        if not cfg.PROCESSED_OUTPUT.exists():
-            logging.warning(f"No processed props file found to grade at {cfg.PROCESSED_OUTPUT}")
+        # Check for the new filename first
+        props_file = cfg.OUTPUT_DIR / "processed_props.csv"
+        if not props_file.exists():
+            # Fallback to old name just in case
+            props_file = cfg.OUTPUT_DIR / "prop_check_results.csv"
+            
+        if not props_file.exists():
+            logging.warning("No processed props file found to grade.")
             return
             
-        df_props = pd.read_csv(cfg.PROCESSED_OUTPUT)
+        df_props = pd.read_csv(props_file)
         
         if not cfg.MASTER_BOX_SCORES_FILE.exists():
             logging.warning("No master box scores found. Cannot grade.")
@@ -104,57 +111,27 @@ def grade_predictions():
         return
 
     # 2. Prep & Normalize
+    # --- FIX: Handle New vs Old Column Names for Player ---
+    if 'Player' in df_props.columns:
+        player_col = 'Player'
+    elif 'Player Name' in df_props.columns:
+        player_col = 'Player Name'
+    else:
+        logging.error("Could not find Player column in props file. Available columns: " + str(list(df_props.columns)))
+        return
+
     # Filter out rows without scores/predictions if any
     if 'Score' in df_props.columns:
         df_props = df_props.dropna(subset=['Score']).copy()
+
+    df_props['join_player'] = df_props[player_col].apply(text.preprocess_name_for_fuzzy_match)
     
-    # --- DETECT PLAYER COLUMN ---
-    props_player_col = None
-    possible_player_cols = ['Player Name', 'PLAYER_NAME', 'Player', 'PLAYER']
-    for col in possible_player_cols:
-        if col in df_props.columns:
-            props_player_col = col
-            break
-            
-    if not props_player_col:
-        logging.error(f"Could not find Player column in props file. Available columns: {df_props.columns.tolist()}")
+    # Ensure GAME_DATE exists
+    if 'GAME_DATE' not in df_props.columns:
+        logging.warning("GAME_DATE missing in props file. Cannot match specific games.")
         return
 
-    # --- DETECT OR INFER DATE ---
-    props_date_col = None
-    possible_date_cols = ['GAME_DATE', 'Date', 'date', 'Game Date']
-    for col in possible_date_cols:
-        if col in df_props.columns:
-            props_date_col = col
-            break
-            
-    if not props_date_col:
-        logging.info("No Date column found in props file. Attempting to infer date from Box Scores...")
-        
-        # Strategy: Find the most recent date in the box scores that matches these players
-        prop_players = df_props[props_player_col].unique()
-        
-        # Filter box scores to only these players to find their latest games
-        # Using simple matching first (assuming names are relatively standard)
-        relevant_box = df_box[df_box['PLAYER_NAME'].isin(prop_players)]
-        
-        if not relevant_box.empty:
-            # Assume the slate date is the most recent date found for these players
-            inferred_date = relevant_box['GAME_DATE'].max()
-            logging.info(f"Inferred Slate Date: {inferred_date} (derived from most recent matching box scores)")
-        else:
-            # Fallback: Just take the absolute newest date in the box score file
-            inferred_date = df_box['GAME_DATE'].max()
-            logging.warning(f"Could not match specific players. Defaulting to most recent box score date: {inferred_date}")
-            
-        df_props['inferred_date'] = inferred_date
-        props_date_col = 'inferred_date'
-    else:
-        logging.info(f"Using existing Date column: {props_date_col}")
-
-    # Create join keys
-    df_props['join_player'] = df_props[props_player_col].apply(text.preprocess_name_for_fuzzy_match)
-    df_props['join_date'] = pd.to_datetime(df_props[props_date_col]).dt.strftime('%Y-%m-%d')
+    df_props['join_date'] = pd.to_datetime(df_props['GAME_DATE']).dt.strftime('%Y-%m-%d')
     
     df_box['join_player'] = df_box['PLAYER_NAME'].apply(text.preprocess_name_for_fuzzy_match)
     df_box['join_date'] = pd.to_datetime(df_box['GAME_DATE']).dt.strftime('%Y-%m-%d')
@@ -163,7 +140,6 @@ def grade_predictions():
     df_box = calculate_derived_stats(df_box)
 
     # 3. Merge
-    # Inner join would lose props we can't find box scores for. Left join keeps them so we see "Missing Data".
     df_merged = pd.merge(
         df_props, 
         df_box, 
@@ -173,34 +149,25 @@ def grade_predictions():
     )
 
     # 4. Grade
-    cols = ['Actual Value', 'Result (O/U/P)', 'Correctness']
+    cols = ['Actual Value', 'Result', 'Correctness']
     df_merged[cols] = df_merged.apply(check_prop_row, axis=1)
     
     # --- SORTING LOGIC ---
-    # Sort by Tier (S -> A -> B) then by Win Probability
     tier_order = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
     
     if 'Tier' in df_merged.columns:
         df_merged['sort_idx'] = df_merged['Tier'].map(tier_order).fillna(99)
         
-        sort_cols = ['sort_idx']
-        ascending_order = [True]
-        
-        if 'Win_Prob' in df_merged.columns:
-            sort_cols.append('Win_Prob')
-            ascending_order.append(False)
-        elif 'Win%' in df_merged.columns: # Handle 'Win%' column name
-            sort_cols.append('Win%')
-            ascending_order.append(False)
-            
-        df_merged = df_merged.sort_values(by=sort_cols, ascending=ascending_order)
+        # Sort by correctness to see hits at top? Or Tier?
+        # Let's keep Tier -> Correctness
+        df_merged.sort_values(by=['sort_idx', 'Correctness'], ascending=[True, True], inplace=True)
         df_merged = df_merged.drop(columns=['sort_idx'])
 
     # 5. Save Results
-    out_file = cfg.OUTPUT_DIR / "prop_check_results.csv"
+    # Overwrite the file with graded columns appended
     try:
-        df_merged.to_csv(out_file, index=False)
-        logging.info(f"Graded results saved to {out_file}")
+        df_merged.to_csv(props_file, index=False)
+        logging.info(f"Graded results saved to {props_file}")
     except Exception as e:
         logging.error(f"Failed to save grading results: {e}")
     
