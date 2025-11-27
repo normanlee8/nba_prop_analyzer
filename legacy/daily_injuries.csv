@@ -1,0 +1,115 @@
+Team,Team_Full,Player,Position,Updated,Injury,Injury Status,Status_Clean
+ATL,Atlanta,N'Faly Dante,C,"Tue, Nov 25",Knee,Game Time Decision,GTD
+ATL,Atlanta,Eli N'Diaye,PF,"Sun, Nov 16",Groin,Game Time Decision,GTD
+ATL,Atlanta,Trae Young,PG,"Sat, Nov 1",Knee,Expected to be out until at least Nov 30,OUT
+BOS,Boston,Neemias Queta,C,"Tue, Nov 25",Ankle,Expected to be out until at least Nov 29,OUT
+BOS,Boston,Jayson Tatum,PF,"Wed, Oct 1",Achilles,Expected to be out until at least Apr 1,OUT
+BKN,Brooklyn,Ben Saraf,PG,"Mon, Nov 24",Ankle,Game Time Decision,GTD
+BKN,Brooklyn,Cam Thomas,SG,"Fri, Nov 7",Hamstring,Expected to be out until at least Dec 18,OUT
+BKN,Brooklyn,Haywood Highsmith,SF,"Sun, Oct 19",Knee,Expected to be out until at least Dec 18,OUT
+CHA,Charlotte,Pat Connaughton,SG,"Tue, Nov 25",Calf,Expected to be out until at least Nov 28,OUT
+CHA,Charlotte,Josh Green,SF,"Sun, Nov 23",Shoulder,Expected to be out until at least Dec 1,OUT
+CHA,Charlotte,Grant Williams,PF,"Sun, Nov 23",Knee,Expected to be out until at least Dec 1,OUT
+CHI,Chicago,Isaac Okoro,SF,"Mon, Nov 24",Back,Game Time Decision,GTD
+CHI,Chicago,Dalen Terry,SG,"Mon, Nov 24",Calf,Game Time Decision,GTD
+CHI,Chicago,Trentyn Flowers,SF,"Mon, Nov 24",Illness,Game Time Decision,GTD
+CHI,Chicago,Nikola Vucevic,C,"Mon, Nov 24",Knee,Game Time Decision,GTD
+CHI,Chicago,Kevin Huerter,SG,"Mon, Nov 24",Pelvis,Game Time Decision,GTD
+CHI,Chicago,Zach Collins,C,"Thu, Nov 20",Wrist,Expected to be out until at least Dec 1,OUT
+CLE,Cleveland,Craig Porter Jr.,PG,"Mon, Nov 24",Hamstring,Game Time Decision,GTD
+CLE,Cleveland,Darius Garland,PG,"Mon, Nov 24",Toe,Game Time Decision,GTD
+CLE,Cleveland,Dean Wade,PF,"Mon, Nov 24",Knee,Game Time Decision,GTD
+CLE,Cleveland,De'Andre Hunter,SF,"Mon, Nov 24",Rest,Game Time Decision,GTD
+CLE,Cleveland,Jarrett Allen,C,"Mon, Nov 24",Finger,Game Time Decision,GTD
+CLE,Cleveland,Sam Merrill,SG,"Mon, Nov 24",Hand,Game Time Decision,GTD
+CLE,Cleveland,Chris Livingston,SF,"Sun, Nov 23",Illness,Game Time Decision,GTD
+CLE,Cleveland,Max Strus,SG,"Wed, Oct 1",Foot,Expected to be out until at least Dec 1,OUT
+DAL,Dallas,Dereck Lively II,C,"Tue, Nov 25",Foot,Expected to be out until at least Dec 3,OUT
+DAL,Dallas,Anthony Davis,C,"Mon, Nov 24",Calf,Game Time Decision,GTD
+DAL,Dallas,Dante Exum,SG,"Thu, Nov 20",Knee,Out for the season,OUT
+DAL,Dallas,Kyrie Irving,PG,"Wed, Oct 1",Knee,Expected to be out until at least Jan 1,OUT
+DEN,Denver,Julian Strawther,SF,"Mon, Nov 24",Back,Game Time Decision,GTD
+DEN,Denver,Aaron Gordon,PF,"Sun, Nov 23",Hamstring,Expected to be out until at least Jan 2,OUT
+DEN,Denver,Christian Braun,SF,"Fri, Nov 14",Ankle,Expected to be out until at least Jan 9,OUT
+DET,Detroit,Bobi Klintman,PF,"Tue, Nov 25",Ankle,Expected to be out until at least Nov 28,OUT
+DET,Detroit,Marcus Sasser,PG,"Sat, Nov 8",Hip,Expected to be out until at least Dec 18,OUT
+UNK,Golden St.,Al Horford,C,"Tue, Nov 25",Back,Expected to be out until at least Dec 2,OUT
+UNK,Golden St.,Draymond Green,PF,"Tue, Nov 25",Foot,Game Time Decision,GTD
+UNK,Golden St.,Alex Toohey,SF,"Mon, Nov 24",Knee,Game Time Decision,GTD
+UNK,Golden St.,Jonathan Kuminga,PF,"Sun, Nov 23",Knee,Expected to be out until at least Dec 2,OUT
+UNK,Golden St.,De'Anthony Melton,SG,"Wed, Nov 19",Knee,Expected to be out until at least Dec 2,OUT
+HOU,Houston,Steven Adams,C,"Tue, Nov 25",Ankle,Expected to be out until at least Nov 30,OUT
+HOU,Houston,Dorian Finney-Smith,PF,"Sun, Nov 23",Ankle,Expected to be out until at least Nov 30,OUT
+HOU,Houston,Tari Eason,PF,"Sat, Nov 22",Oblique,Expected to be out until at least Dec 18,OUT
+HOU,Houston,Fred VanVleet,PG,"Tue, Oct 21",Knee,Expected to be out until at least Jun 1,OUT
+IND,Indiana,Quenton Jackson,SG,"Mon, Nov 24",Hamstring,Expected to be out until at least Dec 1,OUT
+IND,Indiana,Kam Jones,PG,"Mon, Nov 24",Back,Expected to be out until at least Dec 1,OUT
+IND,Indiana,Johnny Furphy,SG,"Mon, Nov 24",Ankle,Expected to be out until at least Dec 1,OUT
+IND,Indiana,Aaron Nesmith,SF,"Sat, Nov 15",Knee,Expected to be out until at least Dec 18,OUT
+IND,Indiana,Obi Toppin,PF,"Fri, Oct 31",Foot,Expected to be out until at least Feb 2,OUT
+IND,Indiana,Tyrese Haliburton,PG,"Tue, Oct 28",Achilles,Out for the season,OUT
+UNK,L.A. Clippers,Jordan Miller,SG,"Wed, Nov 26",Hamstring,Game Time Decision,GTD
+UNK,L.A. Clippers,Bogdan Bogdanovic,SG,"Wed, Nov 26",Hip,Game Time Decision,GTD
+UNK,L.A. Clippers,Derrick Jones Jr.,SF,"Mon, Nov 17",Knee,Expected to be out until at least Dec 30,OUT
+UNK,L.A. Clippers,Bradley Beal,SG,"Wed, Nov 12",Hip,Out for the season,OUT
+UNK,L.A. Lakers,Deandre Ayton,C,"Wed, Nov 26",Knee,Game Time Decision,GTD
+MEM,Memphis,Zach Edey,C,"Mon, Nov 24",Head,Game Time Decision,GTD
+MEM,Memphis,Ty Jerome,SG,"Sat, Nov 22",Calf,Expected to be out until at least Jan 15,OUT
+MEM,Memphis,Ja Morant,PG,"Mon, Nov 17",Calf,Expected to be out until at least Dec 2,OUT
+MEM,Memphis,Javon Small,PG,"Sat, Nov 15",Toe,Expected to be out until at least Dec 7,OUT
+MEM,Memphis,Brandon Clarke,C,"Tue, Nov 11",Knee,Expected to be out until at least Dec 30,OUT
+MEM,Memphis,Scotty Pippen Jr.,PG,"Sat, Oct 18",Toe,Expected to be out until at least Jan 15,OUT
+MIA,Miami,Jaime Jaquez Jr.,SF,"Tue, Nov 25",Hip,Game Time Decision,GTD
+MIA,Miami,Nikola Jovic,PF,"Tue, Nov 25",Hip,Game Time Decision,GTD
+MIA,Miami,Dru Smith,SG,"Tue, Nov 25",Hip,Game Time Decision,GTD
+MIA,Miami,Andrew Wiggins,SF,"Tue, Nov 25",Hip,Game Time Decision,GTD
+MIA,Miami,Norman Powell,SG,"Tue, Nov 25",Groin,Game Time Decision,GTD
+MIA,Miami,Terry Rozier,SG,"Sat, Nov 22",Not Injury Related,Expected to be out until at least Dec 18,OUT
+MIL,Milwaukee,Kevin Porter,PG,"Tue, Nov 25",Knee,Expected to be out until at least Nov 28,OUT
+MIL,Milwaukee,Giannis Antetokounmpo,PF,"Tue, Nov 25",Thigh,Game Time Decision,GTD
+MIL,Milwaukee,Taurean Prince,SG,"Thu, Nov 13",Neck,Expected to be out until at least Jan 2,OUT
+NOP,New Orleans,Jordan Poole,SG,"Tue, Nov 25",Quadriceps,Expected to be out until at least Nov 29,OUT
+NOP,New Orleans,Karlo Matkovic,PF,"Tue, Nov 25",Calf,Expected to be out until at least Nov 29,OUT
+NOP,New Orleans,Herbert Jones,SG,"Mon, Nov 24",Calf,Expected to be out until at least Dec 2,OUT
+NOP,New Orleans,Dejounte Murray,PG,"Thu, Oct 2",Achilles,Expected to be out until at least Jan 2,OUT
+NYK,New York,Landry Shamet,SG,"Tue, Nov 25",Shoulder,Expected to be out until at least Nov 28,OUT
+NYK,New York,OG Anunoby,SF,"Sun, Nov 16",Hamstring,Expected to be out until at least Dec 2,OUT
+UNK,Oklahoma City,Jalen Williams,SF,"Tue, Nov 25",Wrist,Expected to be out until at least Nov 28,OUT
+UNK,Oklahoma City,Shai Gilgeous-Alexander,SG,"Tue, Nov 25",Illness,Game Time Decision,GTD
+UNK,Oklahoma City,Aaron Wiggins,SG,"Sat, Nov 22",Thigh,Expected to be out until at least Nov 30,OUT
+UNK,Oklahoma City,Nikola Topic,PG,"Thu, Oct 30",Groin,Expected to be out until at least Feb 20,OUT
+UNK,Oklahoma City,Thomas Sorber,PF,"Tue, Oct 28",Knee,Out for the season,OUT
+ORL,Orlando,Jonathan Isaac,PF,"Tue, Nov 25",Back,Game Time Decision,GTD
+ORL,Orlando,Paolo Banchero,PF,"Tue, Nov 25",Groin,Game Time Decision,GTD
+ORL,Orlando,Moe Wagner,C,"Mon, Nov 24",Knee,Expected to be out until at least Dec 3,OUT
+ORL,Orlando,Colin Castleton,C,"Fri, Nov 21",Hand,Game Time Decision,GTD
+PHI,Philadelphia,Trendon Watford,PF,"Wed, Nov 26",Thigh,Game Time Decision,GTD
+PHI,Philadelphia,Adem Bona,PF,"Tue, Nov 25",Ankle,Game Time Decision,GTD
+PHI,Philadelphia,VJ Edgecombe,SG,"Tue, Nov 25",Calf,Game Time Decision,GTD
+PHI,Philadelphia,Paul George,SF,"Tue, Nov 25",Ankle,Game Time Decision,GTD
+PHI,Philadelphia,Joel Embiid,C,"Tue, Nov 25",Knee,Game Time Decision,GTD
+PHI,Philadelphia,Kelly Oubre Jr.,SG,"Wed, Nov 19",Knee,Expected to be out until at least Dec 4,OUT
+PHX,Phoenix,Ryan Dunn,SG,"Tue, Nov 25",Wrist,Expected to be out until at least Nov 28,OUT
+PHX,Phoenix,Grayson Allen,SG,"Tue, Nov 25",Quadriceps,Expected to be out until at least Nov 28,OUT
+PHX,Phoenix,Jalen Green,SG,"Tue, Nov 11",Hamstring,Expected to be out until at least Dec 18,OUT
+POR,Portland,Shaedon Sharpe,SG,"Mon, Nov 24",Calf,Game Time Decision,GTD
+POR,Portland,Scoot Henderson,PG,"Fri, Nov 21",Hamstring,Expected to be out until at least Dec 20,OUT
+POR,Portland,Jrue Holiday,PG,"Fri, Nov 21",Calf,Expected to be out until at least Dec 5,OUT
+POR,Portland,Matisse Thybulle,SF,"Wed, Nov 19",Thumb,Expected to be out until at least Dec 2,OUT
+POR,Portland,Blake Wesley,SG,"Wed, Nov 5",Foot,Expected to be out until at least Jan 30,OUT
+POR,Portland,Damian Lillard,PG,"Tue, Oct 28",Achilles,Out for the season,OUT
+SAC,Sacramento,Dennis Schroder,PG,"Tue, Nov 25",Shoulder,Game Time Decision,GTD
+SAC,Sacramento,Domantas Sabonis,C,"Thu, Nov 20",Knee,Expected to be out until at least Dec 18,OUT
+SAS,San Antonio,Harrison Ingram,SF,"Tue, Nov 25",Undisclosed,Game Time Decision,GTD
+SAS,San Antonio,Dylan Harper,PG,"Tue, Nov 25",Calf,Game Time Decision,GTD
+SAS,San Antonio,Jordan McLaughlin,PG,"Tue, Nov 25",Hamstring,Expected to be out until at least Nov 28,OUT
+SAS,San Antonio,Stephon Castle,PG,"Tue, Nov 18",Hip,Expected to be out until at least Nov 30,OUT
+SAS,San Antonio,Victor Wembanyama,C,"Mon, Nov 17",Calf,Expected to be out until at least Dec 2,OUT
+TOR,Toronto,RJ Barrett,SF,"Wed, Nov 26",Knee,Expected to be out until at least Dec 5,OUT
+UTA,Utah,Kevin Love,PF,"Tue, Nov 25",Rest,Game Time Decision,GTD
+UTA,Utah,Georges Niang,PF,"Sat, Nov 22",Foot,Expected to be out until at least Dec 7,OUT
+UTA,Utah,Walker Kessler,C,"Wed, Nov 5",Shoulder,Out for the season,OUT
+WAS,Washington,Corey Kispert,SG,"Tue, Nov 25",Thumb,Game Time Decision,GTD
+WAS,Washington,Marvin Bagley III,C,"Tue, Nov 25",Hip,Game Time Decision,GTD
+WAS,Washington,Kyshawn George,SF,"Tue, Nov 25",Illness,Game Time Decision,GTD
+WAS,Washington,Tre Johnson,SG,"Mon, Nov 24",Hip,Expected to be out until at least Dec 17,OUT

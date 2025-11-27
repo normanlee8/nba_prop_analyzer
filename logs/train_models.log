@@ -1,0 +1,539 @@
+2025-11-22 03:19:37 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-11-22 03:19:37 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-11-22 03:19:37 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-11-22 03:19:37 [INFO] root: Loaded 4613 rows of training data.
+2025-11-22 03:19:37 [INFO] root: --- Training Model: PTS ---
+2025-11-22 03:19:37 [INFO] root: Training PTS...
+2025-11-22 03:19:45 [INFO] root: [PTS] Validation Accuracy: 52.1%
+2025-11-22 03:19:45 [INFO] root: Saved artifacts for PTS to model_PTS.pkl
+2025-11-22 03:19:45 [INFO] root: --- Training Model: REB ---
+2025-11-22 03:19:45 [INFO] root: Training REB...
+2025-11-22 03:19:52 [INFO] root: [REB] Validation Accuracy: 57.4%
+2025-11-22 03:19:52 [INFO] root: Saved artifacts for REB to model_REB.pkl
+2025-11-22 03:19:52 [INFO] root: --- Training Model: AST ---
+2025-11-22 03:19:52 [INFO] root: Training AST...
+2025-11-22 03:19:58 [INFO] root: [AST] Validation Accuracy: 57.3%
+2025-11-22 03:19:58 [INFO] root: Saved artifacts for AST to model_AST.pkl
+2025-11-22 03:19:58 [INFO] root: --- Training Model: FG3M ---
+2025-11-22 03:19:58 [INFO] root: Training FG3M...
+2025-11-22 03:20:07 [INFO] root: [FG3M] Validation Accuracy: 62.0%
+2025-11-22 03:20:07 [INFO] root: Saved artifacts for FG3M to model_FG3M.pkl
+2025-11-22 03:20:07 [INFO] root: --- Training Model: STL ---
+2025-11-22 03:20:07 [INFO] root: Training STL...
+2025-11-22 03:20:13 [INFO] root: [STL] Validation Accuracy: 58.6%
+2025-11-22 03:20:13 [INFO] root: Saved artifacts for STL to model_STL.pkl
+2025-11-22 03:20:13 [INFO] root: --- Training Model: BLK ---
+2025-11-22 03:20:13 [INFO] root: Training BLK...
+2025-11-22 03:20:22 [INFO] root: [BLK] Validation Accuracy: 69.2%
+2025-11-22 03:20:22 [INFO] root: Saved artifacts for BLK to model_BLK.pkl
+2025-11-22 03:20:22 [INFO] root: --- Training Model: TOV ---
+2025-11-22 03:20:22 [INFO] root: Training TOV...
+2025-11-22 03:20:32 [INFO] root: [TOV] Validation Accuracy: 58.1%
+2025-11-22 03:20:32 [INFO] root: Saved artifacts for TOV to model_TOV.pkl
+2025-11-22 03:20:32 [INFO] root: --- Training Model: PRA ---
+2025-11-22 03:20:32 [INFO] root: Training PRA...
+2025-11-22 03:20:41 [INFO] root: [PRA] Validation Accuracy: 52.5%
+2025-11-22 03:20:42 [INFO] root: Saved artifacts for PRA to model_PRA.pkl
+2025-11-22 03:20:42 [INFO] root: --- Training Model: PR ---
+2025-11-22 03:20:42 [INFO] root: Training PR...
+2025-11-22 03:20:57 [INFO] root: [PR] Validation Accuracy: 52.1%
+2025-11-22 03:20:57 [INFO] root: Saved artifacts for PR to model_PR.pkl
+2025-11-22 03:20:57 [INFO] root: --- Training Model: PA ---
+2025-11-22 03:20:57 [INFO] root: Training PA...
+2025-11-22 03:21:10 [INFO] root: [PA] Validation Accuracy: 51.9%
+2025-11-22 03:21:10 [INFO] root: Saved artifacts for PA to model_PA.pkl
+2025-11-22 03:21:10 [INFO] root: --- Training Model: RA ---
+2025-11-22 03:21:10 [INFO] root: Training RA...
+2025-11-22 03:21:22 [INFO] root: [RA] Validation Accuracy: 55.4%
+2025-11-22 03:21:22 [INFO] root: Saved artifacts for RA to model_RA.pkl
+2025-11-22 03:21:22 [INFO] root: --- Training Model: STK ---
+2025-11-22 03:21:22 [INFO] root: Training STK...
+2025-11-22 03:21:33 [INFO] root: [STK] Validation Accuracy: 59.5%
+2025-11-22 03:21:33 [INFO] root: Saved artifacts for STK to model_STK.pkl
+2025-11-22 03:21:33 [INFO] root: --- Training Model: FANTASY_PTS ---
+2025-11-22 03:21:33 [INFO] root: Training FANTASY_PTS...
+2025-11-22 03:21:47 [INFO] root: [FANTASY_PTS] Validation Accuracy: 53.1%
+2025-11-22 03:21:47 [INFO] root: Saved artifacts for FANTASY_PTS to model_FANTASY_PTS.pkl
+2025-11-22 03:21:47 [INFO] root: --- Training Model: Q1_PTS ---
+2025-11-22 03:21:47 [WARNING] root: Target column 'Q1_PTS' not found in dataset. Skipping.
+2025-11-22 03:21:47 [INFO] root: --- Training Model: Q1_REB ---
+2025-11-22 03:21:47 [WARNING] root: Target column 'Q1_REB' not found in dataset. Skipping.
+2025-11-22 03:21:47 [INFO] root: --- Training Model: Q1_AST ---
+2025-11-22 03:21:47 [WARNING] root: Target column 'Q1_AST' not found in dataset. Skipping.
+2025-11-22 03:21:47 [INFO] root: --- Training Model: Q1_PRA ---
+2025-11-22 03:21:47 [WARNING] root: Target column 'Q1_PRA' not found in dataset. Skipping.
+2025-11-22 03:21:47 [INFO] root: --- Training Model: 1H_PTS ---
+2025-11-22 03:21:47 [WARNING] root: Target column '1H_PTS' not found in dataset. Skipping.
+2025-11-22 03:21:47 [INFO] root: --- Training Model: 1H_REB ---
+2025-11-22 03:21:47 [WARNING] root: Target column '1H_REB' not found in dataset. Skipping.
+2025-11-22 03:21:47 [INFO] root: --- Training Model: 1H_AST ---
+2025-11-22 03:21:47 [WARNING] root: Target column '1H_AST' not found in dataset. Skipping.
+2025-11-22 03:21:47 [INFO] root: --- Training Model: 1H_PRA ---
+2025-11-22 03:21:47 [WARNING] root: Target column '1H_PRA' not found in dataset. Skipping.
+2025-11-22 03:21:47 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 8
+2025-11-22 03:25:27 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-11-22 03:25:27 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-11-22 03:25:27 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-11-22 03:25:27 [INFO] root: Loaded 4613 rows of training data.
+2025-11-22 03:25:27 [WARNING] root: Skipping 8 props due to missing historical target data:
+2025-11-22 03:25:27 [WARNING] root: Missing Targets: Q1_PTS, Q1_REB, Q1_AST, Q1_PRA, 1H_PTS, 1H_REB, 1H_AST, 1H_PRA
+2025-11-22 03:25:27 [WARNING] root: (Note: Standard NBA logs do not provide historical Quarter/Half splits, so these cannot be trained.)
+2025-11-22 03:25:27 [INFO] root: --- Training Model: PTS ---
+2025-11-22 03:25:27 [INFO] root: Training PTS...
+2025-11-22 03:25:35 [INFO] root: [PTS] Validation Accuracy: 52.5%
+2025-11-22 03:25:35 [INFO] root: Saved artifacts for PTS to model_PTS.pkl
+2025-11-22 03:25:35 [INFO] root: --- Training Model: REB ---
+2025-11-22 03:25:35 [INFO] root: Training REB...
+2025-11-22 03:25:42 [INFO] root: [REB] Validation Accuracy: 57.2%
+2025-11-22 03:25:42 [INFO] root: Saved artifacts for REB to model_REB.pkl
+2025-11-22 03:25:42 [INFO] root: --- Training Model: AST ---
+2025-11-22 03:25:42 [INFO] root: Training AST...
+2025-11-22 03:25:49 [INFO] root: [AST] Validation Accuracy: 57.1%
+2025-11-22 03:25:49 [INFO] root: Saved artifacts for AST to model_AST.pkl
+2025-11-22 03:25:49 [INFO] root: --- Training Model: FG3M ---
+2025-11-22 03:25:49 [INFO] root: Training FG3M...
+2025-11-22 03:25:58 [INFO] root: [FG3M] Validation Accuracy: 62.2%
+2025-11-22 03:25:58 [INFO] root: Saved artifacts for FG3M to model_FG3M.pkl
+2025-11-22 03:25:58 [INFO] root: --- Training Model: STL ---
+2025-11-22 03:25:58 [INFO] root: Training STL...
+2025-11-22 03:26:03 [INFO] root: [STL] Validation Accuracy: 58.2%
+2025-11-22 03:26:03 [INFO] root: Saved artifacts for STL to model_STL.pkl
+2025-11-22 03:26:03 [INFO] root: --- Training Model: BLK ---
+2025-11-22 03:26:03 [INFO] root: Training BLK...
+2025-11-22 03:26:13 [INFO] root: [BLK] Validation Accuracy: 71.0%
+2025-11-22 03:26:13 [INFO] root: Saved artifacts for BLK to model_BLK.pkl
+2025-11-22 03:26:13 [INFO] root: --- Training Model: TOV ---
+2025-11-22 03:26:13 [INFO] root: Training TOV...
+2025-11-22 03:26:22 [INFO] root: [TOV] Validation Accuracy: 58.4%
+2025-11-22 03:26:22 [INFO] root: Saved artifacts for TOV to model_TOV.pkl
+2025-11-22 03:26:22 [INFO] root: --- Training Model: PRA ---
+2025-11-22 03:26:22 [INFO] root: Training PRA...
+2025-11-22 03:26:31 [INFO] root: [PRA] Validation Accuracy: 51.8%
+2025-11-22 03:26:31 [INFO] root: Saved artifacts for PRA to model_PRA.pkl
+2025-11-22 03:26:31 [INFO] root: --- Training Model: PR ---
+2025-11-22 03:26:31 [INFO] root: Training PR...
+2025-11-22 03:26:44 [INFO] root: [PR] Validation Accuracy: 52.2%
+2025-11-22 03:26:44 [INFO] root: Saved artifacts for PR to model_PR.pkl
+2025-11-22 03:26:44 [INFO] root: --- Training Model: PA ---
+2025-11-22 03:26:44 [INFO] root: Training PA...
+2025-11-22 03:26:57 [INFO] root: [PA] Validation Accuracy: 53.4%
+2025-11-22 03:26:57 [INFO] root: Saved artifacts for PA to model_PA.pkl
+2025-11-22 03:26:57 [INFO] root: --- Training Model: RA ---
+2025-11-22 03:26:57 [INFO] root: Training RA...
+2025-11-22 03:27:09 [INFO] root: [RA] Validation Accuracy: 56.8%
+2025-11-22 03:27:09 [INFO] root: Saved artifacts for RA to model_RA.pkl
+2025-11-22 03:27:09 [INFO] root: --- Training Model: STK ---
+2025-11-22 03:27:09 [INFO] root: Training STK...
+2025-11-22 03:27:19 [INFO] root: [STK] Validation Accuracy: 59.2%
+2025-11-22 03:27:19 [INFO] root: Saved artifacts for STK to model_STK.pkl
+2025-11-22 03:27:19 [INFO] root: --- Training Model: FANTASY_PTS ---
+2025-11-22 03:27:19 [INFO] root: Training FANTASY_PTS...
+2025-11-22 03:27:33 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-11-22 03:27:33 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-11-22 03:27:33 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-11-22 03:27:33 [INFO] root: Loaded 4613 rows of training data.
+2025-11-22 03:27:33 [INFO] root: Note: 8 props excluded from training (Historical data not available).
+2025-11-22 03:27:33 [INFO] root: Excluded: Q1_PTS, Q1_REB, Q1_AST, Q1_PRA, 1H_PTS, 1H_REB, 1H_AST, 1H_PRA
+2025-11-22 03:27:33 [INFO] root: Proceeding to train models for 13 props...
+2025-11-22 03:27:33 [INFO] root: --- Training Model: PTS ---
+2025-11-22 03:27:33 [INFO] root: Training PTS...
+2025-11-22 03:27:41 [INFO] root: [PTS] Validation Accuracy: 53.0%
+2025-11-22 03:27:41 [INFO] root: Saved artifacts for PTS to model_PTS.pkl
+2025-11-22 03:27:41 [INFO] root: --- Training Model: REB ---
+2025-11-22 03:27:41 [INFO] root: Training REB...
+2025-11-22 03:27:48 [INFO] root: [REB] Validation Accuracy: 57.1%
+2025-11-22 03:27:48 [INFO] root: Saved artifacts for REB to model_REB.pkl
+2025-11-22 03:27:48 [INFO] root: --- Training Model: AST ---
+2025-11-22 03:27:48 [INFO] root: Training AST...
+2025-11-22 03:27:55 [INFO] root: [AST] Validation Accuracy: 56.4%
+2025-11-22 03:27:55 [INFO] root: Saved artifacts for AST to model_AST.pkl
+2025-11-22 03:27:55 [INFO] root: --- Training Model: FG3M ---
+2025-11-22 03:27:55 [INFO] root: Training FG3M...
+2025-11-22 03:28:04 [INFO] root: [FG3M] Validation Accuracy: 61.9%
+2025-11-22 03:28:04 [INFO] root: Saved artifacts for FG3M to model_FG3M.pkl
+2025-11-22 03:28:04 [INFO] root: --- Training Model: STL ---
+2025-11-22 03:28:04 [INFO] root: Training STL...
+2025-11-22 03:28:09 [INFO] root: [STL] Validation Accuracy: 59.2%
+2025-11-22 03:28:09 [INFO] root: Saved artifacts for STL to model_STL.pkl
+2025-11-22 03:28:09 [INFO] root: --- Training Model: BLK ---
+2025-11-22 03:28:09 [INFO] root: Training BLK...
+2025-11-22 03:28:18 [INFO] root: [BLK] Validation Accuracy: 69.2%
+2025-11-22 03:28:18 [INFO] root: Saved artifacts for BLK to model_BLK.pkl
+2025-11-22 03:28:18 [INFO] root: --- Training Model: TOV ---
+2025-11-22 03:28:18 [INFO] root: Training TOV...
+2025-11-22 03:28:27 [INFO] root: [TOV] Validation Accuracy: 58.0%
+2025-11-22 03:28:27 [INFO] root: Saved artifacts for TOV to model_TOV.pkl
+2025-11-22 03:28:27 [INFO] root: --- Training Model: PRA ---
+2025-11-22 03:28:27 [INFO] root: Training PRA...
+2025-11-22 03:28:34 [INFO] root: [PRA] Validation Accuracy: 51.4%
+2025-11-22 03:28:34 [INFO] root: Saved artifacts for PRA to model_PRA.pkl
+2025-11-22 03:28:34 [INFO] root: --- Training Model: PR ---
+2025-11-22 03:28:34 [INFO] root: Training PR...
+2025-11-22 03:28:45 [INFO] root: [PR] Validation Accuracy: 51.9%
+2025-11-22 03:28:45 [INFO] root: Saved artifacts for PR to model_PR.pkl
+2025-11-22 03:28:45 [INFO] root: --- Training Model: PA ---
+2025-11-22 03:28:45 [INFO] root: Training PA...
+2025-11-22 03:28:58 [INFO] root: [PA] Validation Accuracy: 53.8%
+2025-11-22 03:28:58 [INFO] root: Saved artifacts for PA to model_PA.pkl
+2025-11-22 03:28:58 [INFO] root: --- Training Model: RA ---
+2025-11-22 03:28:58 [INFO] root: Training RA...
+2025-11-22 03:29:10 [INFO] root: [RA] Validation Accuracy: 55.4%
+2025-11-22 03:29:10 [INFO] root: Saved artifacts for RA to model_RA.pkl
+2025-11-22 03:29:10 [INFO] root: --- Training Model: STK ---
+2025-11-22 03:29:10 [INFO] root: Training STK...
+2025-11-22 03:29:20 [INFO] root: [STK] Validation Accuracy: 58.7%
+2025-11-22 03:29:20 [INFO] root: Saved artifacts for STK to model_STK.pkl
+2025-11-22 03:29:20 [INFO] root: --- Training Model: FANTASY_PTS ---
+2025-11-22 03:29:20 [INFO] root: Training FANTASY_PTS...
+2025-11-22 03:29:33 [INFO] root: [FANTASY_PTS] Validation Accuracy: 52.8%
+2025-11-22 03:29:33 [INFO] root: Saved artifacts for FANTASY_PTS to model_FANTASY_PTS.pkl
+2025-11-22 03:29:33 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 0
+2025-11-22 03:31:37 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-11-22 03:31:37 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-11-22 03:31:37 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-11-22 03:31:37 [INFO] root: Loaded 4613 rows of training data.
+2025-11-22 03:31:37 [INFO] root: Note: 8 props excluded from training (Historical data not available).
+2025-11-22 03:31:37 [INFO] root: Excluded: Q1_PTS, Q1_REB, Q1_AST, Q1_PRA, 1H_PTS, 1H_REB, 1H_AST, 1H_PRA
+2025-11-22 03:31:37 [INFO] root: Proceeding to train models for 13 props...
+2025-11-22 03:31:37 [INFO] root: --- Training Model: PTS ---
+2025-11-22 03:31:37 [INFO] root: Training PTS...
+2025-11-22 03:31:45 [INFO] root: [PTS] Validation Accuracy: 53.1%
+2025-11-22 03:31:45 [INFO] root: Saved artifacts for PTS to model_PTS.pkl
+2025-11-22 03:31:45 [INFO] root: --- Training Model: REB ---
+2025-11-22 03:31:45 [INFO] root: Training REB...
+2025-11-22 03:31:52 [INFO] root: [REB] Validation Accuracy: 57.3%
+2025-11-22 03:31:53 [INFO] root: Saved artifacts for REB to model_REB.pkl
+2025-11-22 03:31:53 [INFO] root: --- Training Model: AST ---
+2025-11-22 03:31:53 [INFO] root: Training AST...
+2025-11-22 03:32:00 [INFO] root: [AST] Validation Accuracy: 56.0%
+2025-11-22 03:32:00 [INFO] root: Saved artifacts for AST to model_AST.pkl
+2025-11-22 03:32:00 [INFO] root: --- Training Model: FG3M ---
+2025-11-22 03:32:00 [INFO] root: Training FG3M...
+2025-11-22 03:32:09 [INFO] root: [FG3M] Validation Accuracy: 61.6%
+2025-11-22 03:32:09 [INFO] root: Saved artifacts for FG3M to model_FG3M.pkl
+2025-11-22 03:32:09 [INFO] root: --- Training Model: STL ---
+2025-11-22 03:32:09 [INFO] root: Training STL...
+2025-11-22 03:32:14 [INFO] root: [STL] Validation Accuracy: 57.6%
+2025-11-22 03:32:14 [INFO] root: Saved artifacts for STL to model_STL.pkl
+2025-11-22 03:32:14 [INFO] root: --- Training Model: BLK ---
+2025-11-22 03:32:14 [INFO] root: Training BLK...
+2025-11-22 03:32:23 [INFO] root: [BLK] Validation Accuracy: 69.3%
+2025-11-22 03:32:23 [INFO] root: Saved artifacts for BLK to model_BLK.pkl
+2025-11-22 03:32:23 [INFO] root: --- Training Model: TOV ---
+2025-11-22 03:32:23 [INFO] root: Training TOV...
+2025-11-22 03:32:33 [INFO] root: [TOV] Validation Accuracy: 58.4%
+2025-11-22 03:32:33 [INFO] root: Saved artifacts for TOV to model_TOV.pkl
+2025-11-22 03:32:33 [INFO] root: --- Training Model: PRA ---
+2025-11-22 03:32:33 [INFO] root: Training PRA...
+2025-11-22 03:32:42 [INFO] root: [PRA] Validation Accuracy: 52.8%
+2025-11-22 03:32:42 [INFO] root: Saved artifacts for PRA to model_PRA.pkl
+2025-11-22 03:32:42 [INFO] root: --- Training Model: PR ---
+2025-11-22 03:32:42 [INFO] root: Training PR...
+2025-11-22 03:32:55 [INFO] root: [PR] Validation Accuracy: 53.6%
+2025-11-22 03:32:55 [INFO] root: Saved artifacts for PR to model_PR.pkl
+2025-11-22 03:32:55 [INFO] root: --- Training Model: PA ---
+2025-11-22 03:32:55 [INFO] root: Training PA...
+2025-11-22 03:33:07 [INFO] root: [PA] Validation Accuracy: 53.5%
+2025-11-22 03:33:07 [INFO] root: Saved artifacts for PA to model_PA.pkl
+2025-11-22 03:33:07 [INFO] root: --- Training Model: RA ---
+2025-11-22 03:33:07 [INFO] root: Training RA...
+2025-11-22 03:33:18 [INFO] root: [RA] Validation Accuracy: 54.9%
+2025-11-22 03:33:18 [INFO] root: Saved artifacts for RA to model_RA.pkl
+2025-11-22 03:33:18 [INFO] root: --- Training Model: STK ---
+2025-11-22 03:33:18 [INFO] root: Training STK...
+2025-11-22 03:33:28 [INFO] root: [STK] Validation Accuracy: 59.4%
+2025-11-22 03:33:28 [INFO] root: Saved artifacts for STK to model_STK.pkl
+2025-11-22 03:33:28 [INFO] root: --- Training Model: FANTASY_PTS ---
+2025-11-22 03:33:28 [INFO] root: Training FANTASY_PTS...
+2025-11-22 03:33:41 [INFO] root: [FANTASY_PTS] Validation Accuracy: 52.8%
+2025-11-22 03:33:41 [INFO] root: Saved artifacts for FANTASY_PTS to model_FANTASY_PTS.pkl
+2025-11-22 03:33:41 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 0
+2025-11-22 03:38:36 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-11-22 03:38:36 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-11-22 03:38:36 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-11-22 03:38:36 [INFO] root: Loaded 4613 rows of training data.
+2025-11-22 03:38:36 [INFO] root: Note: 8 props excluded from training (Historical data not available).
+2025-11-22 03:38:36 [INFO] root: Excluded: Q1_PTS, Q1_REB, Q1_AST, Q1_PRA, 1H_PTS, 1H_REB, 1H_AST, 1H_PRA
+2025-11-22 03:38:36 [INFO] root: Proceeding to train models for 13 props...
+2025-11-22 03:38:36 [INFO] root: --- Training Model: PTS ---
+2025-11-22 03:38:36 [INFO] root: Training PTS...
+2025-11-22 03:38:43 [INFO] root: [PTS] Validation Accuracy: 56.2%
+2025-11-22 03:38:43 [INFO] root: Saved artifacts for PTS to model_PTS.pkl
+2025-11-22 03:38:43 [INFO] root: --- Training Model: REB ---
+2025-11-22 03:38:43 [INFO] root: Training REB...
+2025-11-22 03:38:50 [INFO] root: [REB] Validation Accuracy: 56.8%
+2025-11-22 03:38:50 [INFO] root: Saved artifacts for REB to model_REB.pkl
+2025-11-22 03:38:50 [INFO] root: --- Training Model: AST ---
+2025-11-22 03:38:50 [INFO] root: Training AST...
+2025-11-22 03:38:59 [INFO] root: [AST] Validation Accuracy: 57.4%
+2025-11-22 03:38:59 [INFO] root: Saved artifacts for AST to model_AST.pkl
+2025-11-22 03:38:59 [INFO] root: --- Training Model: FG3M ---
+2025-11-22 03:38:59 [INFO] root: Training FG3M...
+2025-11-22 03:39:11 [INFO] root: [FG3M] Validation Accuracy: 62.2%
+2025-11-22 03:39:11 [INFO] root: Saved artifacts for FG3M to model_FG3M.pkl
+2025-11-22 03:39:11 [INFO] root: --- Training Model: STL ---
+2025-11-22 03:39:11 [INFO] root: Training STL...
+2025-11-22 03:39:18 [INFO] root: [STL] Validation Accuracy: 61.1%
+2025-11-22 03:39:18 [INFO] root: Saved artifacts for STL to model_STL.pkl
+2025-11-22 03:39:18 [INFO] root: --- Training Model: BLK ---
+2025-11-22 03:39:18 [INFO] root: Training BLK...
+2025-11-22 03:39:27 [INFO] root: [BLK] Validation Accuracy: 71.8%
+2025-11-22 03:39:27 [INFO] root: Saved artifacts for BLK to model_BLK.pkl
+2025-11-22 03:39:27 [INFO] root: --- Training Model: TOV ---
+2025-11-22 03:39:27 [INFO] root: Training TOV...
+2025-11-22 03:39:36 [INFO] root: [TOV] Validation Accuracy: 60.7%
+2025-11-22 03:39:36 [INFO] root: Saved artifacts for TOV to model_TOV.pkl
+2025-11-22 03:39:36 [INFO] root: --- Training Model: PRA ---
+2025-11-22 03:39:36 [INFO] root: Training PRA...
+2025-11-22 03:39:44 [INFO] root: [PRA] Validation Accuracy: 59.2%
+2025-11-22 03:39:44 [INFO] root: Saved artifacts for PRA to model_PRA.pkl
+2025-11-22 03:39:44 [INFO] root: --- Training Model: PR ---
+2025-11-22 03:39:44 [INFO] root: Training PR...
+2025-11-22 03:39:56 [INFO] root: [PR] Validation Accuracy: 54.2%
+2025-11-22 03:39:56 [INFO] root: Saved artifacts for PR to model_PR.pkl
+2025-11-22 03:39:56 [INFO] root: --- Training Model: PA ---
+2025-11-22 03:39:56 [INFO] root: Training PA...
+2025-11-22 03:40:08 [INFO] root: [PA] Validation Accuracy: 56.6%
+2025-11-22 03:40:08 [INFO] root: Saved artifacts for PA to model_PA.pkl
+2025-11-22 03:40:08 [INFO] root: --- Training Model: RA ---
+2025-11-22 03:40:08 [INFO] root: Training RA...
+2025-11-22 03:40:20 [INFO] root: [RA] Validation Accuracy: 58.0%
+2025-11-22 03:40:20 [INFO] root: Saved artifacts for RA to model_RA.pkl
+2025-11-22 03:40:20 [INFO] root: --- Training Model: STK ---
+2025-11-22 03:40:20 [INFO] root: Training STK...
+2025-11-22 03:40:30 [INFO] root: [STK] Validation Accuracy: 60.6%
+2025-11-22 03:40:30 [INFO] root: Saved artifacts for STK to model_STK.pkl
+2025-11-22 03:40:30 [INFO] root: --- Training Model: FANTASY_PTS ---
+2025-11-22 03:40:30 [INFO] root: Training FANTASY_PTS...
+2025-11-22 03:40:42 [INFO] root: [FANTASY_PTS] Validation Accuracy: 57.3%
+2025-11-22 03:40:42 [INFO] root: Saved artifacts for FANTASY_PTS to model_FANTASY_PTS.pkl
+2025-11-22 03:40:42 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 0
+2025-11-22 14:43:17 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-11-22 14:43:17 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-11-22 14:43:17 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-11-22 14:43:17 [INFO] root: Loaded 4613 rows of training data.
+2025-11-22 14:43:17 [INFO] root: Note: 8 props excluded from training (Historical data not available).
+2025-11-22 14:43:17 [INFO] root: Excluded: Q1_PTS, Q1_REB, Q1_AST, Q1_PRA, 1H_PTS, 1H_REB, 1H_AST, 1H_PRA
+2025-11-22 14:43:17 [INFO] root: Proceeding to train models for 13 props...
+2025-11-22 14:43:17 [INFO] root: --- Training Model: PTS ---
+2025-11-22 14:43:17 [INFO] root: Training PTS...
+2025-11-22 14:43:17 [INFO] root: [PTS] Aliasing columns: dict_keys(['PTS_SZN_AVG', 'PTS_L3_AVG', 'PTS_L5_EWMA', 'PTS_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:43:24 [INFO] root: [PTS] Validation Accuracy: 56.6%
+2025-11-22 14:43:24 [INFO] root: Saved artifacts for PTS to model_PTS.pkl
+2025-11-22 14:43:24 [INFO] root: --- Training Model: REB ---
+2025-11-22 14:43:24 [INFO] root: Training REB...
+2025-11-22 14:43:24 [INFO] root: [REB] Aliasing columns: dict_keys(['REB_SZN_AVG', 'REB_L3_AVG', 'REB_L5_EWMA', 'REB_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:43:31 [INFO] root: [REB] Validation Accuracy: 59.3%
+2025-11-22 14:43:31 [INFO] root: Saved artifacts for REB to model_REB.pkl
+2025-11-22 14:43:31 [INFO] root: --- Training Model: AST ---
+2025-11-22 14:43:31 [INFO] root: Training AST...
+2025-11-22 14:43:31 [INFO] root: [AST] Aliasing columns: dict_keys(['AST_SZN_AVG', 'AST_L3_AVG', 'AST_L5_EWMA', 'AST_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:43:40 [INFO] root: [AST] Validation Accuracy: 60.0%
+2025-11-22 14:43:40 [INFO] root: Saved artifacts for AST to model_AST.pkl
+2025-11-22 14:43:40 [INFO] root: --- Training Model: FG3M ---
+2025-11-22 14:43:40 [INFO] root: Training FG3M...
+2025-11-22 14:43:40 [INFO] root: [FG3M] Aliasing columns: dict_keys(['FG3M_SZN_AVG', 'FG3M_L3_AVG', 'FG3M_L5_EWMA', 'FG3M_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:43:50 [INFO] root: [FG3M] Validation Accuracy: 65.3%
+2025-11-22 14:43:50 [INFO] root: Saved artifacts for FG3M to model_FG3M.pkl
+2025-11-22 14:43:50 [INFO] root: --- Training Model: STL ---
+2025-11-22 14:43:50 [INFO] root: Training STL...
+2025-11-22 14:43:50 [INFO] root: [STL] Aliasing columns: dict_keys(['STL_SZN_AVG', 'STL_L3_AVG', 'STL_L5_EWMA', 'STL_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:43:56 [INFO] root: [STL] Validation Accuracy: 62.1%
+2025-11-22 14:43:56 [INFO] root: Saved artifacts for STL to model_STL.pkl
+2025-11-22 14:43:56 [INFO] root: --- Training Model: BLK ---
+2025-11-22 14:43:56 [INFO] root: Training BLK...
+2025-11-22 14:43:56 [INFO] root: [BLK] Aliasing columns: dict_keys(['BLK_SZN_AVG', 'BLK_L3_AVG', 'BLK_L5_EWMA', 'BLK_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:44:02 [INFO] root: [BLK] Validation Accuracy: 72.7%
+2025-11-22 14:44:02 [INFO] root: Saved artifacts for BLK to model_BLK.pkl
+2025-11-22 14:44:02 [INFO] root: --- Training Model: TOV ---
+2025-11-22 14:44:02 [INFO] root: Training TOV...
+2025-11-22 14:44:02 [INFO] root: [TOV] Aliasing columns: dict_keys(['TOV_SZN_AVG', 'TOV_L3_AVG', 'TOV_L5_EWMA', 'TOV_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:44:12 [INFO] root: [TOV] Validation Accuracy: 60.2%
+2025-11-22 14:44:12 [INFO] root: Saved artifacts for TOV to model_TOV.pkl
+2025-11-22 14:44:12 [INFO] root: --- Training Model: PRA ---
+2025-11-22 14:44:12 [INFO] root: Training PRA...
+2025-11-22 14:44:12 [INFO] root: [PRA] Aliasing columns: dict_keys(['PRA_SZN_AVG', 'PRA_L3_AVG', 'PRA_L5_EWMA', 'PRA_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:44:21 [INFO] root: [PRA] Validation Accuracy: 58.4%
+2025-11-22 14:44:21 [INFO] root: Saved artifacts for PRA to model_PRA.pkl
+2025-11-22 14:44:21 [INFO] root: --- Training Model: PR ---
+2025-11-22 14:44:21 [INFO] root: Training PR...
+2025-11-22 14:44:21 [INFO] root: [PR] Aliasing columns: dict_keys(['PR_SZN_AVG', 'PR_L3_AVG', 'PR_L5_EWMA', 'PR_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:44:32 [INFO] root: [PR] Validation Accuracy: 56.4%
+2025-11-22 14:44:32 [INFO] root: Saved artifacts for PR to model_PR.pkl
+2025-11-22 14:44:32 [INFO] root: --- Training Model: PA ---
+2025-11-22 14:44:32 [INFO] root: Training PA...
+2025-11-22 14:44:32 [INFO] root: [PA] Aliasing columns: dict_keys(['PA_SZN_AVG', 'PA_L3_AVG', 'PA_L5_EWMA', 'PA_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:44:45 [INFO] root: [PA] Validation Accuracy: 57.9%
+2025-11-22 14:44:45 [INFO] root: Saved artifacts for PA to model_PA.pkl
+2025-11-22 14:44:45 [INFO] root: --- Training Model: RA ---
+2025-11-22 14:44:45 [INFO] root: Training RA...
+2025-11-22 14:44:45 [INFO] root: [RA] Aliasing columns: dict_keys(['RA_SZN_AVG', 'RA_L3_AVG', 'RA_L5_EWMA', 'RA_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:44:57 [INFO] root: [RA] Validation Accuracy: 58.2%
+2025-11-22 14:44:57 [INFO] root: Saved artifacts for RA to model_RA.pkl
+2025-11-22 14:44:57 [INFO] root: --- Training Model: STK ---
+2025-11-22 14:44:57 [INFO] root: Training STK...
+2025-11-22 14:44:57 [WARNING] root: CRITICAL: 'SZN Avg' missing from features for STK. Model will be poor.
+2025-11-22 14:45:07 [INFO] root: [STK] Validation Accuracy: 60.5%
+2025-11-22 14:45:07 [INFO] root: Saved artifacts for STK to model_STK.pkl
+2025-11-22 14:45:07 [INFO] root: --- Training Model: FANTASY_PTS ---
+2025-11-22 14:45:07 [INFO] root: Training FANTASY_PTS...
+2025-11-22 14:45:07 [INFO] root: [FANTASY_PTS] Aliasing columns: dict_keys(['FANTASY_PTS_SZN_AVG', 'FANTASY_PTS_L3_AVG', 'FANTASY_PTS_L5_EWMA', 'FANTASY_PTS_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:45:20 [INFO] root: [FANTASY_PTS] Validation Accuracy: 59.3%
+2025-11-22 14:45:20 [INFO] root: Saved artifacts for FANTASY_PTS to model_FANTASY_PTS.pkl
+2025-11-22 14:45:20 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 0
+2025-11-22 14:52:27 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-11-22 14:52:27 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-11-22 14:52:27 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-11-22 14:52:28 [INFO] root: Loaded 4613 rows of training data.
+2025-11-22 14:52:28 [INFO] root: Note: 8 props excluded from training (Historical data not available).
+2025-11-22 14:52:28 [INFO] root: Excluded: Q1_PTS, Q1_REB, Q1_AST, Q1_PRA, 1H_PTS, 1H_REB, 1H_AST, 1H_PRA
+2025-11-22 14:52:28 [INFO] root: Proceeding to train models for 13 props...
+2025-11-22 14:52:28 [INFO] root: --- Training Model: PTS ---
+2025-11-22 14:52:28 [INFO] root: Training PTS...
+2025-11-22 14:52:28 [INFO] root: [PTS] Aliasing columns: dict_keys(['PTS_SZN_AVG', 'PTS_L3_AVG', 'PTS_L5_EWMA', 'PTS_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:52:35 [INFO] root: [PTS] Validation Accuracy: 56.3%
+2025-11-22 14:52:35 [INFO] root: Saved artifacts for PTS to model_PTS.pkl
+2025-11-22 14:52:35 [INFO] root: --- Training Model: REB ---
+2025-11-22 14:52:35 [INFO] root: Training REB...
+2025-11-22 14:52:35 [INFO] root: [REB] Aliasing columns: dict_keys(['REB_SZN_AVG', 'REB_L3_AVG', 'REB_L5_EWMA', 'REB_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:52:42 [INFO] root: [REB] Validation Accuracy: 58.7%
+2025-11-22 14:52:42 [INFO] root: Saved artifacts for REB to model_REB.pkl
+2025-11-22 14:52:42 [INFO] root: --- Training Model: AST ---
+2025-11-22 14:52:42 [INFO] root: Training AST...
+2025-11-22 14:52:42 [INFO] root: [AST] Aliasing columns: dict_keys(['AST_SZN_AVG', 'AST_L3_AVG', 'AST_L5_EWMA', 'AST_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:52:49 [INFO] root: [AST] Validation Accuracy: 59.6%
+2025-11-22 14:52:49 [INFO] root: Saved artifacts for AST to model_AST.pkl
+2025-11-22 14:52:49 [INFO] root: --- Training Model: FG3M ---
+2025-11-22 14:52:49 [INFO] root: Training FG3M...
+2025-11-22 14:52:49 [INFO] root: [FG3M] Aliasing columns: dict_keys(['FG3M_SZN_AVG', 'FG3M_L3_AVG', 'FG3M_L5_EWMA', 'FG3M_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:52:59 [INFO] root: [FG3M] Validation Accuracy: 65.3%
+2025-11-22 14:52:59 [INFO] root: Saved artifacts for FG3M to model_FG3M.pkl
+2025-11-22 14:52:59 [INFO] root: --- Training Model: STL ---
+2025-11-22 14:52:59 [INFO] root: Training STL...
+2025-11-22 14:52:59 [INFO] root: [STL] Aliasing columns: dict_keys(['STL_SZN_AVG', 'STL_L3_AVG', 'STL_L5_EWMA', 'STL_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:53:04 [INFO] root: [STL] Validation Accuracy: 62.0%
+2025-11-22 14:53:04 [INFO] root: Saved artifacts for STL to model_STL.pkl
+2025-11-22 14:53:04 [INFO] root: --- Training Model: BLK ---
+2025-11-22 14:53:04 [INFO] root: Training BLK...
+2025-11-22 14:53:04 [INFO] root: [BLK] Aliasing columns: dict_keys(['BLK_SZN_AVG', 'BLK_L3_AVG', 'BLK_L5_EWMA', 'BLK_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:53:10 [INFO] root: [BLK] Validation Accuracy: 72.5%
+2025-11-22 14:53:10 [INFO] root: Saved artifacts for BLK to model_BLK.pkl
+2025-11-22 14:53:10 [INFO] root: --- Training Model: TOV ---
+2025-11-22 14:53:10 [INFO] root: Training TOV...
+2025-11-22 14:53:10 [INFO] root: [TOV] Aliasing columns: dict_keys(['TOV_SZN_AVG', 'TOV_L3_AVG', 'TOV_L5_EWMA', 'TOV_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:53:20 [INFO] root: [TOV] Validation Accuracy: 60.0%
+2025-11-22 14:53:20 [INFO] root: Saved artifacts for TOV to model_TOV.pkl
+2025-11-22 14:53:20 [INFO] root: --- Training Model: PRA ---
+2025-11-22 14:53:20 [INFO] root: Training PRA...
+2025-11-22 14:53:20 [INFO] root: [PRA] Aliasing columns: dict_keys(['PRA_SZN_AVG', 'PRA_L3_AVG', 'PRA_L5_EWMA', 'PRA_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:53:28 [INFO] root: [PRA] Validation Accuracy: 58.2%
+2025-11-22 14:53:28 [INFO] root: Saved artifacts for PRA to model_PRA.pkl
+2025-11-22 14:53:28 [INFO] root: --- Training Model: PR ---
+2025-11-22 14:53:28 [INFO] root: Training PR...
+2025-11-22 14:53:28 [INFO] root: [PR] Aliasing columns: dict_keys(['PR_SZN_AVG', 'PR_L3_AVG', 'PR_L5_EWMA', 'PR_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:53:39 [INFO] root: [PR] Validation Accuracy: 56.0%
+2025-11-22 14:53:40 [INFO] root: Saved artifacts for PR to model_PR.pkl
+2025-11-22 14:53:40 [INFO] root: --- Training Model: PA ---
+2025-11-22 14:53:40 [INFO] root: Training PA...
+2025-11-22 14:53:40 [INFO] root: [PA] Aliasing columns: dict_keys(['PA_SZN_AVG', 'PA_L3_AVG', 'PA_L5_EWMA', 'PA_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:53:51 [INFO] root: [PA] Validation Accuracy: 57.9%
+2025-11-22 14:53:51 [INFO] root: Saved artifacts for PA to model_PA.pkl
+2025-11-22 14:53:51 [INFO] root: --- Training Model: RA ---
+2025-11-22 14:53:51 [INFO] root: Training RA...
+2025-11-22 14:53:51 [INFO] root: [RA] Aliasing columns: dict_keys(['RA_SZN_AVG', 'RA_L3_AVG', 'RA_L5_EWMA', 'RA_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:54:03 [INFO] root: [RA] Validation Accuracy: 59.2%
+2025-11-22 14:54:03 [INFO] root: Saved artifacts for RA to model_RA.pkl
+2025-11-22 14:54:03 [INFO] root: --- Training Model: STK ---
+2025-11-22 14:54:03 [INFO] root: Training STK...
+2025-11-22 14:54:03 [WARNING] root: CRITICAL: 'SZN Avg' missing from features for STK. Model will be poor.
+2025-11-22 14:54:14 [INFO] root: [STK] Validation Accuracy: 60.2%
+2025-11-22 14:54:14 [INFO] root: Saved artifacts for STK to model_STK.pkl
+2025-11-22 14:54:14 [INFO] root: --- Training Model: FANTASY_PTS ---
+2025-11-22 14:54:14 [INFO] root: Training FANTASY_PTS...
+2025-11-22 14:54:14 [INFO] root: [FANTASY_PTS] Aliasing columns: dict_keys(['FANTASY_PTS_SZN_AVG', 'FANTASY_PTS_L3_AVG', 'FANTASY_PTS_L5_EWMA', 'FANTASY_PTS_L10_STD']) -> dict_values(['SZN Avg', 'L3 Avg', 'L5 EWMA', 'L10_STD_DEV'])
+2025-11-22 14:54:27 [INFO] root: [FANTASY_PTS] Validation Accuracy: 58.0%
+2025-11-22 14:54:27 [INFO] root: Saved artifacts for FANTASY_PTS to model_FANTASY_PTS.pkl
+2025-11-22 14:54:27 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 0
+2025-11-27 01:52:57 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-11-27 01:52:57 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-11-27 01:52:57 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-11-27 01:53:05 [INFO] root: Loaded 126056 rows of training data.
+2025-11-27 01:53:05 [INFO] root: Note: 8 props excluded from training (Historical data not available).
+2025-11-27 01:53:05 [INFO] root: Excluded: Q1_PTS, Q1_REB, Q1_AST, Q1_PRA, 1H_PTS, 1H_REB, 1H_AST, 1H_PRA
+2025-11-27 01:53:05 [INFO] root: Proceeding to train models for 13 props...
+2025-11-27 01:53:05 [INFO] root: --- Training Model: PTS ---
+2025-11-27 01:53:06 [INFO] root: Training PTS...
+2025-11-27 01:53:06 [INFO] root: [PTS] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:53:42 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-11-27 01:53:42 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-11-27 01:53:42 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-11-27 01:53:51 [INFO] root: Loaded 126056 rows of training data.
+2025-11-27 01:53:51 [INFO] root: Note: 8 props excluded from training (Historical data not available).
+2025-11-27 01:53:51 [INFO] root: Excluded: Q1_PTS, Q1_REB, Q1_AST, Q1_PRA, 1H_PTS, 1H_REB, 1H_AST, 1H_PRA
+2025-11-27 01:53:51 [INFO] root: Proceeding to train models for 13 props...
+2025-11-27 01:53:51 [INFO] root: --- Training Model: PTS ---
+2025-11-27 01:53:51 [INFO] root: Training PTS...
+2025-11-27 01:53:52 [INFO] root: [PTS] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:54:36 [INFO] root: [PTS] Validation Accuracy: 62.9%
+2025-11-27 01:54:36 [INFO] root: Saved artifacts for PTS to model_PTS.pkl
+2025-11-27 01:54:36 [INFO] root: --- Training Model: REB ---
+2025-11-27 01:54:37 [INFO] root: Training REB...
+2025-11-27 01:54:37 [INFO] root: [REB] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:55:27 [INFO] root: [REB] Validation Accuracy: 67.2%
+2025-11-27 01:55:27 [INFO] root: Saved artifacts for REB to model_REB.pkl
+2025-11-27 01:55:27 [INFO] root: --- Training Model: AST ---
+2025-11-27 01:55:28 [INFO] root: Training AST...
+2025-11-27 01:55:28 [INFO] root: [AST] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:56:11 [INFO] root: [AST] Validation Accuracy: 74.1%
+2025-11-27 01:56:11 [INFO] root: Saved artifacts for AST to model_AST.pkl
+2025-11-27 01:56:11 [INFO] root: --- Training Model: FG3M ---
+2025-11-27 01:56:11 [INFO] root: Training FG3M...
+2025-11-27 01:56:12 [INFO] root: [FG3M] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:56:43 [INFO] root: [FG3M] Validation Accuracy: 82.3%
+2025-11-27 01:56:43 [INFO] root: Saved artifacts for FG3M to model_FG3M.pkl
+2025-11-27 01:56:43 [INFO] root: --- Training Model: STL ---
+2025-11-27 01:56:43 [INFO] root: Training STL...
+2025-11-27 01:56:43 [INFO] root: [STL] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:57:16 [INFO] root: [STL] Validation Accuracy: 82.3%
+2025-11-27 01:57:16 [INFO] root: Saved artifacts for STL to model_STL.pkl
+2025-11-27 01:57:16 [INFO] root: --- Training Model: BLK ---
+2025-11-27 01:57:17 [INFO] root: Training BLK...
+2025-11-27 01:57:17 [INFO] root: [BLK] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:57:46 [INFO] root: [BLK] Validation Accuracy: 91.8%
+2025-11-27 01:57:46 [INFO] root: Saved artifacts for BLK to model_BLK.pkl
+2025-11-27 01:57:46 [INFO] root: --- Training Model: TOV ---
+2025-11-27 01:57:46 [INFO] root: Training TOV...
+2025-11-27 01:57:46 [INFO] root: [TOV] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:58:19 [INFO] root: [TOV] Validation Accuracy: 83.1%
+2025-11-27 01:58:19 [INFO] root: Saved artifacts for TOV to model_TOV.pkl
+2025-11-27 01:58:19 [INFO] root: --- Training Model: PRA ---
+2025-11-27 01:58:19 [INFO] root: Training PRA...
+2025-11-27 01:58:19 [INFO] root: [PRA] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:59:01 [INFO] root: [PRA] Validation Accuracy: 58.7%
+2025-11-27 01:59:01 [INFO] root: Saved artifacts for PRA to model_PRA.pkl
+2025-11-27 01:59:01 [INFO] root: --- Training Model: PR ---
+2025-11-27 01:59:02 [INFO] root: Training PR...
+2025-11-27 01:59:02 [INFO] root: [PR] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:59:03 [ERROR] root: Preprocessing failed for PR: Cannot use median strategy with non-numeric data:
+could not convert string to float: '2025-26'
+2025-11-27 01:59:03 [INFO] root: --- Training Model: PA ---
+2025-11-27 01:59:04 [INFO] root: Training PA...
+2025-11-27 01:59:05 [INFO] root: [PA] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:59:06 [ERROR] root: Preprocessing failed for PA: Cannot use median strategy with non-numeric data:
+could not convert string to float: '2025-26'
+2025-11-27 01:59:06 [INFO] root: --- Training Model: RA ---
+2025-11-27 01:59:07 [INFO] root: Training RA...
+2025-11-27 01:59:08 [INFO] root: [RA] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:59:09 [ERROR] root: Preprocessing failed for RA: Cannot use median strategy with non-numeric data:
+could not convert string to float: '2025-26'
+2025-11-27 01:59:09 [INFO] root: --- Training Model: STK ---
+2025-11-27 01:59:10 [INFO] root: Training STK...
+2025-11-27 01:59:11 [INFO] root: [STK] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:59:14 [ERROR] root: Preprocessing failed for STK: Cannot use median strategy with non-numeric data:
+could not convert string to float: '2025-26'
+2025-11-27 01:59:14 [INFO] root: --- Training Model: FANTASY_PTS ---
+2025-11-27 01:59:15 [INFO] root: Training FANTASY_PTS...
+2025-11-27 01:59:15 [INFO] root: [FANTASY_PTS] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-27 01:59:17 [ERROR] root: Preprocessing failed for FANTASY_PTS: Cannot use median strategy with non-numeric data:
+could not convert string to float: '2025-26'
+2025-11-27 01:59:17 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 0

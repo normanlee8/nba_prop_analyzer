@@ -1,0 +1,40 @@
+2025-11-23 01:38:12 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-11-23 01:38:12 [INFO] root: --- Grading Predictions vs Actuals ---
+2025-11-26 12:05:19 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-11-26 12:05:19 [INFO] root: --- Grading Predictions vs Actuals ---
+2025-11-26 12:12:27 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-11-26 12:12:27 [INFO] root: --- Grading Predictions vs Actuals ---
+2025-11-26 12:12:27 [ERROR] root: Could not find Date column in props file. Available columns: ['Status', 'Game', 'Qtr', 'Player', 'Prop', 'Line', 'Curr', 'Proj', 'Edge', 'Win%', 'Pick', 'Tier']
+2025-11-26 12:19:23 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-11-26 12:19:23 [INFO] root: --- Grading Predictions vs Actuals ---
+2025-11-26 12:19:23 [INFO] root: No Date column found in props file. Attempting to infer date from Box Scores...
+2025-11-26 12:19:23 [INFO] root: Inferred Slate Date: 2025-11-25 (derived from most recent matching box scores)
+2025-11-26 12:19:23 [INFO] root: Graded results saved to output/prop_check_results.csv
+2025-11-26 12:19:23 [INFO] root: ----------------------------------------
+2025-11-26 12:19:23 [INFO] root: PERFORMANCE SUMMARY
+2025-11-26 12:19:23 [INFO] root: Accuracy on 306 Total Graded Props: 58.17% (178/306)
+2025-11-26 12:19:23 [INFO] root: Accuracy on 204 S-Tier Props: 58.82% (120/204)
+2025-11-26 12:19:23 [INFO] root: Accuracy on 19 A-Tier Props: 68.42% (13/19)
+2025-11-26 12:19:23 [INFO] root: ----------------------------------------
+2025-11-26 12:39:52 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-11-26 12:39:52 [INFO] root: --- Grading Predictions vs Actuals ---
+2025-11-26 12:39:52 [INFO] root: No Date column found in props file. Attempting to infer date from Box Scores...
+2025-11-26 12:39:52 [INFO] root: Inferred Slate Date: 2025-11-25 (derived from most recent matching box scores)
+2025-11-26 12:39:52 [INFO] root: Graded results saved to output/prop_check_results.csv
+2025-11-26 12:39:52 [INFO] root: ----------------------------------------
+2025-11-26 12:39:52 [INFO] root: PERFORMANCE SUMMARY
+2025-11-26 12:39:52 [INFO] root: Accuracy on 306 Total Graded Props: 58.17% (178/306)
+2025-11-26 12:39:52 [INFO] root: Accuracy on 204 S-Tier Props: 58.82% (120/204)
+2025-11-26 12:39:52 [INFO] root: Accuracy on 19 A-Tier Props: 68.42% (13/19)
+2025-11-26 12:39:52 [INFO] root: ----------------------------------------
+2025-11-27 00:22:23 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-11-27 00:22:23 [INFO] root: --- Grading Predictions vs Actuals ---
+2025-11-27 00:22:23 [INFO] root: No Date column found in props file. Attempting to infer date from Box Scores...
+2025-11-27 00:22:23 [INFO] root: Inferred Slate Date: 2025-11-25 (derived from most recent matching box scores)
+2025-11-27 00:22:23 [INFO] root: Graded results saved to output/prop_check_results.csv
+2025-11-27 00:22:23 [INFO] root: ----------------------------------------
+2025-11-27 00:22:23 [INFO] root: PERFORMANCE SUMMARY
+2025-11-27 00:22:23 [INFO] root: Accuracy on 306 Total Graded Props: 58.17% (178/306)
+2025-11-27 00:22:23 [INFO] root: Accuracy on 204 S-Tier Props: 58.82% (120/204)
+2025-11-27 00:22:23 [INFO] root: Accuracy on 19 A-Tier Props: 68.42% (13/19)
+2025-11-27 00:22:23 [INFO] root: ----------------------------------------
