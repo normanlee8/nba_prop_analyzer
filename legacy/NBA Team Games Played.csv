@@ -1,31 +1,3 @@
-Rank,Team,2026,Last 3,Last 1,Home,Away,2025
-1,Orlando,19,3,1,10,9,19
-1,Golden State,19,3,1,7,12,19
-1,Cleveland,19,3,1,11,8,19
-1,Atlanta,19,3,1,7,12,19
-1,Dallas,19,3,1,13,6,19
-6,Okla City,18,3,1,8,10,18
-6,Milwaukee,18,3,1,11,7,18
-6,LA Clippers,18,3,1,8,10,18
-6,Phoenix,18,3,1,11,7,18
-6,Toronto,18,3,1,8,10,18
-6,New Orleans,18,3,1,10,8,18
-6,Memphis,18,3,1,10,8,18
-6,Sacramento,18,3,1,8,10,18
-6,Portland,18,3,1,7,11,18
-6,Miami,18,3,1,9,9,18
-16,Minnesota,17,3,1,8,9,17
-16,Detroit,17,3,1,8,9,17
-16,Denver,17,3,1,8,9,17
-16,Brooklyn,17,3,1,8,9,17
-16,Philadelphia,17,3,1,10,7,17
-16,Charlotte,17,3,1,8,9,17
-16,LA Lakers,17,3,1,7,10,17
-16,Indiana,17,3,1,8,9,17
-16,Chicago,17,3,1,8,9,17
-16,Washington,17,3,1,7,10,17
-16,Utah,17,3,1,9,8,17
-16,Boston,17,3,1,9,8,17
-28,New York,16,3,1,9,7,16
-28,San Antonio,16,3,1,10,6,16
-30,Houston,15,3,1,7,8,15
+version https://git-lfs.github.com/spec/v1
+oid sha256:414205769ed33aa4bb8bcaf1266fa45f53a7805ef91866979e1cb7eef268d384
+size 832
