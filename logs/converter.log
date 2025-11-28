@@ -5,3 +5,15 @@
 2025-11-27 14:29:03 [INFO] root: Logging initialized. Writing to logs/converter.log
 2025-11-27 14:29:03 [INFO] root: Smart Date Detector initialized with 591 recent matchups.
 2025-11-27 14:29:03 [INFO] root: Successfully converted props to input/props_today.csv (389 rows)
+2025-11-27 15:15:57 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-11-27 15:15:57 [INFO] root: Smart Date Detector initialized with 591 recent matchups.
+2025-11-27 15:15:57 [INFO] root: Successfully converted props to input/props_today.csv (389 rows)
+2025-11-27 15:20:36 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-11-27 15:20:36 [INFO] root: Smart Date Detector initialized with 591 recent matchups.
+2025-11-27 15:20:36 [INFO] root: Successfully converted props to input/props_today.csv (389 rows)
+2025-11-27 15:26:35 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-11-27 15:26:35 [INFO] root: Smart Date Detector initialized with 591 recent matchups.
+2025-11-27 15:26:35 [INFO] root: Successfully converted props to input/props_today.csv (389 rows)
+2025-11-27 15:51:07 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-11-27 15:51:08 [INFO] root: Smart Date Detector initialized with 591 recent matchups.
+2025-11-27 15:51:08 [INFO] root: Successfully converted props to input/props_today.csv (661 rows)

@@ -25,14 +25,29 @@ class SmartDateDetector:
 
     def _load_history(self):
         """
-        Loads the last N days of matchups from master_box_scores.csv.
+        Loads the last N days of matchups from ALL master_box_scores_*.csv files.
         """
-        if not cfg.MASTER_BOX_SCORES_FILE.exists():
+        # Load all box score files found matching the pattern
+        files = sorted(cfg.DATA_DIR.glob(cfg.MASTER_BOX_SCORES_PATTERN))
+        
+        if not files:
+            logging.warning("No master_box_scores files found for date detection.")
             return
 
         try:
-            # Load only necessary columns to be fast
-            df = pd.read_csv(cfg.MASTER_BOX_SCORES_FILE, usecols=['TEAM_ABBREVIATION', 'OPPONENT_ABBREV', 'GAME_DATE'])
+            dfs = []
+            for f in files:
+                try:
+                    # Load only necessary columns to be fast
+                    # Note: We must ensure headers exist in all files
+                    d = pd.read_csv(f, usecols=['TEAM_ABBREVIATION', 'OPPONENT_ABBREV', 'GAME_DATE'])
+                    dfs.append(d)
+                except Exception as e:
+                    logging.warning(f"Skipping {f} in SmartDateDetector: {e}")
+            
+            if not dfs: return
+
+            df = pd.concat(dfs, ignore_index=True)
             df['GAME_DATE'] = pd.to_datetime(df['GAME_DATE'])
             
             # Filter for recent history only
@@ -40,8 +55,8 @@ class SmartDateDetector:
             recent = df[df['GAME_DATE'] >= cutoff].copy()
             
             # Populate Lookup Dictionary: {(Team, Opp): DateString}
-            # We sort by date descending so we match the most recent game if duplicates exist
-            recent = recent.sort_values('GAME_DATE', ascending=False)
+            # Sort by date ASCENDING so the most recent game (last in list) overwrites older ones
+            recent = recent.sort_values('GAME_DATE', ascending=True)
             
             for _, row in recent.iterrows():
                 t1 = row['TEAM_ABBREVIATION']
@@ -82,13 +97,15 @@ def clean_prop_line(text):
 
 def parse_matchup(matchup_line):
     """Extracts Team abbreviations from a matchup line."""
+    # Normalize inputs to @ for detection, but output as vs.
     line = matchup_line.replace(' vs ', ' @ ').replace(' vs. ', ' @ ').replace('-', ' @ ')
     match = re.search(r'\b([A-Z]{3})\s*@\s*([A-Z]{3})\b', line)
     
     if match:
         team1 = match.group(1)
         team2 = match.group(2)
-        full_matchup_string = f"{team1} @ {team2}"
+        # Output as "vs." instead of "@"
+        full_matchup_string = f"{team1} vs. {team2}"
         return team1, team2, full_matchup_string
     return None, None, None
 

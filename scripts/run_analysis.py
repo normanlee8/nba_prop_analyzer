@@ -68,18 +68,9 @@ def main():
         # --- ROBUST COLUMN HANDLING ---
         props_df.columns = props_df.columns.str.strip()
         
-        # Check and Fix 'Prop Type'
-        if 'Prop Type' not in props_df.columns:
-            logging.warning("'Prop Type' column missing. Attempting to auto-fix...")
-            aliases = ['Prop Category', 'PropCategory', 'Market', 'Type', 'Category', 'Prop', 'Stat']
-            for alias in aliases:
-                if alias in props_df.columns:
-                    logging.info(f"Renaming column '{alias}' -> 'Prop Type'")
-                    props_df.rename(columns={alias: 'Prop Type'}, inplace=True)
-                    break
-        
-        if 'Prop Type' not in props_df.columns:
-            logging.critical(f"CRITICAL ERROR: Could not find 'Prop Type' column.")
+        # Use 'Prop Category' directly (standardized in parser.py)
+        if 'Prop Category' not in props_df.columns:
+            logging.critical(f"CRITICAL ERROR: 'Prop Category' column missing.")
             logging.critical(f"Available Columns: {list(props_df.columns)}")
             return
 
@@ -126,7 +117,7 @@ def main():
     # Rename Columns for Readability
     rename_map = {
         'Player Name': 'Player',
-        'Prop Type': 'Prop',
+        'Prop Category': 'Prop', # Used directly now
         'Prop Line': 'Line',
         'Model_Pred': 'Proj',
         'Model_Conf': 'Prob',
@@ -135,7 +126,7 @@ def main():
     
     # Select columns to keep
     keep_cols = [
-        'Player Name', 'Team', 'Opponent', 'Prop Type', 'Prop Line', 
+        'Player Name', 'Team', 'Opponent', 'Prop Category', 'Prop Line', # Used directly now
         'Model_Pred', 'Model_Conf', 'Edge_Type', 'Tier',
         'Last 5', 'Season Avg', 'Diff%'
     ]
@@ -152,7 +143,7 @@ def main():
 
     # 5. Save Results
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    outfile = cfg.OUTPUT_DIR / "processed_props.csv"  # <--- CHANGED FILENAME
+    outfile = cfg.OUTPUT_DIR / "processed_props.csv" 
     record_file = cfg.INPUT_DIR / "records" / f"{timestamp}.csv"
     
     outfile.parent.mkdir(parents=True, exist_ok=True)

@@ -29,7 +29,8 @@ def predict_props(features_df):
     logging.info(f"Starting batch inference on {len(features_df)} props...")
 
     for idx, row in features_df.iterrows():
-        raw_type = row.get('Prop Type')
+        # FIX: Use 'Prop Category' to match parser and run_analysis.py
+        raw_type = row.get('Prop Category')
         
         if pd.isna(raw_type) or not isinstance(raw_type, str):
             continue 

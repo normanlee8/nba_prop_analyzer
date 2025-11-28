@@ -24,10 +24,17 @@ PROPS_FILE = INPUT_DIR / "props_today.csv"
 # Final results
 PROCESSED_OUTPUT = OUTPUT_DIR / "processed_props.csv"
 
-# Master Data Files
-MASTER_PLAYER_FILE = DATA_DIR / "master_player_stats.csv"
-MASTER_TEAM_FILE = DATA_DIR / "master_team_stats.csv"
-MASTER_BOX_SCORES_FILE = DATA_DIR / "master_box_scores.csv"
+# Master Data Files (Defaults to Current Season)
+# We also define patterns to load multiple seasons
+MASTER_PLAYER_FILE = DATA_DIR / "master_player_stats_2025-26.csv"
+MASTER_PLAYER_PATTERN = "master_player_stats_*.csv"
+
+MASTER_TEAM_FILE = DATA_DIR / "master_team_stats_2025-26.csv"
+MASTER_TEAM_PATTERN = "master_team_stats_*.csv"
+
+MASTER_BOX_SCORES_FILE = DATA_DIR / "master_box_scores_2025-26.csv"
+MASTER_BOX_SCORES_PATTERN = "master_box_scores_*.csv"
+
 MASTER_VS_OPP_FILE = DATA_DIR / "master_vs_opponent.csv"
 MASTER_DVP_FILE = DATA_DIR / "master_dvp_stats.csv"
 

@@ -11,30 +11,55 @@ _INJURY_WARNING_SHOWN = False
 def load_static_data():
     """
     Loads master player and team stats.
-    For inference, we typically want the LATEST season's averages.
+    Merges ALL found season files (e.g. 2024-25 and 2025-26), 
+    prioritizing the latest season's data for deduplication.
     """
     logging.info("--- Loading Static Data Files ---")
     try:
-        # Find latest master_player_stats file
-        files = sorted(cfg.DATA_DIR.glob("master_player_stats_*.csv"))
-        if not files:
+        # 1. Load Player Stats
+        player_files = sorted(cfg.DATA_DIR.glob(cfg.MASTER_PLAYER_PATTERN))
+        if not player_files:
             logging.error("No master_player_stats files found.")
             return None, None, 100.0
             
-        latest_file = files[-1]
-        # logging.info(f"Using {latest_file.name} for player stats.")
-        player_stats_df = pd.read_csv(latest_file)
+        player_dfs = []
+        for f in player_files:
+            try:
+                df = pd.read_csv(f)
+                player_dfs.append(df)
+            except Exception as e:
+                logging.warning(f"Error reading {f}: {e}")
         
-        if 'clean_name' in player_stats_df.columns:
-            player_stats_df['processed_name'] = player_stats_df['clean_name'].apply(preprocess_name_for_fuzzy_match)
-        
-        # Find latest master_team_stats file
-        team_files = sorted(cfg.DATA_DIR.glob("master_team_stats_*.csv"))
+        if player_dfs:
+            player_stats_df = pd.concat(player_dfs, ignore_index=True)
+            # Deduplicate: Keep LAST occurrence (which corresponds to latest file due to sorted() above)
+            if 'PLAYER_ID' in player_stats_df.columns:
+                player_stats_df = player_stats_df.drop_duplicates(subset=['PLAYER_ID'], keep='last')
+            
+            if 'clean_name' in player_stats_df.columns:
+                player_stats_df['processed_name'] = player_stats_df['clean_name'].apply(preprocess_name_for_fuzzy_match)
+        else:
+            player_stats_df = pd.DataFrame()
+
+        # 2. Load Team Stats
+        team_files = sorted(cfg.DATA_DIR.glob(cfg.MASTER_TEAM_PATTERN))
         if team_files:
-            team_stats_df = pd.read_csv(team_files[-1])
-            if 'TEAM_ABBREVIATION' in team_stats_df.columns:
-                team_stats_df = team_stats_df.drop_duplicates(subset=['TEAM_ABBREVIATION'], keep='last')
-                team_stats_df.set_index('TEAM_ABBREVIATION', inplace=True)
+            team_dfs = []
+            for f in team_files:
+                try:
+                    df = pd.read_csv(f)
+                    team_dfs.append(df)
+                except Exception as e:
+                    logging.warning(f"Error reading {f}: {e}")
+            
+            if team_dfs:
+                team_stats_df = pd.concat(team_dfs, ignore_index=True)
+                if 'TEAM_ABBREVIATION' in team_stats_df.columns:
+                    # Keep latest stats for each team
+                    team_stats_df = team_stats_df.drop_duplicates(subset=['TEAM_ABBREVIATION'], keep='last')
+                    team_stats_df.set_index('TEAM_ABBREVIATION', inplace=True)
+            else:
+                team_stats_df = pd.DataFrame()
         else:
             team_stats_df = pd.DataFrame()
         
@@ -53,7 +78,7 @@ def load_box_scores(player_ids=None):
     """
     try:
         # Glob all season files
-        files = sorted(cfg.DATA_DIR.glob("master_box_scores_*.csv"))
+        files = sorted(cfg.DATA_DIR.glob(cfg.MASTER_BOX_SCORES_PATTERN))
         if not files:
             logging.warning("No master_box_scores files found.")
             return None
