@@ -31,7 +31,6 @@ def print_pretty_table(df, title="TOP 20 DISCOVERED EDGES"):
         widths.append(max_len + 2) # Add padding
 
     # Create format string (e.g., "| {:<10} | {:<5} | ...")
-    # Using simple join logic avoids f-string escaping issues
     fmt_parts = []
     for w in widths:
         fmt_parts.append(f"{{:<{w}}}")
@@ -115,13 +114,20 @@ def main():
         results_df['Model_Conf'] = 0.0
     
     # --- SORTING LOGIC ---
-    # Map Tier to Rank (S=0, A=1, B=2, C=3) so we can sort properly
     tier_map = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
     results_df['Tier_Rank'] = results_df['Tier'].map(tier_map).fillna(99)
-    
-    # Sort by: 1. Tier (Best first), 2. Probability (Highest first)
     results_df.sort_values(by=['Tier_Rank', 'Model_Conf'], ascending=[True, False], inplace=True)
     
+    # --- FIX: Date Normalization & Formatting ---
+    # 1. Standardize column name (Handle 'Game_date' vs 'GAME_DATE')
+    if 'Game_date' in results_df.columns:
+        results_df.rename(columns={'Game_date': 'GAME_DATE'}, inplace=True)
+    
+    # 2. Format Date to YYYY-MM-DD string to prevent table print issues
+    if 'GAME_DATE' in results_df.columns:
+        results_df['GAME_DATE'] = pd.to_datetime(results_df['GAME_DATE'], errors='coerce').dt.strftime('%Y-%m-%d')
+        results_df['GAME_DATE'] = results_df['GAME_DATE'].fillna("N/A")
+
     # Rename Columns for Readability
     rename_map = {
         'Player Name': 'Player',
@@ -130,13 +136,13 @@ def main():
         'Model_Pred': 'Proj',
         'Model_Conf': 'Prob',
         'Edge_Type': 'Pick',
-        'GAME_DATE': 'Date'  # Clean name for the output table
+        'GAME_DATE': 'Date'  # Now guaranteed to match
     }
     
     # Select columns to keep
     keep_cols = [
         'Player Name', 'Team', 'Opponent', 'Prop Category', 'Prop Line', 
-        'GAME_DATE',  # <--- Added GAME_DATE here
+        'GAME_DATE',
         'Model_Pred', 'Model_Conf', 'Edge_Type', 'Tier',
         'Last 5', 'Season Avg', 'Diff%'
     ]
