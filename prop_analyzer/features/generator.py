@@ -70,7 +70,8 @@ def build_feature_set(props_df):
                 'deuce mcbride': 'miles mcbride',
                 'cam johnson': 'cameron johnson',
                 'lu dort': 'luguentz dort',
-                'pj washington': 'p.j. washington'
+                'pj washington': 'p.j. washington',
+                'jimmy butler': 'jimmy butler iii'
             }
             props_df['clean_name'] = props_df['clean_name'].replace(manual_map)
             
