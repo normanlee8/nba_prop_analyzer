@@ -153,3 +153,32 @@
 2025-11-29 02:04:21 [INFO] root: Merging Team Stats...
 2025-11-29 02:04:27 [INFO] root: Saved master_training_dataset.csv with 31717 rows and 642 features.
 2025-11-29 02:04:27 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
+2025-11-29 12:56:28 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-11-29 12:56:28 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
+2025-11-29 12:56:28 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-11-29 12:56:28 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-11-29 12:56:28 [INFO] root: Creating Player ID Map across all seasons...
+2025-11-29 12:56:28 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-11-29 12:56:28 [INFO] root: Saved master_player_stats_2024-25.csv
+2025-11-29 12:56:28 [INFO] root: Saved master_player_stats_2025-26.csv
+2025-11-29 12:56:28 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-11-29 12:56:28 [INFO] root: Saved master_team_stats_2024-25.csv
+2025-11-29 12:56:29 [INFO] root: Saved master_team_stats_2025-26.csv
+2025-11-29 12:56:29 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-11-29 12:56:29 [INFO] root: --- Calculating Historical Usage Vacancy ---
+2025-11-29 12:56:29 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
+2025-11-29 12:56:29 [INFO] root: --- Calculating Historical Usage Vacancy ---
+2025-11-29 12:56:29 [INFO] root: Saved master_box_scores_2025-26.csv (5533 rows)
+2025-11-29 12:56:29 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-11-29 12:56:29 [INFO] root: Saved master_vs_opponent.csv
+2025-11-29 12:56:29 [INFO] root: --- Starting: process_dvp_stats ---
+2025-11-29 12:56:29 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
+2025-11-29 12:56:29 [INFO] root: Saved master_dvp_stats.csv
+2025-11-29 12:56:29 [INFO] root: Step 2: Building Final Training Dataset...
+2025-11-29 12:56:29 [INFO] root: --- Building Master Training Dataset ---
+2025-11-29 12:56:29 [INFO] root: --- Loading Static Data Files ---
+2025-11-29 12:56:29 [INFO] root: Calculating historical rolling features (this may take a moment)...
+2025-11-29 12:56:30 [INFO] root: Merging Defense vs Position (DVP) stats...
+2025-11-29 12:56:30 [INFO] root: Merging Team Stats...
+2025-11-29 12:56:36 [INFO] root: Saved master_training_dataset.csv with 31717 rows and 642 features.
+2025-11-29 12:56:36 [INFO] root: <<< DATABASE BUILD COMPLETE >>>

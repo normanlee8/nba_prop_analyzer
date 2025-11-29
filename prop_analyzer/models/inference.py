@@ -22,6 +22,31 @@ PROP_MAP = {
     'Fantasy Points': 'FANTASY_PTS'
 }
 
+def rename_features_for_inference(feature_dict, prop_cat):
+    """
+    Renames keys in the feature dictionary to match model expectations.
+    (e.g., 'PTS_SZN_AVG' -> 'SZN Avg')
+    """
+    prefix = PROP_MAP.get(prop_cat, prop_cat)
+    
+    # Mapping must match what was used in training.py
+    mapping = {
+        f'{prefix}_SZN_AVG': 'SZN Avg',
+        f'{prefix}_L5_AVG': 'L5 Avg',
+        f'{prefix}_L5_EWMA': 'L5 EWMA',
+        f'{prefix}_L3_AVG': 'L3 Avg',
+        f'{prefix}_L10_STD': 'L10_STD_DEV',
+        f'{prefix}_L10_STD_DEV': 'L10_STD_DEV'
+    }
+    
+    new_dict = feature_dict.copy()
+    for old_key, new_key in mapping.items():
+        if old_key in new_dict:
+            new_dict[new_key] = new_dict[old_key]
+            # We keep the old key too just in case, but new key is priority
+            
+    return new_dict
+
 def predict_props(features_df):
     results = []
     model_cache = {}
@@ -29,7 +54,6 @@ def predict_props(features_df):
     logging.info(f"Starting batch inference on {len(features_df)} props...")
 
     for idx, row in features_df.iterrows():
-        # FIX: Use 'Prop Category' to match parser and run_analysis.py
         raw_type = row.get('Prop Category')
         
         if pd.isna(raw_type) or not isinstance(raw_type, str):
@@ -45,7 +69,11 @@ def predict_props(features_df):
                 logging.warning(f"Could not load model for {model_key}: {e}")
                 model_cache[model_key] = None
             
+        # --- CRITICAL FIX: Rename features before passing to model ---
         feature_vector = row.to_dict()
+        feature_vector = rename_features_for_inference(feature_vector, raw_type)
+        # -----------------------------------------------------------
+        
         pred_out = predict_prop(model_cache, model_key, feature_vector)
         
         if pred_out:
@@ -91,10 +119,8 @@ def predict_prop(model_cache, prop_category, feature_vector_dict):
     preprocessor = models['scaler']
     
     try:
-        # Suppress warnings during transform AND prediction
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            # Specifically ignore the sklearn/LGBM feature name warning
             warnings.filterwarnings("ignore", category=UserWarning, message=".*X does not have valid feature names.*")
             
             X_scaled = preprocessor.transform(aligned_vector)

@@ -113,7 +113,7 @@ def build_feature_set(props_df):
         props_df = props_df.sort_values('GAME_DATE')
         history_df = history_df.sort_values('GAME_DATE')
         
-        # Merge Asof
+        # Merge Asof (Historical Rolling Stats)
         features_df = pd.merge_asof(
             props_df,
             history_df,
@@ -123,6 +123,15 @@ def build_feature_set(props_df):
             allow_exact_matches=False,
             suffixes=('', '_hist')
         )
+        
+        # --- CRITICAL FIX START ---
+        # Force merge of static stats (Season Avg, etc.) even when box scores are used.
+        # This prevents the model from seeing 0.0 for 'SZN Avg'.
+        if player_stats_static is not None:
+            # Only select columns that don't already exist (or the join key) to avoid conflicts
+            cols_to_use = [c for c in player_stats_static.columns if c not in features_df.columns or c == 'PLAYER_ID']
+            features_df = pd.merge(features_df, player_stats_static[cols_to_use], on='PLAYER_ID', how='left')
+        # --- CRITICAL FIX END ---
         
         logging.info(f"Point-in-time merge complete. Rows: {len(features_df)}")
     else:
