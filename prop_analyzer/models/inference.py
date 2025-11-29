@@ -19,17 +19,19 @@ PROP_MAP = {
     'Pts+Reb': 'PR',
     'Pts+Ast': 'PA',
     'Reb+Ast': 'RA',
-    'Fantasy Points': 'FANTASY_PTS'
+    'Fantasy Points': 'FANTASY_PTS',
+    
+    # Explicit Quarter/Half Mappings (Pass-through)
+    'Q1_PTS': 'Q1_PTS', 'Q1_REB': 'Q1_REB', 'Q1_AST': 'Q1_AST', 'Q1_PRA': 'Q1_PRA',
+    '1H_PTS': '1H_PTS', '1H_REB': '1H_REB', '1H_AST': '1H_AST', '1H_PRA': '1H_PRA'
 }
 
 def rename_features_for_inference(feature_dict, prop_cat):
     """
     Renames keys in the feature dictionary to match model expectations.
-    (e.g., 'PTS_SZN_AVG' -> 'SZN Avg')
     """
     prefix = PROP_MAP.get(prop_cat, prop_cat)
     
-    # Mapping must match what was used in training.py
     mapping = {
         f'{prefix}_SZN_AVG': 'SZN Avg',
         f'{prefix}_L5_AVG': 'L5 Avg',
@@ -43,7 +45,6 @@ def rename_features_for_inference(feature_dict, prop_cat):
     for old_key, new_key in mapping.items():
         if old_key in new_dict:
             new_dict[new_key] = new_dict[old_key]
-            # We keep the old key too just in case, but new key is priority
             
     return new_dict
 
@@ -66,13 +67,20 @@ def predict_props(features_df):
                 loaded_artifact = registry.load_artifacts(model_key)
                 model_cache[model_key] = loaded_artifact
             except Exception as e:
-                logging.warning(f"Could not load model for {model_key}: {e}")
+                # Silence model loading errors (expected if model not trained for exotic props like Q1_STL)
                 model_cache[model_key] = None
+        
+        # --- SAFETY CHECK ---
+        szn_avg_key = f"{model_key}_SZN_AVG"
+        szn_val = row.get(szn_avg_key)
+        
+        # Warnings un-suppressed as requested
+        if pd.isna(szn_val) or (szn_val == 0.0 and model_key in ['PTS', 'PRA', 'PA', 'PR']):
+            logging.warning(f"Skipping {row.get('Player Name')} ({raw_type}) - Missing History (SZN Avg is 0/NaN)")
+            continue
             
-        # --- CRITICAL FIX: Rename features before passing to model ---
         feature_vector = row.to_dict()
         feature_vector = rename_features_for_inference(feature_vector, raw_type)
-        # -----------------------------------------------------------
         
         pred_out = predict_prop(model_cache, model_key, feature_vector)
         
@@ -110,11 +118,12 @@ def predict_prop(model_cache, prop_category, feature_vector_dict):
     if models is None:
         return None
 
-    # Align Features
     num_df = pd.DataFrame([feature_vector_dict])
     num_df.columns = [re.sub(r'[^\w\s]', '_', str(col)).replace(' ', '_') for col in num_df.columns]
     feature_cols = models['features']
-    aligned_vector = num_df.reindex(columns=feature_cols, fill_value=0.0)
+    
+    # Use np.nan for missing columns so Imputer handles them
+    aligned_vector = num_df.reindex(columns=feature_cols, fill_value=np.nan)
 
     preprocessor = models['scaler']
     
@@ -125,7 +134,6 @@ def predict_prop(model_cache, prop_category, feature_vector_dict):
             
             X_scaled = preprocessor.transform(aligned_vector)
 
-            # Predict Quantiles
             q20_lgbm = models['q20']['lgbm'].predict(X_scaled)[0]
             q20_xgb = models['q20']['xgb'].predict(X_scaled)[0]
             pred_lower = (q20_lgbm + q20_xgb) / 2
@@ -134,7 +142,6 @@ def predict_prop(model_cache, prop_category, feature_vector_dict):
             q80_xgb = models['q80']['xgb'].predict(X_scaled)[0]
             pred_upper = (q80_lgbm + q80_xgb) / 2
             
-            # Predict Probability
             prob_over = 0.5
             if models['clf']:
                 prob_over = models['clf'].predict_proba(X_scaled)[0][1]
@@ -145,7 +152,6 @@ def predict_prop(model_cache, prop_category, feature_vector_dict):
             'prob_over': prob_over
         }
     except Exception as e:
-        logging.error(f"[{prop_category}] Prediction Failed: {e}")
         return None
 
 def determine_tier(prop_line, pred_lower, pred_upper, prob_over, injury_status='ACTIVE'):

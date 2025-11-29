@@ -8,7 +8,6 @@ from prop_analyzer.data import loader
 def add_rolling_stats_history(df):
     """
     Calculates historical rolling features on the full box score dataset.
-    This creates a snapshot of 'stats so far' for every point in time.
     """
     df = df.sort_values(by=['PLAYER_ID', 'GAME_DATE']).reset_index(drop=True)
     
@@ -18,18 +17,10 @@ def add_rolling_stats_history(df):
 
     grouped = df.groupby('PLAYER_ID')
 
-    # Rolling Stats (Inclusive of current row)
     for col in stats_to_roll:
-        # Season Average (Expanding)
         df[f'{col}_SZN_AVG'] = grouped[col].expanding().mean().values
-        
-        # L5 Avg
         df[f'{col}_L5_AVG'] = grouped[col].rolling(window=5, min_periods=1).mean().values
-        
-        # L10 Std
         df[f'{col}_L10_STD'] = grouped[col].rolling(window=10, min_periods=3).std().values
-        
-        # EWMA 
         df[f'{col}_L5_EWMA'] = grouped[col].ewm(alpha=0.15, adjust=False).mean().values
 
     if 'USG_PROXY' in df.columns:
@@ -39,16 +30,10 @@ def add_rolling_stats_history(df):
     return df
 
 def build_feature_set(props_df):
-    """
-    Constructs the feature matrix (X) for a list of props.
-    Uses point-in-time lookup to prevent data leakage for backtests.
-    """
     logging.info("Building feature set with Point-in-Time safety...")
     
     # 1. Load Data
     box_scores = loader.load_box_scores()
-    
-    # Load other static files
     player_stats_static, team_stats, league_pace = loader.load_static_data()
     vs_opp_df = loader.load_vs_opponent_data()
     
@@ -60,25 +45,20 @@ def build_feature_set(props_df):
     if 'PLAYER_ID' not in props_df.columns:
         if player_stats_static is not None:
             name_map = player_stats_static.set_index('clean_name')['PLAYER_ID'].to_dict()
-            
-            # Normalize input names
             props_df['clean_name'] = props_df['Player Name'].apply(lambda x: str(x).lower().strip())
             
             # --- FIX: Manual Name Mapping ---
-            # Maps: Input Name (lowercase) -> Master File Name (lowercase)
             manual_map = {
                 'deuce mcbride': 'miles mcbride',
                 'cam johnson': 'cameron johnson',
                 'lu dort': 'luguentz dort',
                 'pj washington': 'p.j. washington',
-                'jimmy butler': 'jimmy butler iii'
+                'jimmy butler': 'jimmy butler iii' 
             }
             props_df['clean_name'] = props_df['clean_name'].replace(manual_map)
             
-            # Perform mapping
             props_df['PLAYER_ID'] = props_df['clean_name'].map(name_map)
             
-            # Handle Unmapped Players
             missing_ids = props_df[props_df['PLAYER_ID'].isna()]
             if not missing_ids.empty:
                 logging.warning(f"Dropping {len(missing_ids)} props due to unrecognized player names: {missing_ids['Player Name'].unique()}")
@@ -88,9 +68,7 @@ def build_feature_set(props_df):
                 logging.error("No valid props remaining after name mapping.")
                 return pd.DataFrame()
 
-            # Force conversion to int64 to match box scores
             props_df['PLAYER_ID'] = props_df['PLAYER_ID'].astype('int64')
-            
         else:
             logging.error("Cannot map names: Player stats file missing.")
             return pd.DataFrame()
@@ -99,22 +77,17 @@ def build_feature_set(props_df):
     if box_scores is not None and not box_scores.empty:
         logging.info("Calculating dynamic historical stats...")
         
-        # Ensure box scores ID is strictly int64
-        if box_scores['PLAYER_ID'].dtype != 'int64':
-             box_scores['PLAYER_ID'] = box_scores['PLAYER_ID'].astype('int64')
+        box_scores['PLAYER_ID'] = box_scores['PLAYER_ID'].fillna(0).astype('int64')
+        props_df['PLAYER_ID'] = props_df['PLAYER_ID'].fillna(0).astype('int64')
 
-        # Calculate stats for every game in history
         history_df = add_rolling_stats_history(box_scores.copy())
         
-        # Prepare for Merge
         props_df['GAME_DATE'] = pd.to_datetime(props_df['GAME_DATE'])
         history_df['GAME_DATE'] = pd.to_datetime(history_df['GAME_DATE'])
         
-        # Sort strictly for merge_asof
         props_df = props_df.sort_values('GAME_DATE')
         history_df = history_df.sort_values('GAME_DATE')
         
-        # Merge Asof (Historical Rolling Stats)
         features_df = pd.merge_asof(
             props_df,
             history_df,
@@ -125,18 +98,136 @@ def build_feature_set(props_df):
             suffixes=('', '_hist')
         )
         
-        # --- CRITICAL FIX START ---
-        # Force merge of static stats (Season Avg, etc.) even when box scores are used.
-        # This prevents the model from seeing 0.0 for 'SZN Avg'.
+        # --- FIX: ROBUST REPAIR & BACKFILL ---
         if player_stats_static is not None:
-            # Only select columns that don't already exist (or the join key) to avoid conflicts
             cols_to_use = [c for c in player_stats_static.columns if c not in features_df.columns or c == 'PLAYER_ID']
             features_df = pd.merge(features_df, player_stats_static[cols_to_use], on='PLAYER_ID', how='left')
-        # --- CRITICAL FIX END ---
-        
+            
+            # A. REPAIR: Calculate Missing Season Totals from Home/Away Splits
+            if 'SEASON_G' in features_df.columns:
+                features_df['SEASON_G'] = features_df['SEASON_G'].fillna(
+                    features_df.get('HOME_GP', 0) + features_df.get('AWAY_GP', 0)
+                ).replace(0, 1)
+
+            metrics_map = {
+                'PTS': 'SEASON_PTS', 'REB': 'SEASON_TRB', 'AST': 'SEASON_AST',
+                'STL': 'SEASON_STL', 'BLK': 'SEASON_BLK', 'FG3M': 'SEASON_FG3M',
+                'TOV': 'SEASON_TOV'
+            }
+            
+            if 'SEASON_TOV' not in features_df.columns:
+                features_df['SEASON_TOV'] = features_df.get('HOME_TOV', 0) + features_df.get('AWAY_TOV', 0)
+
+            for short_name, col_name in metrics_map.items():
+                if col_name in features_df.columns:
+                    home_col = f'HOME_{short_name}'
+                    away_col = f'AWAY_{short_name}'
+                    if home_col in features_df.columns and away_col in features_df.columns:
+                        features_df[col_name] = features_df[col_name].fillna(
+                            features_df[home_col].fillna(0) + features_df[away_col].fillna(0)
+                        )
+
+            # B. BACKFILL: Main Rolling Stats
+            for short_name, static_col in metrics_map.items():
+                rolling_col = f'{short_name}_SZN_AVG'
+                if static_col in features_df.columns:
+                    if rolling_col not in features_df.columns: features_df[rolling_col] = 0.0
+                    
+                    avg_val = features_df[static_col] / features_df['SEASON_G']
+                    features_df[rolling_col] = features_df[rolling_col].fillna(avg_val)
+                    
+                    features_df[rolling_col] = features_df.apply(
+                        lambda r: (r[static_col] / r['SEASON_G']) if r[rolling_col] == 0.0 else r[rolling_col], 
+                        axis=1
+                    )
+
+            # C. BACKFILL: Derived Full Game Stats (Fixes 'float' attribute error)
+            if 'PTS_SZN_AVG' in features_df.columns:
+                p = features_df['PTS_SZN_AVG']
+                r = features_df['REB_SZN_AVG']
+                a = features_df['AST_SZN_AVG']
+                s = features_df.get('STL_SZN_AVG', 0)
+                b = features_df.get('BLK_SZN_AVG', 0)
+                t = features_df.get('TOV_SZN_AVG', 0)
+                
+                # --- FIX: Explicit checks to avoid .fillna() on non-Series ---
+                
+                # PRA
+                calc_pra = p + r + a
+                if 'PRA_SZN_AVG' in features_df.columns:
+                    features_df['PRA_SZN_AVG'] = features_df['PRA_SZN_AVG'].replace(0.0, np.nan).fillna(calc_pra)
+                else:
+                    features_df['PRA_SZN_AVG'] = calc_pra
+                
+                # PR
+                calc_pr = p + r
+                if 'PR_SZN_AVG' in features_df.columns:
+                    features_df['PR_SZN_AVG'] = features_df['PR_SZN_AVG'].replace(0.0, np.nan).fillna(calc_pr)
+                else:
+                    features_df['PR_SZN_AVG'] = calc_pr
+
+                # PA
+                calc_pa = p + a
+                if 'PA_SZN_AVG' in features_df.columns:
+                    features_df['PA_SZN_AVG'] = features_df['PA_SZN_AVG'].replace(0.0, np.nan).fillna(calc_pa)
+                else:
+                    features_df['PA_SZN_AVG'] = calc_pa
+
+                # RA
+                calc_ra = r + a
+                if 'RA_SZN_AVG' in features_df.columns:
+                    features_df['RA_SZN_AVG'] = features_df['RA_SZN_AVG'].replace(0.0, np.nan).fillna(calc_ra)
+                else:
+                    features_df['RA_SZN_AVG'] = calc_ra
+                
+                # FANTASY
+                fantasy_calc = p + (1.2 * r) + (1.5 * a) + (3 * s) + (3 * b) - t
+                if 'FANTASY_PTS_SZN_AVG' in features_df.columns:
+                    features_df['FANTASY_PTS_SZN_AVG'] = features_df['FANTASY_PTS_SZN_AVG'].replace(0.0, np.nan).fillna(fantasy_calc)
+                else:
+                    features_df['FANTASY_PTS_SZN_AVG'] = fantasy_calc
+
+            # D. BACKFILL: Quarter & Half Stats
+            segments = ['Q1', 'Q2', 'Q3', 'Q4']
+            base_metrics = ['PTS', 'REB', 'AST']
+            
+            for seg in segments:
+                for met in base_metrics:
+                    static_col = f"{seg}_{met}" 
+                    target_col = f"{seg}_{met}_SZN_AVG"
+                    
+                    if static_col in features_df.columns:
+                        if target_col not in features_df.columns: features_df[target_col] = np.nan
+                        features_df[target_col] = features_df[target_col].fillna(features_df[static_col])
+
+                # PRA for Quarters
+                pra_target = f"{seg}_PRA_SZN_AVG"
+                p_avg = features_df.get(f"{seg}_PTS_SZN_AVG", 0)
+                r_avg = features_df.get(f"{seg}_REB_SZN_AVG", 0)
+                a_avg = features_df.get(f"{seg}_AST_SZN_AVG", 0)
+                
+                # --- FIX: Check for column existence ---
+                calc_q_pra = p_avg + r_avg + a_avg
+                if pra_target in features_df.columns:
+                    features_df[pra_target] = features_df[pra_target].fillna(calc_q_pra)
+                else:
+                    features_df[pra_target] = calc_q_pra
+
+            # E. BACKFILL: Halves (Sum of Quarters)
+            halves = {'1H': ['Q1', 'Q2'], '2H': ['Q3', 'Q4']}
+            for half, q_list in halves.items():
+                for met in ['PTS', 'REB', 'AST', 'PRA']:
+                    target_col = f"{half}_{met}_SZN_AVG"
+                    val = 0
+                    for q in q_list:
+                        val += features_df.get(f"{q}_{met}_SZN_AVG", 0)
+                    
+                    if target_col not in features_df.columns: features_df[target_col] = np.nan
+                    features_df[target_col] = features_df[target_col].fillna(val)
+
         logging.info(f"Point-in-time merge complete. Rows: {len(features_df)}")
     else:
-        logging.warning("No box scores found. Falling back to static stats (Potentially Unsafe for Backtesting).")
+        logging.warning("No box scores found. Falling back to static stats.")
         features_df = pd.merge(props_df, player_stats_static, on='PLAYER_ID', how='left')
 
     # 4. Merge Team and Opponent Stats
