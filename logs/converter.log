@@ -19,3 +19,90 @@
 2025-11-27 15:51:08 [INFO] root: Successfully converted props to input/props_today.csv (661 rows)
 2025-11-29 02:45:52 [INFO] root: Logging initialized. Writing to logs/converter.log
 2025-11-29 02:45:53 [INFO] root: Successfully converted props to input/props_today.csv (661 rows)
+2025-11-29 12:01:21 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:27 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:01:32 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:01:43 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:01:48 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:01:53 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:01:58 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:02:04 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:02:09 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:02:14 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:02:19 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:02:24 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:02:29 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:02:34 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:02:39 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:02:39 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:39 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:41 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:41 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:41 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:47 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:47 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:47 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:47 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
+2025-11-29 12:02:52 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:02:57 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:03:02 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
+2025-11-29 12:12:20 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-11-29 12:12:20 [INFO] root: Successfully converted props to input/props_today.csv (890 rows)
+2025-11-29 12:12:49 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-11-29 12:12:49 [INFO] root: Successfully converted props to input/props_today.csv (661 rows)
+2025-11-29 12:12:59 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-11-29 12:12:59 [INFO] root: Successfully converted props to input/props_today.csv (890 rows)

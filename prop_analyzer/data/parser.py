@@ -61,38 +61,28 @@ class SmartDateDetector:
 
     def _check_nba_schedule(self, team, opponent, check_date):
         """Checks if a specific matchup is scheduled for a specific date string (YYYY-MM-DD)."""
+        
+        # 1. Check Cache first
         if check_date in self.schedule_cache:
             games = self.schedule_cache[check_date]
         else:
+            # 2. Fetch from API if not cached
             try:
-                # Fetch schedule from NBA API
-                board = scoreboardv2.ScoreboardV2(game_date=check_date, timeout=5)
+                # Reduced timeout to fail faster if NBA stats is laggy
+                board = scoreboardv2.ScoreboardV2(game_date=check_date, timeout=3)
                 games_df = board.game_header.get_data_frame()
                 
-                # Create a set of matchups for this day: {('LAL', 'BOS'), ('BOS', 'LAL'), ...}
-                daily_matchups = set()
-                if not games_df.empty:
-                    for _, row in games_df.iterrows():
-                        home = row['HOME_TEAM_EST_TO'].replace('NOP', 'NO').upper() # Handle NOP variation if needed
-                        away = row['VISITOR_TEAM_EST_TO'].replace('NOP', 'NO').upper()
-                        # Add standard abbreviations
-                        daily_matchups.add((row['HOME_TEAM_ID'], row['VISITOR_TEAM_ID'])) # IDs are safer, but let's stick to abbr if easier
-                        # Using text abbr from 'HOME_TEAM_EST_TO' is sometimes unreliable, 
-                        # but standard 3-letter codes usually work.
-                        # Let's trust the input text matching.
-                        daily_matchups.add(f"{home}-{away}")
-                        daily_matchups.add(f"{away}-{home}")
-                        
-                        # Fallback: Extract standard abbreviation if available or just store raw
-                        # For simplicity, we just cache the raw dataframe or a simplified list
-                
+                # Cache the result (even if empty) to prevent re-fetching
                 self.schedule_cache[check_date] = games_df
                 games = games_df
+                
             except Exception as e:
                 logging.warning(f"Could not fetch schedule for {check_date}: {e}")
+                # CRITICAL FIX: Cache the failure (empty df) so we don't retry 50 times
+                self.schedule_cache[check_date] = pd.DataFrame()
                 return False
 
-        # Check if our teams match any game in the cached dataframe
+        # 3. Check if our teams match any game in the cached dataframe
         if games is None or games.empty:
             return False
             
@@ -101,9 +91,15 @@ class SmartDateDetector:
         
         # Iterate rows to find match
         for _, row in games.iterrows():
-            # These columns usually contain the 3-letter code (e.g. 'LAL')
-            home_code = row.get('HOME_TEAM_EST_TO', '')
-            away_code = row.get('VISITOR_TEAM_EST_TO', '')
+            # CRITICAL FIX: Use .get() to avoid KeyError if API format changes
+            home_code_raw = row.get('HOME_TEAM_EST_TO', '')
+            away_code_raw = row.get('VISITOR_TEAM_EST_TO', '')
+            
+            if not isinstance(home_code_raw, str) or not isinstance(away_code_raw, str):
+                continue
+
+            home_code = home_code_raw.replace('NOP', 'NO').upper()
+            away_code = away_code_raw.replace('NOP', 'NO').upper()
             
             # Simple check (Order doesn't matter for "is playing")
             if (t1 == home_code and t2 == away_code) or (t1 == away_code and t2 == home_code):

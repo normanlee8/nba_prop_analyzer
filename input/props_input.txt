@@ -12,88 +12,837 @@ Get up to $1,000 in bonus!
 
 Claim Your 50% Deposit Match • Deposit
 All NBA
-Jarace Walker
+Anthony Edwards
 
-IND vs WAS - Fri 4:30PM PST
+MIN vs BOS - 2:00PM PST
+28.5
+Points
+38.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+4.5
+Assists
+3.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+34.5
+Points + Rebounds
+32.5
+Points + Assists
+0.5
+Double Doubles
+8.5
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+12.5
+1Q Pts + Rebs + Asts
+42.65
+Fantasy Points
 2.5
+Turnovers
+1.5
+Steals
+5.5
+FT Made
+14.5
+1H Points
+1.5
+1H 3-Pointers Made
+19.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+3.5
+Points in First 5 Min.
+1.5
+Offensive Rebounds
+20.5
+FG Attempted
+8.5
+3s Attempted
+Anfernee Simons
+
+BOS @ MIN - 2:00PM PST
+13.5
+Points
+18.5
+Pts + Rebs + Asts
+2.5
+Rebounds
+2.5
+Assists
+2.5
+3-Pointers Made
+0.5
+1Q 3-Pointers Made
+1.5
+1H 3-Pointers Made
+6.5
+3s Attempted
+Julius Randle
+
+MIN vs BOS - 2:00PM PST
+20.5
+Points
+33.5
+Pts + Rebs + Asts
+7.5
+Rebounds
+4.5
+Assists
+1.5
+3-Pointers Made
+12.5
+Rebounds + Assists
+28.5
+Points + Rebounds
+26.5
+Points + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+1.5
+1Q Rebounds
+9.5
+1Q Pts + Rebs + Asts
+37.75
+Fantasy Points
+2.5
+Turnovers
+5.5
+FT Made
+10.5
+1H Points
+16.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+1.5
+Offensive Rebounds
+14.5
+FG Attempted
+4.5
+3s Attempted
+Donte DiVincenzo
+
+MIN vs BOS - 2:00PM PST
+12.5
+Points
+20.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+3.5
+Assists
+2.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+0.5
+1Q 3-Pointers Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+7.5
+3s Attempted
+Mike Conley
+
+MIN vs BOS - 2:00PM PST
+3.5
+Points
+9.5
+Pts + Rebs + Asts
+1.5
+Rebounds
+2.5
+Assists
+0.5
+3-Pointers Made
+Payton Pritchard
+
+BOS @ MIN - 2:00PM PST
+17.5
+Points
+26.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+4.5
+Assists
+3.5
+3-Pointers Made
+8.5
+Rebounds + Assists
+21.5
+Points + Rebounds
+22.5
+Points + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+8.5
+1Q Pts + Rebs + Asts
+30.95
+Fantasy Points
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+14.5
+FG Attempted
+8.5
+3s Attempted
+Neemias Queta
+
+BOS @ MIN - 2:00PM PST
+8.5
+Points
+19.5
+Pts + Rebs + Asts
+7.5
+Rebounds
+1.5
 Assists
 0.5
 Double Doubles
 1.5
 1Q Rebounds
-10.5
-Points
-Alex Sarr
+3.5
+Offensive Rebounds
+Jaylen Brown
 
-WAS @ IND - Fri 4:30PM PST
+BOS @ MIN - 2:00PM PST
+26.5
+Points
+37.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+4.5
+Assists
+1.5
+3-Pointers Made
+10.5
+Rebounds + Assists
+32.5
+Points + Rebounds
+30.5
+Points + Assists
+0.5
+Double Doubles
+7.5
+1Q Points
+1.5
+1Q Rebounds
+10.5
+1Q Pts + Rebs + Asts
+42.05
+Fantasy Points
+3.5
+Turnovers
+1.5
+Steals
+5.5
+FT Made
+14.5
+1H Points
+19.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+3.5
+Points in First 5 Min.
+1.5
+Offensive Rebounds
+21.5
+FG Attempted
+5.5
+3s Attempted
+Derrick White
+
+BOS @ MIN - 2:00PM PST
 18.5
 Points
-30.5
+27.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+4.5
+Assists
+3.5
+3-Pointers Made
+8.5
+Rebounds + Assists
+22.5
+Points + Rebounds
+23.5
+Points + Assists
+0.5
+Double Doubles
+3.5
+1Q Points
+0.5
+1Q 3-Pointers Made
+5.5
+1Q Pts + Rebs + Asts
+36.15
+Fantasy Points
+1.5
+Steals
+2.5
+Blocks + Steals
+2.5
+FT Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+14.5
+FG Attempted
+8.5
+3s Attempted
+Rudy Gobert
+
+MIN vs BOS - 2:00PM PST
+9.5
+Points
+23.5
+Pts + Rebs + Asts
+11.5
+Rebounds
+1.5
+Assists
+12.5
+Rebounds + Assists
+0.5
+Double Doubles
+2.5
+1Q Rebounds
+1.5
+Blocks
+2.5
+Blocks + Steals
+0.5
+First FG Attempt
+3.5
+Offensive Rebounds
+Jaden McDaniels
+
+MIN vs BOS - 2:00PM PST
+14.5
+Points
+21.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+2.5
+Assists
+1.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+Naz Reid
+
+MIN vs BOS - 2:00PM PST
+13.5
+Points
+21.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+1.5
+Assists
+2.5
+3-Pointers Made
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+1.5
+1H 3-Pointers Made
+1.5
+Offensive Rebounds
+5.5
+3s Attempted
+Jordan Walsh
+
+BOS @ MIN - 2:00PM PST
+5.5
+Points
+11.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+1.5
+Assists
+0.5
+3-Pointers Made
+1.5
+1Q Rebounds
+Scottie Barnes
+
+TOR @ CHA - 3:00PM PST
+19.5
+Points
+33.5
 Pts + Rebs + Asts
 8.5
 Rebounds
-3.5
+5.5
 Assists
-CJ McCollum
-
-WAS @ IND - Fri 4:30PM PST
-17.5
-Points
+1.5
+3-Pointers Made
+13.5
+Rebounds + Assists
+27.5
+Points + Rebounds
 25.5
-Pts + Rebs + Asts
+Points + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+2.5
+1Q Rebounds
+8.5
+1Q Pts + Rebs + Asts
+43.45
+Fantasy Points
+2.5
+Turnovers
+1.5
+Steals
+1.5
+Blocks
+2.5
+Blocks + Steals
 3.5
+FT Made
+16.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+1.5
+Offensive Rebounds
+15.5
+FG Attempted
+Brandon Ingram
+
+TOR @ CHA - 3:00PM PST
+24.5
+Points
+34.5
+Pts + Rebs + Asts
+5.5
 Rebounds
 3.5
 Assists
-Bennedict Mathurin
+1.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+30.5
+Points + Rebounds
+28.5
+Points + Assists
+0.5
+Double Doubles
+6.5
+1Q Points
+1.5
+1Q Rebounds
+9.5
+1Q Pts + Rebs + Asts
+39.25
+Fantasy Points
+2.5
+Turnovers
+4.5
+FT Made
+12.5
+1H Points
+17.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+0.5
+Offensive Rebounds
+19.5
+FG Attempted
+5.5
+3s Attempted
+Miles Bridges
 
-IND vs WAS - Fri 4:30PM PST
-23.5
+CHA vs TOR - 3:00PM PST
+19.5
 Points
-31.5
+29.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+3.5
+Assists
+2.5
+3-Pointers Made
+10.5
+Rebounds + Assists
+25.5
+Points + Rebounds
+22.5
+Points + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+7.5
+1Q Pts + Rebs + Asts
+33.95
+Fantasy Points
+2.5
+Turnovers
+3.5
+FT Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+1.5
+Offensive Rebounds
+15.5
+FG Attempted
+6.5
+3s Attempted
+Jakob Poeltl
+
+TOR @ CHA - 3:00PM PST
+12.5
+Points
+23.5
+Pts + Rebs + Asts
+9.5
+Rebounds
+1.5
+Assists
+10.5
+Rebounds + Assists
+21.5
+Points + Rebounds
+0.5
+Double Doubles
+2.5
+1Q Rebounds
+0.5
+First FG Attempt
+3.5
+Offensive Rebounds
+Collin Sexton
+
+CHA vs TOR - 3:00PM PST
+12.5
+Points
+18.5
+Pts + Rebs + Asts
+2.5
+Rebounds
+3.5
+Assists
+1.5
+3-Pointers Made
+Sandro Mamukelashvili
+
+TOR @ CHA - 3:00PM PST
+10.5
+Points
+17.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+1.5
+Assists
+0.5
+3-Pointers Made
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+1.5
+Offensive Rebounds
+Moussa Diabate
+
+CHA vs TOR - 3:00PM PST
+5.5
+Points
+13.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+LaMelo Ball
+
+CHA vs TOR - 3:00PM PST
+17.5
+Points
+30.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+7.5
+Assists
+2.5
+3-Pointers Made
+12.5
+Rebounds + Assists
+22.5
+Points + Rebounds
+25.5
+Points + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+7.5
+1Q Pts + Rebs + Asts
+33.85
+Fantasy Points
+2.5
+Turnovers
+2.5
+FT Made
+1.5
+1H 3-Pointers Made
+15.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+5.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+14.5
+FG Attempted
+7.5
+3s Attempted
+Brandon Miller
+
+CHA vs TOR - 3:00PM PST
+18.5
+Points
+24.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+2.5
+Assists
+2.5
+3-Pointers Made
+21.5
+Points + Rebounds
+21.5
+Points + Assists
+4.5
+1Q Points
+0.5
+1Q 3-Pointers Made
+2.5
+Turnovers
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+8.5
+3s Attempted
+14.5
+FG Attempted
+Immanuel Quickley
+
+TOR @ CHA - 3:00PM PST
+17.5
+Points
+28.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+6.5
+Assists
+2.5
+3-Pointers Made
+11.5
+Rebounds + Assists
+22.5
+Points + Rebounds
+24.5
+Points + Assists
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+6.5
+1Q Pts + Rebs + Asts
+34.65
+Fantasy Points
+1.5
+Steals
+2.5
+FT Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+7.5
+3s Attempted
+Jamal Shead
+
+TOR @ CHA - 3:00PM PST
+6.5
+Points
+14.5
+Pts + Rebs + Asts
+1.5
+Rebounds
+5.5
+Assists
+0.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
+Kon Knueppel
+
+CHA vs TOR - 3:00PM PST
+16.5
+Points
+24.5
 Pts + Rebs + Asts
 5.5
 Rebounds
 2.5
 Assists
-Bilal Coulibaly
-
-WAS @ IND - Fri 4:30PM PST
-9.5
-Points
-17.5
-Pts + Rebs + Asts
-4.5
-Rebounds
+2.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+21.5
+Points + Rebounds
+19.5
+Points + Assists
+0.5
+Double Doubles
 3.5
-Assists
-Kyshawn George
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+2.5
+Turnovers
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+7.5
+3s Attempted
+Ryan Kalkbrenner
 
-WAS @ IND - Fri 4:30PM PST
-16.5
-Points
-27.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-4.5
-Assists
-Ben Sheppard
-
-IND vs WAS - Fri 4:30PM PST
+CHA vs TOR - 3:00PM PST
 6.5
 Points
-12.5
+13.5
 Pts + Rebs + Asts
-3.5
+6.5
 Rebounds
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
 1.5
-Assists
+1Q Rebounds
 1.5
-3-Pointers Made
+Blocks
+2.5
+Blocks + Steals
 Pascal Siakam
 
-IND vs WAS - Fri 4:30PM PST
+IND vs CHI - 4:30PM PST
 24.5
 Points
 36.5
@@ -102,533 +851,494 @@ Pts + Rebs + Asts
 Rebounds
 4.5
 Assists
-Khris Middleton
-
-WAS @ IND - Fri 4:30PM PST
-9.5
-Points
-16.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-3.5
-Assists
-Andrew Nembhard
-
-IND vs WAS - Fri 4:30PM PST
-17.5
-Points
-26.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-6.5
-Assists
-T.J. McConnell
-
-IND vs WAS - Fri 4:30PM PST
+1.5
+3-Pointers Made
 12.5
-Points
-21.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-5.5
-Assists
-Jay Huff
-
-IND vs WAS - Fri 4:30PM PST
-9.5
-Points
-17.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-1.5
-Assists
-Isaiah Jackson
-
-IND vs WAS - Fri 4:30PM PST
-7.5
-Points
-16.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-1.5
-Assists
-Giannis Antetokounmpo
-
-MIL @ NYK - Fri 4:30PM PST
+Rebounds + Assists
+31.5
+Points + Rebounds
 29.5
-Points
-46.5
-Pts + Rebs + Asts
-9.5
-Rebounds
-6.5
-Assists
-Karl-Anthony Towns
-
-NYK vs MIL - Fri 4:30PM PST
-24.5
-Points
-39.5
-Pts + Rebs + Asts
-11.5
-Rebounds
-3.5
-Assists
-Jordan Clarkson
-
-NYK vs MIL - Fri 4:30PM PST
-11.5
-Points
-16.5
-Pts + Rebs + Asts
+Points + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
 1.5
-Rebounds
+1Q Rebounds
+8.5
+1Q Pts + Rebs + Asts
+42.15
+Fantasy Points
+2.5
+Turnovers
 1.5
-Assists
-1.5
-3-Pointers Made
-Josh Hart
-
-NYK vs MIL - Fri 4:30PM PST
+Steals
+5.5
+FT Made
 12.5
-Points
-26.5
-Pts + Rebs + Asts
-7.5
-Rebounds
+1H Points
+17.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
 4.5
-Assists
-Gary Trent Jr.
-
-MIL @ NYK - Fri 4:30PM PST
-9.5
-Points
-12.5
-Pts + Rebs + Asts
-1.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-Deuce McBride
-
-NYK vs MIL - Fri 4:30PM PST
-10.5
-Points
-15.5
-Pts + Rebs + Asts
+Pts+Reb+Ast in First 5 Min.
 2.5
-Rebounds
-2.5
-Assists
+Points in First 5 Min.
 1.5
-3-Pointers Made
-Ryan Rollins
+Offensive Rebounds
+18.5
+FG Attempted
+4.5
+3s Attempted
+Nikola Vucevic
 
-MIL @ NYK - Fri 4:30PM PST
+CHI @ IND - 4:30PM PST
 18.5
 Points
-29.5
+32.5
 Pts + Rebs + Asts
-3.5
+10.5
 Rebounds
-6.5
+3.5
 Assists
-Jalen Brunson
-
-NYK vs MIL - Fri 4:30PM PST
+1.5
+3-Pointers Made
+14.5
+Rebounds + Assists
 29.5
-Points
-40.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-6.5
-Assists
-Kyle Kuzma
+Points + Rebounds
+22.5
+Points + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+2.5
+1Q Rebounds
+7.5
+1Q Pts + Rebs + Asts
+35.35
+Fantasy Points
+15.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+2.5
+Offensive Rebounds
+5.5
+3s Attempted
+15.5
+FG Attempted
+Matas Buzelis
 
-MIL @ NYK - Fri 4:30PM PST
+CHI @ IND - 4:30PM PST
 13.5
 Points
-19.5
+20.5
 Pts + Rebs + Asts
 4.5
 Rebounds
 1.5
 Assists
-Myles Turner
+1.5
+3-Pointers Made
+17.5
+Points + Rebounds
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+1.5
+Blocks
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+3s Attempted
+Bennedict Mathurin
 
-MIL @ NYK - Fri 4:30PM PST
+IND vs CHI - 4:30PM PST
+23.5
+Points
+32.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+2.5
+Assists
+2.5
+3-Pointers Made
+8.5
+Rebounds + Assists
+29.5
+Points + Rebounds
+26.5
+Points + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+1.5
+1Q Rebounds
+7.5
+1Q Pts + Rebs + Asts
+34.45
+Fantasy Points
+2.5
+Turnovers
+6.5
+FT Made
+11.5
+1H Points
+15.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+3.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+1.5
+Offensive Rebounds
+5.5
+3s Attempted
+16.5
+FG Attempted
+Ben Sheppard
+
+IND vs CHI - 4:30PM PST
+7.5
+Points
 14.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+2.5
+Assists
+1.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+4.5
+3s Attempted
+Coby White
+
+CHI @ IND - 4:30PM PST
+22.5
+Points
+30.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+5.5
+Assists
+2.5
+3-Pointers Made
+8.5
+Rebounds + Assists
+25.5
+Points + Rebounds
+26.5
+Points + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+0.5
+1Q 3-Pointers Made
+6.5
+1Q Pts + Rebs + Asts
+34.25
+Fantasy Points
+2.5
+Turnovers
+5.5
+FT Made
+11.5
+1H Points
+1.5
+1H 3-Pointers Made
+15.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+3.5
+Points in First 5 Min.
+7.5
+3s Attempted
+16.5
+FG Attempted
+Josh Giddey
+
+CHI @ IND - 4:30PM PST
+19.5
+Points
+38.5
+Pts + Rebs + Asts
+9.5
+Rebounds
+8.5
+Assists
+1.5
+3-Pointers Made
+18.5
+Rebounds + Assists
+29.5
+Points + Rebounds
+29.5
+Points + Assists
+0.5
+Double Doubles
+0.5
+Triple Doubles
+4.5
+1Q Points
+2.5
+1Q Rebounds
+2.5
+1Q Assists
+9.5
+1Q Pts + Rebs + Asts
+46.95
+Fantasy Points
+3.5
+Turnovers
+4.5
+FT Made
+10.5
+1H Points
+4.5
+1H Assists
+19.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+1.5
+Offensive Rebounds
+4.5
+3s Attempted
+15.5
+FG Attempted
+Andrew Nembhard
+
+IND vs CHI - 4:30PM PST
+17.5
+Points
+27.5
+Pts + Rebs + Asts
+2.5
+Rebounds
+6.5
+Assists
+1.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+20.5
+Points + Rebounds
+24.5
+Points + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+6.5
+1Q Pts + Rebs + Asts
+33.25
+Fantasy Points
+2.5
+Turnovers
+1.5
+Steals
+4.5
+FT Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+14.5
+FG Attempted
+4.5
+3s Attempted
+Kevin Huerter
+
+CHI @ IND - 4:30PM PST
+12.5
+Points
+17.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+2.5
+Assists
+1.5
+3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+3s Attempted
+Cade Cunningham
+
+DET @ MIA - 5:00PM PST
+29.5
+Points
+45.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+9.5
+Assists
+2.5
+3-Pointers Made
+16.5
+Rebounds + Assists
+35.5
+Points + Rebounds
+38.5
+Points + Assists
+0.5
+Double Doubles
+0.5
+Triple Doubles
+6.5
+1Q Points
+1.5
+1Q Rebounds
+2.5
+1Q Assists
+11.5
+1Q Pts + Rebs + Asts
+51.55
+Fantasy Points
+4.5
+Turnovers
+1.5
+Steals
+7.5
+FT Made
+14.5
+1H Points
+4.5
+1H Assists
+23.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+5.5
+Pts+Reb+Ast in First 5 Min.
+3.5
+Points in First 5 Min.
+1.5
+Offensive Rebounds
+6.5
+3s Attempted
+24.5
+FG Attempted
+Andrew Wiggins
+
+MIA vs DET - 5:00PM PST
+15.5
 Points
 22.5
 Pts + Rebs + Asts
-6.5
+4.5
+Rebounds
+2.5
+Assists
+1.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+19.5
+Points + Rebounds
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+1.5
+Steals
+2.5
+Blocks + Steals
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+3s Attempted
+Jaden Ivey
+
+DET @ MIA - 5:00PM PST
+8.5
+Points
+13.5
+Pts + Rebs + Asts
+2.5
 Rebounds
 1.5
 Assists
-Mikal Bridges
+1.5
+3-Pointers Made
+Tobias Harris
 
-NYK vs MIL - Fri 4:30PM PST
-15.5
+DET @ MIA - 5:00PM PST
+12.5
 Points
-24.5
+20.5
 Pts + Rebs + Asts
-4.5
+5.5
 Rebounds
-3.5
+2.5
 Assists
-Mitchell Robinson
-
-NYK vs MIL - Fri 4:30PM PST
-3.5
-Points
-10.5
-Pts + Rebs + Asts
-6.5
-Rebounds
+1.5
+3-Pointers Made
+7.5
+Rebounds + Assists
 0.5
 Double Doubles
 1.5
 1Q Rebounds
-AJ Green
-
-MIL @ NYK - Fri 4:30PM PST
-10.5
-Points
-14.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-1.5
-Assists
-2.5
-3-Pointers Made
-Darius Garland
-
-CLE @ ATL - Fri 4:30PM PST
-15.5
-Points
-25.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-6.5
-Assists
-Evan Mobley
-
-CLE @ ATL - Fri 4:30PM PST
-18.5
-Points
-31.5
-Pts + Rebs + Asts
-8.5
-Rebounds
-3.5
-Assists
-Jalen Johnson
-
-ATL vs CLE - Fri 4:30PM PST
-20.5
-Points
-37.5
-Pts + Rebs + Asts
-9.5
-Rebounds
-7.5
-Assists
-Zaccharie Risacher
-
-ATL vs CLE - Fri 4:30PM PST
-11.5
-Points
-14.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-De'Andre Hunter
-
-CLE @ ATL - Fri 4:30PM PST
-15.5
-Points
-22.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-2.5
-Assists
-Nickeil Alexander-Walker
-
-ATL vs CLE - Fri 4:30PM PST
-17.5
-Points
-24.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-3.5
-Assists
-Dyson Daniels
-
-ATL vs CLE - Fri 4:30PM PST
-10.5
-Points
-22.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-5.5
-Assists
-Vit Krejci
-
-ATL vs CLE - Fri 4:30PM PST
-7.5
-Points
-11.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-Donovan Mitchell
-
-CLE @ ATL - Fri 4:30PM PST
-28.5
-Points
-39.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-5.5
-Assists
-Kristaps Porzingis
-
-ATL vs CLE - Fri 4:30PM PST
-18.5
-Points
-28.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-3.5
-Assists
-Jarrett Allen
-
-CLE @ ATL - Fri 4:30PM PST
-13.5
-Points
-24.5
-Pts + Rebs + Asts
-8.5
-Rebounds
-1.5
-Assists
-Lonzo Ball
-
-CLE @ ATL - Fri 4:30PM PST
-6.5
-Points
-14.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-3.5
-Assists
-Luke Kennard
-
-ATL vs CLE - Fri 4:30PM PST
-6.5
-Points
-10.5
-Pts + Rebs + Asts
-1.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-Onyeka Okongwu
-
-ATL vs CLE - Fri 4:30PM PST
-13.5
-Points
-21.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-2.5
-Assists
-Jaylon Tyson
-
-CLE @ ATL - Fri 4:30PM PST
-7.5
-Points
-13.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-Cade Cunningham
-
-DET vs ORL - Fri 4:30PM PST
-26.5
-Points
-41.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-8.5
-Assists
-Desmond Bane
-
-ORL @ DET - Fri 4:30PM PST
-19.5
-Points
-28.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-4.5
-Assists
-Jaden Ivey
-
-DET vs ORL - Fri 4:30PM PST
-9.5
-Points
-14.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
-Assists
-1.5
-3-Pointers Made
-Wendell Carter Jr.
-
-ORL @ DET - Fri 4:30PM PST
-11.5
-Points
-21.5
-Pts + Rebs + Asts
-7.5
-Rebounds
-1.5
-Assists
-Jalen Duren
-
-DET vs ORL - Fri 4:30PM PST
-19.5
-Points
-33.5
-Pts + Rebs + Asts
-11.5
-Rebounds
-2.5
-Assists
-Isaiah Stewart
-
-DET vs ORL - Fri 4:30PM PST
-7.5
-Points
-14.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-1.5
-Assists
-Anthony Black
-
-ORL @ DET - Fri 4:30PM PST
-12.5
-Points
-18.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
-Assists
-1.5
-3-Pointers Made
-Tristan da Silva
-
-ORL @ DET - Fri 4:30PM PST
-11.5
-Points
-17.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-Franz Wagner
-
-ORL @ DET - Fri 4:30PM PST
-23.5
-Points
-33.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-3.5
-Assists
-Jalen Suggs
-
-ORL @ DET - Fri 4:30PM PST
-15.5
-Points
-25.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-5.5
-Assists
-Tobias Harris
-
-DET vs ORL - Fri 4:30PM PST
-11.5
-Points
-18.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-2.5
-Assists
-1.5
-3-Pointers Made
-Ausar Thompson
-
-DET vs ORL - Fri 4:30PM PST
-11.5
-Points
-19.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-2.5
-Assists
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+0.5
+Offensive Rebounds
 Caris LeVert
 
-DET vs ORL - Fri 4:30PM PST
+DET @ MIA - 5:00PM PST
 8.5
 Points
-13.5
+14.5
 Pts + Rebs + Asts
 2.5
 Rebounds
@@ -638,10 +1348,10 @@ Assists
 3-Pointers Made
 Duncan Robinson
 
-DET vs ORL - Fri 4:30PM PST
-10.5
+DET @ MIA - 5:00PM PST
+12.5
 Points
-14.5
+17.5
 Pts + Rebs + Asts
 2.5
 Rebounds
@@ -649,55 +1359,1109 @@ Rebounds
 Assists
 2.5
 3-Pointers Made
-Goga Bitadze
+0.5
+1Q 3-Pointers Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+7.5
+3s Attempted
+Bam Adebayo
 
-ORL @ DET - Fri 4:30PM PST
+MIA vs DET - 5:00PM PST
+18.5
+Points
+30.5
+Pts + Rebs + Asts
+8.5
+Rebounds
+2.5
+Assists
+1.5
+3-Pointers Made
+11.5
+Rebounds + Assists
+27.5
+Points + Rebounds
+21.5
+Points + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+2.5
+1Q Rebounds
+7.5
+1Q Pts + Rebs + Asts
+36.45
+Fantasy Points
+3.5
+FT Made
+15.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+1.5
+Offensive Rebounds
+14.5
+FG Attempted
+Tyler Herro
+
+MIA vs DET - 5:00PM PST
+21.5
+Points
+31.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+4.5
+Assists
+1.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+26.5
+Points + Rebounds
+26.5
+Points + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+1.5
+1Q Rebounds
+8.5
+1Q Pts + Rebs + Asts
+35.75
+Fantasy Points
+2.5
+Turnovers
+1.5
+Steals
+3.5
+FT Made
+10.5
+1H Points
+15.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+3.5
+Points in First 5 Min.
+15.5
+FG Attempted
+5.5
+3s Attempted
+Ausar Thompson
+
+DET @ MIA - 5:00PM PST
+11.5
+Points
+20.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+2.5
+Assists
+0.5
+3-Pointers Made
+8.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+1.5
+Steals
+2.5
+Blocks + Steals
+0.5
+First FG Attempt
+2.5
+Offensive Rebounds
+Norman Powell
+
+MIA vs DET - 5:00PM PST
+18.5
+Points
+24.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+1.5
+Assists
+2.5
+3-Pointers Made
+22.5
+Points + Rebounds
+21.5
+Points + Assists
+4.5
+1Q Points
+0.5
+1Q 3-Pointers Made
+1.5
+Steals
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
 6.5
+3s Attempted
+Davion Mitchell
+
+MIA vs DET - 5:00PM PST
+8.5
+Points
+17.5
+Pts + Rebs + Asts
+2.5
+Rebounds
+6.5
+Assists
+0.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+Steals
+Kel'el Ware
+
+MIA vs DET - 5:00PM PST
+10.5
+Points
+22.5
+Pts + Rebs + Asts
+10.5
+Rebounds
+0.5
+3-Pointers Made
+11.5
+Rebounds + Assists
+0.5
+Double Doubles
+2.5
+1Q Rebounds
+1.5
+Blocks
+2.5
+Blocks + Steals
+2.5
+Offensive Rebounds
+Giannis Antetokounmpo
+
+MIL vs BKN - 5:00PM PST
+28.5
+Points
+45.5
+Pts + Rebs + Asts
+10.5
+Rebounds
+6.5
+Assists
+0.5
+3-Pointers Made
+16.5
+Rebounds + Assists
+39.5
+Points + Rebounds
+35.5
+Points + Assists
+0.5
+Double Doubles
+0.5
+Triple Doubles
+6.5
+1Q Points
+2.5
+1Q Rebounds
+12.5
+1Q Pts + Rebs + Asts
+54.05
+Fantasy Points
+3.5
+Turnovers
+5.5
+FT Made
+16.5
+1H Points
+26.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+6.5
+Pts+Reb+Ast in First 5 Min.
+4.5
+Points in First 5 Min.
+3.5
+Offensive Rebounds
+16.5
+FG Attempted
+Myles Turner
+
+MIL vs BKN - 5:00PM PST
+13.5
+Points
+21.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+1.5
+Assists
+2.5
+3-Pointers Made
+8.5
+Rebounds + Assists
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+1.5
+Blocks
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+1.5
+Offensive Rebounds
+5.5
+3s Attempted
+Terance Mann
+
+BKN @ MIL - 5:00PM PST
+11.5
+Points
+20.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+4.5
+Assists
+1.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+Bobby Portis
+
+MIL vs BKN - 5:00PM PST
+16.5
+Pts + Rebs + Asts
+1.5
+Assists
+1.5
+3-Pointers Made
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+Noah Clowney
+
+BKN @ MIL - 5:00PM PST
+18.5
+Points
+26.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+1.5
+Assists
+3.5
+3-Pointers Made
+20.5
+Points + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+7.5
+1Q Pts + Rebs + Asts
+30.65
+Fantasy Points
+4.5
+FT Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+0.5
+Offensive Rebounds
+14.5
+FG Attempted
+9.5
+3s Attempted
+AJ Green
+
+MIL vs BKN - 5:00PM PST
+17.5
+Pts + Rebs + Asts
+2.5
+Assists
+6.5
+3s Attempted
+Kyle Kuzma
+
+MIL vs BKN - 5:00PM PST
+12.5
+Points
+19.5
+Pts + Rebs + Asts
+2.5
+Assists
+0.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+Nic Claxton
+
+BKN @ MIL - 5:00PM PST
+15.5
+Points
+29.5
+Pts + Rebs + Asts
+9.5
+Rebounds
+3.5
+Assists
+13.5
+Rebounds + Assists
+25.5
+Points + Rebounds
+19.5
+Points + Assists
+0.5
+Double Doubles
+3.5
+1Q Points
+2.5
+1Q Rebounds
+7.5
+1Q Pts + Rebs + Asts
+36.05
+Fantasy Points
+3.5
+FT Made
+3.5
+Offensive Rebounds
+Gary Trent Jr.
+
+MIL vs BKN - 5:00PM PST
+8.5
 Points
 11.5
+Pts + Rebs + Asts
+1.5
+Rebounds
+1.5
+Assists
+1.5
+3-Pointers Made
+4.5
+3s Attempted
+Ziaire Williams
+
+BKN @ MIL - 5:00PM PST
+11.5
+Points
+16.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+2.5
+3-Pointers Made
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+1.5
+1H 3-Pointers Made
+6.5
+3s Attempted
+Ryan Rollins
+
+MIL vs BKN - 5:00PM PST
+16.5
+Points
+27.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+6.5
+Assists
+2.5
+3-Pointers Made
+10.5
+Rebounds + Assists
+21.5
+Points + Rebounds
+23.5
+Points + Assists
+0.5
+Double Doubles
+3.5
+1Q Points
+0.5
+1Q 3-Pointers Made
+6.5
+1Q Pts + Rebs + Asts
+33.55
+Fantasy Points
+2.5
+Turnovers
+1.5
+Steals
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+5.5
+3s Attempted
+Zion Williamson
+
+NOP @ GSW - 5:30PM PST
+21.5
+Points
+31.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+4.5
+Assists
+10.5
+Rebounds + Assists
+27.5
+Points + Rebounds
+25.5
+Points + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+1.5
+1Q Rebounds
+7.5
+1Q Pts + Rebs + Asts
+36.25
+Fantasy Points
+3.5
+Turnovers
+1.5
+Steals
+5.5
+FT Made
+10.5
+1H Points
+15.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+3.5
+Points in First 5 Min.
+2.5
+Offensive Rebounds
+Jonathan Kuminga
+
+GSW vs NOP - 5:30PM PST
+15.5
+Points
+22.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+2.5
+Assists
+1.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+20.5
+Points + Rebounds
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+1.5
+Offensive Rebounds
+Brandin Podziemski
+
+GSW vs NOP - 5:30PM PST
+14.5
+Points
+23.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+3.5
+Assists
+2.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+19.5
+Points + Rebounds
+19.5
+Points + Assists
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+1.5
+Steals
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+0.5
+Offensive Rebounds
+6.5
+3s Attempted
+Yves Missi
+
+NOP @ GSW - 5:30PM PST
+6.5
+Points
+14.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+1.5
+Assists
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+1.5
+Blocks
+3.5
+Offensive Rebounds
+Trey Murphy III
+
+NOP @ GSW - 5:30PM PST
+18.5
+Points
+27.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+3.5
+Assists
+2.5
+3-Pointers Made
+8.5
+Rebounds + Assists
+23.5
+Points + Rebounds
+21.5
+Points + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+6.5
+1Q Pts + Rebs + Asts
+33.05
+Fantasy Points
+2.5
+Turnovers
+1.5
+Steals
+3.5
+FT Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+1.5
+Offensive Rebounds
+14.5
+FG Attempted
+7.5
+3s Attempted
+Moses Moody
+
+GSW vs NOP - 5:30PM PST
+14.5
+Points
+20.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+1.5
+Assists
+3.5
+3-Pointers Made
+18.5
+Points + Rebounds
+3.5
+1Q Points
+0.5
+1Q 3-Pointers Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+7.5
+3s Attempted
+Will Richard
+
+GSW vs NOP - 5:30PM PST
+9.5
+Points
+14.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+1.5
+Assists
+1.5
+3-Pointers Made
+4.5
+3s Attempted
+Derik Queen
+
+NOP @ GSW - 5:30PM PST
+12.5
+Points
+23.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+4.5
+Assists
+0.5
+3-Pointers Made
+11.5
+Rebounds + Assists
+19.5
+Points + Rebounds
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+2.5
+Turnovers
+1.5
+Steals
+2.5
+Blocks + Steals
+0.5
+First FG Attempt
+Jimmy Butler
+
+GSW vs NOP - 5:30PM PST
+21.5
+Points
+33.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+5.5
+Assists
+0.5
+3-Pointers Made
+11.5
+Rebounds + Assists
+27.5
+Points + Rebounds
+27.5
+Points + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+1.5
+1Q Rebounds
+8.5
+1Q Pts + Rebs + Asts
+41.35
+Fantasy Points
+1.5
+Steals
+6.5
+FT Made
+10.5
+1H Points
+16.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+2.5
+Offensive Rebounds
+Draymond Green
+
+GSW vs NOP - 5:30PM PST
+9.5
+Points
+22.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+5.5
+Assists
+1.5
+3-Pointers Made
+12.5
+Rebounds + Assists
+0.5
+Double Doubles
+0.5
+Triple Doubles
+1.5
+1Q Rebounds
+3.5
+Turnovers
+2.5
+Blocks + Steals
+1.5
+Offensive Rebounds
+5.5
+3s Attempted
+Jose Alvarado
+
+NOP @ GSW - 5:30PM PST
+9.5
+Points
+16.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+3.5
+Assists
+1.5
+3-Pointers Made
+5.5
+3s Attempted
+Buddy Hield
+
+GSW vs NOP - 5:30PM PST
+9.5
+Points
+14.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+1.5
+Assists
+2.5
+3-Pointers Made
+0.5
+1Q 3-Pointers Made
+1.5
+1H 3-Pointers Made
+5.5
+3s Attempted
+Saddiq Bey
+
+NOP @ GSW - 5:30PM PST
+14.5
+Points
+22.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+1.5
+Assists
+1.5
+3-Pointers Made
+8.5
+Rebounds + Assists
+20.5
+Points + Rebounds
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+1.5
+Steals
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+5.5
+3s Attempted
+Jeremiah Fears
+
+NOP @ GSW - 5:30PM PST
+13.5
+Points
+19.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+2.5
+Assists
+1.5
+3-Pointers Made
+2.5
+Turnovers
+1.5
+Steals
+0.5
+First FG Attempt
+Quinten Post
+
+GSW vs NOP - 5:30PM PST
+8.5
+Points
+14.5
 Pts + Rebs + Asts
 4.5
 Rebounds
 1.5
 Assists
 1.5
+3-Pointers Made
+5.5
+3s Attempted
+Nikola Jokic
+
+DEN @ PHX - 6:00PM PST
+30.5
+Points
+52.5
+Pts + Rebs + Asts
+12.5
+Rebounds
+10.5
+Assists
+1.5
+3-Pointers Made
+22.5
+Rebounds + Assists
+42.5
+Points + Rebounds
+40.5
+Points + Assists
+0.5
+Double Doubles
+0.5
+Triple Doubles
+8.5
+1Q Points
+3.5
 1Q Rebounds
-LaMelo Ball
-
-CHA vs CHI - Fri 4:30PM PST
-18.5
-Points
-31.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-7.5
-Assists
-Coby White
-
-CHI @ CHA - Fri 4:30PM PST
-23.5
-Points
-31.5
-Pts + Rebs + Asts
 3.5
-Rebounds
-5.5
-Assists
-Miles Bridges
-
-CHA vs CHI - Fri 4:30PM PST
-18.5
-Points
-28.5
-Pts + Rebs + Asts
+1Q Assists
+16.5
+1Q Pts + Rebs + Asts
+62.85
+Fantasy Points
+3.5
+Turnovers
+1.5
+Steals
+2.5
+Blocks + Steals
 6.5
-Rebounds
+FT Made
+15.5
+1H Points
+5.5
+1H Assists
+27.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+6.5
+Pts+Reb+Ast in First 5 Min.
 3.5
-Assists
-Matas Buzelis
+Points in First 5 Min.
+3.5
+Offensive Rebounds
+4.5
+3s Attempted
+19.5
+FG Attempted
+Jamal Murray
 
-CHI @ CHA - Fri 4:30PM PST
+DEN @ PHX - 6:00PM PST
+24.5
+Points
+36.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+6.5
+Assists
+2.5
+3-Pointers Made
+11.5
+Rebounds + Assists
+28.5
+Points + Rebounds
+31.5
+Points + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+0.5
+1Q 3-Pointers Made
+9.5
+1Q Pts + Rebs + Asts
+42.25
+Fantasy Points
+2.5
+Turnovers
+1.5
+Steals
+3.5
+FT Made
+12.5
+1H Points
+1.5
+1H 3-Pointers Made
+17.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+19.5
+FG Attempted
+7.5
+3s Attempted
+Cam Johnson
+
+DEN @ PHX - 6:00PM PST
+14.5
+Points
+22.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+2.5
+Assists
+2.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+19.5
+Points + Rebounds
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+5.5
+3s Attempted
+Royce O'Neale
+
+PHX vs DEN - 6:00PM PST
+11.5
+Points
+19.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+2.5
+Assists
+3.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+0.5
+Offensive Rebounds
+7.5
+3s Attempted
+Peyton Watson
+
+DEN @ PHX - 6:00PM PST
 13.5
 Points
 20.5
@@ -705,349 +2469,70 @@ Pts + Rebs + Asts
 5.5
 Rebounds
 1.5
-3-Pointers Made
-Collin Sexton
-
-CHA vs CHI - Fri 4:30PM PST
-14.5
-Points
-19.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-3.5
-Assists
-Kevin Huerter
-
-CHI @ CHA - Fri 4:30PM PST
-10.5
-Points
-17.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
 Assists
 1.5
 3-Pointers Made
-Brandon Miller
-
-CHA vs CHI - Fri 4:30PM PST
-19.5
-Points
-26.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-3.5
-Assists
-Nikola Vucevic
-
-CHI @ CHA - Fri 4:30PM PST
-18.5
-Points
-32.5
-Pts + Rebs + Asts
-10.5
-Rebounds
-3.5
-Assists
-Josh Giddey
-
-CHI @ CHA - Fri 4:30PM PST
-19.5
-Points
-39.5
-Pts + Rebs + Asts
-8.5
-Rebounds
-9.5
-Assists
-Ayo Dosunmu
-
-CHI @ CHA - Fri 4:30PM PST
-14.5
-Points
-21.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-2.5
-Assists
-Kon Knueppel
-
-CHA vs CHI - Fri 4:30PM PST
-18.5
-Points
-26.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-2.5
-Assists
-Ryan Kalkbrenner
-
-CHA vs CHI - Fri 4:30PM PST
-7.5
-Points
-16.5
-Pts + Rebs + Asts
-6.5
-Rebounds
 7.5
 Rebounds + Assists
-Paul George
-
-PHI @ BKN - Fri 4:30PM PST
-14.5
-Points
-22.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-3.5
-Assists
-Nic Claxton
-
-BKN vs PHI - Fri 4:30PM PST
-14.5
-Points
-27.5
-Pts + Rebs + Asts
-8.5
-Rebounds
-3.5
-Assists
-Andre Drummond
-
-PHI @ BKN - Fri 4:30PM PST
-10.5
-Points
-23.5
-Pts + Rebs + Asts
-12.5
-Rebounds
 0.5
-3-Pointers Made
-Justin Edwards
-
-PHI @ BKN - Fri 4:30PM PST
-10.5
-Points
-16.5
-Pts + Rebs + Asts
+Double Doubles
 3.5
-Rebounds
+1Q Points
 1.5
-Assists
+1Q Rebounds
 1.5
-3-Pointers Made
-Noah Clowney
+Steals
+1.5
+Blocks
+2.5
+Blocks + Steals
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+1.5
+Offensive Rebounds
+4.5
+3s Attempted
+Collin Gillespie
 
-BKN vs PHI - Fri 4:30PM PST
-16.5
+PHX vs DEN - 6:00PM PST
+14.5
 Points
 24.5
 Pts + Rebs + Asts
 4.5
 Rebounds
-1.5
+5.5
 Assists
-Tyrese Martin
-
-BKN vs PHI - Fri 4:30PM PST
-12.5
-Points
-19.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-3.5
-Assists
-Tyrese Maxey
-
-PHI @ BKN - Fri 4:30PM PST
-32.5
-Points
-43.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-7.5
-Assists
-Terance Mann
-
-BKN vs PHI - Fri 4:30PM PST
-8.5
-Points
-15.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-3.5
-Assists
-Quentin Grimes
-
-PHI @ BKN - Fri 4:30PM PST
-16.5
-Points
-23.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-3.5
-Assists
-Drake Powell
-
-BKN vs PHI - Fri 4:30PM PST
-8.5
-Points
-14.5
-Pts + Rebs + Asts
 2.5
-Rebounds
-2.5
-Assists
-0.5
 3-Pointers Made
-Day'Ron Sharpe
-
-BKN vs PHI - Fri 4:30PM PST
-7.5
-Points
-16.5
-Pts + Rebs + Asts
-7.5
-Rebounds
-1.5
-Assists
-Egor Demin
-
-BKN vs PHI - Fri 4:30PM PST
 9.5
-Points
+Rebounds + Assists
 18.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-4.5
-Assists
-Nikola Jokic
-
-DEN vs SAS - Fri 6:30PM PST
-30.5
-Points
-54.5
-Pts + Rebs + Asts
-12.5
-Rebounds
-10.5
-Assists
-Jamal Murray
-
-DEN vs SAS - Fri 6:30PM PST
-24.5
-Points
-35.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-6.5
-Assists
-Devin Vassell
-
-SAS @ DEN - Fri 6:30PM PST
-15.5
-Points
-22.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-2.5
-Assists
-Dylan Harper
-
-SAS @ DEN - Fri 6:30PM PST
-11.5
-Points
-17.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-3.5
-Assists
-0.5
-3-Pointers Made
-Cam Johnson
-
-DEN vs SAS - Fri 6:30PM PST
-14.5
-Points
-21.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-2.5
-Assists
-Julian Champagnie
-
-SAS @ DEN - Fri 6:30PM PST
-11.5
-Points
-17.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-1.5
-Assists
-Peyton Watson
-
-DEN vs SAS - Fri 6:30PM PST
-13.5
-Points
-22.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-1.5
-Assists
-Luke Kornet
-
-SAS @ DEN - Fri 6:30PM PST
-7.5
-Points
-16.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-2.5
-Assists
-De'Aaron Fox
-
-SAS @ DEN - Fri 6:30PM PST
-24.5
-Points
-35.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-6.5
-Assists
-Harrison Barnes
-
-SAS @ DEN - Fri 6:30PM PST
-13.5
-Points
+Points + Rebounds
 19.5
-Pts + Rebs + Asts
+Points + Assists
+0.5
+Double Doubles
 3.5
-Rebounds
+1Q Points
+1.5
+1Q Rebounds
+0.5
+1Q 3-Pointers Made
 2.5
-Assists
-Jonas Valanciunas
-
-DEN vs SAS - Fri 6:30PM PST
+Turnovers
+1.5
+Steals
+1.5
+1H 3-Pointers Made
 7.5
+3s Attempted
+Oso Ighodaro
+
+PHX vs DEN - 6:00PM PST
+6.5
 Points
 14.5
 Pts + Rebs + Asts
@@ -1057,36 +2542,115 @@ Rebounds
 Assists
 0.5
 Double Doubles
-Keldon Johnson
-
-SAS @ DEN - Fri 6:30PM PST
-13.5
-Points
-22.5
-Pts + Rebs + Asts
-6.5
-Rebounds
 1.5
-Assists
-Bruce Brown
+1Q Rebounds
+Devin Booker
 
-DEN vs SAS - Fri 6:30PM PST
-8.5
+PHX vs DEN - 6:00PM PST
+25.5
 Points
-14.5
+37.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+7.5
+Assists
+2.5
+3-Pointers Made
+10.5
+Rebounds + Assists
+29.5
+Points + Rebounds
+33.5
+Points + Assists
+0.5
+Double Doubles
+6.5
+1Q Points
+1.5
+1Q Rebounds
+2.5
+1Q Assists
+0.5
+1Q 3-Pointers Made
+11.5
+1Q Pts + Rebs + Asts
+43.55
+Fantasy Points
+3.5
+Turnovers
+6.5
+FT Made
+13.5
+1H Points
+1.5
+1H 3-Pointers Made
+18.5
+1H Pts + Rebs + Asts
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+6.5
+3s Attempted
+18.5
+FG Attempted
+Dillon Brooks
+
+PHX vs DEN - 6:00PM PST
+19.5
+Points
+24.5
 Pts + Rebs + Asts
 3.5
 Rebounds
+1.5
+Assists
 2.5
+3-Pointers Made
+21.5
+Points + Assists
+4.5
+1Q Points
+0.5
+1Q 3-Pointers Made
+2.5
+Turnovers
+1.5
+Steals
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+7.5
+3s Attempted
+16.5
+FG Attempted
+Bruce Brown
+
+DEN @ PHX - 6:00PM PST
+7.5
+Points
+13.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+1.5
 Assists
 0.5
 3-Pointers Made
 Tim Hardaway Jr.
 
-DEN vs SAS - Fri 6:30PM PST
+DEN @ PHX - 6:00PM PST
 11.5
 Points
-14.5
+15.5
 Pts + Rebs + Asts
 2.5
 Rebounds
@@ -1094,528 +2658,34 @@ Rebounds
 Assists
 2.5
 3-Pointers Made
-Spencer Jones
-
-DEN vs SAS - Fri 6:30PM PST
-4.5
-Points
-2.5
-Rebounds
 0.5
-3-Pointers Made
-Shai Gilgeous-Alexander
-
-OKC vs PHX - Fri 6:30PM PST
-30.5
-Points
-41.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-6.5
-Assists
-Jalen Williams
-
-OKC vs PHX - Fri 6:30PM PST
-12.5
-Points
-19.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-3.5
-Assists
-Dillon Brooks
-
-PHX @ OKC - Fri 6:30PM PST
-16.5
-Points
-21.5
-Pts + Rebs + Asts
-3.5
-Rebounds
+1Q 3-Pointers Made
 1.5
-Assists
-Lu Dort
+1H 3-Pointers Made
+6.5
+3s Attempted
+Nick Richards
 
-OKC vs PHX - Fri 6:30PM PST
+PHX vs DEN - 6:00PM PST
 7.5
 Points
-11.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-1.5
-3-Pointers Made
-Cason Wallace
-
-OKC vs PHX - Fri 6:30PM PST
-6.5
-Points
-13.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-Isaiah Hartenstein
-
-OKC vs PHX - Fri 6:30PM PST
-10.5
-Points
-22.5
+15.5
 Pts + Rebs + Asts
 8.5
 Rebounds
-2.5
-Assists
-Collin Gillespie
-
-PHX @ OKC - Fri 6:30PM PST
-11.5
-Points
-21.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-4.5
-Assists
-Jordan Goodwin
-
-PHX @ OKC - Fri 6:30PM PST
 8.5
-Points
-16.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-2.5
-Assists
-Devin Booker
-
-PHX @ OKC - Fri 6:30PM PST
-24.5
-Points
-35.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-6.5
-Assists
-Chet Holmgren
-
-OKC vs PHX - Fri 6:30PM PST
-16.5
-Points
-26.5
-Pts + Rebs + Asts
-7.5
-Rebounds
-1.5
-Assists
-Alex Caruso
-
-OKC vs PHX - Fri 6:30PM PST
-5.5
-Points
-10.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-Mark Williams
-
-PHX @ OKC - Fri 6:30PM PST
-11.5
-Points
-20.5
-Pts + Rebs + Asts
-8.5
-Rebounds
-9.5
 Rebounds + Assists
-Royce O'Neale
-
-PHX @ OKC - Fri 6:30PM PST
-9.5
-Points
-18.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-2.5
-Assists
-Isaiah Joe
-
-OKC vs PHX - Fri 6:30PM PST
-7.5
-Points
-10.5
-Pts + Rebs + Asts
-1.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-Ajay Mitchell
-
-OKC vs PHX - Fri 6:30PM PST
-12.5
-Points
-21.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
-Assists
-0.5
-3-Pointers Made
-Keyonte George
-
-UTA vs SAC - Fri 6:30PM PST
-21.5
-Points
-32.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-6.5
-Assists
-Zach LaVine
-
-SAC @ UTA - Fri 6:30PM PST
-19.5
-Points
-25.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-2.5
-Assists
-Keegan Murray
-
-SAC @ UTA - Fri 6:30PM PST
-16.5
-Points
-23.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-1.5
-Assists
-Russell Westbrook
-
-SAC @ UTA - Fri 6:30PM PST
-14.5
-Points
-30.5
-Pts + Rebs + Asts
-7.5
-Rebounds
-7.5
-Assists
-Jusuf Nurkic
-
-UTA vs SAC - Fri 6:30PM PST
-9.5
-Points
-23.5
-Pts + Rebs + Asts
-10.5
-Rebounds
-3.5
-Assists
-Kevin Love
-
-UTA vs SAC - Fri 6:30PM PST
-5.5
-Points
-12.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-1.5
-Assists
-Brice Sensabaugh
-
-UTA vs SAC - Fri 6:30PM PST
-8.5
-Points
-14.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-Drew Eubanks
-
-SAC @ UTA - Fri 6:30PM PST
-6.5
-Points
-12.5
-Pts + Rebs + Asts
-4.5
-Rebounds
 0.5
 Double Doubles
-1.5
+2.5
 1Q Rebounds
-Isaiah Collier
-
-UTA vs SAC - Fri 6:30PM PST
-8.5
-Points
-17.5
-Pts + Rebs + Asts
 2.5
-Rebounds
-5.5
-Assists
-Lauri Markkanen
+Offensive Rebounds
+Spencer Jones
 
-UTA vs SAC - Fri 6:30PM PST
-26.5
-Points
-34.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-2.5
-Assists
-DeMar DeRozan
-
-SAC @ UTA - Fri 6:30PM PST
-18.5
-Points
-25.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-3.5
-Assists
-Ace Bailey
-
-UTA vs SAC - Fri 6:30PM PST
-12.5
-Points
-19.5
-Pts + Rebs + Asts
+DEN @ PHX - 6:00PM PST
 4.5
-Rebounds
-1.5
-Assists
-Dennis Schroder
-
-SAC @ UTA - Fri 6:30PM PST
-10.5
 Points
-18.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-4.5
-Assists
-Malik Monk
-
-SAC @ UTA - Fri 6:30PM PST
-13.5
-Points
-20.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-3.5
-Assists
-1.5
-3-Pointers Made
-Kyle Filipowski
-
-UTA vs SAC - Fri 6:30PM PST
-9.5
-Points
-17.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-1.5
-Assists
-Precious Achiuwa
-
-SAC @ UTA - Fri 6:30PM PST
-7.5
-Points
-14.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-1.5
-Assists
-Svi Mykhailiuk
-
-UTA vs SAC - Fri 6:30PM PST
-7.5
-Points
-12.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
-Assists
-1.5
-3-Pointers Made
-LeBron James
-
-LAL vs DAL - Fri 7:00PM PST
-21.5
-Points
-34.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-6.5
-Assists
-Cooper Flagg
-
-DAL @ LAL - Fri 7:00PM PST
-15.5
-Points
-25.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-3.5
-Assists
-Austin Reaves
-
-LAL vs DAL - Fri 7:00PM PST
-22.5
-Points
-32.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-4.5
-Assists
-Marcus Smart
-
-LAL vs DAL - Fri 7:00PM PST
-6.5
-Points
-10.5
-Pts + Rebs + Asts
-1.5
-Rebounds
-1.5
-Assists
-0.5
-3-Pointers Made
-Daniel Gafford
-
-DAL @ LAL - Fri 7:00PM PST
-9.5
-Points
-18.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-1.5
-Assists
-Max Christie
-
-DAL @ LAL - Fri 7:00PM PST
-10.5
-Points
-16.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-2.5
-Assists
-1.5
-3-Pointers Made
-Brandon Williams
-
-DAL @ LAL - Fri 7:00PM PST
-11.5
-Points
-18.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-4.5
-Assists
-Luka Doncic
-
-LAL vs DAL - Fri 7:00PM PST
-33.5
-Points
-50.5
-Pts + Rebs + Asts
-8.5
-Rebounds
-8.5
-Assists
-Anthony Davis
-
-DAL @ LAL - Fri 7:00PM PST
-19.5
-Points
-31.5
-Pts + Rebs + Asts
-9.5
-Rebounds
-2.5
-Assists
-PJ Washington
-
-DAL @ LAL - Fri 7:00PM PST
-15.5
-Points
-24.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-2.5
-Assists
-Rui Hachimura
-
-LAL vs DAL - Fri 7:00PM PST
-10.5
-Points
-16.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-1.5
-3-Pointers Made
-Naji Marshall
-
-DAL @ LAL - Fri 7:00PM PST
-9.5
-Points
-16.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-2.5
-Assists
-0.5
-3-Pointers Made
-Jake LaRavia
-
-LAL vs DAL - Fri 7:00PM PST
-6.5
-Points
-10.5
-Pts + Rebs + Asts
 2.5
 Rebounds
 1.5
@@ -1624,192 +2694,283 @@ Assists
 3-Pointers Made
 Kawhi Leonard
 
-LAC vs MEM - Fri 7:00PM PST
-19.5
+LAC vs DAL - 7:00PM PST
+21.5
 Points
 28.5
 Pts + Rebs + Asts
 4.5
-Rebounds
-2.5
-Assists
-Zach Edey
-
-MEM @ LAC - Fri 7:00PM PST
-11.5
-Points
-23.5
-Pts + Rebs + Asts
-10.5
-Rebounds
-1.5
-Assists
-Bogdan Bogdanovic
-
-LAC vs MEM - Fri 7:00PM PST
-8.5
-Points
-14.5
-Pts + Rebs + Asts
-2.5
 Rebounds
 2.5
 Assists
 1.5
 3-Pointers Made
-Jaren Jackson Jr.
-
-MEM @ LAC - Fri 7:00PM PST
-21.5
-Points
-28.5
-Pts + Rebs + Asts
+7.5
+Rebounds + Assists
+26.5
+Points + Rebounds
+23.5
+Points + Assists
+0.5
+Double Doubles
 4.5
-Rebounds
+1Q Points
 1.5
-Assists
-Vince Williams Jr.
-
-MEM @ LAC - Fri 7:00PM PST
-8.5
-Points
-21.5
-Pts + Rebs + Asts
-4.5
-Rebounds
+1Q Rebounds
 6.5
-Assists
-Nicolas Batum
+1Q Pts + Rebs + Asts
+34.05
+Fantasy Points
+1.5
+Steals
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+3s Attempted
+15.5
+FG Attempted
+James Harden
 
-LAC vs MEM - Fri 7:00PM PST
-5.5
+LAC vs DAL - 7:00PM PST
+26.5
 Points
-10.5
+41.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+8.5
+Assists
+3.5
+3-Pointers Made
+14.5
+Rebounds + Assists
+31.5
+Points + Rebounds
+35.5
+Points + Assists
+0.5
+Double Doubles
+0.5
+Triple Doubles
+7.5
+1Q Points
+1.5
+1Q Rebounds
+2.5
+1Q Assists
+0.5
+1Q 3-Pointers Made
+13.5
+1Q Pts + Rebs + Asts
+46.35
+Fantasy Points
+3.5
+Turnovers
+1.5
+Steals
+7.5
+FT Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+3.5
+Points in First 5 Min.
+0.5
+Offensive Rebounds
+17.5
+FG Attempted
+9.5
+3s Attempted
+PJ Washington
+
+DAL @ LAC - 7:00PM PST
+17.5
+Points
+27.5
+Pts + Rebs + Asts
+7.5
+Rebounds
+2.5
+Assists
+1.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+24.5
+Points + Rebounds
+19.5
+Points + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+1.5
+1Q Rebounds
+7.5
+1Q Pts + Rebs + Asts
+32.35
+Fantasy Points
+2.5
+Turnovers
+5.5
+3s Attempted
+14.5
+FG Attempted
+Max Christie
+
+DAL @ LAC - 7:00PM PST
+11.5
+Points
+17.5
 Pts + Rebs + Asts
 3.5
 Rebounds
-1.5
-3-Pointers Made
-Jock Landale
-
-MEM @ LAC - Fri 7:00PM PST
-8.5
-Points
-13.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-1.5
-Assists
-0.5
-3-Pointers Made
-Cam Spencer
-
-MEM @ LAC - Fri 7:00PM PST
-9.5
-Points
-16.5
-Pts + Rebs + Asts
 2.5
-Rebounds
-4.5
 Assists
-1.5
+2.5
 3-Pointers Made
-James Harden
+0.5
+1Q 3-Pointers Made
+1.5
+1H 3-Pointers Made
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+6.5
+3s Attempted
+Brandon Williams
 
-LAC vs MEM - Fri 7:00PM PST
-26.5
-Points
-40.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-8.5
-Assists
-Ivica Zubac
-
-LAC vs MEM - Fri 7:00PM PST
-17.5
-Points
-31.5
-Pts + Rebs + Asts
+DAL @ LAC - 7:00PM PST
 11.5
-Rebounds
-2.5
-Assists
-John Collins
-
-LAC vs MEM - Fri 7:00PM PST
-13.5
-Points
-19.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-1.5
-3-Pointers Made
-Kentavious Caldwell-Pope
-
-MEM @ LAC - Fri 7:00PM PST
-5.5
-Points
-10.5
-Pts + Rebs + Asts
-1.5
-Rebounds
-2.5
-Assists
-0.5
-3-Pointers Made
-Santi Aldama
-
-MEM @ LAC - Fri 7:00PM PST
-12.5
-Points
-21.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-2.5
-Assists
-Kris Dunn
-
-LAC vs MEM - Fri 7:00PM PST
-8.5
-Points
-14.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
-Assists
-0.5
-3-Pointers Made
-Jaylen Wells
-
-MEM @ LAC - Fri 7:00PM PST
-12.5
 Points
 18.5
 Pts + Rebs + Asts
-3.5
-Rebounds
-1.5
-Assists
 2.5
+Rebounds
+3.5
+Assists
+0.5
 3-Pointers Made
-Cedric Coward
+1.5
+Steals
+Cooper Flagg
 
-MEM @ LAC - Fri 7:00PM PST
-12.5
+DAL @ LAC - 7:00PM PST
+16.5
 Points
-21.5
+26.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+3.5
+Assists
+1.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+23.5
+Points + Rebounds
+19.5
+Points + Assists
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+6.5
+1Q Pts + Rebs + Asts
+31.95
+Fantasy Points
+2.5
+Turnovers
+1.5
+Steals
+0.5
+First FG Attempt
+0.5
+First 3-Point Attempt
+14.5
+FG Attempted
+Ivica Zubac
+
+LAC vs DAL - 7:00PM PST
+18.5
+Points
+32.5
+Pts + Rebs + Asts
+11.5
+Rebounds
+2.5
+Assists
+13.5
+Rebounds + Assists
+30.5
+Points + Rebounds
+20.5
+Points + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+2.5
+1Q Rebounds
+7.5
+1Q Pts + Rebs + Asts
+37.05
+Fantasy Points
+0.5
+First FG Attempt
+4.5
+Pts+Reb+Ast in First 5 Min.
+2.5
+Points in First 5 Min.
+3.5
+Offensive Rebounds
+John Collins
+
+LAC vs DAL - 7:00PM PST
+11.5
+Points
+18.5
 Pts + Rebs + Asts
 5.5
 Rebounds
+0.5
+3-Pointers Made
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+0.5
+First FG Attempt
+1.5
+Offensive Rebounds
+Kris Dunn
+
+LAC vs DAL - 7:00PM PST
+8.5
+Points
+14.5
+Pts + Rebs + Asts
+2.5
+Rebounds
 2.5
 Assists
+0.5
+3-Pointers Made
+1.5
+Steals
 Add picks
 
 Pick a minimum of 2 players from at least two different teams.
