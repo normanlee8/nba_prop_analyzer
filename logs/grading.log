@@ -38,3 +38,18 @@
 2025-11-27 15:49:40 [INFO] root: Accuracy on 23 S-Tier Props: 56.52% (13/23)
 2025-11-27 15:49:40 [INFO] root: Accuracy on 16 A-Tier Props: 50.00% (8/16)
 2025-11-27 15:49:40 [INFO] root: ----------------------------------------
+2025-11-29 02:04:50 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-11-29 02:04:50 [INFO] root: --- Grading Predictions vs Actuals ---
+2025-11-29 02:04:50 [WARNING] root: GAME_DATE missing in props file. Cannot match specific games.
+2025-11-29 02:46:28 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-11-29 02:46:28 [INFO] root: --- Grading Predictions vs Actuals ---
+2025-11-29 02:46:29 [WARNING] root: GAME_DATE missing in props file. Cannot match specific games.
+2025-11-29 02:49:35 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-11-29 02:49:35 [INFO] root: --- Grading Predictions vs Actuals ---
+2025-11-29 02:49:35 [INFO] root: Graded results saved to output/processed_props.csv
+2025-11-29 02:49:35 [INFO] root: ----------------------------------------
+2025-11-29 02:49:35 [INFO] root: PERFORMANCE SUMMARY
+2025-11-29 02:49:35 [INFO] root: Accuracy on 583 Total Graded Props: 49.06% (286/583)
+2025-11-29 02:49:35 [INFO] root: Accuracy on 410 S-Tier Props: 45.61% (187/410)
+2025-11-29 02:49:35 [INFO] root: Accuracy on 48 A-Tier Props: 66.67% (32/48)
+2025-11-29 02:49:35 [INFO] root: ----------------------------------------

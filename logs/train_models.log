@@ -144,3 +144,76 @@ could not convert string to float: '2025-26'
 2025-11-28 13:08:10 [ERROR] root: Preprocessing failed for FANTASY_PTS: Cannot use median strategy with non-numeric data:
 could not convert string to float: '2025-26'
 2025-11-28 13:08:10 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 0
+2025-11-29 02:50:53 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-11-29 02:50:53 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-11-29 02:50:53 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-11-29 02:50:55 [INFO] root: Loaded 31717 rows of training data.
+2025-11-29 02:50:55 [INFO] root: Note: 8 props excluded from training (Historical data not available).
+2025-11-29 02:50:55 [INFO] root: Excluded: Q1_PTS, Q1_REB, Q1_AST, Q1_PRA, 1H_PTS, 1H_REB, 1H_AST, 1H_PRA
+2025-11-29 02:50:55 [INFO] root: Proceeding to train models for 13 props...
+2025-11-29 02:50:55 [INFO] root: --- Training Model: PTS ---
+2025-11-29 02:50:55 [INFO] root: Training PTS...
+2025-11-29 02:50:55 [INFO] root: [PTS] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:51:10 [INFO] root: [PTS] Validation Accuracy: 56.0%
+2025-11-29 02:51:10 [INFO] root: Saved artifacts for PTS to model_PTS.pkl
+2025-11-29 02:51:10 [INFO] root: --- Training Model: REB ---
+2025-11-29 02:51:10 [INFO] root: Training REB...
+2025-11-29 02:51:10 [INFO] root: [REB] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:51:22 [INFO] root: [REB] Validation Accuracy: 57.4%
+2025-11-29 02:51:22 [INFO] root: Saved artifacts for REB to model_REB.pkl
+2025-11-29 02:51:22 [INFO] root: --- Training Model: AST ---
+2025-11-29 02:51:22 [INFO] root: Training AST...
+2025-11-29 02:51:22 [INFO] root: [AST] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:51:34 [INFO] root: [AST] Validation Accuracy: 59.2%
+2025-11-29 02:51:34 [INFO] root: Saved artifacts for AST to model_AST.pkl
+2025-11-29 02:51:34 [INFO] root: --- Training Model: FG3M ---
+2025-11-29 02:51:34 [INFO] root: Training FG3M...
+2025-11-29 02:51:34 [INFO] root: [FG3M] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:51:49 [INFO] root: [FG3M] Validation Accuracy: 64.9%
+2025-11-29 02:51:49 [INFO] root: Saved artifacts for FG3M to model_FG3M.pkl
+2025-11-29 02:51:49 [INFO] root: --- Training Model: STL ---
+2025-11-29 02:51:49 [INFO] root: Training STL...
+2025-11-29 02:51:49 [INFO] root: [STL] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:51:58 [INFO] root: [STL] Validation Accuracy: 63.5%
+2025-11-29 02:51:58 [INFO] root: Saved artifacts for STL to model_STL.pkl
+2025-11-29 02:51:58 [INFO] root: --- Training Model: BLK ---
+2025-11-29 02:51:58 [INFO] root: Training BLK...
+2025-11-29 02:51:58 [INFO] root: [BLK] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:52:11 [INFO] root: [BLK] Validation Accuracy: 73.7%
+2025-11-29 02:52:11 [INFO] root: Saved artifacts for BLK to model_BLK.pkl
+2025-11-29 02:52:11 [INFO] root: --- Training Model: TOV ---
+2025-11-29 02:52:11 [INFO] root: Training TOV...
+2025-11-29 02:52:11 [INFO] root: [TOV] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:52:26 [INFO] root: [TOV] Validation Accuracy: 60.8%
+2025-11-29 02:52:26 [INFO] root: Saved artifacts for TOV to model_TOV.pkl
+2025-11-29 02:52:26 [INFO] root: --- Training Model: PRA ---
+2025-11-29 02:52:26 [INFO] root: Training PRA...
+2025-11-29 02:52:26 [INFO] root: [PRA] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:52:41 [INFO] root: [PRA] Validation Accuracy: 55.2%
+2025-11-29 02:52:41 [INFO] root: Saved artifacts for PRA to model_PRA.pkl
+2025-11-29 02:52:41 [INFO] root: --- Training Model: PR ---
+2025-11-29 02:52:41 [INFO] root: Training PR...
+2025-11-29 02:52:41 [INFO] root: [PR] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:52:41 [ERROR] root: Preprocessing failed for PR: Cannot use median strategy with non-numeric data:
+could not convert string to float: '2025-26'
+2025-11-29 02:52:41 [INFO] root: --- Training Model: PA ---
+2025-11-29 02:52:41 [INFO] root: Training PA...
+2025-11-29 02:52:41 [INFO] root: [PA] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:52:42 [ERROR] root: Preprocessing failed for PA: Cannot use median strategy with non-numeric data:
+could not convert string to float: '2025-26'
+2025-11-29 02:52:42 [INFO] root: --- Training Model: RA ---
+2025-11-29 02:52:42 [INFO] root: Training RA...
+2025-11-29 02:52:42 [INFO] root: [RA] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:52:42 [ERROR] root: Preprocessing failed for RA: Cannot use median strategy with non-numeric data:
+could not convert string to float: '2025-26'
+2025-11-29 02:52:42 [INFO] root: --- Training Model: STK ---
+2025-11-29 02:52:42 [INFO] root: Training STK...
+2025-11-29 02:52:42 [INFO] root: [STK] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:52:42 [ERROR] root: Preprocessing failed for STK: Cannot use median strategy with non-numeric data:
+could not convert string to float: '2025-26'
+2025-11-29 02:52:42 [INFO] root: --- Training Model: FANTASY_PTS ---
+2025-11-29 02:52:42 [INFO] root: Training FANTASY_PTS...
+2025-11-29 02:52:42 [INFO] root: [FANTASY_PTS] Applying Sample Weights: Current(2025-26)=1.0, Past=0.6
+2025-11-29 02:52:43 [ERROR] root: Preprocessing failed for FANTASY_PTS: Cannot use median strategy with non-numeric data:
+could not convert string to float: '2025-26'
+2025-11-29 02:52:43 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 0

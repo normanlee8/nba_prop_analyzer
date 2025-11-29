@@ -31,22 +31,30 @@ def print_pretty_table(df, title="TOP 20 DISCOVERED EDGES"):
         widths.append(max_len + 2) # Add padding
 
     # Create format string (e.g., "| {:<10} | {:<5} | ...")
-    fmt = "|".join([f" {{:<{w}}} " for w in widths])
-    fmt = "|" + fmt + "|"
+    # Using simple join logic avoids f-string escaping issues
+    fmt_parts = []
+    for w in widths:
+        fmt_parts.append(f"{{:<{w}}}")
+    fmt = "| " + " | ".join(fmt_parts) + " |"
 
     # Create Separator Line
-    header_str = fmt.format(*df.columns)
-    sep_line = "=" * len(header_str)
+    try:
+        header_str = fmt.format(*df.columns)
+        sep_line = "=" * len(header_str)
 
-    print(f"\n{title}")
-    print(sep_line)
-    print(header_str)
-    print(sep_line)
+        print(f"\n{title}")
+        print(sep_line)
+        print(header_str)
+        print(sep_line)
 
-    for _, row in df.iterrows():
-        print(fmt.format(*row.values))
+        for _, row in df.iterrows():
+            print(fmt.format(*row.values))
 
-    print(sep_line + "\n")
+        print(sep_line + "\n")
+    except Exception as e:
+        logging.error(f"Error printing table: {e}")
+        # Fallback to standard pandas print
+        print(df.head(20))
 
 def main():
     common.setup_logging(name="analysis_pregame")
@@ -117,19 +125,22 @@ def main():
     # Rename Columns for Readability
     rename_map = {
         'Player Name': 'Player',
-        'Prop Category': 'Prop', # Used directly now
+        'Prop Category': 'Prop',
         'Prop Line': 'Line',
         'Model_Pred': 'Proj',
         'Model_Conf': 'Prob',
-        'Edge_Type': 'Pick'
+        'Edge_Type': 'Pick',
+        'GAME_DATE': 'Date'  # Clean name for the output table
     }
     
     # Select columns to keep
     keep_cols = [
-        'Player Name', 'Team', 'Opponent', 'Prop Category', 'Prop Line', # Used directly now
+        'Player Name', 'Team', 'Opponent', 'Prop Category', 'Prop Line', 
+        'GAME_DATE',  # <--- Added GAME_DATE here
         'Model_Pred', 'Model_Conf', 'Edge_Type', 'Tier',
         'Last 5', 'Season Avg', 'Diff%'
     ]
+    
     # Filter for existing columns
     existing_cols = [c for c in keep_cols if c in results_df.columns]
     

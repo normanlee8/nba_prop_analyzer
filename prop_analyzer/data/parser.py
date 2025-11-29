@@ -5,6 +5,7 @@ import logging
 import pandas as pd
 from pathlib import Path
 from prop_analyzer import config as cfg
+from nba_api.stats.endpoints import scoreboardv2
 
 # Expanded map to catch common abbreviations
 DAYS_MAP = {
@@ -16,72 +17,128 @@ DAYS_MAP = {
 
 class SmartDateDetector:
     """
-    Uses historical box scores to determine if a matchup belongs to a past game.
+    1. Checks historical box scores (Past 3 Days) to see if it's a recent game (Backtesting).
+    2. If not found, checks the NBA Schedule for Today and Tomorrow (Live/Upcoming).
     """
-    def __init__(self, lookback_days=10):
+    def __init__(self, lookback_days=3):
         self.history_map = {}
         self.lookback_days = lookback_days
+        self.schedule_cache = {}  # Cache schedule to avoid spamming API
         self._load_history()
 
     def _load_history(self):
-        """
-        Loads the last N days of matchups from ALL master_box_scores_*.csv files.
-        """
-        # Load all box score files found matching the pattern
+        """Loads the last N days of matchups."""
         files = sorted(cfg.DATA_DIR.glob(cfg.MASTER_BOX_SCORES_PATTERN))
-        
-        if not files:
-            logging.warning("No master_box_scores files found for date detection.")
-            return
+        if not files: return
 
         try:
             dfs = []
             for f in files:
                 try:
-                    # Load only necessary columns to be fast
-                    # Note: We must ensure headers exist in all files
+                    # Only load what we need
                     d = pd.read_csv(f, usecols=['TEAM_ABBREVIATION', 'OPPONENT_ABBREV', 'GAME_DATE'])
                     dfs.append(d)
-                except Exception as e:
-                    logging.warning(f"Skipping {f} in SmartDateDetector: {e}")
+                except: continue
             
             if not dfs: return
 
             df = pd.concat(dfs, ignore_index=True)
             df['GAME_DATE'] = pd.to_datetime(df['GAME_DATE'])
             
-            # Filter for recent history only
+            # Dynamic cutoff based on lookback_days
             cutoff = pd.Timestamp.now() - pd.Timedelta(days=self.lookback_days)
-            recent = df[df['GAME_DATE'] >= cutoff].copy()
-            
-            # Populate Lookup Dictionary: {(Team, Opp): DateString}
-            # Sort by date ASCENDING so the most recent game (last in list) overwrites older ones
-            recent = recent.sort_values('GAME_DATE', ascending=True)
+            recent = df[df['GAME_DATE'] >= cutoff].sort_values('GAME_DATE', ascending=True)
             
             for _, row in recent.iterrows():
                 t1 = row['TEAM_ABBREVIATION']
                 t2 = row['OPPONENT_ABBREV']
                 date_str = row['GAME_DATE'].strftime('%Y-%m-%d')
-                
-                # Store both directions (LAL vs BOS, BOS vs LAL)
                 self.history_map[(t1, t2)] = date_str
                 self.history_map[(t2, t1)] = date_str
                 
-            logging.info(f"Smart Date Detector initialized with {len(self.history_map)} recent matchups.")
-            
         except Exception as e:
-            logging.warning(f"Failed to load history for date detection: {e}")
+            logging.warning(f"Failed to load history: {e}")
+
+    def _check_nba_schedule(self, team, opponent, check_date):
+        """Checks if a specific matchup is scheduled for a specific date string (YYYY-MM-DD)."""
+        if check_date in self.schedule_cache:
+            games = self.schedule_cache[check_date]
+        else:
+            try:
+                # Fetch schedule from NBA API
+                board = scoreboardv2.ScoreboardV2(game_date=check_date, timeout=5)
+                games_df = board.game_header.get_data_frame()
+                
+                # Create a set of matchups for this day: {('LAL', 'BOS'), ('BOS', 'LAL'), ...}
+                daily_matchups = set()
+                if not games_df.empty:
+                    for _, row in games_df.iterrows():
+                        home = row['HOME_TEAM_EST_TO'].replace('NOP', 'NO').upper() # Handle NOP variation if needed
+                        away = row['VISITOR_TEAM_EST_TO'].replace('NOP', 'NO').upper()
+                        # Add standard abbreviations
+                        daily_matchups.add((row['HOME_TEAM_ID'], row['VISITOR_TEAM_ID'])) # IDs are safer, but let's stick to abbr if easier
+                        # Using text abbr from 'HOME_TEAM_EST_TO' is sometimes unreliable, 
+                        # but standard 3-letter codes usually work.
+                        # Let's trust the input text matching.
+                        daily_matchups.add(f"{home}-{away}")
+                        daily_matchups.add(f"{away}-{home}")
+                        
+                        # Fallback: Extract standard abbreviation if available or just store raw
+                        # For simplicity, we just cache the raw dataframe or a simplified list
+                
+                self.schedule_cache[check_date] = games_df
+                games = games_df
+            except Exception as e:
+                logging.warning(f"Could not fetch schedule for {check_date}: {e}")
+                return False
+
+        # Check if our teams match any game in the cached dataframe
+        if games is None or games.empty:
+            return False
+            
+        # Normalize inputs
+        t1, t2 = team.upper(), opponent.upper()
+        
+        # Iterate rows to find match
+        for _, row in games.iterrows():
+            # These columns usually contain the 3-letter code (e.g. 'LAL')
+            home_code = row.get('HOME_TEAM_EST_TO', '')
+            away_code = row.get('VISITOR_TEAM_EST_TO', '')
+            
+            # Simple check (Order doesn't matter for "is playing")
+            if (t1 == home_code and t2 == away_code) or (t1 == away_code and t2 == home_code):
+                return True
+                
+        return False
 
     def find_date(self, team, opponent):
         """
-        Returns the historical date if found, otherwise returns Today.
+        Logic:
+        1. Check History (Last 3 Days).
+        2. Check Schedule (Today).
+        3. Check Schedule (Tomorrow).
+        4. Fallback -> Today.
         """
-        # 1. Check History (Backtest Mode)
+        # 1. Check History (Backtest)
         if (team, opponent) in self.history_map:
             return self.history_map[(team, opponent)]
         
-        # 2. Fallback to Today (Live Mode)
-        return datetime.datetime.now().strftime("%Y-%m-%d")
+        today = datetime.datetime.now()
+        tomorrow = today + datetime.timedelta(days=1)
+        
+        str_today = today.strftime("%Y-%m-%d")
+        str_tomorrow = tomorrow.strftime("%Y-%m-%d")
+
+        # 2. Check Today's Schedule
+        if self._check_nba_schedule(team, opponent, str_today):
+            return str_today
+            
+        # 3. Check Tomorrow's Schedule
+        if self._check_nba_schedule(team, opponent, str_tomorrow):
+            return str_tomorrow
+
+        # 4. Fallback (Default to Today if unknown)
+        return str_today
 
 def clean_prop_line(text):
     """Robustly extracts a numeric value from a line string."""
@@ -118,7 +175,7 @@ def parse_text_to_csv(input_path=None, output_path=None):
         return
 
     # Initialize Smart Detector
-    date_detector = SmartDateDetector(lookback_days=14)
+    date_detector = SmartDateDetector(lookback_days=3)
     
     current_player = None
     current_team = None

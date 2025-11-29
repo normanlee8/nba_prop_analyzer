@@ -17,3 +17,5 @@
 2025-11-27 15:51:07 [INFO] root: Logging initialized. Writing to logs/converter.log
 2025-11-27 15:51:08 [INFO] root: Smart Date Detector initialized with 591 recent matchups.
 2025-11-27 15:51:08 [INFO] root: Successfully converted props to input/props_today.csv (661 rows)
+2025-11-29 02:45:52 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-11-29 02:45:53 [INFO] root: Successfully converted props to input/props_today.csv (661 rows)
