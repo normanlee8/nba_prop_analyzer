@@ -126,9 +126,13 @@ def grade_predictions():
 
     df_props['join_player'] = df_props[player_col].apply(text.preprocess_name_for_fuzzy_match)
     
+    # --- FIX: Handle Date Column (Date vs GAME_DATE) ---
+    if 'Date' in df_props.columns and 'GAME_DATE' not in df_props.columns:
+        df_props.rename(columns={'Date': 'GAME_DATE'}, inplace=True)
+
     # Ensure GAME_DATE exists
     if 'GAME_DATE' not in df_props.columns:
-        logging.warning("GAME_DATE missing in props file. Cannot match specific games.")
+        logging.warning(f"GAME_DATE missing in props file. Available columns: {list(df_props.columns)}")
         return
 
     df_props['join_date'] = pd.to_datetime(df_props['GAME_DATE']).dt.strftime('%Y-%m-%d')
@@ -140,6 +144,7 @@ def grade_predictions():
     df_box = calculate_derived_stats(df_box)
 
     # 3. Merge
+    # A left merge preserves the order of the left DataFrame (df_props)
     df_merged = pd.merge(
         df_props, 
         df_box, 
@@ -152,16 +157,9 @@ def grade_predictions():
     cols = ['Actual Value', 'Result', 'Correctness']
     df_merged[cols] = df_merged.apply(check_prop_row, axis=1)
     
-    # --- SORTING LOGIC ---
-    tier_order = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
-    
-    if 'Tier' in df_merged.columns:
-        df_merged['sort_idx'] = df_merged['Tier'].map(tier_order).fillna(99)
-        
-        # Sort by correctness to see hits at top? Or Tier?
-        # Let's keep Tier -> Correctness
-        df_merged.sort_values(by=['sort_idx', 'Correctness'], ascending=[True, True], inplace=True)
-        df_merged = df_merged.drop(columns=['sort_idx'])
+    # --- SORTING LOGIC REMOVED ---
+    # The previous sorting block has been deleted to preserve the order 
+    # established by run_analysis.py
 
     # 5. Save Results
     # Overwrite the file with graded columns appended

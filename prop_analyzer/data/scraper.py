@@ -23,6 +23,8 @@ try:
     from nba_api.stats.endpoints.leaguedashteamstats import LeagueDashTeamStats
     from nba_api.stats.endpoints.leaguedashptdefend import LeagueDashPtDefend
     from nba_api.stats.endpoints.leaguedashoppptshot import LeagueDashOppPtShot
+    # --- FIX: Import CommonAllPlayers for dynamic roster fetching ---
+    from nba_api.stats.endpoints.commonallplayers import CommonAllPlayers
 except ImportError as e:
     print("--- FATAL ERROR ---")
     print(f"Failed to import a module from 'nba-api': {e}")
@@ -501,12 +503,30 @@ def scrape_nba_api_stats(season_cfg, output_dir):
     
     try:
         logging.info("Fetching Player Box Scores...")
-        all_players = players.get_players()
         
-        active_players = [p for p in all_players if p['is_active']]
+        # --- FIX START: Fetch dynamic roster instead of static list ---
+        logging.info(f"Fetching live roster for season {target_season}...")
+        
+        # '1' for IsOnlyCurrentSeason ensures we get currently active players on rosters
+        # If looking at past seasons, you might change this logic, but for rookies this is key.
+        roster_api = CommonAllPlayers(
+            is_only_current_season=1, 
+            league_id='00', 
+            season=target_season
+        )
+        roster_df = roster_api.get_data_frames()[0]
+        
+        active_players = []
+        for _, row in roster_df.iterrows():
+            active_players.append({
+                'id': row['PERSON_ID'],
+                'full_name': row['DISPLAY_FIRST_LAST'],
+                'is_active': True 
+            })
+        # --- FIX END ---
+
         total_active = len(active_players)
-        
-        logging.info(f"Found {total_active} active players. Starting sequential scrape...")
+        logging.info(f"Found {total_active} active players (Dynamic Fetch). Starting sequential scrape...")
         
         all_logs = []
 
