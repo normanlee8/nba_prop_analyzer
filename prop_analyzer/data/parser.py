@@ -6,6 +6,7 @@ import pandas as pd
 from pathlib import Path
 from prop_analyzer import config as cfg
 from nba_api.stats.endpoints import scoreboardv2
+from nba_api.stats.static import teams
 
 # Expanded map to catch common abbreviations
 DAYS_MAP = {
@@ -17,14 +18,35 @@ DAYS_MAP = {
 
 class SmartDateDetector:
     """
-    1. Checks historical box scores (Past 3 Days) to see if it's a recent game (Backtesting).
-    2. If not found, checks the NBA Schedule for Today and Tomorrow (Live/Upcoming).
+    1. Checks the NBA Schedule for Today and Tomorrow (Live/Upcoming) using Team IDs.
+    2. If not found, checks historical box scores (Past 3 Days) (Backtesting).
     """
     def __init__(self, lookback_days=3):
         self.history_map = {}
         self.lookback_days = lookback_days
         self.schedule_cache = {}  # Cache schedule to avoid spamming API
+        self.team_id_map = self._build_team_map()
         self._load_history()
+
+    def _build_team_map(self):
+        """Builds a dictionary mapping abbreviations to Team IDs."""
+        try:
+            nba_teams = teams.get_teams()
+            id_map = {t['abbreviation']: t['id'] for t in nba_teams}
+            
+            # Add common variants/legacy codes manually
+            if 'NOP' in id_map: id_map['NO'] = id_map['NOP']
+            if 'UTA' in id_map: id_map['UTAH'] = id_map['UTA']
+            if 'SAS' in id_map: id_map['SA'] = id_map['SAS']
+            if 'GSW' in id_map: id_map['GS'] = id_map['GSW']
+            if 'NYK' in id_map: id_map['NY'] = id_map['NYK']
+            if 'WAS' in id_map: id_map['WSH'] = id_map['WAS']
+            if 'PHX' in id_map: id_map['PHO'] = id_map['PHX']
+            
+            return id_map
+        except Exception as e:
+            logging.error(f"Failed to load team ID map: {e}")
+            return {}
 
     def _load_history(self):
         """Loads the last N days of matchups."""
@@ -60,78 +82,71 @@ class SmartDateDetector:
             logging.warning(f"Failed to load history: {e}")
 
     def _check_nba_schedule(self, team, opponent, check_date):
-        """Checks if a specific matchup is scheduled for a specific date string (YYYY-MM-DD)."""
+        """Checks if a specific matchup is scheduled for a specific date string using IDs."""
         
-        # 1. Check Cache first
+        # 1. Resolve Team IDs from Abbreviations
+        t1_id = self.team_id_map.get(team.upper())
+        t2_id = self.team_id_map.get(opponent.upper())
+
+        # If we can't map the abbreviation, we can't check the schedule reliably
+        if not t1_id or not t2_id:
+            return False
+
+        # 2. Check Cache
         if check_date in self.schedule_cache:
-            games = self.schedule_cache[check_date]
+            games_df = self.schedule_cache[check_date]
         else:
-            # 2. Fetch from API if not cached
+            # 3. Fetch from API if not cached
             try:
-                # Reduced timeout to fail faster if NBA stats is laggy
-                board = scoreboardv2.ScoreboardV2(game_date=check_date, timeout=3)
+                board = scoreboardv2.ScoreboardV2(game_date=check_date, timeout=5)
+                # USE GAME_HEADER: It contains IDs (HOME_TEAM_ID, VISITOR_TEAM_ID) and is most reliable
                 games_df = board.game_header.get_data_frame()
-                
-                # Cache the result (even if empty) to prevent re-fetching
                 self.schedule_cache[check_date] = games_df
-                games = games_df
-                
             except Exception as e:
                 logging.warning(f"Could not fetch schedule for {check_date}: {e}")
-                # CRITICAL FIX: Cache the failure (empty df) so we don't retry 50 times
                 self.schedule_cache[check_date] = pd.DataFrame()
                 return False
 
-        # 3. Check if our teams match any game in the cached dataframe
-        if games is None or games.empty:
+        if games_df is None or games_df.empty:
             return False
             
-        # Normalize inputs
-        t1, t2 = team.upper(), opponent.upper()
-        
-        # Iterate rows to find match
-        for _, row in games.iterrows():
-            # CRITICAL FIX: Use .get() to avoid KeyError if API format changes
-            home_code_raw = row.get('HOME_TEAM_EST_TO', '')
-            away_code_raw = row.get('VISITOR_TEAM_EST_TO', '')
-            
-            if not isinstance(home_code_raw, str) or not isinstance(away_code_raw, str):
-                continue
-
-            home_code = home_code_raw.replace('NOP', 'NO').upper()
-            away_code = away_code_raw.replace('NOP', 'NO').upper()
-            
-            # Simple check (Order doesn't matter for "is playing")
-            if (t1 == home_code and t2 == away_code) or (t1 == away_code and t2 == home_code):
-                return True
-                
-        return False
+        # 4. Check for Matchup in Data Frame using IDs
+        # We look for a row where HOME=t1 AND VISITOR=t2 OR HOME=t2 AND VISITOR=t1
+        try:
+            match = games_df[
+                ((games_df['HOME_TEAM_ID'] == t1_id) & (games_df['VISITOR_TEAM_ID'] == t2_id)) |
+                ((games_df['HOME_TEAM_ID'] == t2_id) & (games_df['VISITOR_TEAM_ID'] == t1_id))
+            ]
+            return not match.empty
+        except KeyError:
+            # Fallback if columns are missing (unlikely for GameHeader)
+            return False
 
     def find_date(self, team, opponent):
         """
-        Logic:
-        1. Check History (Last 3 Days).
-        2. Check Schedule (Today).
-        3. Check Schedule (Tomorrow).
+        Logic (Updated):
+        1. Check Schedule (Today) - Priority.
+        2. Check Schedule (Tomorrow).
+        3. Check History (Last 3 Days).
         4. Fallback -> Today.
         """
-        # 1. Check History (Backtest)
-        if (team, opponent) in self.history_map:
-            return self.history_map[(team, opponent)]
-        
         today = datetime.datetime.now()
         tomorrow = today + datetime.timedelta(days=1)
         
         str_today = today.strftime("%Y-%m-%d")
         str_tomorrow = tomorrow.strftime("%Y-%m-%d")
 
-        # 2. Check Today's Schedule
+        # 1. Check Today's Schedule (PRIORITY)
         if self._check_nba_schedule(team, opponent, str_today):
             return str_today
             
-        # 3. Check Tomorrow's Schedule
+        # 2. Check Tomorrow's Schedule
         if self._check_nba_schedule(team, opponent, str_tomorrow):
             return str_tomorrow
+
+        # 3. Check History (Backtest)
+        if (team, opponent) in self.history_map:
+            return self.history_map[(team, opponent)]
 
         # 4. Fallback (Default to Today if unknown)
         return str_today
@@ -152,12 +167,11 @@ def parse_matchup(matchup_line):
     """Extracts Team abbreviations from a matchup line."""
     # Normalize inputs to @ for detection, but output as vs.
     line = matchup_line.replace(' vs ', ' @ ').replace(' vs. ', ' @ ').replace('-', ' @ ')
-    match = re.search(r'\b([A-Z]{3})\s*@\s*([A-Z]{3})\b', line)
+    match = re.search(r'\b([A-Z]{2,3})\s*@\s*([A-Z]{2,3})\b', line) # Updated regex for 2-3 chars
     
     if match:
         team1 = match.group(1)
         team2 = match.group(2)
-        # Output as "vs." instead of "@"
         full_matchup_string = f"{team1} vs. {team2}"
         return team1, team2, full_matchup_string
     return None, None, None
@@ -190,18 +204,14 @@ def parse_text_to_csv(input_path=None, output_path=None):
             if not line: continue
 
             # 1. Check for Time/Matchup Line (Context Switch)
-            # Regex looks for "LAL @ BOS" or times
-            # We prioritize finding the teams
             t1, t2, full_matchup = parse_matchup(line)
             
-            # If we found a valid matchup line (e.g. "7:00 PM LAL @ BOS")
             if full_matchup:
                 current_matchup = full_matchup
                 current_team = t1
                 current_opponent = t2
                 
                 # --- SMART DATE LOOKUP ---
-                # Check if this exact matchup happened recently
                 current_game_date = date_detector.find_date(t1, t2)
                 continue 
 
@@ -216,7 +226,6 @@ def parse_text_to_csv(input_path=None, output_path=None):
                 prop_category_str = line
                 prop_category_std = cfg.MASTER_PROP_MAP.get(prop_category_str, None)
                 
-                # Auto-fix common variations
                 if not prop_category_std:
                     for k, v in cfg.MASTER_PROP_MAP.items():
                         if k.lower() == prop_category_str.lower():
