@@ -119,3 +119,21 @@
 2025-12-02 14:21:06 [INFO] root: Accuracy on 86 S-Tier Props: 48.84% (42/86)
 2025-12-02 14:21:06 [INFO] root: Accuracy on 59 A-Tier Props: 47.46% (28/59)
 2025-12-02 14:21:06 [INFO] root: ----------------------------------------
+2025-12-02 23:23:18 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-02 23:23:18 [INFO] root: --- Grading Predictions vs Actuals ---
+2025-12-02 23:23:18 [INFO] root: Graded results saved to output/processed_props.csv
+2025-12-02 23:23:18 [INFO] root: ----------------------------------------
+2025-12-02 23:23:18 [INFO] root: PERFORMANCE SUMMARY
+2025-12-02 23:23:18 [INFO] root: Accuracy on 483 Total Graded Props: 52.80% (255/483)
+2025-12-02 23:23:18 [INFO] root: Accuracy on 61 S-Tier Props: 40.98% (25/61)
+2025-12-02 23:23:18 [INFO] root: Accuracy on 38 A-Tier Props: 34.21% (13/38)
+2025-12-02 23:23:18 [INFO] root: ----------------------------------------
+2025-12-03 20:15:41 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-03 20:15:41 [INFO] root: --- Grading Predictions vs Actuals ---
+2025-12-03 20:15:41 [INFO] root: Graded results saved to output/processed_props.csv
+2025-12-03 20:15:41 [INFO] root: ----------------------------------------
+2025-12-03 20:15:41 [INFO] root: PERFORMANCE SUMMARY
+2025-12-03 20:15:41 [INFO] root: Accuracy on 403 Total Graded Props: 56.33% (227/403)
+2025-12-03 20:15:41 [INFO] root: Accuracy on 75 S-Tier Props: 74.67% (56/75)
+2025-12-03 20:15:41 [INFO] root: Accuracy on 36 A-Tier Props: 47.22% (17/36)
+2025-12-03 20:15:41 [INFO] root: ----------------------------------------
