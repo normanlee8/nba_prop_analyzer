@@ -6,252 +6,69 @@ Rankings
 News feed
 $0.00
 
-Pre-game
+Pre-game & In-game
 
 Get up to $1,000 in bonus!
 
 Claim Your 50% Deposit Match • Deposit
-Pre-game NBA
-Kawhi Leonard
+All NBA
+Anfernee Simons
 
-LAC @ ATL - 4:30PM PST
-24.5
-Points
-32.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-3.5
-Assists
-2.5
-3-Pointers Made
-8.5
-Rebounds + Assists
-29.5
-Points + Rebounds
-27.5
-Points + Assists
-0.5
-Double Doubles
-4.5
-1Q Points
-1.5
-1Q Rebounds
-0.5
-1Q 3-Pointers Made
-6.5
-1Q Pts + Rebs + Asts
-38.95
-Fantasy Points
-2.5
-Turnovers
-1.5
-Steals
+BOS @ MIL - Thu 5:00PM PST
 11.5
-1H Points
-1.5
-1H 3-Pointers Made
-16.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-4.5
-Pts+Reb+Ast in First 5 Min.
-3.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-0.5
-Offensive Rebounds
-18.5
-FG Attempted
-5.5
-3s Attempted
-Ivica Zubac
-
-LAC @ ATL - 4:30PM PST
+Points
 17.5
-Points
-32.5
 Pts + Rebs + Asts
+2.5
+Rebounds
+2.5
+Assists
+2.5
+3-Pointers Made
+Derrick White
+
+BOS @ MIL - Thu 5:00PM PST
+18.5
+Points
+29.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+5.5
+Assists
+3.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+1.5
+1Q Rebounds
+Myles Turner
+
+MIL vs BOS - Thu 5:00PM PST
 12.5
-Rebounds
-2.5
-Assists
-15.5
-Rebounds + Assists
-29.5
-Points + Rebounds
-19.5
-Points + Assists
-0.5
-Double Doubles
-4.5
-1Q Points
-3.5
-1Q Rebounds
-7.5
-1Q Pts + Rebs + Asts
-39.05
-Fantasy Points
-5.5
-1H Rebounds
-16.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-4.5
-Pts+Reb+Ast in First 5 Min.
-2.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-3.5
-Offensive Rebounds
-John Collins
-
-LAC @ ATL - 4:30PM PST
-13.5
 Points
-21.5
+18.5
 Pts + Rebs + Asts
-6.5
-Rebounds
-0.5
-3-Pointers Made
-7.5
-Rebounds + Assists
-0.5
-Double Doubles
-3.5
-1Q Points
-1.5
-1Q Rebounds
-0.5
-3+ Points Scored Each Quarter
-1.5
-Offensive Rebounds
-Nicolas Batum
-
-LAC @ ATL - 4:30PM PST
 4.5
-Points
-2.5
 Rebounds
 1.5
-3-Pointers Made
-4.5
-3s Attempted
-Onyeka Okongwu
-
-ATL vs LAC - 4:30PM PST
-20.5
-Points
-33.5
-Pts + Rebs + Asts
-9.5
-Rebounds
-3.5
 Assists
 2.5
 3-Pointers Made
-13.5
-Rebounds + Assists
-30.5
-Points + Rebounds
-24.5
-Points + Assists
 0.5
 Double Doubles
-5.5
-1Q Points
-2.5
+1.5
 1Q Rebounds
-0.5
-1Q 3-Pointers Made
-8.5
-1Q Pts + Rebs + Asts
-41.45
-Fantasy Points
-2.5
-Turnovers
-1.5
-Steals
-2.5
-Blocks + Steals
-4.5
-FT Made
-10.5
-1H Points
-1.5
-1H 3-Pointers Made
-4.5
-1H Rebounds
-16.5
-1H Pts + Rebs + Asts
-3.5
-Pts+Reb+Ast in First 5 Min.
-2.5
-Points in First 5 Min.
-2.5
-Offensive Rebounds
-16.5
-FG Attempted
-6.5
-3s Attempted
-Dyson Daniels
+Bobby Portis
 
-ATL vs LAC - 4:30PM PST
-13.5
+MIL vs BOS - Thu 5:00PM PST
+12.5
 Points
-29.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-8.5
-Assists
-0.5
-3-Pointers Made
-14.5
-Rebounds + Assists
-20.5
-Points + Rebounds
 22.5
-Points + Assists
-0.5
-Double Doubles
-0.5
-Triple Doubles
-3.5
-1Q Points
-1.5
-1Q Rebounds
-2.5
-1Q Assists
-7.5
-1Q Pts + Rebs + Asts
-39.35
-Fantasy Points
-2.5
-Turnovers
-2.5
-Steals
-2.5
-Blocks + Steals
-4.5
-1H Assists
-2.5
-Offensive Rebounds
-Mouhamed Gueye
-
-ATL vs LAC - 4:30PM PST
-9.5
-Points
-19.5
 Pts + Rebs + Asts
 7.5
 Rebounds
@@ -265,1906 +82,604 @@ Rebounds + Assists
 Double Doubles
 1.5
 1Q Rebounds
-1.5
-Steals
-1.5
-Blocks
-2.5
-Blocks + Steals
-2.5
-Offensive Rebounds
-James Harden
+Payton Pritchard
 
-LAC @ ATL - 4:30PM PST
+BOS @ MIL - Thu 5:00PM PST
+16.5
+Points
 25.5
-Points
-39.5
 Pts + Rebs + Asts
-5.5
+4.5
 Rebounds
-9.5
+4.5
 Assists
 3.5
 3-Pointers Made
-14.5
+8.5
 Rebounds + Assists
+0.5
+Double Doubles
+3.5
+1Q Points
+Josh Minott
+
+BOS @ MIL - Thu 5:00PM PST
+5.5
+Points
+11.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+0.5
+3-Pointers Made
+Jordan Walsh
+
+BOS @ MIL - Thu 5:00PM PST
+7.5
+Points
+14.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+1.5
+Assists
+0.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+Sam Hauser
+
+BOS @ MIL - Thu 5:00PM PST
+7.5
+Points
+12.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+1.5
+Assists
+2.5
+3-Pointers Made
+Jaylen Brown
+
+BOS @ MIL - Thu 5:00PM PST
 30.5
-Points + Rebounds
-34.5
-Points + Assists
-0.5
-Double Doubles
-0.5
-Triple Doubles
-7.5
-1Q Points
-1.5
-1Q Rebounds
-2.5
-1Q Assists
-0.5
-1Q 3-Pointers Made
-13.5
-1Q Pts + Rebs + Asts
-47.35
-Fantasy Points
-4.5
-Turnovers
-8.5
-FT Made
-12.5
-1H Points
-1.5
-1H 3-Pointers Made
-4.5
-1H Assists
-20.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-4.5
-Pts+Reb+Ast in First 5 Min.
-3.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-0.5
-Offensive Rebounds
-10.5
-3s Attempted
-18.5
-FG Attempted
-Zaccharie Risacher
-
-ATL vs LAC - 4:30PM PST
-13.5
-Points
-19.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-3.5
-1Q Points
-5.5
-3s Attempted
-Luke Kennard
-
-ATL vs LAC - 4:30PM PST
-8.5
-Points
-13.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
-Assists
-1.5
-3-Pointers Made
-4.5
-3s Attempted
-Nickeil Alexander-Walker
-
-ATL vs LAC - 4:30PM PST
-22.5
-Points
-31.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-4.5
-Assists
-2.5
-3-Pointers Made
-8.5
-Rebounds + Assists
-26.5
-Points + Rebounds
-26.5
-Points + Assists
-5.5
-1Q Points
-0.5
-1Q 3-Pointers Made
-7.5
-1Q Pts + Rebs + Asts
-34.55
-Fantasy Points
-2.5
-Turnovers
-3.5
-FT Made
-11.5
-1H Points
-1.5
-1H 3-Pointers Made
-15.5
-1H Pts + Rebs + Asts
-3.5
-Pts+Reb+Ast in First 5 Min.
-2.5
-Points in First 5 Min.
-9.5
-3s Attempted
-17.5
-FG Attempted
-Kris Dunn
-
-LAC @ ATL - 4:30PM PST
-8.5
-Points
-14.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-3.5
-Assists
-0.5
-3-Pointers Made
-1.5
-Steals
-Kobe Brown
-
-LAC @ ATL - 4:30PM PST
-3.5
-Points
-3.5
-Rebounds
-1.5
-Assists
-0.5
-3-Pointers Made
-Vit Krejci
-
-ATL vs LAC - 4:30PM PST
-9.5
-Points
-15.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
-Assists
-2.5
-3-Pointers Made
-0.5
-1Q 3-Pointers Made
-1.5
-1H 3-Pointers Made
-5.5
-3s Attempted
-Karl-Anthony Towns
-
-NYK vs CHA - 4:30PM PST
-24.5
-Points
-39.5
-Pts + Rebs + Asts
-12.5
-Rebounds
-2.5
-Assists
-1.5
-3-Pointers Made
-15.5
-Rebounds + Assists
-36.5
-Points + Rebounds
-27.5
-Points + Assists
-0.5
-Double Doubles
-4.5
-1Q Points
-2.5
-1Q Rebounds
-9.5
-1Q Pts + Rebs + Asts
-44.75
-Fantasy Points
-2.5
-Turnovers
-6.5
-FT Made
-12.5
-1H Points
-5.5
-1H Rebounds
-19.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-4.5
-Pts+Reb+Ast in First 5 Min.
-2.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-3.5
-Offensive Rebounds
-4.5
-3s Attempted
-15.5
-FG Attempted
-LaMelo Ball
-
-CHA @ NYK - 4:30PM PST
-19.5
-Points
-33.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-7.5
-Assists
-2.5
-3-Pointers Made
-12.5
-Rebounds + Assists
-24.5
-Points + Rebounds
-27.5
-Points + Assists
-0.5
-Double Doubles
-0.5
-Triple Doubles
-4.5
-1Q Points
-0.5
-1Q 3-Pointers Made
-8.5
-1Q Pts + Rebs + Asts
-39.25
-Fantasy Points
-3.5
-Turnovers
-4.5
-FT Made
-10.5
-1H Points
-1.5
-1H 3-Pointers Made
-4.5
-1H Assists
-16.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-5.5
-Pts+Reb+Ast in First 5 Min.
-2.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-16.5
-FG Attempted
-7.5
-3s Attempted
-Miles Bridges
-
-CHA @ NYK - 4:30PM PST
-21.5
-Points
-30.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-3.5
-Assists
-2.5
-3-Pointers Made
-9.5
-Rebounds + Assists
-27.5
-Points + Rebounds
-24.5
-Points + Assists
-0.5
-Double Doubles
-4.5
-1Q Points
-1.5
-1Q Rebounds
-0.5
-1Q 3-Pointers Made
-7.5
-1Q Pts + Rebs + Asts
-34.65
-Fantasy Points
-2.5
-Turnovers
-5.5
-FT Made
-10.5
-1H Points
-1.5
-1H 3-Pointers Made
-15.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-4.5
-Pts+Reb+Ast in First 5 Min.
-2.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-0.5
-Offensive Rebounds
-7.5
-3s Attempted
-17.5
-FG Attempted
-Mikal Bridges
-
-NYK vs CHA - 4:30PM PST
-15.5
-Points
-24.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-3.5
-Assists
-1.5
-3-Pointers Made
-7.5
-Rebounds + Assists
-19.5
-Points + Rebounds
-19.5
-Points + Assists
-3.5
-1Q Points
-2.5
-Steals
-1.5
-Blocks
-3.5
-Blocks + Steals
-0.5
-3+ Points Scored Each Quarter
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-5.5
-3s Attempted
-Deuce McBride
-
-NYK vs CHA - 4:30PM PST
-11.5
-Points
-17.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
-Assists
-2.5
-3-Pointers Made
-0.5
-1Q 3-Pointers Made
-1.5
-1H 3-Pointers Made
-0.5
-3+ Points Scored Each Quarter
-5.5
-3s Attempted
-Tyler Kolek
-
-NYK vs CHA - 4:30PM PST
-5.5
-Points
-9.5
-Pts + Rebs + Asts
-1.5
-Rebounds
-2.5
-Assists
-0.5
-3-Pointers Made
-Liam McNeeley
-
-CHA @ NYK - 4:30PM PST
-5.5
-Points
-2.5
-Rebounds
-1.5
-Assists
-0.5
-3-Pointers Made
-Ryan Kalkbrenner
-
-CHA @ NYK - 4:30PM PST
-6.5
-Points
-13.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-7.5
-Rebounds + Assists
-0.5
-Double Doubles
-1.5
-1Q Rebounds
-1.5
-Blocks
-Jalen Brunson
-
-NYK vs CHA - 4:30PM PST
-29.5
-Points
-39.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-6.5
-Assists
-2.5
-3-Pointers Made
-9.5
-Rebounds + Assists
-32.5
-Points + Rebounds
-36.5
-Points + Assists
-0.5
-Double Doubles
-8.5
-1Q Points
-2.5
-1Q Assists
-0.5
-1Q 3-Pointers Made
-13.5
-1Q Pts + Rebs + Asts
-43.05
-Fantasy Points
-2.5
-Turnovers
-6.5
-FT Made
-14.5
-1H Points
-1.5
-1H 3-Pointers Made
-19.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-4.5
-Pts+Reb+Ast in First 5 Min.
-3.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-20.5
-FG Attempted
-6.5
-3s Attempted
-Jordan Clarkson
-
-NYK vs CHA - 4:30PM PST
-11.5
-Points
-14.5
-Pts + Rebs + Asts
-1.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-0.5
-3+ Points Scored Each Quarter
-Josh Hart
-
-NYK vs CHA - 4:30PM PST
-13.5
-Points
-29.5
-Pts + Rebs + Asts
-9.5
-Rebounds
-5.5
-Assists
-1.5
-3-Pointers Made
-14.5
-Rebounds + Assists
-23.5
-Points + Rebounds
-20.5
-Points + Assists
-0.5
-Double Doubles
-0.5
-Triple Doubles
-3.5
-1Q Points
-2.5
-1Q Rebounds
-7.5
-1Q Pts + Rebs + Asts
-38.45
-Fantasy Points
-1.5
-Steals
-2.5
-Blocks + Steals
-4.5
-1H Rebounds
-0.5
-3+ Points Scored Each Quarter
-2.5
-Offensive Rebounds
-Collin Sexton
-
-CHA @ NYK - 4:30PM PST
-14.5
-Points
-20.5
-Pts + Rebs + Asts
-1.5
-Rebounds
-3.5
-Assists
-1.5
-3-Pointers Made
-18.5
-Points + Assists
-3.5
-1Q Points
-0.5
-3+ Points Scored Each Quarter
-0.5
-Team High Scorer
-Kon Knueppel
-
-CHA @ NYK - 4:30PM PST
-18.5
-Points
-26.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-3.5
-Assists
-3.5
-3-Pointers Made
-8.5
-Rebounds + Assists
-23.5
-Points + Rebounds
-21.5
-Points + Assists
-0.5
-Double Doubles
-4.5
-1Q Points
-1.5
-1Q Rebounds
-0.5
-1Q 3-Pointers Made
-6.5
-1Q Pts + Rebs + Asts
-30.55
-Fantasy Points
-2.5
-Turnovers
-1.5
-1H 3-Pointers Made
-0.5
-3+ Points Scored Each Quarter
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-9.5
-3s Attempted
-14.5
-FG Attempted
-Moussa Diabate
-
-CHA @ NYK - 4:30PM PST
-8.5
-Points
-17.5
-Pts + Rebs + Asts
-8.5
-Rebounds
-0.5
-Double Doubles
-2.5
-1Q Rebounds
-Sion James
-
-CHA @ NYK - 4:30PM PST
-6.5
-Points
-11.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-Giannis Antetokounmpo
-
-MIL vs DET - 5:00PM PST
-30.5
-Points
-46.5
-Pts + Rebs + Asts
-10.5
-Rebounds
-6.5
-Assists
-0.5
-3-Pointers Made
-17.5
-Rebounds + Assists
-41.5
-Points + Rebounds
-36.5
-Points + Assists
-0.5
-Double Doubles
-0.5
-Triple Doubles
-6.5
-1Q Points
-2.5
-1Q Rebounds
-11.5
-1Q Pts + Rebs + Asts
-56.75
-Fantasy Points
-3.5
-Turnovers
-1.5
-Blocks
-2.5
-Blocks + Steals
-6.5
-FT Made
-15.5
-1H Points
-5.5
-1H Rebounds
-24.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-6.5
-Pts+Reb+Ast in First 5 Min.
-4.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-3.5
-Offensive Rebounds
-18.5
-FG Attempted
-Kyle Kuzma
-
-MIL vs DET - 5:00PM PST
-10.5
-Points
-16.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-2.5
-Assists
-0.5
-3-Pointers Made
-0.5
-3+ Points Scored Each Quarter
-Jaden Ivey
-
-DET @ MIL - 5:00PM PST
-8.5
-Points
-12.5
-Pts + Rebs + Asts
-1.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-Ausar Thompson
-
-DET @ MIL - 5:00PM PST
-10.5
-Points
-19.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-2.5
-Assists
-0.5
-3-Pointers Made
-8.5
-Rebounds + Assists
-0.5
-Double Doubles
-1.5
-1Q Rebounds
-1.5
-Steals
-2.5
-Blocks + Steals
-1.5
-Offensive Rebounds
-Gary Trent Jr.
-
-MIL vs DET - 5:00PM PST
-8.5
-Points
-11.5
-Pts + Rebs + Asts
-1.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-4.5
-3s Attempted
-Caris LeVert
-
-DET @ MIL - 5:00PM PST
-9.5
-Points
-14.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
-Assists
-1.5
-3-Pointers Made
-AJ Green
-
-MIL vs DET - 5:00PM PST
-8.5
-Points
-13.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
-Assists
-2.5
-3-Pointers Made
-0.5
-1Q 3-Pointers Made
-1.5
-1H 3-Pointers Made
-6.5
-3s Attempted
-Ryan Rollins
-
-MIL vs DET - 5:00PM PST
-13.5
-Points
-22.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-4.5
-Assists
-1.5
-3-Pointers Made
-7.5
-Rebounds + Assists
-17.5
-Points + Rebounds
-18.5
-Points + Assists
-0.5
-Double Doubles
-4.5
-1Q Points
-0.5
-1Q 3-Pointers Made
-2.5
-Turnovers
-1.5
-Steals
-1.5
-1H 3-Pointers Made
-0.5
-3+ Points Scored Each Quarter
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-4.5
-3s Attempted
-Cade Cunningham
-
-DET @ MIL - 5:00PM PST
-27.5
 Points
 42.5
 Pts + Rebs + Asts
-5.5
+7.5
 Rebounds
-8.5
+5.5
 Assists
 1.5
 3-Pointers Made
-14.5
-Rebounds + Assists
-33.5
-Points + Rebounds
-35.5
-Points + Assists
-0.5
-Double Doubles
-0.5
-Triple Doubles
-5.5
-1Q Points
-1.5
-1Q Rebounds
-8.5
-1Q Pts + Rebs + Asts
-47.75
-Fantasy Points
-4.5
-Turnovers
-1.5
-Steals
-5.5
-FT Made
-13.5
-1H Points
-20.5
-1H Pts + Rebs + Asts
-5.5
-Pts+Reb+Ast in First 5 Min.
-3.5
-Points in First 5 Min.
-1.5
-Offensive Rebounds
-20.5
-FG Attempted
-6.5
-3s Attempted
-Myles Turner
-
-MIL vs DET - 5:00PM PST
-12.5
-Points
-20.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-1.5
-Assists
-2.5
-3-Pointers Made
-0.5
-Double Doubles
-3.5
-1Q Points
-1.5
-1Q Rebounds
-0.5
-1Q 3-Pointers Made
-1.5
-Blocks
-2.5
-Blocks + Steals
-1.5
-1H 3-Pointers Made
-0.5
-3+ Points Scored Each Quarter
-1.5
-Offensive Rebounds
-5.5
-3s Attempted
-Tobias Harris
-
-DET @ MIL - 5:00PM PST
-12.5
-Points
-20.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-2.5
-Assists
-1.5
-3-Pointers Made
-0.5
-Double Doubles
-1.5
-1Q Rebounds
-4.5
-3s Attempted
-Jalen Duren
-
-DET @ MIL - 5:00PM PST
-17.5
-Points
-31.5
-Pts + Rebs + Asts
-11.5
-Rebounds
-2.5
-Assists
 12.5
 Rebounds + Assists
-29.5
-Points + Rebounds
-19.5
-Points + Assists
 0.5
 Double Doubles
-5.5
+8.5
 1Q Points
 2.5
 1Q Rebounds
-7.5
-1Q Pts + Rebs + Asts
-36.65
-Fantasy Points
-5.5
-FT Made
-5.5
-1H Rebounds
-15.5
-1H Pts + Rebs + Asts
+Kyle Kuzma
+
+MIL vs BOS - Thu 5:00PM PST
+12.5
+Points
+20.5
+Pts + Rebs + Asts
 4.5
-Pts+Reb+Ast in First 5 Min.
+Rebounds
 2.5
-Points in First 5 Min.
-3.5
-Offensive Rebounds
-Bobby Portis
-
-MIL vs DET - 5:00PM PST
-8.5
-Points
-14.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-1.5
-3-Pointers Made
+Assists
 0.5
-Double Doubles
-Isaiah Stewart
-
-DET @ MIL - 5:00PM PST
+3-Pointers Made
 7.5
-Points
-14.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-0.5
-3-Pointers Made
+Rebounds + Assists
 0.5
 Double Doubles
+3.5
+1Q Points
 1.5
 1Q Rebounds
-1.5
-Blocks
-1.5
-Offensive Rebounds
-Daniss Jenkins
+Gary Trent Jr.
 
-DET @ MIL - 5:00PM PST
+MIL vs BOS - Thu 5:00PM PST
 9.5
 Points
-17.5
+13.5
+Pts + Rebs + Asts
+1.5
+Rebounds
+1.5
+Assists
+2.5
+3-Pointers Made
+Gary Harris
+
+MIL vs BOS - Thu 5:00PM PST
+3.5
+Points
+1.5
+Rebounds
+1.5
+Assists
+0.5
+3-Pointers Made
+AJ Green
+
+MIL vs BOS - Thu 5:00PM PST
+11.5
+Points
+16.5
 Pts + Rebs + Asts
 2.5
 Rebounds
-4.5
+2.5
 Assists
-1.5
+3.5
 3-Pointers Made
-7.5
+3.5
+1Q Points
+Ryan Rollins
+
+MIL vs BOS - Thu 5:00PM PST
+18.5
+Points
+30.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+6.5
+Assists
+2.5
+3-Pointers Made
+11.5
 Rebounds + Assists
 0.5
 Double Doubles
+4.5
+1Q Points
+1.5
+1Q Rebounds
 Kevin Porter Jr.
 
-MIL vs DET - 5:00PM PST
-14.5
-Points
-23.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-4.5
-Assists
-1.5
-3-Pointers Made
-8.5
-Rebounds + Assists
-18.5
-Points + Rebounds
-19.5
-Points + Assists
-0.5
-Double Doubles
-3.5
-1Q Points
-2.5
-Turnovers
-1.5
-Steals
-0.5
-3+ Points Scored Each Quarter
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-4.5
-3s Attempted
-Kevin Durant
-
-HOU vs SAC - 5:00PM PST
-25.5
-Points
-34.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-3.5
-Assists
-2.5
-3-Pointers Made
-9.5
-Rebounds + Assists
-30.5
-Points + Rebounds
-29.5
-Points + Assists
-0.5
-Double Doubles
-6.5
-1Q Points
-1.5
-1Q Rebounds
-0.5
-1Q 3-Pointers Made
-10.5
-1Q Pts + Rebs + Asts
-39.75
-Fantasy Points
-2.5
-Turnovers
-5.5
-FT Made
-13.5
-1H Points
-1.5
-1H 3-Pointers Made
-19.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-4.5
-Pts+Reb+Ast in First 5 Min.
-2.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-0.5
-Offensive Rebounds
-17.5
-FG Attempted
-5.5
-3s Attempted
-Zach LaVine
-
-SAC @ HOU - 5:00PM PST
-2.5
-3-Pointers Made
-2.5
-Turnovers
-14.5
-FG Attempted
-6.5
-3s Attempted
-Keegan Murray
-
-SAC @ HOU - 5:00PM PST
-2.5
-3-Pointers Made
-22.5
-Points + Rebounds
-0.5
-Double Doubles
-1.5
-1Q Rebounds
-1.5
-Steals
-2.5
-Blocks + Steals
-6.5
-3s Attempted
-Russell Westbrook
-
-SAC @ HOU - 5:00PM PST
-0.5
-Double Doubles
-0.5
-Triple Doubles
-1.5
-1Q Rebounds
-3.5
-Turnovers
-1.5
-Steals
-4.5
-3s Attempted
-Malik Monk
-
-SAC @ HOU - 5:00PM PST
-12.5
-Points
-18.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-3.5
-Assists
-1.5
-3-Pointers Made
-4.5
-3s Attempted
-Steven Adams
-
-HOU vs SAC - 5:00PM PST
-6.5
-Points
-14.5
-Pts + Rebs + Asts
-8.5
-Rebounds
-9.5
-Rebounds + Assists
-0.5
-Double Doubles
-1.5
-1Q Rebounds
-4.5
-1H Rebounds
-4.5
-Offensive Rebounds
-Precious Achiuwa
-
-SAC @ HOU - 5:00PM PST
-6.5
-Points
-1.5
-Assists
-0.5
-3-Pointers Made
-0.5
-Double Doubles
-1.5
-1Q Rebounds
-Alperen Sengun
-
-HOU vs SAC - 5:00PM PST
-22.5
-Points
-38.5
-Pts + Rebs + Asts
-9.5
-Rebounds
-6.5
-Assists
-0.5
-3-Pointers Made
-15.5
-Rebounds + Assists
-32.5
-Points + Rebounds
-29.5
-Points + Assists
-0.5
-Double Doubles
-0.5
-Triple Doubles
-5.5
-1Q Points
-2.5
-1Q Rebounds
-10.5
-1Q Pts + Rebs + Asts
-46.05
-Fantasy Points
-2.5
-Turnovers
-5.5
-FT Made
-12.5
-1H Points
-5.5
-1H Rebounds
-20.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-4.5
-Pts+Reb+Ast in First 5 Min.
-2.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-2.5
-Offensive Rebounds
-15.5
-FG Attempted
-DeMar DeRozan
-
-SAC @ HOU - 5:00PM PST
-2.5
-Rebounds
-3.5
-Assists
-0.5
-3-Pointers Made
-3.5
-1Q Points
-Jabari Smith Jr.
-
-HOU vs SAC - 5:00PM PST
-14.5
-Points
-22.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-1.5
-Assists
-2.5
-3-Pointers Made
-0.5
-Double Doubles
-3.5
-1Q Points
-1.5
-1Q Rebounds
-0.5
-1Q 3-Pointers Made
-1.5
-1H 3-Pointers Made
-0.5
-3+ Points Scored Each Quarter
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-1.5
-Offensive Rebounds
-5.5
-3s Attempted
-Reed Sheppard
-
-HOU vs SAC - 5:00PM PST
-13.5
-Points
-19.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-3.5
-Assists
-2.5
-3-Pointers Made
-1.5
-Steals
-2.5
-Blocks + Steals
-6.5
-3s Attempted
-Amen Thompson
-
-HOU vs SAC - 5:00PM PST
-17.5
-Points
-29.5
-Pts + Rebs + Asts
-7.5
-Rebounds
-5.5
-Assists
-0.5
-3-Pointers Made
-12.5
-Rebounds + Assists
-24.5
-Points + Rebounds
-22.5
-Points + Assists
-0.5
-Double Doubles
-4.5
-1Q Points
-1.5
-1Q Rebounds
-7.5
-1Q Pts + Rebs + Asts
-38.05
-Fantasy Points
-1.5
-Steals
-2.5
-FT Made
-0.5
-3+ Points Scored Each Quarter
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-2.5
-Offensive Rebounds
-Aaron Holiday
-
-HOU vs SAC - 5:00PM PST
-9.5
-Points
-13.5
-Pts + Rebs + Asts
-1.5
-Rebounds
-2.5
-Assists
-2.5
-3-Pointers Made
-0.5
-1Q 3-Pointers Made
-1.5
-1H 3-Pointers Made
-5.5
-3s Attempted
-Josh Okogie
-
-HOU vs SAC - 5:00PM PST
-7.5
-Points
-11.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-1.5
-Assists
-0.5
-3-Pointers Made
-1.5
-Steals
-Nic Claxton
-
-BKN @ CHI - 5:00PM PST
-14.5
-Points
-27.5
-Pts + Rebs + Asts
-8.5
-Rebounds
-3.5
-Assists
-12.5
-Rebounds + Assists
-22.5
-Points + Rebounds
-0.5
-Double Doubles
-3.5
-1Q Points
-2.5
-1Q Rebounds
-6.5
-1Q Pts + Rebs + Asts
-36.35
-Fantasy Points
-1.5
-Blocks
-2.5
-Blocks + Steals
-4.5
-FT Made
-4.5
-1H Rebounds
-0.5
-3+ Points Scored Each Quarter
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-3.5
-Offensive Rebounds
-Josh Giddey
-
-CHI vs BKN - 5:00PM PST
+MIL vs BOS - Thu 5:00PM PST
 21.5
 Points
-40.5
+33.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+5.5
+Assists
+2.5
+3-Pointers Made
+11.5
+Rebounds + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+1.5
+1Q Rebounds
+Neemias Queta
+
+BOS @ MIL - Thu 5:00PM PST
+10.5
+Points
+21.5
 Pts + Rebs + Asts
 9.5
 Rebounds
-9.5
+1.5
+Assists
+11.5
+Rebounds + Assists
+0.5
+Double Doubles
+2.5
+1Q Rebounds
+Kawhi Leonard
+
+LAC @ HOU - Thu 5:00PM PST
+22.5
+Points
+30.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+2.5
 Assists
 1.5
 3-Pointers Made
-19.5
+7.5
 Rebounds + Assists
-30.5
-Points + Rebounds
-30.5
-Points + Assists
+4.5
+1Q Points
+James Harden
+
+LAC @ HOU - Thu 5:00PM PST
+23.5
+Points
+37.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+7.5
+Assists
+2.5
+3-Pointers Made
+12.5
+Rebounds + Assists
 0.5
 Double Doubles
-0.5
-Triple Doubles
-5.5
+7.5
 1Q Points
-2.5
+1.5
 1Q Rebounds
 2.5
 1Q Assists
-10.5
-1Q Pts + Rebs + Asts
-47.35
-Fantasy Points
-3.5
-Turnovers
-1.5
-Steals
-5.5
-FT Made
-10.5
-1H Points
-4.5
-1H Rebounds
-4.5
-1H Assists
-19.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-4.5
-Pts+Reb+Ast in First 5 Min.
-2.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-1.5
-Offensive Rebounds
-16.5
-FG Attempted
-5.5
-3s Attempted
-Michael Porter Jr.
+Ivica Zubac
 
-BKN @ CHI - 5:00PM PST
-24.5
+LAC @ HOU - Thu 5:00PM PST
+14.5
 Points
-34.5
-Pts + Rebs + Asts
-6.5
-Rebounds
-2.5
-Assists
-3.5
-3-Pointers Made
-10.5
-Rebounds + Assists
-31.5
-Points + Rebounds
 27.5
-Points + Assists
-0.5
-Double Doubles
-5.5
-1Q Points
-1.5
-1Q Rebounds
-0.5
-1Q 3-Pointers Made
-7.5
-1Q Pts + Rebs + Asts
-39.95
-Fantasy Points
-2.5
-Turnovers
-4.5
-FT Made
-12.5
-1H Points
-1.5
-1H 3-Pointers Made
-18.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-4.5
-Pts+Reb+Ast in First 5 Min.
-2.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-1.5
-Offensive Rebounds
-9.5
-3s Attempted
-19.5
-FG Attempted
-Ziaire Williams
-
-BKN @ CHI - 5:00PM PST
-8.5
-Points
-11.5
 Pts + Rebs + Asts
-2.5
-Rebounds
-1.5
-3-Pointers Made
-4.5
-3s Attempted
-Drake Powell
-
-BKN @ CHI - 5:00PM PST
-7.5
-Points
-12.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-2.5
-Assists
-0.5
-3-Pointers Made
-Noah Clowney
-
-BKN @ CHI - 5:00PM PST
-15.5
-Points
-21.5
-Pts + Rebs + Asts
-4.5
-Rebounds
-1.5
-Assists
-2.5
-3-Pointers Made
-20.5
-Points + Rebounds
-0.5
-Double Doubles
-3.5
-1Q Points
-1.5
-1Q Rebounds
-0.5
-1Q 3-Pointers Made
-1.5
-1H 3-Pointers Made
-0.5
-3+ Points Scored Each Quarter
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-6.5
-3s Attempted
-Nikola Vucevic
-
-CHI vs BKN - 5:00PM PST
-19.5
-Points
-32.5
-Pts + Rebs + Asts
-9.5
-Rebounds
-3.5
-Assists
-1.5
-3-Pointers Made
-13.5
-Rebounds + Assists
-30.5
-Points + Rebounds
-22.5
-Points + Assists
-0.5
-Double Doubles
-4.5
-1Q Points
-2.5
-1Q Rebounds
-8.5
-1Q Pts + Rebs + Asts
-36.65
-Fantasy Points
-4.5
-1H Rebounds
-16.5
-1H Pts + Rebs + Asts
-0.5
-3+ Points Scored Each Quarter
-4.5
-Pts+Reb+Ast in First 5 Min.
-2.5
-Points in First 5 Min.
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-2.5
-Offensive Rebounds
-5.5
-3s Attempted
-15.5
-FG Attempted
-Matas Buzelis
-
-CHI vs BKN - 5:00PM PST
-17.5
-Points
-25.5
-Pts + Rebs + Asts
-5.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-8.5
-Rebounds + Assists
-22.5
-Points + Rebounds
-19.5
-Points + Assists
-0.5
-Double Doubles
-3.5
-1Q Points
-1.5
-1Q Rebounds
-1.5
-Blocks
-2.5
-Blocks + Steals
-0.5
-3+ Points Scored Each Quarter
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-1.5
-Offensive Rebounds
-5.5
-3s Attempted
-Ayo Dosunmu
-
-CHI vs BKN - 5:00PM PST
-18.5
-Points
-26.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-4.5
-Assists
-1.5
-3-Pointers Made
-7.5
-Rebounds + Assists
-21.5
-Points + Rebounds
-22.5
-Points + Assists
-0.5
-Double Doubles
-4.5
-1Q Points
-6.5
-1Q Pts + Rebs + Asts
-29.95
-Fantasy Points
-2.5
-FT Made
-0.5
-3+ Points Scored Each Quarter
-0.5
-Game High Scorer
-0.5
-Team High Scorer
-5.5
-3s Attempted
-Danny Wolf
-
-BKN @ CHI - 5:00PM PST
-7.5
-Points
-13.5
-Pts + Rebs + Asts
-3.5
-Rebounds
-1.5
-Assists
-0.5
-3-Pointers Made
-Egor Demin
-
-BKN @ CHI - 5:00PM PST
 10.5
-Points
-19.5
-Pts + Rebs + Asts
-4.5
 Rebounds
-4.5
-Assists
 2.5
-3-Pointers Made
-9.5
+Assists
+12.5
 Rebounds + Assists
 0.5
 Double Doubles
-1.5
-Steals
-0.5
-Team High Scorer
-6.5
-3s Attempted
-Tyrese Martin
-
-BKN @ CHI - 5:00PM PST
-9.5
-Points
-15.5
-Pts + Rebs + Asts
 3.5
-Rebounds
+1Q Points
 2.5
+1Q Rebounds
+Jabari Smith Jr.
+
+HOU vs LAC - Thu 5:00PM PST
+14.5
+Points
+22.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+1.5
 Assists
 1.5
 3-Pointers Made
-4.5
-3s Attempted
-Cooper Flagg
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+Amen Thompson
 
-DAL vs MIA - 5:30PM PST
-17.5
+HOU vs LAC - Thu 5:00PM PST
+16.5
 Points
 28.5
 Pts + Rebs + Asts
 6.5
 Rebounds
-3.5
+4.5
 Assists
-1.5
+0.5
 3-Pointers Made
-10.5
+11.5
 Rebounds + Assists
-24.5
-Points + Rebounds
-20.5
-Points + Assists
 0.5
 Double Doubles
-4.5
+3.5
 1Q Points
 1.5
 1Q Rebounds
-2.5
-Turnovers
-1.5
-Steals
-4.5
-3s Attempted
-15.5
-FG Attempted
-Bam Adebayo
+Nicolas Batum
 
-MIA @ DAL - 5:30PM PST
-18.5
+LAC @ HOU - Thu 5:00PM PST
+3.5
 Points
-31.5
-Pts + Rebs + Asts
-0.5
-Double Doubles
-2.5
-1Q Rebounds
-4.5
-3s Attempted
-14.5
-FG Attempted
-Klay Thompson
-
-DAL vs MIA - 5:30PM PST
-10.5
-Points
-15.5
-Pts + Rebs + Asts
 2.5
 Rebounds
 1.5
+3-Pointers Made
+Aaron Holiday
+
+HOU vs LAC - Thu 5:00PM PST
+7.5
+Points
+10.5
+Pts + Rebs + Asts
+1.5
+Rebounds
+1.5
+Assists
+1.5
+3-Pointers Made
+Josh Okogie
+
+HOU vs LAC - Thu 5:00PM PST
+5.5
+Points
+10.5
+Pts + Rebs + Asts
+2.5
+Rebounds
+0.5
+3-Pointers Made
+Kevin Durant
+
+HOU vs LAC - Thu 5:00PM PST
+26.5
+Points
+34.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+4.5
+Assists
+1.5
+3-Pointers Made
+8.5
+Rebounds + Assists
+7.5
+1Q Points
+1.5
+1Q Rebounds
+Alperen Sengun
+
+HOU vs LAC - Thu 5:00PM PST
+22.5
+Points
+37.5
+Pts + Rebs + Asts
+9.5
+Rebounds
+6.5
+Assists
+0.5
+3-Pointers Made
+15.5
+Rebounds + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+2.5
+1Q Rebounds
+John Collins
+
+LAC @ HOU - Thu 5:00PM PST
+11.5
+Points
+16.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+0.5
+3-Pointers Made
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+Reed Sheppard
+
+HOU vs LAC - Thu 5:00PM PST
+10.5
+Points
+16.5
+Pts + Rebs + Asts
+2.5
+Rebounds
+2.5
+Assists
+2.5
+3-Pointers Made
+Steven Adams
+
+HOU vs LAC - Thu 5:00PM PST
+6.5
+Points
+15.5
+Pts + Rebs + Asts
+8.5
+Rebounds
+8.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+Kris Dunn
+
+LAC @ HOU - Thu 5:00PM PST
+6.5
+Points
+11.5
+Pts + Rebs + Asts
+2.5
+Rebounds
+2.5
+Assists
+0.5
+3-Pointers Made
+Kobe Sanders
+
+LAC @ HOU - Thu 5:00PM PST
+4.5
+Points
+1.5
+Rebounds
+0.5
+3-Pointers Made
+Jerami Grant
+
+POR @ NOP - Thu 5:00PM PST
+21.5
+Points
+28.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+3.5
 Assists
 2.5
 3-Pointers Made
 7.5
-3s Attempted
-Jaime Jaquez Jr.
-
-MIA @ DAL - 5:30PM PST
-4.5
-Rebounds
-0.5
-3-Pointers Made
+Rebounds + Assists
 0.5
 Double Doubles
+5.5
+1Q Points
 1.5
 1Q Rebounds
-Naji Marshall
+Jose Alvarado
 
-DAL vs MIA - 5:30PM PST
-13.5
+NOP vs POR - Thu 5:00PM PST
+9.5
+Points
+15.5
+Pts + Rebs + Asts
+2.5
+Rebounds
+2.5
+Assists
+1.5
+3-Pointers Made
+Trey Murphy III
+
+NOP vs POR - Thu 5:00PM PST
+22.5
+Points
+32.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+3.5
+Assists
+2.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+1.5
+1Q Rebounds
+Herb Jones
+
+NOP vs POR - Thu 5:00PM PST
+10.5
+Points
+16.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+2.5
+Assists
+1.5
+3-Pointers Made
+Robert Williams
+
+POR @ NOP - Thu 5:00PM PST
+10.5
 Points
 22.5
+Pts + Rebs + Asts
+10.5
+Rebounds
+1.5
+Assists
+0.5
+3-Pointers Made
+12.5
+Rebounds + Assists
+0.5
+Double Doubles
+2.5
+1Q Rebounds
+Jeremiah Fears
+
+NOP vs POR - Thu 5:00PM PST
+15.5
+Points
+23.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+3.5
+Assists
+0.5
+3-Pointers Made
+3.5
+1Q Points
+Sidy Cissoko
+
+POR @ NOP - Thu 5:00PM PST
+5.5
+Points
+10.5
+Pts + Rebs + Asts
+2.5
+Rebounds
+1.5
+Assists
+0.5
+3-Pointers Made
+Deni Avdija
+
+POR @ NOP - Thu 5:00PM PST
+25.5
+Points
+42.5
+Pts + Rebs + Asts
+8.5
+Rebounds
+7.5
+Assists
+2.5
+3-Pointers Made
+16.5
+Rebounds + Assists
+0.5
+Double Doubles
+5.5
+1Q Points
+2.5
+1Q Rebounds
+2.5
+1Q Assists
+Yves Missi
+
+NOP vs POR - Thu 5:00PM PST
+4.5
+Points
+11.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+1.5
+1Q Rebounds
+Shaedon Sharpe
+
+POR @ NOP - Thu 5:00PM PST
+22.5
+Points
+30.5
 Pts + Rebs + Asts
 5.5
 Rebounds
@@ -2172,169 +687,544 @@ Rebounds
 Assists
 1.5
 3-Pointers Made
-9.5
+7.5
 Rebounds + Assists
-18.5
-Points + Rebounds
+0.5
+Double Doubles
+5.5
+1Q Points
+1.5
+1Q Rebounds
+Saddiq Bey
+
+NOP vs POR - Thu 5:00PM PST
+16.5
+Points
+25.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+2.5
+Assists
+1.5
+3-Pointers Made
+8.5
+Rebounds + Assists
 0.5
 Double Doubles
 3.5
 1Q Points
 1.5
 1Q Rebounds
-1.5
-Steals
-4.5
-3s Attempted
-Kel'el Ware
+Toumani Camara
 
-MIA @ DAL - 5:30PM PST
-8.5
+POR @ NOP - Thu 5:00PM PST
+13.5
+Points
+22.5
+Pts + Rebs + Asts
+6.5
 Rebounds
+2.5
+Assists
+2.5
+3-Pointers Made
+8.5
+Rebounds + Assists
 0.5
 Double Doubles
-2.5
+3.5
+1Q Points
+1.5
 1Q Rebounds
-Pelle Larsson
+Derik Queen
 
-MIA @ DAL - 5:30PM PST
-9.5
+NOP vs POR - Thu 5:00PM PST
+15.5
 Points
-16.5
+27.5
+Pts + Rebs + Asts
+7.5
+Rebounds
+3.5
+Assists
+11.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+Kris Murray
+
+POR @ NOP - Thu 5:00PM PST
+6.5
+Points
+12.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+1.5
+Assists
+0.5
+3-Pointers Made
+Nikola Jokic
+
+DEN @ SAC - Thu 7:00PM PST
+28.5
+Points
+51.5
+Pts + Rebs + Asts
+12.5
+Rebounds
+10.5
+Assists
+1.5
+3-Pointers Made
+22.5
+Rebounds + Assists
+0.5
+Double Doubles
+8.5
+1Q Points
+3.5
+1Q Rebounds
+3.5
+1Q Assists
+Jamal Murray
+
+DEN @ SAC - Thu 7:00PM PST
+24.5
+Points
+35.5
 Pts + Rebs + Asts
 3.5
+Rebounds
+6.5
+Assists
+3.5
+3-Pointers Made
+10.5
+Rebounds + Assists
+0.5
+Double Doubles
+7.5
+1Q Points
+1.5
+1Q Rebounds
+Keegan Murray
+
+SAC vs DEN - Thu 7:00PM PST
+16.5
+Points
+24.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+1.5
+Assists
+2.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+1.5
+1Q Rebounds
+Russell Westbrook
+
+SAC vs DEN - Thu 7:00PM PST
+17.5
+Points
+33.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+8.5
+Assists
+1.5
+3-Pointers Made
+16.5
+Rebounds + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+1.5
+1Q Rebounds
+2.5
+1Q Assists
+Malik Monk
+
+SAC vs DEN - Thu 7:00PM PST
+14.5
+Points
+21.5
+Pts + Rebs + Asts
+2.5
 Rebounds
 3.5
 Assists
 1.5
 3-Pointers Made
-Anthony Davis
+3.5
+1Q Points
+Tim Hardaway Jr.
 
-DAL vs MIA - 5:30PM PST
-23.5
+DEN @ SAC - Thu 7:00PM PST
+12.5
 Points
-37.5
+16.5
+Pts + Rebs + Asts
+2.5
+Rebounds
+1.5
+Assists
+2.5
+3-Pointers Made
+Maxime Raynaud
+
+SAC vs DEN - Thu 7:00PM PST
+12.5
+Points
+21.5
+Pts + Rebs + Asts
+7.5
+Rebounds
+1.5
+Assists
+0.5
+3-Pointers Made
+8.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+Precious Achiuwa
+
+SAC vs DEN - Thu 7:00PM PST
+8.5
+Points
+16.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+1.5
+Assists
+0.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+Zach LaVine
+
+SAC vs DEN - Thu 7:00PM PST
+20.5
+Points
+26.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+2.5
+Assists
+2.5
+3-Pointers Made
+4.5
+1Q Points
+DeMar DeRozan
+
+SAC vs DEN - Thu 7:00PM PST
+20.5
+Points
+28.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+4.5
+Assists
+0.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+Jonas Valanciunas
+
+DEN @ SAC - Thu 7:00PM PST
+8.5
+Points
+14.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+1.5
+Assists
+0.5
+Double Doubles
+Cam Johnson
+
+DEN @ SAC - Thu 7:00PM PST
+13.5
+Points
+20.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+2.5
+Assists
+2.5
+3-Pointers Made
+Bruce Brown
+
+DEN @ SAC - Thu 7:00PM PST
+8.5
+Points
+13.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+1.5
+Assists
+0.5
+3-Pointers Made
+Peyton Watson
+
+DEN @ SAC - Thu 7:00PM PST
+11.5
+Points
+19.5
+Pts + Rebs + Asts
+5.5
+Rebounds
+1.5
+Assists
+1.5
+3-Pointers Made
+7.5
+Rebounds + Assists
+0.5
+Double Doubles
+3.5
+1Q Points
+1.5
+1Q Rebounds
+Spencer Jones
+
+DEN @ SAC - Thu 7:00PM PST
+6.5
+Points
+11.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+0.5
+3-Pointers Made
+Keon Ellis
+
+SAC vs DEN - Thu 7:00PM PST
+7.5
+Points
+10.5
+Pts + Rebs + Asts
+1.5
+Rebounds
+1.5
+3-Pointers Made
+Karl-Anthony Towns
+
+NYK @ ORL - Sat 2:30PM PST
+21.5
+Points
+36.5
 Pts + Rebs + Asts
 11.5
 Rebounds
 2.5
 Assists
-0.5
+1.5
 3-Pointers Made
 14.5
 Rebounds + Assists
-34.5
-Points + Rebounds
-26.5
-Points + Assists
 0.5
 Double Doubles
-5.5
+4.5
 1Q Points
 2.5
 1Q Rebounds
-2.5
-Turnovers
-1.5
-Blocks
-2.5
-Blocks + Steals
-17.5
-FG Attempted
-Tyler Herro
+Paolo Banchero
 
-MIA @ DAL - 5:30PM PST
-22.5
+ORL vs NYK - Sat 2:30PM PST
+20.5
 Points
-27.5
-Points + Rebounds
+32.5
+Pts + Rebs + Asts
+6.5
+Rebounds
+3.5
+Assists
+1.5
+3-Pointers Made
+11.5
+Rebounds + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
 1.5
 1Q Rebounds
-2.5
-Turnovers
-6.5
-3s Attempted
-16.5
-FG Attempted
-Andrew Wiggins
+OG Anunoby
 
-MIA @ DAL - 5:30PM PST
-5.5
+NYK @ ORL - Sat 2:30PM PST
+14.5
+Points
+21.5
+Pts + Rebs + Asts
+4.5
 Rebounds
+1.5
+Assists
+2.5
+3-Pointers Made
+Mikal Bridges
+
+NYK @ ORL - Sat 2:30PM PST
+14.5
+Points
+23.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+3.5
+Assists
 1.5
 3-Pointers Made
 7.5
 Rebounds + Assists
-19.5
-Points + Assists
+3.5
+1Q Points
+Wendell Carter Jr.
+
+ORL vs NYK - Sat 2:30PM PST
+10.5
+Points
+20.5
+Pts + Rebs + Asts
+7.5
+Rebounds
+1.5
+Assists
+0.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+0.5
+Double Doubles
+1.5
+1Q Rebounds
+Jalen Brunson
+
+NYK @ ORL - Sat 2:30PM PST
+28.5
+Points
+38.5
+Pts + Rebs + Asts
+2.5
+Rebounds
+5.5
+Assists
+2.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+0.5
+Double Doubles
+8.5
+1Q Points
+Desmond Bane
+
+ORL vs NYK - Sat 2:30PM PST
+20.5
+Points
+29.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+4.5
+Assists
+1.5
+3-Pointers Made
+9.5
+Rebounds + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+Jalen Suggs
+
+ORL vs NYK - Sat 2:30PM PST
+17.5
+Points
+26.5
+Pts + Rebs + Asts
+3.5
+Rebounds
+4.5
+Assists
+2.5
+3-Pointers Made
+8.5
+Rebounds + Assists
+0.5
+Double Doubles
+4.5
+1Q Points
+Josh Hart
+
+NYK @ ORL - Sat 2:30PM PST
+12.5
+Points
+27.5
+Pts + Rebs + Asts
+8.5
+Rebounds
+5.5
+Assists
+1.5
+3-Pointers Made
+14.5
+Rebounds + Assists
+0.5
+Double Doubles
+2.5
+1Q Rebounds
+Anthony Black
+
+ORL vs NYK - Sat 2:30PM PST
+15.5
+Points
+25.5
+Pts + Rebs + Asts
+4.5
+Rebounds
+4.5
+Assists
+1.5
+3-Pointers Made
+9.5
+Rebounds + Assists
 0.5
 Double Doubles
 3.5
 1Q Points
 1.5
 1Q Rebounds
-4.5
-3s Attempted
-Max Christie
-
-DAL vs MIA - 5:30PM PST
-10.5
-Points
-15.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-1.5
-Assists
-2.5
-3-Pointers Made
-5.5
-3s Attempted
-Davion Mitchell
-
-MIA @ DAL - 5:30PM PST
-9.5
-Points
-19.5
-Pts + Rebs + Asts
-0.5
-3-Pointers Made
-0.5
-Double Doubles
-1.5
-Steals
-Ryan Nembhard
-
-DAL vs MIA - 5:30PM PST
-9.5
-Points
-16.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-5.5
-Assists
-1.5
-3-Pointers Made
-7.5
-Rebounds + Assists
-0.5
-Double Doubles
-Simone Fontecchio
-
-MIA @ DAL - 5:30PM PST
-7.5
-Points
-12.5
-Pts + Rebs + Asts
-2.5
-Rebounds
-1.5
-Assists
-1.5
-3-Pointers Made
-4.5
-3s Attempted
 Add picks
 
 Pick a minimum of 2 players from at least two different teams.
