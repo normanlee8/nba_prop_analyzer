@@ -166,3 +166,198 @@
 2025-12-12 11:50:17 [INFO] root: Successfully converted props to input/props_today.csv (1169 rows)
 2025-12-12 22:20:08 [INFO] root: Logging initialized. Writing to logs/converter.log
 2025-12-12 22:20:09 [INFO] root: Successfully converted props to input/props_today.csv (244 rows)
+2025-12-12 23:46:20 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-12 23:46:20 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-12 23:46:20 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-12 23:46:20 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-12 23:46:20 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=3s Attempted, Line=5.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=FG Attempted, Line=14.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=FG Attempted, Line=15.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=3s Attempted, Line=4.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=Blocks + Steals, Line=2.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=3s Attempted, Line=6.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Triple Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=3s Attempted, Line=4.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Goga Bitadze, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=FG Attempted, Line=21.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=3s Attempted, Line=7.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=3s Attempted, Line=5.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=FG Attempted, Line=16.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=OG Anunoby, Prop=Blocks + Steals, Line=2.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=OG Anunoby, Prop=3s Attempted, Line=5.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Mikal Bridges, Prop=Blocks + Steals, Line=2.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Mikal Bridges, Prop=3s Attempted, Line=5.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Wendell Carter Jr., Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Anthony Black, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Tristan da Silva, Prop=3s Attempted, Line=4.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=Blocks + Steals, Line=3.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=3s Attempted, Line=4.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=3s Attempted, Line=6.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=FG Attempted, Line=15.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Chet Holmgren, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Devin Vassell, Prop=3s Attempted, Line=5.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Lu Dort, Prop=3s Attempted, Line=4.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Stephon Castle, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Julian Champagnie, Prop=3s Attempted, Line=4.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=Blocks + Steals, Line=2.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=FG Attempted, Line=18.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=3s Attempted, Line=4.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=FG Attempted, Line=14.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Harrison Barnes, Prop=3s Attempted, Line=4.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Keldon Johnson, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Isaiah Hartenstein, Prop=Double Doubles, Line=0.5
+2025-12-12 23:46:20 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-12 23:46:20 [INFO] root: Successfully converted props to input/props_today.csv (244 rows)
+2025-12-12 23:46:20 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-13 00:05:23 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-13 00:05:23 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-13 00:05:23 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-13 00:05:23 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-13 00:05:23 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=3s Attempted, Line=5.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=FG Attempted, Line=14.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=FG Attempted, Line=15.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=3s Attempted, Line=4.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=3s Attempted, Line=6.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Triple Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=3s Attempted, Line=4.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Goga Bitadze, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=FG Attempted, Line=21.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=3s Attempted, Line=7.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=3s Attempted, Line=5.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=FG Attempted, Line=16.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=OG Anunoby, Prop=3s Attempted, Line=5.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Mikal Bridges, Prop=3s Attempted, Line=5.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Wendell Carter Jr., Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Anthony Black, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Tristan da Silva, Prop=3s Attempted, Line=4.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=3s Attempted, Line=4.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=3s Attempted, Line=6.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=FG Attempted, Line=15.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Chet Holmgren, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Devin Vassell, Prop=3s Attempted, Line=5.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Lu Dort, Prop=3s Attempted, Line=4.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Stephon Castle, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Julian Champagnie, Prop=3s Attempted, Line=4.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=FG Attempted, Line=18.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=3s Attempted, Line=4.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=FG Attempted, Line=14.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Harrison Barnes, Prop=3s Attempted, Line=4.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Keldon Johnson, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Isaiah Hartenstein, Prop=Double Doubles, Line=0.5
+2025-12-13 00:05:24 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-13 00:05:24 [INFO] root: Successfully converted props to input/props_today.csv (249 rows)
+2025-12-13 00:05:24 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-13 00:07:04 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-13 00:07:04 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-13 00:07:04 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-13 00:07:04 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-13 00:07:04 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=3s Attempted, Line=5.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=FG Attempted, Line=14.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=FG Attempted, Line=15.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=3s Attempted, Line=4.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=3s Attempted, Line=6.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Triple Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=3s Attempted, Line=4.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Goga Bitadze, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=FG Attempted, Line=21.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=3s Attempted, Line=7.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=3s Attempted, Line=5.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=FG Attempted, Line=16.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=OG Anunoby, Prop=3s Attempted, Line=5.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Mikal Bridges, Prop=3s Attempted, Line=5.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Wendell Carter Jr., Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Anthony Black, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Tristan da Silva, Prop=3s Attempted, Line=4.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=3s Attempted, Line=4.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=3s Attempted, Line=6.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=FG Attempted, Line=15.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Chet Holmgren, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Devin Vassell, Prop=3s Attempted, Line=5.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Lu Dort, Prop=3s Attempted, Line=4.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Stephon Castle, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Julian Champagnie, Prop=3s Attempted, Line=4.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=FG Attempted, Line=18.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=3s Attempted, Line=4.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=FG Attempted, Line=14.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Harrison Barnes, Prop=3s Attempted, Line=4.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Keldon Johnson, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Isaiah Hartenstein, Prop=Double Doubles, Line=0.5
+2025-12-13 00:07:05 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-13 00:07:05 [INFO] root: Successfully converted props to input/props_today.csv (249 rows)
+2025-12-13 00:07:05 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-13 00:27:57 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-13 00:27:57 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-13 00:27:58 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-13 00:27:58 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-13 00:27:58 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Triple Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Goga Bitadze, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Wendell Carter Jr., Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Anthony Black, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Chet Holmgren, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Stephon Castle, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Keldon Johnson, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Isaiah Hartenstein, Prop=Double Doubles, Line=0.5
+2025-12-13 00:27:58 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-13 00:27:58 [INFO] root: Successfully converted props to input/props_today.csv (272 rows)
+2025-12-13 00:27:58 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-13 00:42:11 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-13 00:42:11 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-13 00:42:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-13 00:42:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-13 00:42:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-13 00:42:11 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Triple Doubles, Line=0.5
+2025-12-13 00:42:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-13 00:42:11 [INFO] root: Successfully converted props to input/props_today.csv (289 rows)
+2025-12-13 00:42:11 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-13 00:48:49 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-13 00:48:49 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-13 00:48:49 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-13 00:48:49 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-13 00:48:49 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-13 00:48:50 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-13 00:48:50 [INFO] root: Successfully converted props to input/props_today.csv (290 rows)
+2025-12-13 00:48:50 [INFO] root: <<< CONVERTER COMPLETE >>>

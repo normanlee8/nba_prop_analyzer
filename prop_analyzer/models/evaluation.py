@@ -1,6 +1,7 @@
 import pandas as pd
 import logging
 from prop_analyzer import config as cfg
+from prop_analyzer.config import Cols
 from prop_analyzer.utils import text
 
 def calculate_derived_stats(df):
@@ -32,35 +33,40 @@ def calculate_derived_stats(df):
 def check_prop_row(row):
     """
     Compares the prediction against the actual value to determine correctness.
+    Uses strictly standardized columns from Cols class.
     """
-    # --- FIX: Support New Column Names ---
-    # Try 'Prop' (New) first, then 'Prop Category' (Old)
-    prop_cat = row.get('Prop') if 'Prop' in row else row.get('Prop Category', '')
-    prop_cat_clean = str(prop_cat).strip()
+    # 1. Get Prop Category (e.g., 'Points')
+    prop_cat_clean = str(row.get(Cols.PROP_TYPE, '')).strip()
     
-    # Map to DB Column (e.g. Points -> PTS)
+    # 2. Map to DB Column (e.g., 'Points' -> 'PTS')
     prop_map_lookup = cfg.MASTER_PROP_MAP.get(prop_cat_clean, prop_cat_clean)
     
     try:
-        # Try 'Line' (New) first, then 'Prop Line' (Old)
-        line_val = row.get('Line') if 'Line' in row else row.get('Prop Line')
+        # 3. Get Line
+        line_val = row.get(Cols.PROP_LINE)
+        if pd.isna(line_val):
+            return pd.Series([None, 'Error', None])
         line = float(line_val)
         
-        # Get Actual
+        # 4. Get Actual Value from merged Box Score data
+        # The merge in grade_predictions suffixes the box score cols (usually no suffix or handled there)
+        # But here 'row' contains the merged data.
         actual = row.get(prop_map_lookup)
+        
+        # If lookup failed (maybe it's a raw column like 'PTS' already), try direct
         if pd.isna(actual):
-            # Fallback if map lookup failed
             actual = row.get(prop_cat_clean)
             
         if actual is not None:
             actual = float(actual)
+            
     except (ValueError, TypeError):
         return pd.Series([None, 'Error', None])
         
     if pd.isna(actual): 
         return pd.Series([None, 'Missing Data', None])
     
-    # Determine Result
+    # 5. Determine Result (Over/Under/Push)
     if actual > line: 
         res = 'Over'
     elif actual < line: 
@@ -68,9 +74,9 @@ def check_prop_row(row):
     else:
         res = 'Push'
     
-    # Determine Correctness
-    # Support 'Pick' (New) or 'Best Pick' (Old)
-    my_pick = row.get('Pick') if 'Pick' in row else row.get('Best Pick')
+    # 6. Determine Correctness
+    # We compare the Result against our Pick (Cols.EDGE_TYPE)
+    my_pick = row.get(Cols.EDGE_TYPE) # Expected: 'Over' or 'Under'
     
     correctness = 'Incorrect'
     if res == 'Push':
@@ -85,14 +91,9 @@ def grade_predictions():
     
     # 1. Load Data
     try:
-        # Check for the new filename first
-        props_file = cfg.OUTPUT_DIR / "processed_props.csv"
+        props_file = cfg.PROCESSED_OUTPUT
         if not props_file.exists():
-            # Fallback to old name just in case
-            props_file = cfg.OUTPUT_DIR / "prop_check_results.csv"
-            
-        if not props_file.exists():
-            logging.warning("No processed props file found to grade.")
+            logging.warning(f"No processed props file found at {props_file}")
             return
             
         df_props = pd.read_csv(props_file)
@@ -111,40 +112,33 @@ def grade_predictions():
         return
 
     # 2. Prep & Normalize
-    # --- FIX: Handle New vs Old Column Names for Player ---
-    if 'Player' in df_props.columns:
-        player_col = 'Player'
-    elif 'Player Name' in df_props.columns:
-        player_col = 'Player Name'
-    else:
-        logging.error("Could not find Player column in props file. Available columns: " + str(list(df_props.columns)))
+    # Standardize Player Names for Join
+    if Cols.PLAYER_NAME not in df_props.columns:
+        logging.error(f"Schema mismatch: {Cols.PLAYER_NAME} missing from props file.")
         return
 
-    # Filter out rows without scores/predictions if any
-    if 'Score' in df_props.columns:
-        df_props = df_props.dropna(subset=['Score']).copy()
-
-    df_props['join_player'] = df_props[player_col].apply(text.preprocess_name_for_fuzzy_match)
+    df_props['join_player'] = df_props[Cols.PLAYER_NAME].apply(text.preprocess_name_for_fuzzy_match)
     
-    # --- FIX: Handle Date Column (Date vs GAME_DATE) ---
-    if 'Date' in df_props.columns and 'GAME_DATE' not in df_props.columns:
-        df_props.rename(columns={'Date': 'GAME_DATE'}, inplace=True)
-
-    # Ensure GAME_DATE exists
-    if 'GAME_DATE' not in df_props.columns:
-        logging.warning(f"GAME_DATE missing in props file. Available columns: {list(df_props.columns)}")
+    # Ensure DATE exists and is formatted
+    if Cols.DATE not in df_props.columns:
+        logging.error(f"Schema mismatch: {Cols.DATE} missing from props file.")
         return
 
-    df_props['join_date'] = pd.to_datetime(df_props['GAME_DATE']).dt.strftime('%Y-%m-%d')
+    df_props['join_date'] = pd.to_datetime(df_props[Cols.DATE], errors='coerce').dt.strftime('%Y-%m-%d')
     
+    # Prep Box Scores
+    # Note: MASTER_BOX_SCORES has standard columns from etl.py
     df_box['join_player'] = df_box['PLAYER_NAME'].apply(text.preprocess_name_for_fuzzy_match)
-    df_box['join_date'] = pd.to_datetime(df_box['GAME_DATE']).dt.strftime('%Y-%m-%d')
     
-    # Calculate derived stats on the box scores so we can grade things like "1H Points"
+    # Check if Cols.DATE is in box scores (standardized in etl.py) or fallback to GAME_DATE
+    date_col_box = Cols.DATE if Cols.DATE in df_box.columns else 'GAME_DATE'
+    df_box['join_date'] = pd.to_datetime(df_box[date_col_box], errors='coerce').dt.strftime('%Y-%m-%d')
+    
+    # Calculate derived stats (Q1, 1H, etc.) so we can grade those props
     df_box = calculate_derived_stats(df_box)
 
     # 3. Merge
-    # A left merge preserves the order of the left DataFrame (df_props)
+    # Left merge preserves the order and rows of our predictions
     df_merged = pd.merge(
         df_props, 
         df_box, 
@@ -154,13 +148,10 @@ def grade_predictions():
     )
 
     # 4. Grade
-    cols = ['Actual Value', 'Result', 'Correctness']
-    df_merged[cols] = df_merged.apply(check_prop_row, axis=1)
+    # Apply grading logic row-by-row
+    out_cols = [Cols.ACTUAL_VAL, Cols.RESULT, Cols.CORRECTNESS]
+    df_merged[out_cols] = df_merged.apply(check_prop_row, axis=1)
     
-    # --- SORTING LOGIC REMOVED ---
-    # The previous sorting block has been deleted to preserve the order 
-    # established by run_analysis.py
-
     # 5. Save Results
     # Overwrite the file with graded columns appended
     try:
@@ -171,28 +162,31 @@ def grade_predictions():
     
     # 6. Performance Summary Report
     # Filter strictly for Correct/Incorrect (Exclude Pushes/Missing)
-    graded = df_merged[df_merged['Correctness'].isin(['Correct', 'Incorrect'])]
-    
-    def log_accuracy(subset, label):
-        total = len(subset)
-        if total > 0:
-            correct = len(subset[subset['Correctness'] == 'Correct'])
-            acc = (correct / total) * 100
-            logging.info(f"Accuracy on {total} {label}: {acc:.2f}% ({correct}/{total})")
-        else:
-            logging.info(f"Accuracy on 0 {label}: N/A")
-
-    logging.info("-" * 40)
-    logging.info("PERFORMANCE SUMMARY")
-    
-    log_accuracy(graded, "Total Graded Props")
-    
-    # S-Tier Stats
-    if 'Tier' in graded.columns:
-        s_tier = graded[graded['Tier'] == 'S Tier']
-        log_accuracy(s_tier, "S-Tier Props")
+    if Cols.CORRECTNESS in df_merged.columns:
+        graded = df_merged[df_merged[Cols.CORRECTNESS].isin(['Correct', 'Incorrect'])]
         
-        a_tier = graded[graded['Tier'] == 'A Tier']
-        log_accuracy(a_tier, "A-Tier Props")
-    
-    logging.info("-" * 40)
+        def log_accuracy(subset, label):
+            total = len(subset)
+            if total > 0:
+                correct = len(subset[subset[Cols.CORRECTNESS] == 'Correct'])
+                acc = (correct / total) * 100
+                logging.info(f"Accuracy on {total} {label}: {acc:.2f}% ({correct}/{total})")
+            else:
+                logging.info(f"Accuracy on 0 {label}: N/A")
+
+        logging.info("-" * 40)
+        logging.info("PERFORMANCE SUMMARY")
+        
+        log_accuracy(graded, "Total Graded Props")
+        
+        # S-Tier Stats (if Tier column exists)
+        if Cols.TIER in graded.columns:
+            s_tier = graded[graded[Cols.TIER] == 'S Tier']
+            log_accuracy(s_tier, "S-Tier Props")
+            
+            a_tier = graded[graded[Cols.TIER] == 'A Tier']
+            log_accuracy(a_tier, "A-Tier Props")
+        
+        logging.info("-" * 40)
+    else:
+        logging.warning("Skipping summary: Correctness column not generated.")

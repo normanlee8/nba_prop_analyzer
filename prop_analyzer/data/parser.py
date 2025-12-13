@@ -5,6 +5,7 @@ import logging
 import pandas as pd
 from pathlib import Path
 from prop_analyzer import config as cfg
+from prop_analyzer.config import Cols  # Import the new Data Contract
 from nba_api.stats.endpoints import scoreboardv2
 from nba_api.stats.static import teams
 
@@ -194,6 +195,11 @@ def parse_text_to_csv(input_path=None, output_path=None):
     current_game_date = None 
     
     data_to_write = [] 
+    
+    # Validation Counters
+    lines_processed = 0
+    props_parsed = 0
+    suspicious_lines = 0
 
     try:
         with open(input_path, 'r', encoding='utf-8') as f_in:
@@ -202,6 +208,7 @@ def parse_text_to_csv(input_path=None, output_path=None):
         for line in lines:
             line = line.strip()
             if not line: continue
+            lines_processed += 1
 
             # 1. Check for Time/Matchup Line (Context Switch)
             t1, t2, full_matchup = parse_matchup(line)
@@ -226,6 +233,7 @@ def parse_text_to_csv(input_path=None, output_path=None):
                 prop_category_str = line
                 prop_category_std = cfg.MASTER_PROP_MAP.get(prop_category_str, None)
                 
+                # Try Case-insensitive lookup if direct failed
                 if not prop_category_std:
                     for k, v in cfg.MASTER_PROP_MAP.items():
                         if k.lower() == prop_category_str.lower():
@@ -238,11 +246,19 @@ def parse_text_to_csv(input_path=None, output_path=None):
                         current_matchup, prop_category_std, prop_line_value,
                         current_game_date 
                     ])
+                    props_parsed += 1
+                else:
+                    logging.warning(f"Skipped incomplete prop: Player={current_player}, Prop={line}, Line={prop_line_value}")
                 
                 prop_line_value = None 
                 continue
 
             # 4. Fallback: Player Name
+            # Validation: Warn if a "Player Name" looks like a failed Prop Line
+            if any(char.isdigit() for char in line) or 'OVER' in line.upper() or 'UNDER' in line.upper():
+                logging.warning(f"SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '{line}'")
+                suspicious_lines += 1
+            
             current_player = line
             prop_line_value = None 
             continue
@@ -251,7 +267,8 @@ def parse_text_to_csv(input_path=None, output_path=None):
             logging.warning("No valid props parsed. Check input format.")
             return
 
-        header = ['Player Name', 'Team', 'Opponent', 'Matchup', 'Prop Category', 'Prop Line', 'GAME_DATE']
+        # Use Standardized Columns from Config
+        header = Cols.get_required_input_cols()
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -260,6 +277,15 @@ def parse_text_to_csv(input_path=None, output_path=None):
             writer.writerow(header)
             writer.writerows(data_to_write)
             
+        # --- VALIDATION SUMMARY ---
+        print("-" * 40)
+        print(f"PARSING COMPLETE: {output_path}")
+        print(f"Lines Processed: {lines_processed}")
+        print(f"Props Extracted: {props_parsed}")
+        if suspicious_lines > 0:
+            print(f"WARNING: {suspicious_lines} lines looked suspicious (Check logs).")
+        print("-" * 40)
+        
         logging.info(f"Successfully converted props to {output_path} ({len(data_to_write)} rows)")
         
         # Save timestamped record

@@ -11,6 +11,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score
 
 from prop_analyzer import config as cfg
+from prop_analyzer.config import Cols
 from prop_analyzer.features import definitions as feat_defs
 from prop_analyzer.models import registry
 
@@ -22,12 +23,20 @@ MIN_SAMPLES = 200
 PROP_KEY_MAP = {
     'Points': 'PTS', 'Rebounds': 'REB', 'Assists': 'AST',
     'Threes': 'FG3M', 'Steals': 'STL', 'Blocks': 'BLK', 'Turnovers': 'TOV',
+    
+    'FG Attempted': 'FGA', '3s Attempted': 'FG3A',
+    'Double Doubles': 'DD', 'Double Double': 'DD',
+    # --- ADDED TD ---
+    'Triple Doubles': 'TD', 'Triple Double': 'TD',
+    # ----------------
+    
     'PRA': 'PRA', 'Pts+Reb+Ast': 'PRA', 
     'Pts+Reb': 'PR', 'Pts+Ast': 'PA', 'Reb+Ast': 'RA',
     'Fantasy Points': 'FANTASY_PTS',
     # Direct mappings
     'PTS': 'PTS', 'REB': 'REB', 'AST': 'AST', 'FG3M': 'FG3M',
-    'STL': 'STL', 'BLK': 'BLK', 'TOV': 'TOV', 'STK': 'STK'
+    'STL': 'STL', 'BLK': 'BLK', 'TOV': 'TOV', 'STK': 'STK',
+    'FGA': 'FGA', 'FG3A': 'FG3A', 'DD': 'DD', 'TD': 'TD'
 }
 
 def rename_features_for_model(df, prop_cat):
@@ -36,18 +45,16 @@ def rename_features_for_model(df, prop_cat):
     """
     prefix = PROP_KEY_MAP.get(prop_cat, prop_cat)
     
-    # Define mappings based on dataset.py output
+    # Define mappings based on dataset.py output (Using Cols constants)
+    # Note: dataset.py outputs f'{col}_{Cols.SZN_AVG}' -> e.g., 'PTS_SZN_AVG'
     mapping = {
-        f'{prefix}_SZN_AVG': 'SZN Avg',
-        f'{prefix}_L5_AVG': 'L5 Avg',  
+        f'{prefix}_{Cols.SZN_AVG}': 'SZN Avg',
+        f'{prefix}_{Cols.L5_AVG}': 'L5 Avg',  
         f'{prefix}_L5_EWMA': 'L5 EWMA',
         f'{prefix}_L3_AVG': 'L3 Avg',
         f'{prefix}_L10_STD': 'L10_STD_DEV',
-        f'{prefix}_L10_STD_DEV': 'L10_STD_DEV',
         f'SZN_TS_PCT': 'SZN_TS_PCT',
-        f'SZN_EFG_PCT': 'SZN_EFG_PCT',
         f'SZN_USG_PROXY': 'SZN_USG_PROXY'
-        # REMOVED DANGEROUS FALLBACK to prevent duplicate columns and data leakage
     }
     
     # Only rename columns that actually exist in the DF
@@ -78,8 +85,8 @@ def get_feature_cols(prop_cat, all_columns):
         c for c in all_columns 
         if ('_RANK' in c or 'TEAM_' in c or 'OPP_' in c or 'DVP_' in c)
         and c not in relevant
-        and 'NAME' not in c and 'ABBREV' not in c and 'DATE' not in c
-        and 'SEASON_ID' not in c and 'PLAYER_ID' not in c # FIX: Exclude IDs explicitly
+        and 'NAME' not in c and 'ABBREV' not in c and Cols.DATE not in c
+        and 'SEASON_ID' not in c and Cols.PLAYER_ID not in c
         and c not in vacancy_cols 
     ]
 
@@ -126,11 +133,34 @@ def train_single_prop(df, prop_cat):
     logging.info(f"Training {prop_cat}...")
     
     # --- TIME SERIES SPLIT PROTECTION ---
-    if 'GAME_DATE' in df.columns:
+    if Cols.DATE in df.columns:
+        df[Cols.DATE] = pd.to_datetime(df[Cols.DATE])
+        df = df.sort_values(by=Cols.DATE, ascending=True).reset_index(drop=True)
+    elif 'GAME_DATE' in df.columns: # Fallback
         df['GAME_DATE'] = pd.to_datetime(df['GAME_DATE'])
         df = df.sort_values(by='GAME_DATE', ascending=True).reset_index(drop=True)
     else:
-        logging.warning(f"[{prop_cat}] 'GAME_DATE' missing. Shuffling might leak future data!")
+        logging.warning(f"[{prop_cat}] Date column missing. Shuffling might leak future data!")
+
+    # --- SYNTHETIC LINE GENERATION (Improved) ---
+    # Used if Prop Line is missing (Historical Training)
+    # New Logic: Weighted avg of Season Long (Stability) + L5 (Recency)
+    # This creates a "sharper" line than just L5, forcing model to find real edges.
+    prop_prefix = PROP_KEY_MAP.get(prop_cat, prop_cat)
+    szn_col = f'{prop_prefix}_{Cols.SZN_AVG}'
+    l5_col = f'{prop_prefix}_{Cols.L5_AVG}'
+    
+    if Cols.PROP_LINE not in df.columns:
+        if szn_col in df.columns and l5_col in df.columns:
+            # Smart Baseline: (SZN + L5) / 2
+            df[Cols.PROP_LINE] = (df[szn_col] + df[l5_col]) / 2
+        elif szn_col in df.columns:
+            df[Cols.PROP_LINE] = df[szn_col]
+        else:
+            # Fallback to rolling mean if columns missing (shouldn't happen with dataset.py)
+            df[Cols.PROP_LINE] = df[prop_cat].rolling(window=5, min_periods=1).mean().shift(1)
+            
+        df = df.dropna(subset=[Cols.PROP_LINE]).copy()
 
     # --- RENAME COLUMNS ---
     df = rename_features_for_model(df, prop_cat)
@@ -145,32 +175,52 @@ def train_single_prop(df, prop_cat):
     # Select and Prepare Features
     feature_list = get_feature_cols(prop_cat, df.columns)
     
-    # Check if we have enough features
     if len(feature_list) < 5:
         logging.warning(f"[{prop_cat}] Not enough matching features found ({len(feature_list)}). Skipping.")
         return
 
     df = backfill_missing_cols(df, feature_list)
     
-    # Sanitize column names
+    # Sanitize column names for XGBoost
     sanitized_cols = [re.sub(r'[^\w\s]', '_', str(col)).replace(' ', '_') for col in feature_list]
     
+    # Prepare X (Features)
     X = df[feature_list].copy()
     X.columns = sanitized_cols
     
-    # Targets
-    y_reg = df['Actual Value']
-    y_clf = (df['Actual Value'] > df['Prop Line']).astype(int)
+    # Prepare Y (Targets)
+    target_col = 'Actual Value' # Created in run_training wrapper usually, ensure it exists
+    if target_col not in df.columns:
+        df[target_col] = df[prop_cat] # Fallback
+        
+    y_reg = df[target_col]
     
-    # Time-Series Split
+    # --- PUSH HANDLING ---
+    # Create a mask for non-push results for the classifier
+    # We strictly want to learn Win vs Loss. Pushes are noise for binary classification.
+    no_push_mask = df[target_col] != df[Cols.PROP_LINE]
+    
+    # Time-Series Split Index
     split_idx = int(len(X) * (1 - TEST_SET_SIZE_PCT))
     
-    X_train, X_val = X.iloc[:split_idx], X.iloc[split_idx:]
+    # REGRESSION SPLIT (Uses All Data)
+    X_train_reg, X_val_reg = X.iloc[:split_idx], X.iloc[split_idx:]
     y_reg_train, y_reg_val = y_reg.iloc[:split_idx], y_reg.iloc[split_idx:]
-    y_clf_train, y_clf_val = y_clf.iloc[:split_idx], y_clf.iloc[split_idx:]
+    w_train_reg = sample_weights.iloc[:split_idx]
     
-    w_train = sample_weights.iloc[:split_idx]
+    # CLASSIFICATION SPLIT (Excludes Pushes)
+    # We apply the mask *before* splitting to ensure valid rows
+    X_clf_full = X[no_push_mask]
+    y_clf_full = (df.loc[no_push_mask, target_col] > df.loc[no_push_mask, Cols.PROP_LINE]).astype(int)
+    w_clf_full = sample_weights[no_push_mask]
     
+    # Re-calculate split index for the filtered dataset
+    split_idx_clf = int(len(X_clf_full) * (1 - TEST_SET_SIZE_PCT))
+    
+    X_train_clf, X_val_clf = X_clf_full.iloc[:split_idx_clf], X_clf_full.iloc[split_idx_clf:]
+    y_clf_train, y_clf_val = y_clf_full.iloc[:split_idx_clf], y_clf_full.iloc[split_idx_clf:]
+    w_train_clf = w_clf_full.iloc[:split_idx_clf]
+
     # Pipeline Setup
     zero_impute_keywords = ['HIST_', 'VS_OPP_', 'Q1_', 'Q2_', 'Q3_', 'Q4_', 'DVP_', 'MISSING']
     hist_cols = [c for c in X.columns if any(k in c for k in zero_impute_keywords)]
@@ -188,8 +238,14 @@ def train_single_prop(df, prop_cat):
     ], remainder='passthrough')
     
     try:
-        X_train_proc = preprocessor.fit_transform(X_train)
-        X_val_proc = preprocessor.transform(X_val)
+        # Fit on Regression Train Set (broadest data)
+        X_train_proc_reg = preprocessor.fit_transform(X_train_reg)
+        X_val_proc_reg = preprocessor.transform(X_val_reg)
+        
+        # Transform Classification Set
+        X_train_proc_clf = preprocessor.transform(X_train_clf)
+        X_val_proc_clf = preprocessor.transform(X_val_clf)
+        
     except Exception as e:
         logging.error(f"Preprocessing failed for {prop_cat}: {e}")
         return
@@ -198,24 +254,25 @@ def train_single_prop(df, prop_cat):
     def train_q(alpha):
         lgbm = lgb.LGBMRegressor(objective='quantile', alpha=alpha, n_estimators=600, learning_rate=0.04, verbose=-1)
         lgbm.fit(
-            X_train_proc, y_reg_train, sample_weight=w_train,
-            eval_set=[(X_val_proc, y_reg_val)], 
+            X_train_proc_reg, y_reg_train, sample_weight=w_train_reg,
+            eval_set=[(X_val_proc_reg, y_reg_val)], 
             callbacks=[lgb.early_stopping(50, verbose=False)]
         )
         xgb_mod = xgb.XGBRegressor(objective='reg:quantileerror', quantile_alpha=alpha, n_estimators=600, learning_rate=0.04)
-        xgb_mod.fit(X_train_proc, y_reg_train, sample_weight=w_train, eval_set=[(X_val_proc, y_reg_val)], verbose=False)
+        xgb_mod.fit(X_train_proc_reg, y_reg_train, sample_weight=w_train_reg, eval_set=[(X_val_proc_reg, y_reg_val)], verbose=False)
         return lgbm, xgb_mod
 
     lgbm_q20, xgb_q20 = train_q(0.20)
     lgbm_q80, xgb_q80 = train_q(0.80)
     
     # --- MODEL 2: CLASSIFIER ---
+    # Note: Trained on Push-Free data
     clf = xgb.XGBClassifier(objective='binary:logistic', n_estimators=500, learning_rate=0.03, eval_metric='logloss')
-    clf.fit(X_train_proc, y_clf_train, sample_weight=w_train, eval_set=[(X_val_proc, y_clf_val)], verbose=False)
+    clf.fit(X_train_proc_clf, y_clf_train, sample_weight=w_train_clf, eval_set=[(X_val_proc_clf, y_clf_val)], verbose=False)
     
-    preds = clf.predict_proba(X_val_proc)[:, 1]
+    preds = clf.predict_proba(X_val_proc_clf)[:, 1]
     acc = accuracy_score(y_clf_val, (preds > 0.5).astype(int))
-    logging.info(f"[{prop_cat}] Validation Accuracy: {acc:.1%}")
+    logging.info(f"[{prop_cat}] Validation Accuracy (Push-Free): {acc:.1%}")
 
     artifacts = {
         'scaler': preprocessor,

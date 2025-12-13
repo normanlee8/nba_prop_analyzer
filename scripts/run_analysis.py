@@ -8,6 +8,7 @@ from datetime import datetime
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from prop_analyzer import config as cfg
+from prop_analyzer.config import Cols
 from prop_analyzer.features import generator
 from prop_analyzer.models import inference
 from prop_analyzer.utils import common
@@ -59,122 +60,137 @@ def main():
     common.setup_logging(name="analysis_pregame")
     logging.info(">>> STARTING PRE-GAME PROP ANALYSIS <<<")
     
-    # 1. Load Today's Props
-    props_path = cfg.INPUT_DIR / "props_today.csv"
-    if not props_path.exists():
-        logging.critical(f"Props file not found: {props_path}")
-        logging.critical("Please run 'scripts/run_scrape.py' or provide input.")
-        return
-
+    # Wrap execution in try/except for robustness
     try:
-        props_df = pd.read_csv(props_path)
-        if props_df.empty:
-            logging.warning("props_today.csv is empty.")
+        # 1. Load Today's Props
+        props_path = cfg.PROPS_FILE
+        if not props_path.exists():
+            logging.critical(f"Props file not found: {props_path}")
+            logging.critical("Please run 'scripts/run_converter.py' or provide input.")
             return
+
+        try:
+            props_df = pd.read_csv(props_path)
+            if props_df.empty:
+                logging.warning("props_today.csv is empty.")
+                return
+                
+            # Basic sanitization
+            props_df.columns = props_df.columns.str.strip()
             
-        # --- ROBUST COLUMN HANDLING ---
-        props_df.columns = props_df.columns.str.strip()
-        
-        # Use 'Prop Category' directly (standardized in parser.py)
-        if 'Prop Category' not in props_df.columns:
-            logging.critical(f"CRITICAL ERROR: 'Prop Category' column missing.")
-            logging.critical(f"Available Columns: {list(props_df.columns)}")
+            # Validate Schema using Data Contract
+            required = Cols.get_required_input_cols()
+            missing = [c for c in required if c not in props_df.columns]
+            
+            if missing:
+                logging.critical(f"CRITICAL ERROR: Input file missing required columns: {missing}")
+                return
+
+            logging.info(f"Loaded {len(props_df)} props. Schema verified.")
+            
+        except Exception as e:
+            logging.critical(f"Failed to read props file: {e}")
             return
 
-        logging.info(f"Loaded {len(props_df)} props. Columns verified.")
+        # 2. Build Feature Vectors
+        try:
+            features_df = generator.build_feature_set(props_df)
+            if features_df.empty:
+                logging.critical("Feature generation returned empty dataset.")
+                return
+        except Exception as e:
+            logging.critical(f"Feature generation failed: {e}", exc_info=True)
+            return
+
+        # 3. Run Inference
+        logging.info("Running Machine Learning Inference...")
+        try:
+            results_df = inference.predict_props(features_df)
+        except Exception as e:
+            logging.critical(f"Inference process crashed: {e}", exc_info=True)
+            return
+        
+        if results_df is None or results_df.empty:
+            logging.warning("No predictions were generated.")
+            return
+
+        # 4. Filter & Format Output
+        if Cols.CONFIDENCE not in results_df.columns:
+            results_df[Cols.CONFIDENCE] = 0.0
+        
+        # --- SORTING LOGIC ---
+        tier_map = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
+        results_df['Tier_Rank'] = results_df[Cols.TIER].map(tier_map).fillna(99)
+        results_df.sort_values(by=['Tier_Rank', Cols.CONFIDENCE], ascending=[True, False], inplace=True)
+        
+        # --- FORMATTING ---
+        # Standardize Date format for display
+        if Cols.DATE in results_df.columns:
+            results_df[Cols.DATE] = pd.to_datetime(results_df[Cols.DATE], errors='coerce').dt.strftime('%Y-%m-%d')
+            results_df[Cols.DATE] = results_df[Cols.DATE].fillna("N/A")
+
+        # Select columns to keep (Using Cols constants)
+        keep_cols = [
+            Cols.PLAYER_NAME, Cols.TEAM, Cols.OPPONENT, Cols.PROP_TYPE, Cols.PROP_LINE, 
+            Cols.DATE,
+            Cols.PREDICTION, Cols.CONFIDENCE, Cols.EDGE_TYPE, Cols.TIER,
+            f'Diff%', f'{Cols.L5_AVG}', f'{Cols.SZN_AVG}'
+        ]
+        
+        # Filter for existing columns (handle case where L5/SZN avg might be named differently in raw output)
+        # We try to find the matching columns dynamically if exact match fails
+        final_cols = []
+        for c in keep_cols:
+            if c in results_df.columns:
+                final_cols.append(c)
+            # Try finding without prefix if needed, though training.py should be consistent now
+            elif c == f'{Cols.SZN_AVG}' and 'SZN_AVG' in results_df.columns:
+                 final_cols.append('SZN_AVG')
+
+        final_output = results_df[final_cols].copy()
+
+        # Rename Columns for Readability (Console Output)
+        display_map = {
+            Cols.PLAYER_NAME: 'Player',
+            Cols.PROP_TYPE: 'Prop',
+            Cols.PROP_LINE: 'Line',
+            Cols.PREDICTION: 'Proj',
+            Cols.CONFIDENCE: 'Prob',
+            Cols.EDGE_TYPE: 'Pick',
+            Cols.DATE: 'Date',
+            f'{Cols.L5_AVG}': 'L5',
+            f'{Cols.SZN_AVG}': 'SZN'
+        }
+        final_output.rename(columns=display_map, inplace=True)
+
+        # Format Prob as Percentage
+        if 'Prob' in final_output.columns:
+            final_output['Prob'] = final_output['Prob'].apply(lambda x: f"{x*100:.1f}%")
+
+        # 5. Save Results
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        outfile = cfg.PROCESSED_OUTPUT
+        record_file = cfg.INPUT_DIR / "records" / f"analysis_{timestamp}.csv"
+        
+        outfile.parent.mkdir(parents=True, exist_ok=True)
+        record_file.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Save RAW standardized output to CSV (for Grading script)
+        # We save results_df (with Cols schema) to file, NOT the pretty-printed version
+        # This ensures Grading script can read it machine-reliably
+        results_df.to_csv(outfile, index=False)
+        results_df.to_csv(record_file, index=False)
+        
+        logging.info(f"Saved analysis to: {outfile}")
+        
+        # 6. Pretty Print to Console (Top 20)
+        print_pretty_table(final_output.head(20))
+
+        logging.info("<<< ANALYSIS COMPLETE >>>")
         
     except Exception as e:
-        logging.critical(f"Failed to read props file: {e}")
-        return
-
-    # 2. Build Feature Vectors
-    try:
-        features_df = generator.build_feature_set(props_df)
-        if features_df.empty:
-            logging.critical("Feature generation returned empty dataset.")
-            return
-    except Exception as e:
-        logging.critical(f"Feature generation failed: {e}", exc_info=True)
-        return
-
-    # 3. Run Inference
-    logging.info("Running Machine Learning Inference...")
-    try:
-        results_df = inference.predict_props(features_df)
-    except Exception as e:
-        logging.critical(f"Inference process crashed: {e}", exc_info=True)
-        return
-    
-    if results_df is None or results_df.empty:
-        logging.warning("No predictions were generated.")
-        return
-
-    # 4. Filter & Format Output
-    if 'Model_Conf' not in results_df.columns:
-        results_df['Model_Conf'] = 0.0
-    
-    # --- SORTING LOGIC ---
-    tier_map = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
-    results_df['Tier_Rank'] = results_df['Tier'].map(tier_map).fillna(99)
-    results_df.sort_values(by=['Tier_Rank', 'Model_Conf'], ascending=[True, False], inplace=True)
-    
-    # --- FIX: Date Normalization & Formatting ---
-    # 1. Standardize column name (Handle 'Game_date' vs 'GAME_DATE')
-    if 'Game_date' in results_df.columns:
-        results_df.rename(columns={'Game_date': 'GAME_DATE'}, inplace=True)
-    
-    # 2. Format Date to YYYY-MM-DD string to prevent table print issues
-    if 'GAME_DATE' in results_df.columns:
-        results_df['GAME_DATE'] = pd.to_datetime(results_df['GAME_DATE'], errors='coerce').dt.strftime('%Y-%m-%d')
-        results_df['GAME_DATE'] = results_df['GAME_DATE'].fillna("N/A")
-
-    # Rename Columns for Readability
-    rename_map = {
-        'Player Name': 'Player',
-        'Prop Category': 'Prop',
-        'Prop Line': 'Line',
-        'Model_Pred': 'Proj',
-        'Model_Conf': 'Prob',
-        'Edge_Type': 'Pick',
-        'GAME_DATE': 'Date'  # Now guaranteed to match
-    }
-    
-    # Select columns to keep
-    keep_cols = [
-        'Player Name', 'Team', 'Opponent', 'Prop Category', 'Prop Line', 
-        'GAME_DATE',
-        'Model_Pred', 'Model_Conf', 'Edge_Type', 'Tier',
-        'Last 5', 'Season Avg', 'Diff%'
-    ]
-    
-    # Filter for existing columns
-    existing_cols = [c for c in keep_cols if c in results_df.columns]
-    
-    # Create final output and rename
-    final_output = results_df[existing_cols].copy()
-    final_output.rename(columns=rename_map, inplace=True)
-
-    # Format Prob as Percentage (e.g., 0.927 -> 92.7%)
-    if 'Prob' in final_output.columns:
-        final_output['Prob'] = final_output['Prob'].apply(lambda x: f"{x*100:.1f}%")
-
-    # 5. Save Results
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    outfile = cfg.OUTPUT_DIR / "processed_props.csv" 
-    record_file = cfg.INPUT_DIR / "records" / f"{timestamp}.csv"
-    
-    outfile.parent.mkdir(parents=True, exist_ok=True)
-    record_file.parent.mkdir(parents=True, exist_ok=True)
-    
-    final_output.to_csv(outfile, index=False)
-    final_output.to_csv(record_file, index=False)
-    
-    logging.info(f"Saved analysis to: {outfile}")
-    
-    # 6. Pretty Print to Console (Top 20)
-    print_pretty_table(final_output.head(20))
-
-    logging.info("<<< ANALYSIS COMPLETE >>>")
+        logging.critical(f"FATAL ERROR in Analysis Pipeline: {e}", exc_info=True)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

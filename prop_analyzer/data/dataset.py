@@ -3,6 +3,7 @@ import numpy as np
 import logging
 from pathlib import Path
 from prop_analyzer import config as cfg
+from prop_analyzer.config import Cols
 from prop_analyzer.data import loader
 
 def load_master_data():
@@ -15,7 +16,7 @@ def load_master_data():
         box_scores = loader.load_box_scores()
         
         # Load DVP Stats if available
-        dvp_path = cfg.DATA_DIR / "master_dvp_stats.csv"
+        dvp_path = cfg.MASTER_DVP_FILE
         if dvp_path.exists():
             dvp_df = pd.read_csv(dvp_path)
         else:
@@ -48,26 +49,29 @@ def add_rolling_features(df):
     logging.info("Calculating historical rolling features (this may take a moment)...")
     
     # Ensure correct sort order
-    df = df.sort_values(by=['PLAYER_ID', 'GAME_DATE']).reset_index(drop=True)
+    df = df.sort_values(by=[Cols.PLAYER_ID, Cols.DATE]).reset_index(drop=True)
     
-    stats_to_roll = ['PTS', 'REB', 'AST', 'PRA', 'PR', 'PA', 'RA', 'FG3M', 'STL', 'BLK', 'TOV', 'FANTASY_PTS']
+    # --- ADDED TD to list ---
+    stats_to_roll = ['PTS', 'REB', 'AST', 'PRA', 'PR', 'PA', 'RA', 'FG3M', 'STL', 'BLK', 'TOV', 'FANTASY_PTS', 'FGA', 'FG3A', 'DD', 'TD']
+    
+    # Initialize columns if missing
     for col in stats_to_roll:
         if col not in df.columns: df[col] = 0.0
 
-    grouped = df.groupby('PLAYER_ID')
+    grouped = df.groupby(Cols.PLAYER_ID)
 
     # 1. Days Rest
-    df['prev_date'] = grouped['GAME_DATE'].shift(1)
-    df['Days Rest'] = (df['GAME_DATE'] - df['prev_date']).dt.days.fillna(7).clip(upper=7)
+    df['prev_date'] = grouped[Cols.DATE].shift(1)
+    df['Days Rest'] = (df[Cols.DATE] - df['prev_date']).dt.days.fillna(7).clip(upper=7)
     df.drop(columns=['prev_date'], inplace=True)
     
     # 2. Rolling Stats
     for col in stats_to_roll:
-        # SZN Avg (Expanding Mean)
-        df[f'{col}_SZN_AVG'] = grouped[col].expanding().mean().shift(1).values
+        # SZN Avg (Expanding Mean) - Shifted to represent PRE-GAME knowledge
+        df[f'{col}_{Cols.SZN_AVG}'] = grouped[col].expanding().mean().shift(1).values
         
         # L5 Avg (Rolling 5)
-        df[f'{col}_L5_AVG'] = grouped[col].rolling(window=5, min_periods=1).mean().shift(1).values
+        df[f'{col}_{Cols.L5_AVG}'] = grouped[col].rolling(window=5, min_periods=1).mean().shift(1).values
         
         # L3 Avg
         df[f'{col}_L3_AVG'] = grouped[col].rolling(window=3, min_periods=1).mean().shift(1).values
@@ -90,7 +94,9 @@ def add_rolling_features(df):
     # 4. Game Count
     df['SZN Games'] = grouped.cumcount().values 
     
+    # Fill initial NaNs (e.g., first game of season) with 0 to prevent training crashes
     df.fillna(0, inplace=True)
+    
     return df
 
 def create_training_dataset(output_path=None):
@@ -102,13 +108,25 @@ def create_training_dataset(output_path=None):
         return
 
     # 1. Base Filtering
-    req_cols = ['PLAYER_ID', 'GAME_DATE', 'PTS', 'MIN', 'TEAM_ABBREVIATION', 'OPPONENT_ABBREV']
-    if not all(c in bs_df.columns for c in req_cols):
-        logging.error(f"Box scores missing required columns: {req_cols}")
+    # Standardize Date just in case
+    if 'GAME_DATE' in bs_df.columns:
+        bs_df[Cols.DATE] = pd.to_datetime(bs_df['GAME_DATE'])
+    elif Cols.DATE in bs_df.columns:
+        bs_df[Cols.DATE] = pd.to_datetime(bs_df[Cols.DATE])
+
+    # Standardize ID just in case
+    if 'PLAYER_ID' in bs_df.columns:
+        bs_df.rename(columns={'PLAYER_ID': Cols.PLAYER_ID}, inplace=True)
+
+    req_cols = [Cols.PLAYER_ID, Cols.DATE, 'PTS', 'MIN', 'TEAM_ABBREVIATION', 'OPPONENT_ABBREV']
+    
+    # Check for missing columns
+    missing = [c for c in req_cols if c not in bs_df.columns]
+    if missing:
+        logging.error(f"Box scores missing required columns: {missing}")
         return
 
-    bs_df['GAME_DATE'] = pd.to_datetime(bs_df['GAME_DATE'])
-    bs_df.sort_values(by=['PLAYER_ID', 'GAME_DATE'], inplace=True)
+    bs_df.sort_values(by=[Cols.PLAYER_ID, Cols.DATE], inplace=True)
 
     # Rolling History
     try:
@@ -117,35 +135,36 @@ def create_training_dataset(output_path=None):
         logging.critical(f"Feature Engineering Failed: {e}", exc_info=True)
         return
 
-    # 2. DVP Merge
+    # 2. DVP Merge (Improved Logic)
     if dvp_df is not None:
         logging.info("Merging Defense vs Position (DVP) stats...")
+        
+        # Ensure we have a clean position column
         if 'Pos' in bs_df.columns:
             bs_df['Primary_Pos'] = bs_df['Pos'].apply(normalize_position)
         else:
+            logging.warning("No 'Pos' column in box scores. Defaulting to 'PG' for DVP merge (Not Ideal).")
             bs_df['Primary_Pos'] = 'PG' 
 
+        # Merge strictly on Opponent + Position
+        # Note: DVP DF must have 'OPPONENT_ABBREV' and 'Primary_Pos'
         bs_df = pd.merge(
             bs_df, 
             dvp_df, 
-            left_on=['OPPONENT_ABBREV', 'Primary_Pos'], 
-            right_on=['OPPONENT_ABBREV', 'Primary_Pos'], 
+            on=['OPPONENT_ABBREV', 'Primary_Pos'], 
             how='left'
         )
-        dvp_cols = [c for c in dvp_df.columns if c.startswith('DVP_')]
-        if dvp_cols:
-            bs_df[dvp_cols] = bs_df[dvp_cols].fillna(bs_df[dvp_cols].mean())
-
+        
+        # CRITICAL FIX: Do NOT fill DVP NaNs with global mean.
+        
     # 3. Team Stats Merge
     if team_stats_df is not None:
         logging.info("Merging Team Stats...")
         
-        # FIX: Ensure TEAM_ABBREVIATION is a column, not index
         if 'TEAM_ABBREVIATION' not in team_stats_df.columns and team_stats_df.index.name == 'TEAM_ABBREVIATION':
             team_stats_df = team_stats_df.reset_index()
             
         # Prepare Team Stats (Prefix with TEAM_)
-        # We assume any column NOT 'TEAM_ABBREVIATION' is a stat
         team_cols_map = {c: f"TEAM_{c}" for c in team_stats_df.columns if c != 'TEAM_ABBREVIATION'}
         team_df_clean = team_stats_df.rename(columns=team_cols_map)
         
@@ -155,12 +174,13 @@ def create_training_dataset(output_path=None):
         opp_cols_map = {c: f"OPP_{c}" for c in team_stats_df.columns if c != 'TEAM_ABBREVIATION'}
         opp_df_clean = team_stats_df.rename(columns=opp_cols_map)
         
-        # Join Key: The opponent's abbreviation in the box score matches the Team Abbrev in the stats file
+        # Join Key: Opponent Abbrev
         opp_df_clean = opp_df_clean.rename(columns={'TEAM_ABBREVIATION': 'OPPONENT_ABBREV'})
         
         bs_df = pd.merge(bs_df, opp_df_clean, on='OPPONENT_ABBREV', how='left')
 
     # 4. Vacancy Features Check
+    # Ensure these exist so model training doesn't break
     for col in ['MISSING_USG_G', 'MISSING_USG_F', 'TEAM_MISSING_USG', 'TEAM_MISSING_MIN']:
         if col not in bs_df.columns:
             bs_df[col] = 0.0
@@ -168,6 +188,7 @@ def create_training_dataset(output_path=None):
             bs_df[col] = bs_df[col].fillna(0.0)
 
     # 5. Final Cleanup
+    # Drop DNP (Did Not Play) rows where Minutes = 0
     bs_df = bs_df[bs_df['MIN'] > 0].copy()
     
     if output_path is None:

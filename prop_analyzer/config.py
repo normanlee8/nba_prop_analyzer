@@ -38,6 +38,45 @@ MASTER_BOX_SCORES_PATTERN = "master_box_scores_*.csv"
 MASTER_VS_OPP_FILE = DATA_DIR / "master_vs_opponent.csv"
 MASTER_DVP_FILE = DATA_DIR / "master_dvp_stats.csv"
 
+# --- DATA CONTRACT (SCHEMA) ---
+class Cols:
+    """
+    Central source of truth for DataFrame column names to prevent schema drift.
+    All scripts should reference these constants instead of hardcoded strings.
+    """
+    # Core Identity
+    PLAYER_NAME = 'Player Name'
+    PLAYER_ID = 'PLAYER_ID'
+    TEAM = 'Team'
+    OPPONENT = 'Opponent'
+    MATCHUP = 'Matchup'
+    DATE = 'GAME_DATE'  # Standardized from 'Game_date'/'Date'
+    
+    # Props Data
+    PROP_TYPE = 'Prop Category'
+    PROP_LINE = 'Prop Line'
+    
+    # Results & Analysis
+    PREDICTION = 'Model_Pred'
+    CONFIDENCE = 'Model_Conf'
+    EDGE_TYPE = 'Edge_Type'
+    TIER = 'Tier'
+    
+    # Grading
+    ACTUAL_VAL = 'Actual Value'
+    RESULT = 'Result'
+    CORRECTNESS = 'Correctness'
+    
+    # Features (Standardized prefixes)
+    # These match the output of ETL/Feature Gen
+    SZN_AVG = 'SZN_AVG'
+    L5_AVG = 'L5_AVG'
+    
+    @classmethod
+    def get_required_input_cols(cls):
+        """Returns the list of columns expected in props_today.csv"""
+        return [cls.PLAYER_NAME, cls.TEAM, cls.OPPONENT, cls.MATCHUP, cls.PROP_TYPE, cls.PROP_LINE, cls.DATE]
+
 # --- THRESHOLDS ---
 # Pre-game Logic
 MIN_PROB_FOR_S_TIER = 0.585
@@ -61,6 +100,9 @@ BAYESIAN_PRIORS = {
     'FANTASY_PTS': 25.0,
     'Q1_PTS': 4.0, 'Q1_REB': 1.5, 'Q1_AST': 1.0, 'Q1_PRA': 6.5,
     '1H_PTS': 7.0, '1H_REB': 2.5, '1H_AST': 2.0, '1H_PRA': 11.5,
+    # Defaults
+    'FGA': 15.0, 'FG3A': 6.0, 
+    'DD': 0.10, 'TD': 0.03 # 3% chance prior for Triple Doubles (Rare)
 }
 
 # --- PROP MAPPING ---
@@ -72,11 +114,19 @@ MASTER_PROP_MAP = {
     'Steals': 'STL', 'stl': 'STL',
     'Turnovers': 'TOV', 'tov': 'TOV',
     '3-Pointers Made': 'FG3M', '3-Point HITS': 'FG3M', '3 Pointers Made': 'FG3M', 'fg3m': 'FG3M',
+    'FG Attempted': 'FGA', 'Field Goals Attempted': 'FGA',
+    '3s Attempted': 'FG3A', '3-Pointers Attempted': 'FG3A',
+    
+    # --- DERIVED STATS ---
+    'Double Doubles': 'DD', 'Double Double': 'DD',
+    'Triple Doubles': 'TD', 'Triple Double': 'TD', # <-- ADDED
+    # ---------------------
+
     'Pts + Rebs + Asts': 'PRA', 'Pts+Rebs+Asts': 'PRA', 'pra': 'PRA',
     'Rebounds + Assists': 'RA', 'ra': 'RA',
     'Points + Rebounds': 'PR', 'pr': 'PR',
     'Points + Assists': 'PA', 'pa': 'PA',
-    'Steals + Blocks': 'STK', 'Stls + Blks': 'STK', 'stk': 'STK',
+    'Steals + Blocks': 'STK', 'Stls + Blks': 'STK', 'stk': 'STK', 'Blocks + Steals': 'STK',
     'Fantasy Points': 'FANTASY_PTS', 'Fantasy Score': 'FANTASY_PTS', 'fantasy points': 'FANTASY_PTS',
     '1st Quarter Points': 'Q1_PTS', '1Q Points': 'Q1_PTS',
     '1st Quarter Rebounds': 'Q1_REB', '1Q Rebounds': 'Q1_REB',
@@ -90,6 +140,7 @@ MASTER_PROP_MAP = {
 
 SUPPORTED_PROPS = [
     'PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV',
+    'FGA', 'FG3A', 'DD', 'TD', # <-- Added TD
     'PRA', 'PR', 'PA', 'RA', 'STK', 'FANTASY_PTS',
     'Q1_PTS', 'Q1_REB', 'Q1_AST', 'Q1_PRA',
     '1H_PTS', '1H_REB', '1H_AST', '1H_PRA'

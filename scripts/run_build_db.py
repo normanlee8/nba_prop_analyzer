@@ -12,44 +12,51 @@ from prop_analyzer.utils import common
 def main():
     # Setup logging
     common.setup_logging(name="build_db")
-    logging.info(">>> STARTING ETL PIPELINE (Multi-Season) <<<")
     
-    # --- PHASE 1: ETL (Extract, Transform, Load) ---
-    logging.info("Step 1: Aggregating Master Files from Season Folders...")
-    
-    # 1. Identify Season Folders (NEW)
-    season_folders = etl.get_season_folders(cfg.DATA_DIR)
-    if not season_folders:
-        logging.critical(f"No season folders (e.g., 2024-25) found in {cfg.DATA_DIR}")
-        sys.exit(1)
+    try:
+        logging.info(">>> STARTING ETL PIPELINE (Multi-Season) <<<")
         
-    logging.info(f"Found Seasons: {[f.name for f in season_folders]}")
+        # --- PHASE 1: ETL (Extract, Transform, Load) ---
+        logging.info("Step 1: Aggregating Master Files from Season Folders...")
+        
+        # 1. Identify Season Folders
+        season_folders = etl.get_season_folders(cfg.DATA_DIR)
+        if not season_folders:
+            logging.critical(f"No season folders (e.g., 2024-25) found in {cfg.DATA_DIR}")
+            return
+            
+        logging.info(f"Found Seasons: {[f.name for f in season_folders]}")
 
-    # 2. Build ID Map
-    # Now requires season_folders to scan all years for players
-    player_id_map = etl.create_player_id_map(cfg.DATA_DIR, season_folders)
-    if player_id_map is None:
-        logging.critical("Failed to create Player ID Map. Aborting.")
-        return
+        # 2. Build ID Map
+        # Scans all years to map Player Names to unique IDs
+        player_id_map = etl.create_player_id_map(cfg.DATA_DIR, season_folders)
+        if player_id_map is None:
+            logging.critical("Failed to create Player ID Map. Aborting.")
+            return
 
-    # 3. Process Aggregates (Updated Signatures)
-    # We pass 'season_folders' instead of just 'data_dir' for these functions
-    etl.process_master_player_stats(player_id_map, season_folders, cfg.DATA_DIR)
-    etl.process_master_team_stats(player_id_map, season_folders, cfg.DATA_DIR)
-    etl.process_master_box_scores(player_id_map, season_folders, cfg.DATA_DIR)
-    
-    # 4. Derivative Stats (Vs Opponent & DVP)
-    # These operate on the newly created master files, so signatures are mostly same
-    etl.process_vs_opponent_stats(cfg.DATA_DIR, cfg.DATA_DIR)
-    etl.process_dvp_stats(cfg.DATA_DIR)
+        # 3. Process Aggregates
+        # We pass 'season_folders' to process each season independently then merge
+        etl.process_master_player_stats(player_id_map, season_folders, cfg.DATA_DIR)
+        etl.process_master_team_stats(player_id_map, season_folders, cfg.DATA_DIR)
+        etl.process_master_box_scores(player_id_map, season_folders, cfg.DATA_DIR)
+        
+        # 4. Derivative Stats (Vs Opponent & DVP)
+        # These depend on the master files created in step 3
+        etl.process_vs_opponent_stats(cfg.DATA_DIR, cfg.DATA_DIR)
+        etl.process_dvp_stats(cfg.DATA_DIR)
 
-    # --- PHASE 2: Dataset Creation ---
-    logging.info("Step 2: Building Final Training Dataset...")
-    
-    # This reads the master files we just created and adds rolling features
-    dataset.create_training_dataset()
-    
-    logging.info("<<< DATABASE BUILD COMPLETE >>>")
+        # --- PHASE 2: Dataset Creation ---
+        logging.info("Step 2: Building Final Training Dataset...")
+        
+        # This reads the master files and adds rolling features (SZN_AVG, L5, etc.)
+        # It relies on the strict schema enforced in dataset.py
+        dataset.create_training_dataset()
+        
+        logging.info("<<< DATABASE BUILD COMPLETE >>>")
+        
+    except Exception as e:
+        logging.critical(f"FATAL ERROR in Database Build: {e}", exc_info=True)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

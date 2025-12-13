@@ -3,6 +3,7 @@ import numpy as np
 from datetime import timedelta
 from rapidfuzz import process, fuzz
 from prop_analyzer import config as cfg
+from prop_analyzer.config import Cols
 from prop_analyzer.utils.common import get_nba_season_id
 from prop_analyzer.utils.text import preprocess_name_for_fuzzy_match
 
@@ -18,9 +19,19 @@ def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, p
     prop_col = proxy_map.get(prop_category, prop_category)
 
     # Filter for Player & Date
-    player_history = box_scores_df[box_scores_df['PLAYER_ID'] == player_id].copy()
+    # Uses Cols.PLAYER_ID and Cols.DATE standard
+    player_history = box_scores_df[box_scores_df[Cols.PLAYER_ID] == player_id].copy()
+    
+    # Ensure Date format
+    if Cols.DATE in player_history.columns:
+        date_col = Cols.DATE
+    elif 'GAME_DATE' in player_history.columns:
+        date_col = 'GAME_DATE'
+    else:
+        return {} # Should not happen with standardized ETL
+
     prop_date_dt = pd.to_datetime(prop_game_date).normalize()
-    player_history = player_history[player_history['GAME_DATE'] < prop_date_dt]
+    player_history = player_history[pd.to_datetime(player_history[date_col]) < prop_date_dt]
     
     # Season Isolation
     target_season_id = get_nba_season_id(prop_date_dt)
@@ -28,7 +39,7 @@ def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, p
         player_season_df = player_history[player_history['SEASON_ID'] == target_season_id].copy()
     else:
         season_start = prop_date_dt - timedelta(days=270)
-        player_season_df = player_history[player_history['GAME_DATE'] > season_start].copy()
+        player_season_df = player_history[player_history[date_col] > season_start].copy()
 
     defaults = {
         'szn_avg': 0, 'l3_avg': 0, 'l5_avg': 0, 'l10_std_dev': 0, 
@@ -43,7 +54,7 @@ def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, p
         return {'prop_col': prop_col} | defaults
     
     player_season_df.dropna(subset=[prop_col], inplace=True)
-    player_season_df.sort_values(by='GAME_DATE', ascending=False, inplace=True)
+    player_season_df.sort_values(by=date_col, ascending=False, inplace=True)
     
     games_played = len(player_season_df)
     stats = {'prop_col': prop_col, 'season_games': games_played}
@@ -70,14 +81,15 @@ def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, p
 
     # Location Splits
     loc_filter = 'vs.' if is_home else '@'
-    loc_stats_df = player_season_df[player_season_df['MATCHUP'].str.contains(loc_filter, na=False)]
-    stats['loc_avg'] = round(loc_stats_df[prop_col].mean(), 2) if not loc_stats_df.empty else stats['szn_avg']
-    stats['loc_avg_ts'] = round(loc_stats_df['TS_PCT'].mean(), 4) if not loc_stats_df.empty and 'TS_PCT' in loc_stats_df else stats['szn_avg_ts']
-    stats['loc_avg_efg'] = round(loc_stats_df['EFG_PCT'].mean(), 4) if not loc_stats_df.empty and 'EFG_PCT' in loc_stats_df else stats['szn_avg_efg']
-    stats['loc_avg_usg'] = round(loc_stats_df['USG_PROXY'].mean(), 4) if not loc_stats_df.empty and 'USG_PROXY' in loc_stats_df else stats['szn_avg_usg']
+    if 'MATCHUP' in player_season_df.columns:
+        loc_stats_df = player_season_df[player_season_df['MATCHUP'].str.contains(loc_filter, na=False)]
+        stats['loc_avg'] = round(loc_stats_df[prop_col].mean(), 2) if not loc_stats_df.empty else stats['szn_avg']
+        stats['loc_avg_ts'] = round(loc_stats_df['TS_PCT'].mean(), 4) if not loc_stats_df.empty and 'TS_PCT' in loc_stats_df else stats['szn_avg_ts']
+        stats['loc_avg_efg'] = round(loc_stats_df['EFG_PCT'].mean(), 4) if not loc_stats_df.empty and 'EFG_PCT' in loc_stats_df else stats['szn_avg_efg']
+        stats['loc_avg_usg'] = round(loc_stats_df['USG_PROXY'].mean(), 4) if not loc_stats_df.empty and 'USG_PROXY' in loc_stats_df else stats['szn_avg_usg']
 
     # Rolling Windows
-    player_season_df_asc = player_season_df.sort_values(by='GAME_DATE', ascending=True)
+    player_season_df_asc = player_season_df.sort_values(by=date_col, ascending=True)
     
     # L3
     stats['l3_avg'] = round(np.mean(player_season_df[prop_col].head(3).values), 2)
@@ -104,14 +116,23 @@ def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, p
 
 def determine_rest_factor(player_id, box_scores_df, prop_game_date):
     prop_date = pd.to_datetime(prop_game_date).normalize()
-    player_games = box_scores_df[box_scores_df['PLAYER_ID'] == player_id]
+    
+    # Standardize cols
+    pid_col = Cols.PLAYER_ID if Cols.PLAYER_ID in box_scores_df.columns else 'PLAYER_ID'
+    date_col = Cols.DATE if Cols.DATE in box_scores_df.columns else 'GAME_DATE'
+    
+    player_games = box_scores_df[box_scores_df[pid_col] == player_id]
     
     if player_games.empty: return 7
     
-    past_games = player_games[player_games['GAME_DATE'] < prop_date]
+    # Ensure datetime
+    if not pd.api.types.is_datetime64_any_dtype(player_games[date_col]):
+        player_games[date_col] = pd.to_datetime(player_games[date_col])
+
+    past_games = player_games[player_games[date_col] < prop_date]
     if past_games.empty: return 7
         
-    last_game_date = past_games['GAME_DATE'].max()
+    last_game_date = past_games[date_col].max()
     if pd.notna(last_game_date):
         return min((prop_date - last_game_date).days, 7)
     return 7
@@ -120,15 +141,23 @@ def get_schedule_fatigue_metrics(player_id, box_scores_df, prop_game_date):
     prop_date = pd.to_datetime(prop_game_date).normalize()
     start_window = prop_date - timedelta(days=5)
     
-    player_games = box_scores_df[box_scores_df['PLAYER_ID'] == player_id]
-    recent = player_games[(player_games['GAME_DATE'] >= start_window) & (player_games['GAME_DATE'] < prop_date)]
+    # Standardize cols
+    pid_col = Cols.PLAYER_ID if Cols.PLAYER_ID in box_scores_df.columns else 'PLAYER_ID'
+    date_col = Cols.DATE if Cols.DATE in box_scores_df.columns else 'GAME_DATE'
+
+    player_games = box_scores_df[box_scores_df[pid_col] == player_id].copy()
+    if not pd.api.types.is_datetime64_any_dtype(player_games[date_col]):
+        player_games[date_col] = pd.to_datetime(player_games[date_col])
+
+    recent = player_games[(player_games[date_col] >= start_window) & (player_games[date_col] < prop_date)]
     
-    is_b2b = 1 if any(recent['GAME_DATE'] == (prop_date - timedelta(days=1))) else 0
+    is_b2b = 1 if any(recent[date_col] == (prop_date - timedelta(days=1))) else 0
     return {'games_in_l5': len(recent), 'is_b2b': is_b2b}
 
 def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
     """
     Calculates the total missing Usage and Minutes for a team based on the injury report.
+    Includes strict name matching to prevent 'Jalen' vs 'Jaylin' errors.
     Returns: (missing_usg, missing_min, missing_usg_g, missing_usg_f)
     """
     if inj_df is None or inj_df.empty or full_roster_df is None or full_roster_df.empty:
@@ -144,12 +173,20 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
         return 0.0, 0.0, 0.0, 0.0
 
     # 2. Filter Roster for this Team
-    team_roster = full_roster_df[full_roster_df['TEAM_ABBREVIATION'] == team_abbr].copy()
+    # Ensure correct column check for team
+    if 'TEAM_ABBREVIATION' in full_roster_df.columns:
+        team_col = 'TEAM_ABBREVIATION'
+    elif Cols.TEAM in full_roster_df.columns:
+        team_col = Cols.TEAM
+    else:
+        # Cannot filter by team, return safe 0s
+        return 0.0, 0.0, 0.0, 0.0
+
+    team_roster = full_roster_df[full_roster_df[team_col] == team_abbr].copy()
     if team_roster.empty: 
         return 0.0, 0.0, 0.0, 0.0
     
     # 3. Dynamic Column Selection
-    # Determine Usage Column
     if 'USG_PROXY' in team_roster.columns: usg_col = 'USG_PROXY'
     elif 'USG%' in team_roster.columns: usg_col = 'USG%'
     elif 'SEASON_USG' in team_roster.columns: usg_col = 'SEASON_USG'
@@ -157,7 +194,6 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
         usg_col = 'USG_TEMP'
         team_roster[usg_col] = 0.20
 
-    # Determine Minutes Column
     if 'HOME_MIN' in team_roster.columns: min_col = 'HOME_MIN'
     elif 'Home_MIN' in team_roster.columns: min_col = 'Home_MIN'
     elif 'SEASON_MIN' in team_roster.columns: min_col = 'SEASON_MIN'
@@ -166,11 +202,11 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
         min_col = 'MIN_TEMP'
         team_roster[min_col] = 0.0
         
-    # Determine Position Column (For Split Vacancy)
     pos_col = 'Pos' if 'Pos' in team_roster.columns else None
 
-    # 4. Create Lookup Map
-    team_roster['match_name'] = team_roster['clean_name'].fillna('')
+    # 4. Create Lookup Maps
+    # A. Exact Match Map (Priority)
+    team_roster['match_name'] = team_roster['clean_name'].fillna('').str.lower().str.strip()
     
     cols_to_pull = [usg_col, min_col]
     if pos_col: cols_to_pull.append(pos_col)
@@ -186,24 +222,34 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
     for _, row in out_players.iterrows():
         p_name = str(row.get('Player', ''))
         clean_inj_name = preprocess_name_for_fuzzy_match(p_name)
-        match = process.extractOne(clean_inj_name, roster_names, scorer=fuzz.token_sort_ratio, score_cutoff=85)
         
-        if match:
-            matched_name = match[0]
+        # Step 1: Try Exact Match
+        if clean_inj_name in roster_map:
+            matched_name = clean_inj_name
             stats = roster_map[matched_name]
-            
+        else:
+            # Step 2: Fuzzy Match with STRICT threshold
+            # Increased cutoff from 85 -> 90 to avoid Jalen/Jaylin mixups
+            match = process.extractOne(clean_inj_name, roster_names, scorer=fuzz.token_sort_ratio, score_cutoff=90)
+            if match:
+                matched_name = match[0]
+                stats = roster_map[matched_name]
+            else:
+                stats = None
+
+        if stats:
             avg_min = float(stats.get(min_col, 0))
-            # Only count vacancy if the player plays significant minutes
+            
+            # Only count vacancy if the player plays significant minutes (>12)
             if avg_min > 12.0:
                 u_val = float(stats.get(usg_col, 0))
                 
                 missing_usg += u_val
                 missing_min += avg_min
                 
-                # Split Logic
+                # Split Logic (Guard vs Forward/Center)
                 if pos_col:
                     raw_pos = str(stats.get(pos_col, '')).upper()
-                    # Heuristic: If position contains 'G', it's a Guard. Else Forward/Center
                     if 'G' in raw_pos:
                         missing_usg_g += u_val
                     else:
