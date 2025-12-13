@@ -19,8 +19,12 @@ def add_rolling_stats_history(df):
 
     df = df.sort_values(by=[Cols.PLAYER_ID, Cols.DATE]).reset_index(drop=True)
     
-    # --- ADDED TD to list ---
-    stats_to_roll = ['PTS', 'REB', 'AST', 'PRA', 'PR', 'PA', 'RA', 'FG3M', 'STL', 'BLK', 'TOV', 'FANTASY_PTS', 'FGA', 'FG3A', 'DD', 'TD']
+    # Stats to roll (Must match dataset.py)
+    stats_to_roll = [
+        'PTS', 'REB', 'AST', 'PRA', 'PR', 'PA', 'RA', 
+        'FG3M', 'STL', 'BLK', 'TOV', 'FANTASY_PTS', 
+        'FGA', 'FG3A', 'DD', 'TD'
+    ]
     for col in stats_to_roll:
         if col not in df.columns: df[col] = 0.0
 
@@ -62,7 +66,13 @@ def build_feature_set(props_df):
     
     dvp_df = None
     if cfg.MASTER_DVP_FILE.exists():
-        dvp_df = pd.read_csv(cfg.MASTER_DVP_FILE)
+        # --- FIX: Read Parquet instead of CSV ---
+        try:
+            dvp_df = pd.read_parquet(cfg.MASTER_DVP_FILE)
+        except Exception as e:
+            logging.error(f"Failed to read DVP Parquet: {e}")
+            dvp_df = None
+        # ----------------------------------------
 
     # 2. Map Player Names to IDs
     # Using standardized names from parser.py/Cols
@@ -133,10 +143,6 @@ def build_feature_set(props_df):
         
         # Merge AsOf (Backward)
         # For a prop on Date T, finds the last row in history where Date <= T.
-        # Since we want PRE-GAME stats, and history contains finalized games, 
-        # we ideally want Date < T. 
-        # However, typically 'history' doesn't contain T yet (game hasn't happened).
-        # So fetching the last available record is correct.
         features_df = pd.merge_asof(
             props_df,
             history_df,
@@ -191,6 +197,10 @@ def build_feature_set(props_df):
             
         features_df['Primary_Pos'] = features_df.get('Pos', 'PG').apply(normalize_pos)
         
+        # Ensure String Type for Parquet compatibility
+        features_df['Primary_Pos'] = features_df['Primary_Pos'].astype(str)
+        dvp_df['Primary_Pos'] = dvp_df['Primary_Pos'].astype(str)
+
         # Strict Merge (Matches dataset.py logic)
         features_df = pd.merge(
             features_df, 

@@ -675,3 +675,108 @@
 2025-12-13 00:50:46 [INFO] root: Merging Team Stats...
 2025-12-13 00:50:53 [INFO] root: Saved master_training_dataset.csv with 34313 rows and 664 features.
 2025-12-13 00:50:53 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
+2025-12-13 01:51:19 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-13 01:51:19 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-13 01:51:19 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-13 01:51:19 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-13 01:51:19 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-13 01:51:19 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-13 01:51:21 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-13 01:51:21 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-13 01:51:21 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-13 01:51:48 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-13 01:51:48 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-13 01:51:48 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-13 01:51:48 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-13 01:51:48 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-13 01:51:48 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-13 01:51:48 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-13 01:51:48 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-13 01:51:48 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-13 01:51:49 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-13 01:51:49 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-13 01:51:49 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-13 01:51:51 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-13 01:51:51 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
+2025-12-13 01:51:51 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-13 01:51:51 [INFO] root: Saved master_box_scores_2025-26.parquet (8145 rows)
+2025-12-13 01:51:51 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-13 01:51:51 [INFO] root: Saved master_vs_opponent.parquet
+2025-12-13 01:51:51 [INFO] root: --- Starting: process_dvp_stats ---
+2025-12-13 01:51:51 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
+2025-12-13 01:51:51 [INFO] root: Saved master_dvp_stats.parquet
+2025-12-13 01:51:51 [INFO] root: Step 2: Building Final Training Dataset...
+2025-12-13 01:51:51 [INFO] root: --- Building Master Training Dataset ---
+2025-12-13 01:51:51 [INFO] root: --- Loading Static Data Files (Parquet) ---
+2025-12-13 01:51:51 [INFO] root: Calculating historical rolling features (this may take a moment)...
+2025-12-13 01:51:52 [INFO] root: Merging Defense vs Position (DVP) stats...
+2025-12-13 01:51:52 [INFO] root: Merging Team Stats...
+2025-12-13 01:51:52 [CRITICAL] root: FATAL ERROR in Database Build: ("Expected bytes, got a 'int' object", 'Conversion failed for column Pos with type object')
+Traceback (most recent call last):
+  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_build_db.py", line 55, in main
+    dataset.create_training_dataset()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/data/dataset.py", line 192, in create_training_dataset
+    bs_df.to_parquet(output_path, index=False)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/util/_decorators.py", line 333, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 3124, in to_parquet
+    return to_parquet(
+        self,
+    ...<6 lines>...
+        **kwargs,
+    )
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/io/parquet.py", line 482, in to_parquet
+    impl.write(
+    ~~~~~~~~~~^
+        df,
+        ^^^
+    ...<6 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/io/parquet.py", line 191, in write
+    table = self.api.Table.from_pandas(df, **from_pandas_kwargs)
+  File "pyarrow/table.pxi", line 4795, in pyarrow.lib.Table.from_pandas
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pyarrow/pandas_compat.py", line 640, in dataframe_to_arrays
+    arrays = [convert_column(c, f)
+              ~~~~~~~~~~~~~~^^^^^^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pyarrow/pandas_compat.py", line 628, in convert_column
+    raise e
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pyarrow/pandas_compat.py", line 622, in convert_column
+    result = pa.array(col, type=type_, from_pandas=True, safe=safe)
+  File "pyarrow/array.pxi", line 365, in pyarrow.lib.array
+  File "pyarrow/array.pxi", line 91, in pyarrow.lib._ndarray_to_array
+  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
+pyarrow.lib.ArrowTypeError: ("Expected bytes, got a 'int' object", 'Conversion failed for column Pos with type object')
+2025-12-13 01:58:50 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-13 01:58:50 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-13 01:58:50 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-13 01:58:50 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-13 01:58:50 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-13 01:58:50 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-13 01:58:50 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-13 01:58:50 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-13 01:58:50 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-13 01:58:50 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-13 01:58:51 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-13 01:58:51 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-13 01:58:51 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-13 01:58:51 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
+2025-12-13 01:58:51 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-13 01:58:51 [INFO] root: Saved master_box_scores_2025-26.parquet (8145 rows)
+2025-12-13 01:58:51 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-13 01:58:51 [INFO] root: Saved master_vs_opponent.parquet
+2025-12-13 01:58:51 [INFO] root: --- Starting: process_dvp_stats ---
+2025-12-13 01:58:51 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
+2025-12-13 01:58:51 [INFO] root: Saved master_dvp_stats.parquet
+2025-12-13 01:58:51 [INFO] root: Step 2: Building Final Training Dataset...
+2025-12-13 01:58:51 [INFO] root: --- Building Master Training Dataset ---
+2025-12-13 01:58:51 [INFO] root: --- Loading Static Data Files (Parquet) ---
+2025-12-13 01:58:51 [INFO] root: Calculating historical rolling features (this may take a moment)...
+2025-12-13 01:58:52 [INFO] root: Merging Defense vs Position (DVP) stats...
+2025-12-13 01:58:52 [INFO] root: Merging Team Stats...
+2025-12-13 01:58:52 [INFO] root: Saved training dataset to prop_data/master_training_dataset.parquet with 34313 rows.
+2025-12-13 01:58:52 [INFO] root: <<< DATABASE BUILD COMPLETE >>>

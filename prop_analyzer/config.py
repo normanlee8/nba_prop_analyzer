@@ -21,22 +21,25 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 INPUT_PROPS_TXT = INPUT_DIR / "props_input.txt"
 # Parsed CSV for analysis
 PROPS_FILE = INPUT_DIR / "props_today.csv"
+
 # Final results
-PROCESSED_OUTPUT = OUTPUT_DIR / "processed_props.csv"
+PROCESSED_OUTPUT_CSV = OUTPUT_DIR / "processed_props.csv" # System read/write
+PROCESSED_OUTPUT_XLSX = OUTPUT_DIR / "processed_props.xlsx" # Human readable
 
-# Master Data Files (Defaults to Current Season)
+# Master Data Files (NOW PARQUET)
 # We also define patterns to load multiple seasons
-MASTER_PLAYER_FILE = DATA_DIR / "master_player_stats_2025-26.csv"
-MASTER_PLAYER_PATTERN = "master_player_stats_*.csv"
+MASTER_PLAYER_FILE = DATA_DIR / "master_player_stats_2025-26.parquet"
+MASTER_PLAYER_PATTERN = "master_player_stats_*.parquet"
 
-MASTER_TEAM_FILE = DATA_DIR / "master_team_stats_2025-26.csv"
-MASTER_TEAM_PATTERN = "master_team_stats_*.csv"
+MASTER_TEAM_FILE = DATA_DIR / "master_team_stats_2025-26.parquet"
+MASTER_TEAM_PATTERN = "master_team_stats_*.parquet"
 
-MASTER_BOX_SCORES_FILE = DATA_DIR / "master_box_scores_2025-26.csv"
-MASTER_BOX_SCORES_PATTERN = "master_box_scores_*.csv"
+MASTER_BOX_SCORES_FILE = DATA_DIR / "master_box_scores_2025-26.parquet"
+MASTER_BOX_SCORES_PATTERN = "master_box_scores_*.parquet"
 
-MASTER_VS_OPP_FILE = DATA_DIR / "master_vs_opponent.csv"
-MASTER_DVP_FILE = DATA_DIR / "master_dvp_stats.csv"
+MASTER_VS_OPP_FILE = DATA_DIR / "master_vs_opponent.parquet"
+MASTER_DVP_FILE = DATA_DIR / "master_dvp_stats.parquet"
+MASTER_TRAINING_FILE = DATA_DIR / "master_training_dataset.parquet"
 
 # --- DATA CONTRACT (SCHEMA) ---
 class Cols:
@@ -100,9 +103,8 @@ BAYESIAN_PRIORS = {
     'FANTASY_PTS': 25.0,
     'Q1_PTS': 4.0, 'Q1_REB': 1.5, 'Q1_AST': 1.0, 'Q1_PRA': 6.5,
     '1H_PTS': 7.0, '1H_REB': 2.5, '1H_AST': 2.0, '1H_PRA': 11.5,
-    # Defaults
     'FGA': 15.0, 'FG3A': 6.0, 
-    'DD': 0.10, 'TD': 0.03 # 3% chance prior for Triple Doubles (Rare)
+    'DD': 0.10, 'TD': 0.03
 }
 
 # --- PROP MAPPING ---
@@ -117,10 +119,8 @@ MASTER_PROP_MAP = {
     'FG Attempted': 'FGA', 'Field Goals Attempted': 'FGA',
     '3s Attempted': 'FG3A', '3-Pointers Attempted': 'FG3A',
     
-    # --- DERIVED STATS ---
     'Double Doubles': 'DD', 'Double Double': 'DD',
-    'Triple Doubles': 'TD', 'Triple Double': 'TD', # <-- ADDED
-    # ---------------------
+    'Triple Doubles': 'TD', 'Triple Double': 'TD',
 
     'Pts + Rebs + Asts': 'PRA', 'Pts+Rebs+Asts': 'PRA', 'pra': 'PRA',
     'Rebounds + Assists': 'RA', 'ra': 'RA',
@@ -140,7 +140,7 @@ MASTER_PROP_MAP = {
 
 SUPPORTED_PROPS = [
     'PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV',
-    'FGA', 'FG3A', 'DD', 'TD', # <-- Added TD
+    'FGA', 'FG3A', 'DD', 'TD',
     'PRA', 'PR', 'PA', 'RA', 'STK', 'FANTASY_PTS',
     'Q1_PTS', 'Q1_REB', 'Q1_AST', 'Q1_PRA',
     '1H_PTS', '1H_REB', '1H_AST', '1H_PRA'

@@ -984,3 +984,78 @@ AttributeError: 'float' object has no attribute 'fillna'
 2025-12-13 01:03:32 [WARNING] root: Skipping Goga Bitadze (Q1_REB) - Missing History (SZN Avg is 0/NaN)
 2025-12-13 01:03:32 [INFO] root: Saved analysis to: output/processed_props.csv
 2025-12-13 01:03:32 [INFO] root: <<< ANALYSIS COMPLETE >>>
+2025-12-13 02:05:54 [INFO] root: Logging initialized. Writing to logs/analysis_pregame.log
+2025-12-13 02:05:54 [INFO] root: >>> STARTING PRE-GAME PROP ANALYSIS <<<
+2025-12-13 02:05:54 [INFO] root: Loaded 290 props.
+2025-12-13 02:05:54 [INFO] root: Building feature set with Point-in-Time safety...
+2025-12-13 02:05:54 [INFO] root: --- Loading Static Data Files (Parquet) ---
+2025-12-13 02:05:54 [CRITICAL] root: Feature generation failed: 'utf-8' codec can't decode byte 0xa4 in position 7: invalid start byte
+Traceback (most recent call last):
+  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_analysis.py", line 152, in main
+    features_df = generator.build_feature_set(props_df)
+  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/features/generator.py", line 65, in build_feature_set
+    dvp_df = pd.read_csv(cfg.MASTER_DVP_FILE)
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/io/parsers/readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/io/parsers/readers.py", line 1898, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/io/parsers/c_parser_wrapper.py", line 93, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 574, in pandas._libs.parsers.TextReader.__cinit__
+  File "pandas/_libs/parsers.pyx", line 663, in pandas._libs.parsers.TextReader._get_header
+  File "pandas/_libs/parsers.pyx", line 874, in pandas._libs.parsers.TextReader._tokenize_rows
+  File "pandas/_libs/parsers.pyx", line 891, in pandas._libs.parsers.TextReader._check_tokenize_status
+  File "pandas/_libs/parsers.pyx", line 2053, in pandas._libs.parsers.raise_parser_error
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xa4 in position 7: invalid start byte
+2025-12-13 02:07:37 [INFO] root: Logging initialized. Writing to logs/analysis_pregame.log
+2025-12-13 02:07:37 [INFO] root: >>> STARTING PRE-GAME PROP ANALYSIS <<<
+2025-12-13 02:07:37 [INFO] root: Loaded 290 props.
+2025-12-13 02:07:37 [INFO] root: Building feature set with Point-in-Time safety...
+2025-12-13 02:07:37 [INFO] root: --- Loading Static Data Files (Parquet) ---
+2025-12-13 02:07:37 [INFO] root: Calculating dynamic historical stats...
+2025-12-13 02:07:38 [INFO] root: Feature set built. Final Shape: (290, 1143)
+2025-12-13 02:07:38 [INFO] root: Running Machine Learning Inference...
+2025-12-13 02:07:38 [INFO] root: Starting batch inference on 290 props...
+2025-12-13 02:07:39 [WARNING] root: Skipping Chet Holmgren (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:39 [WARNING] root: Skipping Chet Holmgren (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:39 [WARNING] root: Skipping Stephon Castle (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:39 [WARNING] root: Skipping Stephon Castle (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:39 [WARNING] root: Skipping Victor Wembanyama (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:39 [WARNING] root: Skipping Victor Wembanyama (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:40 [WARNING] root: Skipping Victor Wembanyama (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:40 [WARNING] root: Skipping De'Aaron Fox (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:40 [WARNING] root: Skipping Keldon Johnson (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:40 [WARNING] root: Skipping Isaiah Hartenstein (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:40 [WARNING] root: Skipping Shai Gilgeous-Alexander (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:40 [WARNING] root: Skipping Shai Gilgeous-Alexander (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:40 [WARNING] root: Skipping Shai Gilgeous-Alexander (Q1_AST) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:40 [WARNING] root: Skipping Jalen Williams (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:40 [WARNING] root: Skipping Jalen Williams (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:40 [WARNING] root: Skipping Shai Gilgeous-Alexander (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Jalen Suggs (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Jalen Suggs (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Mitchell Robinson (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Josh Hart (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Karl-Anthony Towns (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Karl-Anthony Towns (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Paolo Banchero (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Paolo Banchero (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Mikal Bridges (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Mikal Bridges (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Wendell Carter Jr. (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Anthony Black (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:41 [WARNING] root: Skipping Anthony Black (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:42 [WARNING] root: Skipping OG Anunoby (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:42 [WARNING] root: Skipping Jalen Brunson (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:42 [WARNING] root: Skipping Desmond Bane (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:42 [WARNING] root: Skipping Goga Bitadze (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:07:42 [INFO] root: Saved Excel analysis to: output/processed_props.xlsx
+2025-12-13 02:07:42 [INFO] root: <<< ANALYSIS COMPLETE >>>

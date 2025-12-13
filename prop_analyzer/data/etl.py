@@ -73,6 +73,7 @@ def get_season_folders(data_dir):
     return sorted(folders)
 
 def load_clean_csv(filepath, required_cols):
+    """Loads raw CSV data from scraper output."""
     if not filepath.exists():
         return None
             
@@ -215,9 +216,9 @@ def process_master_player_stats(player_id_map, season_folders, output_dir):
             season_player_df = pd.merge(player_id_map[[Cols.PLAYER_ID, 'Player_Clean', 'TEAM_ID', 'TEAM_ABBREVIATION']], season_player_df, on=Cols.PLAYER_ID, how="right")
             season_player_df.rename(columns={'Player_Clean': 'clean_name'}, inplace=True)
             
-            # --- SAVE SEPARATE FILE ---
-            out_name = f"master_player_stats_{season_id}.csv"
-            season_player_df.to_csv(output_dir / out_name, index=False)
+            # --- SAVE SEPARATE FILE (PARQUET) ---
+            out_name = f"master_player_stats_{season_id}.parquet"
+            season_player_df.to_parquet(output_dir / out_name, index=False)
             logging.info(f"Saved {out_name}")
             
         except Exception as e:
@@ -269,16 +270,14 @@ def process_master_team_stats(player_id_map, season_folders, output_dir):
             
             season_master['SEASON_ID'] = season_id
             
-            # --- SAVE SEPARATE FILE ---
-            out_name = f"master_team_stats_{season_id}.csv"
-            season_master.to_csv(output_dir / out_name, index=False)
+            # --- SAVE SEPARATE FILE (PARQUET) ---
+            out_name = f"master_team_stats_{season_id}.parquet"
+            season_master.to_parquet(output_dir / out_name, index=False)
             logging.info(f"Saved {out_name}")
 
 def calculate_historical_vacancy(bs_df, player_df):
     """
     Ensures vacancy columns exist in the dataset.
-    Ideally, this would calculate historical vacancy based on past injury reports,
-    but for now, we initialize them to 0.0 to prevent schema errors in training.
     """
     logging.info("--- Initializing Historical Vacancy Columns (Placeholder) ---")
     
@@ -313,10 +312,10 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
             id_map = player_id_map[[Cols.PLAYER_ID, 'PLAYER_NAME', 'TEAM_ABBREVIATION', 'Player_Clean']].drop_duplicates(subset=[Cols.PLAYER_ID])
             bs_df = pd.merge(bs_df, id_map, on=Cols.PLAYER_ID, how='left')
             
-            # Load specific player stats for this season to get Position
-            p_stats_path = output_dir / f"master_player_stats_{season_id}.csv"
+            # Load specific player stats for this season to get Position (PARQUET READ)
+            p_stats_path = output_dir / f"master_player_stats_{season_id}.parquet"
             if p_stats_path.exists():
-                p_stats = pd.read_csv(p_stats_path)
+                p_stats = pd.read_parquet(p_stats_path)
                 # Ensure merge key is int
                 if Cols.PLAYER_ID in p_stats.columns:
                     p_stats[Cols.PLAYER_ID] = pd.to_numeric(p_stats[Cols.PLAYER_ID], errors='coerce').fillna(0).astype(int)
@@ -335,25 +334,20 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
             bs_df['STK'] = bs_df['STL'] + bs_df['BLK']
             bs_df['FANTASY_PTS'] = bs_df['PTS'] + (bs_df['REB']*1.2) + (bs_df['AST']*1.5) + (bs_df['STL']*3) + (bs_df['BLK']*3) - bs_df['TOV']
             
-            # --- DOUBLE/TRIPLE DOUBLE CALCULATION (NEW) ---
-            # Check which of the 5 main categories are >= 10
+            # --- DOUBLE/TRIPLE DOUBLE CALCULATION ---
             dd_cols = ['PTS', 'REB', 'AST', 'STL', 'BLK']
             if all(c in bs_df.columns for c in dd_cols):
-                # Count categories with >= 10
                 counts = bs_df[dd_cols].ge(10).sum(axis=1)
-                
                 bs_df['DD'] = counts.ge(2).astype(int)
-                bs_df['TD'] = counts.ge(3).astype(int) # <-- Added Triple Double
+                bs_df['TD'] = counts.ge(3).astype(int)
             else:
                 bs_df['DD'] = 0
                 bs_df['TD'] = 0
-            # ---------------------------------------
 
             # Advanced Metrics
             ts_denom = 2 * (bs_df['FGA'] + 0.44 * bs_df['FTA'])
             bs_df['TS_PCT'] = np.where(ts_denom > 0, bs_df['PTS'] / ts_denom, 0.0)
             
-            # Usage Proxy: (FGA + 0.44*FTA + TOV) / MIN
             usg_num = (bs_df['FGA'] + 0.44 * bs_df['FTA'] + bs_df['TOV'])
             bs_df['USG_PROXY'] = np.where(bs_df['MIN'] > 0, usg_num / bs_df['MIN'], 0.0)
 
@@ -367,7 +361,7 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
             
             # Vacancy Calc (Initialize columns)
             if p_stats_path.exists():
-                bs_df = calculate_historical_vacancy(bs_df, pd.read_csv(p_stats_path))
+                bs_df = calculate_historical_vacancy(bs_df, pd.read_parquet(p_stats_path))
             
             # Opponent Parsing
             def get_opponent(matchup):
@@ -375,9 +369,9 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
                 return matchup.split(" vs. ")[-1] if " vs. " in matchup else matchup.split(" @ ")[-1] if " @ " in matchup else "UNKNOWN"
             bs_df['OPPONENT_ABBREV'] = bs_df['MATCHUP'].apply(get_opponent)
             
-            # --- SAVE SEPARATE FILE ---
-            out_name = f"master_box_scores_{season_id}.csv"
-            bs_df.to_csv(output_dir / out_name, index=False)
+            # --- SAVE SEPARATE FILE (PARQUET) ---
+            out_name = f"master_box_scores_{season_id}.parquet"
+            bs_df.to_parquet(output_dir / out_name, index=False)
             logging.info(f"Saved {out_name} ({len(bs_df)} rows)")
             
         except Exception as e:
@@ -385,33 +379,34 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
 
 def process_vs_opponent_stats(data_dir, output_dir):
     logging.info("--- Starting: process_vs_opponent_stats ---")
-    # For H2H, we WANT to combine history.
-    all_files = sorted(output_dir.glob("master_box_scores_*.csv"))
+    # GLOB FOR PARQUET
+    all_files = sorted(output_dir.glob("master_box_scores_*.parquet"))
     if not all_files: return
 
     dfs = []
     for f in all_files:
         try:
-            dfs.append(pd.read_csv(f, low_memory=False))
+            dfs.append(pd.read_parquet(f))
         except: pass
     
     if not dfs: return
     df = pd.concat(dfs, ignore_index=True)
     
-    # Add TD to aggregation list
+    # Add DD/TD to aggregation list
     agg_cols = {k: 'mean' for k in ['PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 'PRA', 'PR', 'PA', 'RA', 'FANTASY_PTS', 'MIN', 'DD', 'TD'] if k in df.columns}
     if 'Game_ID' in df.columns: agg_cols['Game_ID'] = 'count'
     
     vs_opp_df = df.groupby([Cols.PLAYER_ID, 'PLAYER_NAME', 'OPPONENT_ABBREV']).agg(agg_cols).reset_index()
     if 'Game_ID' in vs_opp_df.columns: vs_opp_df.rename(columns={'Game_ID': 'GAMES_PLAYED'}, inplace=True)
     
-    vs_opp_df.round(2).to_csv(output_dir / "master_vs_opponent.csv", index=False)
-    logging.info("Saved master_vs_opponent.csv")
+    # SAVE AS PARQUET
+    vs_opp_df.round(2).to_parquet(output_dir / "master_vs_opponent.parquet", index=False)
+    logging.info("Saved master_vs_opponent.parquet")
 
 def process_dvp_stats(output_dir):
     logging.info("--- Starting: process_dvp_stats ---")
-    # DvP should ideally be Current Season Only
-    files = sorted(output_dir.glob("master_box_scores_*.csv"))
+    # GLOB FOR PARQUET
+    files = sorted(output_dir.glob("master_box_scores_*.parquet"))
     if not files: return
     
     # Use last file (latest year)
@@ -419,7 +414,7 @@ def process_dvp_stats(output_dir):
     logging.info(f"Calculating DvP using: {latest_file.name}")
     
     try:
-        df = pd.read_csv(latest_file, low_memory=False)
+        df = pd.read_parquet(latest_file)
         
         if 'Pos' not in df.columns or 'OPPONENT_ABBREV' not in df.columns: return
 
@@ -438,7 +433,6 @@ def process_dvp_stats(output_dir):
         agg_dict = {}
         for col in stat_cols:
             if f'{col}_PER36' in df.columns:
-                # Weighted by minutes theoretically better, but PER36 is standard for DVP
                 agg_dict[f'{col}_PER36'] = 'mean'
             elif col in df.columns:
                 agg_dict[col] = 'mean'
@@ -453,7 +447,8 @@ def process_dvp_stats(output_dir):
             rename_map[col] = f"DVP_{base_stat}"
             
         dvp_df.rename(columns=rename_map, inplace=True)
-        dvp_df.round(2).to_csv(output_dir / "master_dvp_stats.csv", index=False)
-        logging.info("Saved master_dvp_stats.csv")
+        # SAVE AS PARQUET
+        dvp_df.round(2).to_parquet(output_dir / "master_dvp_stats.parquet", index=False)
+        logging.info("Saved master_dvp_stats.parquet")
     except Exception as e:
         logging.error(f"Error in process_dvp_stats: {e}")

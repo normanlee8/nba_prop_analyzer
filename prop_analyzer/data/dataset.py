@@ -12,18 +12,18 @@ def load_master_data():
     Uses loader to aggregate separate season files.
     """
     try:
-        # Use loader to get combined box scores
+        # Use loader to get combined box scores (Already updated to read Parquet)
         box_scores = loader.load_box_scores()
         
-        # Load DVP Stats if available
+        # Load DVP Stats if available (Updated to read Parquet)
         dvp_path = cfg.MASTER_DVP_FILE
         if dvp_path.exists():
-            dvp_df = pd.read_csv(dvp_path)
+            dvp_df = pd.read_parquet(dvp_path)
         else:
             dvp_df = None
-            logging.warning("master_dvp_stats.csv not found. Skipping DVP merge.")
+            logging.warning("master_dvp_stats.parquet not found. Skipping DVP merge.")
 
-        # Load Team Stats
+        # Load Team Stats (Already updated to read Parquet)
         _, team_stats, _ = loader.load_static_data()
 
         return box_scores, dvp_df, team_stats
@@ -51,8 +51,12 @@ def add_rolling_features(df):
     # Ensure correct sort order
     df = df.sort_values(by=[Cols.PLAYER_ID, Cols.DATE]).reset_index(drop=True)
     
-    # --- ADDED TD to list ---
-    stats_to_roll = ['PTS', 'REB', 'AST', 'PRA', 'PR', 'PA', 'RA', 'FG3M', 'STL', 'BLK', 'TOV', 'FANTASY_PTS', 'FGA', 'FG3A', 'DD', 'TD']
+    # Stats to roll (Include new Volume and Derived props)
+    stats_to_roll = [
+        'PTS', 'REB', 'AST', 'PRA', 'PR', 'PA', 'RA', 
+        'FG3M', 'STL', 'BLK', 'TOV', 'FANTASY_PTS', 
+        'FGA', 'FG3A', 'DD', 'TD'
+    ]
     
     # Initialize columns if missing
     for col in stats_to_roll:
@@ -135,27 +139,22 @@ def create_training_dataset(output_path=None):
         logging.critical(f"Feature Engineering Failed: {e}", exc_info=True)
         return
 
-    # 2. DVP Merge (Improved Logic)
+    # 2. DVP Merge
     if dvp_df is not None:
         logging.info("Merging Defense vs Position (DVP) stats...")
         
-        # Ensure we have a clean position column
         if 'Pos' in bs_df.columns:
             bs_df['Primary_Pos'] = bs_df['Pos'].apply(normalize_position)
         else:
-            logging.warning("No 'Pos' column in box scores. Defaulting to 'PG' for DVP merge (Not Ideal).")
+            logging.warning("No 'Pos' column in box scores. Defaulting to 'PG' for DVP merge.")
             bs_df['Primary_Pos'] = 'PG' 
 
-        # Merge strictly on Opponent + Position
-        # Note: DVP DF must have 'OPPONENT_ABBREV' and 'Primary_Pos'
         bs_df = pd.merge(
             bs_df, 
             dvp_df, 
             on=['OPPONENT_ABBREV', 'Primary_Pos'], 
             how='left'
         )
-        
-        # CRITICAL FIX: Do NOT fill DVP NaNs with global mean.
         
     # 3. Team Stats Merge
     if team_stats_df is not None:
@@ -164,23 +163,18 @@ def create_training_dataset(output_path=None):
         if 'TEAM_ABBREVIATION' not in team_stats_df.columns and team_stats_df.index.name == 'TEAM_ABBREVIATION':
             team_stats_df = team_stats_df.reset_index()
             
-        # Prepare Team Stats (Prefix with TEAM_)
+        # Prepare Team Stats
         team_cols_map = {c: f"TEAM_{c}" for c in team_stats_df.columns if c != 'TEAM_ABBREVIATION'}
         team_df_clean = team_stats_df.rename(columns=team_cols_map)
-        
         bs_df = pd.merge(bs_df, team_df_clean, on='TEAM_ABBREVIATION', how='left')
         
-        # Prepare Opponent Stats (Prefix with OPP_)
+        # Prepare Opponent Stats
         opp_cols_map = {c: f"OPP_{c}" for c in team_stats_df.columns if c != 'TEAM_ABBREVIATION'}
         opp_df_clean = team_stats_df.rename(columns=opp_cols_map)
-        
-        # Join Key: Opponent Abbrev
         opp_df_clean = opp_df_clean.rename(columns={'TEAM_ABBREVIATION': 'OPPONENT_ABBREV'})
-        
         bs_df = pd.merge(bs_df, opp_df_clean, on='OPPONENT_ABBREV', how='left')
 
     # 4. Vacancy Features Check
-    # Ensure these exist so model training doesn't break
     for col in ['MISSING_USG_G', 'MISSING_USG_F', 'TEAM_MISSING_USG', 'TEAM_MISSING_MIN']:
         if col not in bs_df.columns:
             bs_df[col] = 0.0
@@ -188,14 +182,23 @@ def create_training_dataset(output_path=None):
             bs_df[col] = bs_df[col].fillna(0.0)
 
     # 5. Final Cleanup
-    # Drop DNP (Did Not Play) rows where Minutes = 0
     bs_df = bs_df[bs_df['MIN'] > 0].copy()
     
+    # --- FIX: Enforce String Types for Parquet ---
+    # PyArrow crashes if 'object' columns have mixed types (int vs str)
+    str_cols = ['Pos', 'Primary_Pos', 'TEAM_ABBREVIATION', 'OPPONENT_ABBREV', 'PLAYER_NAME', 'clean_name']
+    for c in str_cols:
+        if c in bs_df.columns:
+            bs_df[c] = bs_df[c].astype(str)
+    # ---------------------------------------------
+
     if output_path is None:
-        output_path = cfg.DATA_DIR / "master_training_dataset.csv"
+        # Use Parquet file from Config
+        output_path = cfg.MASTER_TRAINING_FILE
         
-    bs_df.to_csv(output_path, index=False)
-    logging.info(f"Saved master_training_dataset.csv with {len(bs_df)} rows and {len(bs_df.columns)} features.")
+    # WRITE PARQUET
+    bs_df.to_parquet(output_path, index=False)
+    logging.info(f"Saved training dataset to {output_path} with {len(bs_df)} rows.")
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')

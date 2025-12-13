@@ -13,6 +13,67 @@ from prop_analyzer.features import generator
 from prop_analyzer.models import inference
 from prop_analyzer.utils import common
 
+def save_pretty_excel(df, output_path):
+    """
+    Saves the dataframe to Excel with conditional formatting for probabilities.
+    """
+    try:
+        if df.empty: return
+
+        # Create a Pandas Excel writer using XlsxWriter as the engine.
+        writer = pd.ExcelWriter(output_path, engine='xlsxwriter')
+        
+        # Write data
+        df.to_excel(writer, sheet_name='Picks', index=False)
+        
+        # Get workbook/worksheet objects
+        workbook = writer.book
+        worksheet = writer.sheets['Picks']
+        
+        # --- Formats ---
+        # Green text with light green background for Good picks
+        green_fmt = workbook.add_format({'bg_color': '#C6EFCE', 'font_color': '#006100'})
+        # Red text with light red background for Bad picks
+        red_fmt = workbook.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006'})
+        # Percent format
+        pct_fmt = workbook.add_format({'num_format': '0.0%'})
+        # Header format
+        header_fmt = workbook.add_format({'bold': True, 'bottom': 1, 'bg_color': '#F0F0F0'})
+
+        # Apply Header Format
+        for col_num, value in enumerate(df.columns.values):
+            worksheet.write(0, col_num, value, header_fmt)
+
+        # Apply Column Widths & Num Formats
+        for i, col in enumerate(df.columns):
+            # Dynamic width based on max length of data
+            max_len = max(
+                df[col].astype(str).map(len).max(),
+                len(str(col))
+            )
+            width = min(max_len + 2, 50) # Cap width at 50
+            
+            # Apply percentage format to 'Prob' column
+            if col == 'Prob':
+                worksheet.set_column(i, i, width, pct_fmt)
+                
+                # Conditional Formatting for Probability
+                # Note: Rows are 0-indexed, data starts at row 1
+                worksheet.conditional_format(1, i, len(df), i, {
+                    'type': 'cell',
+                    'criteria': '>=',
+                    'value': 0.585, # S-Tier Threshold
+                    'format': green_fmt
+                })
+            else:
+                worksheet.set_column(i, i, width)
+
+        writer.close()
+        logging.info(f"Saved Excel analysis to: {output_path}")
+        
+    except Exception as e:
+        logging.error(f"Failed to save Excel file: {e}")
+
 def print_pretty_table(df, title="TOP 20 DISCOVERED EDGES"):
     """
     Prints a DataFrame in a clean, grid-like format using | and =.
@@ -27,17 +88,15 @@ def print_pretty_table(df, title="TOP 20 DISCOVERED EDGES"):
     # Calculate column widths based on max length of data or header
     widths = []
     for col in df.columns:
-        # max length of column data or column name
         max_len = max(df_str[col].apply(len).max(), len(col))
-        widths.append(max_len + 2) # Add padding
+        widths.append(max_len + 2)
 
-    # Create format string (e.g., "| {:<10} | {:<5} | ...")
+    # Create format string
     fmt_parts = []
     for w in widths:
         fmt_parts.append(f"{{:<{w}}}")
     fmt = "| " + " | ".join(fmt_parts) + " |"
 
-    # Create Separator Line
     try:
         header_str = fmt.format(*df.columns)
         sep_line = "=" * len(header_str)
@@ -52,15 +111,12 @@ def print_pretty_table(df, title="TOP 20 DISCOVERED EDGES"):
 
         print(sep_line + "\n")
     except Exception as e:
-        logging.error(f"Error printing table: {e}")
-        # Fallback to standard pandas print
         print(df.head(20))
 
 def main():
     common.setup_logging(name="analysis_pregame")
     logging.info(">>> STARTING PRE-GAME PROP ANALYSIS <<<")
     
-    # Wrap execution in try/except for robustness
     try:
         # 1. Load Today's Props
         props_path = cfg.PROPS_FILE
@@ -75,10 +131,9 @@ def main():
                 logging.warning("props_today.csv is empty.")
                 return
                 
-            # Basic sanitization
             props_df.columns = props_df.columns.str.strip()
             
-            # Validate Schema using Data Contract
+            # Validate Schema
             required = Cols.get_required_input_cols()
             missing = [c for c in required if c not in props_df.columns]
             
@@ -86,7 +141,7 @@ def main():
                 logging.critical(f"CRITICAL ERROR: Input file missing required columns: {missing}")
                 return
 
-            logging.info(f"Loaded {len(props_df)} props. Schema verified.")
+            logging.info(f"Loaded {len(props_df)} props.")
             
         except Exception as e:
             logging.critical(f"Failed to read props file: {e}")
@@ -118,18 +173,17 @@ def main():
         if Cols.CONFIDENCE not in results_df.columns:
             results_df[Cols.CONFIDENCE] = 0.0
         
-        # --- SORTING LOGIC ---
+        # Sorting
         tier_map = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
         results_df['Tier_Rank'] = results_df[Cols.TIER].map(tier_map).fillna(99)
         results_df.sort_values(by=['Tier_Rank', Cols.CONFIDENCE], ascending=[True, False], inplace=True)
         
-        # --- FORMATTING ---
-        # Standardize Date format for display
+        # Standardize Date
         if Cols.DATE in results_df.columns:
             results_df[Cols.DATE] = pd.to_datetime(results_df[Cols.DATE], errors='coerce').dt.strftime('%Y-%m-%d')
             results_df[Cols.DATE] = results_df[Cols.DATE].fillna("N/A")
 
-        # Select columns to keep (Using Cols constants)
+        # Select columns for Human/Excel Output
         keep_cols = [
             Cols.PLAYER_NAME, Cols.TEAM, Cols.OPPONENT, Cols.PROP_TYPE, Cols.PROP_LINE, 
             Cols.DATE,
@@ -137,19 +191,16 @@ def main():
             f'Diff%', f'{Cols.L5_AVG}', f'{Cols.SZN_AVG}'
         ]
         
-        # Filter for existing columns (handle case where L5/SZN avg might be named differently in raw output)
-        # We try to find the matching columns dynamically if exact match fails
         final_cols = []
         for c in keep_cols:
             if c in results_df.columns:
                 final_cols.append(c)
-            # Try finding without prefix if needed, though training.py should be consistent now
             elif c == f'{Cols.SZN_AVG}' and 'SZN_AVG' in results_df.columns:
                  final_cols.append('SZN_AVG')
 
         final_output = results_df[final_cols].copy()
 
-        # Rename Columns for Readability (Console Output)
+        # Rename for Readability
         display_map = {
             Cols.PLAYER_NAME: 'Player',
             Cols.PROP_TYPE: 'Prop',
@@ -163,28 +214,23 @@ def main():
         }
         final_output.rename(columns=display_map, inplace=True)
 
-        # Format Prob as Percentage
-        if 'Prob' in final_output.columns:
-            final_output['Prob'] = final_output['Prob'].apply(lambda x: f"{x*100:.1f}%")
-
         # 5. Save Results
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        outfile = cfg.PROCESSED_OUTPUT
-        record_file = cfg.INPUT_DIR / "records" / f"analysis_{timestamp}.csv"
+        # A. Save System CSV (Raw Results for Grading)
+        # Note: We save the full 'results_df' to CSV so grading has all columns
+        results_df.to_csv(cfg.PROCESSED_OUTPUT_CSV, index=False)
         
-        outfile.parent.mkdir(parents=True, exist_ok=True)
-        record_file.parent.mkdir(parents=True, exist_ok=True)
+        # B. Save Human Excel (Formatted)
+        # We use 'final_output' which has clean names
+        # 'Prob' is still numeric here (0.65), perfect for Excel
+        save_pretty_excel(final_output, cfg.PROCESSED_OUTPUT_XLSX)
         
-        # Save RAW standardized output to CSV (for Grading script)
-        # We save results_df (with Cols schema) to file, NOT the pretty-printed version
-        # This ensures Grading script can read it machine-reliably
-        results_df.to_csv(outfile, index=False)
-        results_df.to_csv(record_file, index=False)
-        
-        logging.info(f"Saved analysis to: {outfile}")
-        
-        # 6. Pretty Print to Console (Top 20)
-        print_pretty_table(final_output.head(20))
+        # C. Print to Console
+        # Convert Prob to string for pretty printing (e.g. 65.0%)
+        console_output = final_output.copy()
+        if 'Prob' in console_output.columns:
+            console_output['Prob'] = console_output['Prob'].apply(lambda x: f"{x*100:.1f}%")
+            
+        print_pretty_table(console_output.head(20))
 
         logging.info("<<< ANALYSIS COMPLETE >>>")
         

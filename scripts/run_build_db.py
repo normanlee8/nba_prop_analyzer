@@ -14,7 +14,7 @@ def main():
     common.setup_logging(name="build_db")
     
     try:
-        logging.info(">>> STARTING ETL PIPELINE (Multi-Season) <<<")
+        logging.info(">>> STARTING ETL PIPELINE (Parquet Optimized) <<<")
         
         # --- PHASE 1: ETL (Extract, Transform, Load) ---
         logging.info("Step 1: Aggregating Master Files from Season Folders...")
@@ -34,21 +34,23 @@ def main():
             logging.critical("Failed to create Player ID Map. Aborting.")
             return
 
-        # 3. Process Aggregates
+        # 3. Process Master Stats (Saves as .parquet)
         # We pass 'season_folders' to process each season independently then merge
         etl.process_master_player_stats(player_id_map, season_folders, cfg.DATA_DIR)
         etl.process_master_team_stats(player_id_map, season_folders, cfg.DATA_DIR)
+        
+        # Note: Box Scores depends on Player Stats existing first
         etl.process_master_box_scores(player_id_map, season_folders, cfg.DATA_DIR)
         
         # 4. Derivative Stats (Vs Opponent & DVP)
-        # These depend on the master files created in step 3
+        # These depend on the master parquet files created in step 3
         etl.process_vs_opponent_stats(cfg.DATA_DIR, cfg.DATA_DIR)
         etl.process_dvp_stats(cfg.DATA_DIR)
 
         # --- PHASE 2: Dataset Creation ---
         logging.info("Step 2: Building Final Training Dataset...")
         
-        # This reads the master files and adds rolling features (SZN_AVG, L5, etc.)
+        # This reads the parquet master files and adds rolling features (SZN_AVG, L5, etc.)
         # It relies on the strict schema enforced in dataset.py
         dataset.create_training_dataset()
         
