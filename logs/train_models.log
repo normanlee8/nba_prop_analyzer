@@ -1091,3 +1091,123 @@ ValueError: Length mismatch: Expected axis has 535 elements, new values have 534
 2025-12-10 22:14:38 [INFO] root: [FANTASY_PTS] Validation Accuracy: 58.6%
 2025-12-10 22:14:38 [INFO] root: Saved artifacts for FANTASY_PTS to model_FANTASY_PTS.pkl
 2025-12-10 22:14:38 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 0
+2025-12-12 11:44:12 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-12-12 11:44:12 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-12-12 11:44:12 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-12-12 11:44:14 [INFO] root: Loaded 34184 rows of training data.
+2025-12-12 11:44:14 [INFO] root: Note: 8 props excluded from training (Historical data not available).
+2025-12-12 11:44:14 [INFO] root: Excluded: Q1_PTS, Q1_REB, Q1_AST, Q1_PRA, 1H_PTS, 1H_REB, 1H_AST, 1H_PRA
+2025-12-12 11:44:14 [INFO] root: Proceeding to train models for 13 props...
+2025-12-12 11:44:14 [INFO] root: --- Training Model: PTS ---
+2025-12-12 11:44:14 [INFO] root: Training PTS...
+2025-12-12 11:44:30 [INFO] root: [PTS] Validation Accuracy: 58.4%
+2025-12-12 11:44:30 [INFO] root: Saved artifacts for PTS to model_PTS.pkl
+2025-12-12 11:44:30 [INFO] root: --- Training Model: REB ---
+2025-12-12 11:44:30 [INFO] root: Training REB...
+2025-12-12 11:44:46 [INFO] root: [REB] Validation Accuracy: 60.4%
+2025-12-12 11:44:46 [INFO] root: Saved artifacts for REB to model_REB.pkl
+2025-12-12 11:44:46 [INFO] root: --- Training Model: AST ---
+2025-12-12 11:44:46 [INFO] root: Training AST...
+2025-12-12 11:44:59 [INFO] root: [AST] Validation Accuracy: 60.1%
+2025-12-12 11:44:59 [INFO] root: Saved artifacts for AST to model_AST.pkl
+2025-12-12 11:44:59 [INFO] root: --- Training Model: FG3M ---
+2025-12-12 11:44:59 [INFO] root: Training FG3M...
+2025-12-12 11:45:17 [INFO] root: [FG3M] Validation Accuracy: 66.9%
+2025-12-12 11:45:17 [INFO] root: Saved artifacts for FG3M to model_FG3M.pkl
+2025-12-12 11:45:17 [INFO] root: --- Training Model: STL ---
+2025-12-12 11:45:17 [INFO] root: Training STL...
+2025-12-12 11:45:32 [INFO] root: [STL] Validation Accuracy: 64.9%
+2025-12-12 11:45:32 [INFO] root: Saved artifacts for STL to model_STL.pkl
+2025-12-12 11:45:32 [INFO] root: --- Training Model: BLK ---
+2025-12-12 11:45:32 [INFO] root: Training BLK...
+2025-12-12 11:45:41 [INFO] root: [BLK] Validation Accuracy: 74.0%
+2025-12-12 11:45:41 [INFO] root: Saved artifacts for BLK to model_BLK.pkl
+2025-12-12 11:45:41 [INFO] root: --- Training Model: TOV ---
+2025-12-12 11:45:41 [INFO] root: Training TOV...
+2025-12-12 11:45:56 [INFO] root: [TOV] Validation Accuracy: 63.4%
+2025-12-12 11:45:56 [INFO] root: Saved artifacts for TOV to model_TOV.pkl
+2025-12-12 11:45:56 [INFO] root: --- Training Model: PRA ---
+2025-12-12 11:45:56 [INFO] root: Training PRA...
+2025-12-12 11:46:13 [INFO] root: [PRA] Validation Accuracy: 57.8%
+2025-12-12 11:46:13 [INFO] root: Saved artifacts for PRA to model_PRA.pkl
+2025-12-12 11:46:13 [INFO] root: --- Training Model: PR ---
+2025-12-12 11:46:13 [INFO] root: Training PR...
+2025-12-12 11:46:40 [INFO] root: [PR] Validation Accuracy: 57.5%
+2025-12-12 11:46:40 [INFO] root: Saved artifacts for PR to model_PR.pkl
+2025-12-12 11:46:40 [INFO] root: --- Training Model: PA ---
+2025-12-12 11:46:40 [INFO] root: Training PA...
+2025-12-12 11:47:09 [INFO] root: [PA] Validation Accuracy: 58.3%
+2025-12-12 11:47:09 [INFO] root: Saved artifacts for PA to model_PA.pkl
+2025-12-12 11:47:09 [INFO] root: --- Training Model: RA ---
+2025-12-12 11:47:09 [INFO] root: Training RA...
+2025-12-12 11:47:36 [INFO] root: [RA] Validation Accuracy: 59.1%
+2025-12-12 11:47:36 [INFO] root: Saved artifacts for RA to model_RA.pkl
+2025-12-12 11:47:36 [INFO] root: --- Training Model: STK ---
+2025-12-12 11:47:36 [INFO] root: Training STK...
+2025-12-12 11:48:10 [INFO] root: [STK] Validation Accuracy: 61.5%
+2025-12-12 11:48:10 [INFO] root: Saved artifacts for STK to model_STK.pkl
+2025-12-12 11:48:10 [INFO] root: --- Training Model: FANTASY_PTS ---
+2025-12-12 11:48:10 [INFO] root: Training FANTASY_PTS...
+2025-12-12 11:48:36 [INFO] root: [FANTASY_PTS] Validation Accuracy: 58.4%
+2025-12-12 11:48:36 [INFO] root: Saved artifacts for FANTASY_PTS to model_FANTASY_PTS.pkl
+2025-12-12 11:48:36 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 0
+2025-12-12 22:05:10 [INFO] root: Logging initialized. Writing to logs/train_models.log
+2025-12-12 22:05:10 [INFO] root: >>> STARTING MODEL TRAINING PIPELINE
+2025-12-12 22:05:10 [INFO] root: Loading dataset: prop_data/master_training_dataset.csv
+2025-12-12 22:05:11 [INFO] root: Loaded 34313 rows of training data.
+2025-12-12 22:05:11 [INFO] root: Note: 8 props excluded from training (Historical data not available).
+2025-12-12 22:05:11 [INFO] root: Excluded: Q1_PTS, Q1_REB, Q1_AST, Q1_PRA, 1H_PTS, 1H_REB, 1H_AST, 1H_PRA
+2025-12-12 22:05:11 [INFO] root: Proceeding to train models for 13 props...
+2025-12-12 22:05:11 [INFO] root: --- Training Model: PTS ---
+2025-12-12 22:05:11 [INFO] root: Training PTS...
+2025-12-12 22:05:25 [INFO] root: [PTS] Validation Accuracy: 58.0%
+2025-12-12 22:05:25 [INFO] root: Saved artifacts for PTS to model_PTS.pkl
+2025-12-12 22:05:25 [INFO] root: --- Training Model: REB ---
+2025-12-12 22:05:25 [INFO] root: Training REB...
+2025-12-12 22:05:40 [INFO] root: [REB] Validation Accuracy: 59.6%
+2025-12-12 22:05:40 [INFO] root: Saved artifacts for REB to model_REB.pkl
+2025-12-12 22:05:40 [INFO] root: --- Training Model: AST ---
+2025-12-12 22:05:40 [INFO] root: Training AST...
+2025-12-12 22:05:58 [INFO] root: [AST] Validation Accuracy: 61.1%
+2025-12-12 22:05:58 [INFO] root: Saved artifacts for AST to model_AST.pkl
+2025-12-12 22:05:58 [INFO] root: --- Training Model: FG3M ---
+2025-12-12 22:05:58 [INFO] root: Training FG3M...
+2025-12-12 22:06:14 [INFO] root: [FG3M] Validation Accuracy: 67.2%
+2025-12-12 22:06:14 [INFO] root: Saved artifacts for FG3M to model_FG3M.pkl
+2025-12-12 22:06:14 [INFO] root: --- Training Model: STL ---
+2025-12-12 22:06:14 [INFO] root: Training STL...
+2025-12-12 22:06:28 [INFO] root: [STL] Validation Accuracy: 65.5%
+2025-12-12 22:06:28 [INFO] root: Saved artifacts for STL to model_STL.pkl
+2025-12-12 22:06:28 [INFO] root: --- Training Model: BLK ---
+2025-12-12 22:06:28 [INFO] root: Training BLK...
+2025-12-12 22:06:42 [INFO] root: [BLK] Validation Accuracy: 74.0%
+2025-12-12 22:06:42 [INFO] root: Saved artifacts for BLK to model_BLK.pkl
+2025-12-12 22:06:42 [INFO] root: --- Training Model: TOV ---
+2025-12-12 22:06:42 [INFO] root: Training TOV...
+2025-12-12 22:06:58 [INFO] root: [TOV] Validation Accuracy: 63.7%
+2025-12-12 22:06:58 [INFO] root: Saved artifacts for TOV to model_TOV.pkl
+2025-12-12 22:06:58 [INFO] root: --- Training Model: PRA ---
+2025-12-12 22:06:58 [INFO] root: Training PRA...
+2025-12-12 22:07:14 [INFO] root: [PRA] Validation Accuracy: 57.9%
+2025-12-12 22:07:14 [INFO] root: Saved artifacts for PRA to model_PRA.pkl
+2025-12-12 22:07:14 [INFO] root: --- Training Model: PR ---
+2025-12-12 22:07:14 [INFO] root: Training PR...
+2025-12-12 22:07:40 [INFO] root: [PR] Validation Accuracy: 58.5%
+2025-12-12 22:07:40 [INFO] root: Saved artifacts for PR to model_PR.pkl
+2025-12-12 22:07:40 [INFO] root: --- Training Model: PA ---
+2025-12-12 22:07:40 [INFO] root: Training PA...
+2025-12-12 22:08:10 [INFO] root: [PA] Validation Accuracy: 57.8%
+2025-12-12 22:08:10 [INFO] root: Saved artifacts for PA to model_PA.pkl
+2025-12-12 22:08:10 [INFO] root: --- Training Model: RA ---
+2025-12-12 22:08:10 [INFO] root: Training RA...
+2025-12-12 22:08:36 [INFO] root: [RA] Validation Accuracy: 59.2%
+2025-12-12 22:08:36 [INFO] root: Saved artifacts for RA to model_RA.pkl
+2025-12-12 22:08:36 [INFO] root: --- Training Model: STK ---
+2025-12-12 22:08:36 [INFO] root: Training STK...
+2025-12-12 22:09:09 [INFO] root: [STK] Validation Accuracy: 60.7%
+2025-12-12 22:09:09 [INFO] root: Saved artifacts for STK to model_STK.pkl
+2025-12-12 22:09:09 [INFO] root: --- Training Model: FANTASY_PTS ---
+2025-12-12 22:09:09 [INFO] root: Training FANTASY_PTS...
+2025-12-12 22:09:35 [INFO] root: [FANTASY_PTS] Validation Accuracy: 58.1%
+2025-12-12 22:09:35 [INFO] root: Saved artifacts for FANTASY_PTS to model_FANTASY_PTS.pkl
+2025-12-12 22:09:35 [INFO] root: <<< TRAINING COMPLETE. Success: 13, Failed: 0
