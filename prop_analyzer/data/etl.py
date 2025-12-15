@@ -323,7 +323,6 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
                     p_stats_szn = p_stats[[Cols.PLAYER_ID, 'Pos']].drop_duplicates(subset=[Cols.PLAYER_ID])
                     bs_df = pd.merge(bs_df, p_stats_szn, on=Cols.PLAYER_ID, how='left')
 
-            # --- FIX: Added FTM, FTA, OREB, DREB to numeric conversion list ---
             numeric_cols = [
                 'PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 
                 'FGM', 'FGA', 'FTA', 'FTM', 'OREB', 'DREB', 'MIN'
@@ -450,38 +449,78 @@ def process_dvp_stats(output_dir):
 
 def process_q1_history(output_dir):
     """
-    NEW: Aggregates daily Q1 log snapshots into a single Master Q1 Parquet.
+    1. Aggregates daily Q1 logs -> master_q1_stats.parquet
+    2. Aggregates daily Q2 logs + Q1 logs -> master_1h_stats.parquet
     """
-    logging.info("--- Processing Q1 History for Grading ---")
-    files = sorted(output_dir.rglob("daily_q1_stats_*.parquet"))
-        
-    if not files:
-        logging.warning("No daily Q1 stats found (daily_q1_stats_*.parquet). Grading 1Q props will fail.")
-        return
-
-    dfs = []
-    for f in files:
-        try:
-            df = pd.read_parquet(f)
-            dfs.append(df)
-        except Exception as e:
-            logging.warning(f"Failed to read Q1 file {f}: {e}")
-        
-    if dfs:
-        full_q1 = pd.concat(dfs, ignore_index=True)
-        if 'GAME_DATE' in full_q1.columns:
-            full_q1['GAME_DATE'] = pd.to_datetime(full_q1['GAME_DATE']).dt.normalize()
-            
-        if Cols.PLAYER_ID in full_q1.columns:
+    logging.info("--- Processing Quarter/Half History ---")
+    
+    # --- PROCESS Q1 ---
+    q1_files = sorted(output_dir.rglob("daily_q1_stats_*.parquet"))
+    full_q1 = pd.DataFrame()
+    
+    if q1_files:
+        dfs = []
+        for f in q1_files:
+            try: dfs.append(pd.read_parquet(f))
+            except: pass
+        if dfs:
+            full_q1 = pd.concat(dfs, ignore_index=True)
+            # Cleanup Q1
+            if 'GAME_DATE' in full_q1.columns:
+                full_q1['GAME_DATE'] = pd.to_datetime(full_q1['GAME_DATE']).dt.normalize()
             full_q1 = full_q1.drop_duplicates(subset=[Cols.PLAYER_ID, 'GAME_DATE'], keep='last')
             
-            # --- FIX: Ensure Q1 numeric columns are numeric ---
-            numeric_cols = ['PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV', 'FGM', 'FGA', 'MIN']
-            for col in numeric_cols:
-                if col in full_q1.columns:
-                    full_q1[col] = pd.to_numeric(full_q1[col], errors='coerce').fillna(0)
-
+            # Numeric conversion
+            cols_num = ['PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV', 'FGM', 'FGA', 'MIN']
+            for c in cols_num:
+                if c in full_q1.columns: full_q1[c] = pd.to_numeric(full_q1[c], errors='coerce').fillna(0)
+            
             full_q1.to_parquet(cfg.MASTER_Q1_FILE, index=False)
-            logging.info(f"Saved Master Q1 History: {len(full_q1)} records to {cfg.MASTER_Q1_FILE}")
+            logging.info(f"Saved Master Q1: {len(full_q1)} rows")
+
+    # --- PROCESS 1H (Q1 + Q2) ---
+    q2_files = sorted(output_dir.rglob("daily_q2_stats_*.parquet"))
+    
+    if q1_files and q2_files:
+        logging.info("Building 1st Half (1H) stats from Q1 + Q2...")
+        
+        # Load Q2
+        dfs_q2 = []
+        for f in q2_files:
+            try: dfs_q2.append(pd.read_parquet(f))
+            except: pass
+            
+        if dfs_q2:
+            full_q2 = pd.concat(dfs_q2, ignore_index=True)
+            if 'GAME_DATE' in full_q2.columns:
+                full_q2['GAME_DATE'] = pd.to_datetime(full_q2['GAME_DATE']).dt.normalize()
+            full_q2 = full_q2.drop_duplicates(subset=[Cols.PLAYER_ID, 'GAME_DATE'], keep='last')
+            
+            cols_num = ['PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV', 'FGM', 'FGA', 'MIN']
+            for c in cols_num:
+                if c in full_q2.columns: full_q2[c] = pd.to_numeric(full_q2[c], errors='coerce').fillna(0)
+
+            # Merge Q1 + Q2 on Player/Date
+            # Suffixes: _q1, _q2
+            merged = pd.merge(
+                full_q1, full_q2, 
+                on=[Cols.PLAYER_ID, 'GAME_DATE', 'PLAYER_NAME', 'TEAM_ABBREVIATION'], 
+                how='inner', 
+                suffixes=('_q1', '_q2')
+            )
+            
+            # Calculate 1H Stats
+            stats_to_sum = ['PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV', 'FGM', 'FGA', 'MIN']
+            for col in stats_to_sum:
+                if f'{col}_q1' in merged.columns and f'{col}_q2' in merged.columns:
+                    merged[col] = merged[f'{col}_q1'] + merged[f'{col}_q2']
+            
+            # Save 1H Master
+            # Keep only standard cols + ID
+            keep_cols = [Cols.PLAYER_ID, 'GAME_DATE', 'PLAYER_NAME', 'TEAM_ABBREVIATION'] + stats_to_sum
+            final_1h = merged[keep_cols].copy()
+            
+            final_1h.to_parquet(cfg.MASTER_1H_FILE, index=False)
+            logging.info(f"Saved Master 1H: {len(final_1h)} rows")
     else:
-        logging.warning("No Q1 data available to process.")
+        logging.warning("Missing Q2 files. Cannot build 1H history.")

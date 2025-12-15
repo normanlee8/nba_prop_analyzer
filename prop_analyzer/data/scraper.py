@@ -63,7 +63,7 @@ def get_season_config():
     ]
 
 MAX_WORKERS = 5 
-NBA_API_TIMEOUT = 15 # REDUCED: Fail fast (was 60)
+NBA_API_TIMEOUT = 15 # Reduced to fail fast on stalls
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
@@ -536,42 +536,44 @@ def fetch_and_save_parquet(filename, api_class, output_dir, **kwargs):
             else:
                 logging.error(f"Failed to fetch {filename} after {retries} attempts: {e}")
 
-def scrape_recent_q1_stats(output_dir):
+def scrape_recent_quarter_stats(output_dir):
     """
-    NEW: Fetches yesterday's 1st Quarter stats specifically for grading purposes.
+    Fetches yesterday's Q1 AND Q2 stats specifically for grading purposes.
     Standard box scores often don't contain quarter splits per player.
     """
-    # Calculate yesterday's date (The most likely date needed for grading)
     yesterday_dt = datetime.now() - timedelta(days=1)
     yesterday_str = yesterday_dt.strftime('%m/%d/%Y') # Format: MM/DD/YYYY
     save_str = yesterday_dt.strftime('%Y-%m-%d')
     
-    logging.info(f"--- Fetching 1st Quarter Box Scores for Grading ({yesterday_str}) ---")
+    logging.info(f"--- Fetching Q1 & Q2 Box Scores for Grading ({yesterday_str}) ---")
     
-    try:
-        # LeagueDashPlayerStats with Period=1 gives us the Q1 box score for everyone who played
-        q1_stats = LeagueDashPlayerStats(
-            period=1,
-            date_from_nullable=yesterday_str,
-            date_to_nullable=yesterday_str,
-            season_type_all_star='Regular Season',
-            timeout=NBA_API_TIMEOUT
-        )
-        df = q1_stats.get_data_frames()[0]
-        
-        if not df.empty:
-            df['GAME_DATE'] = save_str
-            # Save to a dedicated sub-folder to keep things organized
-            q1_dir = output_dir / "q1_logs"
-            filename = f"daily_q1_stats_{save_str}"
+    for period in [1, 2]:
+        try:
+            # LeagueDashPlayerStats with Period=X gives us the Q{X} box score
+            stats = LeagueDashPlayerStats(
+                period=period,
+                date_from_nullable=yesterday_str,
+                date_to_nullable=yesterday_str,
+                season_type_all_star='Regular Season',
+                timeout=NBA_API_TIMEOUT
+            )
+            df = stats.get_data_frames()[0]
             
-            save_clean_parquet(df, filename, q1_dir)
-            logging.info(f"Saved Q1 stats for {save_str}")
-        else:
-            logging.info(f"No Q1 stats found for {yesterday_str} (No games played?)")
+            if not df.empty:
+                df['GAME_DATE'] = save_str
+                # Save to specific sub-folder (q1_logs or q2_logs)
+                q_dir = output_dir / f"q{period}_logs"
+                filename = f"daily_q{period}_stats_{save_str}"
+                
+                save_clean_parquet(df, filename, q_dir)
+                logging.info(f"Saved Q{period} stats for {save_str}")
+            else:
+                logging.info(f"No Q{period} stats found for {yesterday_str}")
+                
+            time.sleep(1.0 + random.random()) # Polite delay
             
-    except Exception as e:
-        logging.error(f"Failed to scrape Q1 stats: {e}")
+        except Exception as e:
+            logging.error(f"Failed to scrape Q{period} stats: {e}")
 
 def scrape_nba_api_stats(season_cfg, output_dir):
     target_season = season_cfg['season_str']
@@ -674,10 +676,9 @@ def scrape_nba_api_stats(season_cfg, output_dir):
             for future in concurrent.futures.as_completed(futures):
                 future.result() 
 
-        # --- Q1 GRADING FETCH ---
-        # Only needed for the current season, as this is for "yesterday's" grading
+        # --- Q1/Q2 GRADING FETCH ---
         if season_cfg['is_current']:
-            scrape_recent_q1_stats(output_dir)
+            scrape_recent_quarter_stats(output_dir)
 
         logging.info("--- All nba-api data fetched successfully ---")
 

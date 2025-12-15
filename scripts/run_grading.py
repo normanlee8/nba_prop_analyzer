@@ -16,7 +16,6 @@ def print_accuracy_report(df, label="Total"):
     """Helper to print formatted percentage stats"""
     total = len(df)
     if total == 0:
-        logging.info(f"{label}: No bets graded.")
         return
 
     wins = len(df[df[Cols.RESULT] == 'WIN'])
@@ -30,8 +29,68 @@ def print_accuracy_report(df, label="Total"):
     else:
         logging.info(f"{label}: N/A (Only Pushes)")
 
+def save_user_scorecard(df, date_str):
+    """
+    Saves a clean, human-readable Excel file for the user.
+    Applies conditional formatting: WIN = Green, LOSS = Red.
+    """
+    user_cols = [
+        'Player Name', 'Team', 'Opponent', 'Prop Category', 'Prop Line', 'GAME_DATE', 
+        'Model_Pred', 'Model_Conf', 'Edge_Type', 'Tier', 'Diff%', 'Actual Value', 'Result'
+    ]
+    
+    rename_map = {
+        'Player Name': 'Player',
+        'Prop Category': 'Prop',
+        'Prop Line': 'Line',
+        'GAME_DATE': 'Date',
+        'Model_Pred': 'Proj',
+        'Model_Conf': 'Prob',
+        'Edge_Type': 'Pick',
+        'Actual Value': 'Actual'
+    }
+    
+    available_cols = [c for c in user_cols if c in df.columns]
+    
+    clean_df = df[available_cols].copy()
+    clean_df = clean_df.rename(columns=rename_map)
+    
+    # Save to specific subfolder: user_scorecards
+    scorecard_dir = cfg.GRADED_DIR / "user_scorecards"
+    scorecard_dir.mkdir(parents=True, exist_ok=True)
+    
+    scorecard_path = scorecard_dir / f"{date_str}.xlsx"
+    
+    try:
+        # --- STYLING LOGIC ---
+        def color_result(val):
+            """Colors the text based on Win/Loss"""
+            if val == 'WIN':
+                return 'color: #008000; font-weight: bold' # Green
+            elif val == 'LOSS':
+                return 'color: #FF0000; font-weight: bold' # Red
+            elif val == 'PUSH':
+                return 'color: #808080; font-weight: bold' # Gray
+            return ''
+
+        # Fix for FutureWarning: Use .map instead of .applymap for newer pandas versions
+        if 'Result' in clean_df.columns:
+            try:
+                styler = clean_df.style.map(color_result, subset=['Result'])
+            except AttributeError:
+                # Fallback for older pandas versions
+                styler = clean_df.style.applymap(color_result, subset=['Result'])
+        else:
+            styler = clean_df.style
+
+        # Save to Excel
+        styler.to_excel(scorecard_path, index=False, engine='openpyxl')
+        
+    except Exception as e:
+        logging.error(f"Failed to save user scorecard: {e}")
+
 def grade_predictions():
-    # 1. Load Predictions (Parquet)
+    # 1. Load Predictions
     preds_path = cfg.PROCESSED_OUTPUT_SYSTEM
     if not preds_path.exists():
         logging.critical(f"No predictions file found at {preds_path}")
@@ -49,68 +108,56 @@ def grade_predictions():
     # 2. Load Truth Data
     logging.info("Loading historical data for grading...")
     
-    # A. Full Game Box Scores
     full_game_df = loader.load_box_scores()
+    q1_game_df = loader.load_master_q1_history()
+    h1_game_df = loader.load_master_1h_history()
+
     if full_game_df is None or full_game_df.empty:
         logging.warning("No master box scores found. Full game props cannot be graded.")
         full_game_df = pd.DataFrame()
 
-    # B. 1st Quarter Box Scores
-    q1_game_df = loader.load_master_q1_history()
-    if q1_game_df.empty:
-        logging.warning("No master Q1 history found. 1st Quarter props cannot be graded.")
-
     logging.info(f"Grading {len(preds_df)} predictions...")
 
-    # Standardize Dates in Truth Dataframes
-    if not full_game_df.empty and Cols.DATE in full_game_df.columns:
-        full_game_df[Cols.DATE] = pd.to_datetime(full_game_df[Cols.DATE]).dt.normalize()
-        
-    if not q1_game_df.empty and Cols.DATE in q1_game_df.columns:
-        q1_game_df[Cols.DATE] = pd.to_datetime(q1_game_df[Cols.DATE]).dt.normalize()
+    for df in [full_game_df, q1_game_df, h1_game_df]:
+        if not df.empty and Cols.DATE in df.columns:
+            df[Cols.DATE] = pd.to_datetime(df[Cols.DATE]).dt.normalize()
 
-    # Prepare for iteration
     preds_df['Match_Date'] = pd.to_datetime(preds_df[Cols.DATE]).dt.normalize()
     prop_map = cfg.MASTER_PROP_MAP
     
     results = []
     
     for idx, row in preds_df.iterrows():
-        # Identify Prop Type & Date
         prop_type = row[Cols.PROP_TYPE]
         p_date = row['Match_Date']
         
-        # 3. Determine Source (Q1 vs Full Game)
-        is_q1_prop = '1st Quarter' in prop_type or '1Q' in prop_type or str(prop_map.get(prop_type, '')).startswith('Q1_')
+        prop_key = str(prop_map.get(prop_type, prop_type))
         
-        if is_q1_prop:
+        is_q1 = '1st Quarter' in prop_type or '1Q' in prop_type or prop_key.startswith('Q1_')
+        is_1h = '1st Half' in prop_type or '1H' in prop_type or prop_key.startswith('1H_')
+        
+        if is_q1:
             truth_df = q1_game_df
-            # Mapping: Internal 'Q1_PTS' -> Raw File 'PTS'
-            internal_col = prop_map.get(prop_type, prop_type)
-            if internal_col.startswith('Q1_'):
-                data_col = internal_col.replace('Q1_', '') # e.g. PTS, REB, AST
-            else:
-                data_col = internal_col
+            data_col = prop_key.replace('Q1_', '')
+        elif is_1h:
+            truth_df = h1_game_df
+            data_col = prop_key.replace('1H_', '')
         else:
             truth_df = full_game_df
-            data_col = prop_map.get(prop_type, prop_type)
+            data_col = prop_key
 
         if truth_df.empty:
             row[Cols.RESULT] = 'Missing Data Source'
             results.append(row)
             continue
 
-        # 4. Find Player Match
-        # Try ID first, then Name
         mask = None
         if Cols.PLAYER_ID in row and pd.notna(row[Cols.PLAYER_ID]):
-             # Ensure ID types match (int vs int)
              p_id = int(row[Cols.PLAYER_ID])
              if Cols.PLAYER_ID in truth_df.columns:
                  mask = (truth_df[Cols.PLAYER_ID] == p_id) & (truth_df[Cols.DATE] == p_date)
         
         if mask is None or mask.sum() == 0:
-             # Fallback to Name
              p_name = str(row.get(Cols.PLAYER_NAME, '')).lower().strip()
              if 'PLAYER_NAME' in truth_df.columns:
                  mask = (truth_df['PLAYER_NAME'].str.lower().str.strip() == p_name) & (truth_df[Cols.DATE] == p_date)
@@ -126,12 +173,10 @@ def grade_predictions():
             results.append(row)
             continue
             
-        # 5. Extract Actual Value
-        # Fallback for simple name mismatches (e.g. 'Points' vs 'PTS') if mapping failed
         if data_col not in match.columns:
-             if prop_type == 'Points': data_col = 'PTS'
-             elif prop_type == 'Rebounds': data_col = 'REB'
-             elif prop_type == 'Assists': data_col = 'AST'
+             if 'Points' in prop_type: data_col = 'PTS'
+             elif 'Rebounds' in prop_type: data_col = 'REB'
+             elif 'Assists' in prop_type: data_col = 'AST'
 
         if data_col not in match.columns:
             row[Cols.ACTUAL_VAL] = None
@@ -149,7 +194,6 @@ def grade_predictions():
             
         row[Cols.ACTUAL_VAL] = actual
         
-        # 6. Determine Win/Loss
         try:
             line = float(row[Cols.PROP_LINE])
             pick = row[Cols.EDGE_TYPE]
@@ -181,7 +225,6 @@ def grade_predictions():
         logging.warning("No results to grade.")
         return
 
-    # Filter only graded rows
     finished = graded_df[graded_df[Cols.RESULT].isin(['WIN', 'LOSS', 'PUSH'])]
     
     print_accuracy_report(finished, "Total Props")
@@ -191,31 +234,33 @@ def grade_predictions():
             tier_df = finished[finished[Cols.TIER] == tier]
             print_accuracy_report(tier_df, f"{tier} Props")
 
-    # Q1 Specific Report
     q1_props = finished[finished[Cols.PROP_TYPE].str.contains('1st Quarter|1Q', na=False)]
     if not q1_props.empty:
         print_accuracy_report(q1_props, "1st Quarter Props")
+        
+    h1_props = finished[finished[Cols.PROP_TYPE].str.contains('1st Half|1H', na=False)]
+    if not h1_props.empty:
+        print_accuracy_report(h1_props, "1st Half Props")
 
     logging.info("-" * 40)
     
-    # 8. Save Graded Output
+    # 8. Save Outputs
     today_str = datetime.now().strftime("%Y-%m-%d")
-    record_path = cfg.GRADED_DIR / f"graded_props_{today_str}.parquet"
+    
+    parquet_path = cfg.GRADED_DIR / f"graded_props_{today_str}.parquet"
+    csv_path = cfg.GRADED_DIR / f"graded_{today_str}.csv"
     
     try:
-        # Convert objects to string for Parquet safety
         for col in graded_df.select_dtypes(include=['object']).columns:
             graded_df[col] = graded_df[col].astype(str)
             
-        graded_df.to_parquet(record_path, index=False)
-        logging.info(f"Full graded dataset saved to: {record_path}")
+        graded_df.to_parquet(parquet_path, index=False)
+        graded_df.to_csv(csv_path, index=False)
         
-        # Optional: Save a small CSV for quick viewing
-        csv_view = record_path.with_suffix('.csv')
-        graded_df.to_csv(csv_view, index=False)
+        save_user_scorecard(graded_df, today_str)
         
     except Exception as e:
-        logging.error(f"Failed to save graded output: {e}")
+        logging.error(f"Failed to save output: {e}")
 
 def main():
     common.setup_logging(name="grading")

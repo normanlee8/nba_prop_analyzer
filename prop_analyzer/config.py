@@ -36,8 +36,9 @@ MASTER_TEAM_PATTERN = "master_team_stats_*.parquet"
 MASTER_BOX_SCORES_FILE = DATA_DIR / "master_box_scores_2025-26.parquet"
 MASTER_BOX_SCORES_PATTERN = "master_box_scores_*.parquet"
 
-# NEW: Master Q1 History for Grading
+# NEW: Quarter/Half Masters
 MASTER_Q1_FILE = DATA_DIR / "master_q1_stats.parquet"
+MASTER_1H_FILE = DATA_DIR / "master_1h_stats.parquet"  # <--- ADDED THIS
 
 MASTER_VS_OPP_FILE = DATA_DIR / "master_vs_opponent.parquet"
 MASTER_DVP_FILE = DATA_DIR / "master_dvp_stats.parquet"
@@ -82,13 +83,12 @@ EWMA_DECAY_FACTOR = 0.85
 MIN_GAMES_FOR_ANALYSIS = 5
 
 # --- PRIORS ---
-# Added priors for new props (FTM, OREB)
 BAYESIAN_PRIORS = {
     'PTS': 12.0, 'REB': 4.0, 'AST': 3.0, 'FG3M': 1.5,
     'STL': 0.8, 'BLK': 0.5, 'TOV': 1.5, 'PRA': 18.0,
     'PR': 16.0, 'PA': 15.0, 'RA': 7.0, 'STK': 1.3,
     'FANTASY_PTS': 25.0,
-    'OREB': 0.8, 'FTM': 2.5,  # NEW
+    'OREB': 0.8, 'FTM': 2.5,
     'Q1_PTS': 4.0, 'Q1_REB': 1.5, 'Q1_AST': 1.0, 'Q1_PRA': 6.5,
     '1H_PTS': 7.0, '1H_REB': 2.5, '1H_AST': 2.0, '1H_PRA': 11.5,
     'FGA': 15.0, 'FG3A': 6.0, 
@@ -105,13 +105,13 @@ MASTER_PROP_MAP = {
     'Steals': 'STL', 'stl': 'STL',
     'Turnovers': 'TOV', 'tov': 'TOV',
     
-    # Shooting / Scoring Specifics (Added FT Made)
+    # Shooting
     '3-Pointers Made': 'FG3M', '3-Point HITS': 'FG3M', '3 Pointers Made': 'FG3M', 'fg3m': 'FG3M',
     'FG Attempted': 'FGA', 'Field Goals Attempted': 'FGA',
     '3s Attempted': 'FG3A', '3-Pointers Attempted': 'FG3A',
     'FT Made': 'FTM', 'Free Throws Made': 'FTM',
     
-    # Rebounding Specifics (Added OREB)
+    # Rebounding
     'Offensive Rebounds': 'OREB',
     
     # Combos
@@ -124,14 +124,14 @@ MASTER_PROP_MAP = {
     'Steals + Blocks': 'STK', 'Stls + Blks': 'STK', 'stk': 'STK', 'Blocks + Steals': 'STK',
     'Fantasy Points': 'FANTASY_PTS', 'Fantasy Score': 'FANTASY_PTS', 'fantasy points': 'FANTASY_PTS',
     
-    # Quarter Props (Added Q1 3-Pointers)
+    # Quarter Props
     '1st Quarter Points': 'Q1_PTS', '1Q Points': 'Q1_PTS',
     '1st Quarter Rebounds': 'Q1_REB', '1Q Rebounds': 'Q1_REB',
     '1st Quarter Assists': 'Q1_AST', '1Q Assists': 'Q1_AST',
     '1st Quarter PRA': 'Q1_PRA', '1Q Pts + Rebs + Asts': 'Q1_PRA',
     '1Q 3-Pointers Made': 'Q1_FG3M', '1st Quarter 3-Pointers Made': 'Q1_FG3M',
     
-    # Half Props (Added 1H 3-Pointers)
+    # Half Props
     '1st Half Points': '1H_PTS', '1H Points': '1H_PTS',
     '1st Half Rebounds': '1H_REB', '1H Rebounds': '1H_REB',
     '1st Half Assists': '1H_AST', '1H Assists': '1H_AST',
@@ -139,7 +139,6 @@ MASTER_PROP_MAP = {
     '1H 3-Pointers Made': '1H_FG3M',
 }
 
-# Added new supported props so the model knows to look for them
 SUPPORTED_PROPS = [
     'PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV',
     'FGA', 'FG3A', 'FTM', 'OREB', 'DD', 'TD',

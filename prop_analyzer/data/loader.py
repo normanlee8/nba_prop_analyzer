@@ -118,7 +118,7 @@ def load_box_scores(player_ids=None):
 
 def load_master_q1_history():
     """
-    NEW: Loads the Master Q1 History parquet file for grading 1st Quarter props.
+    Loads the Master Q1 History parquet file for grading 1st Quarter props.
     """
     path = cfg.MASTER_Q1_FILE
     if not path.exists():
@@ -133,6 +133,25 @@ def load_master_q1_history():
         return df
     except Exception as e:
         logging.error(f"Error loading Master Q1 History: {e}")
+        return pd.DataFrame()
+
+def load_master_1h_history():
+    """
+    NEW: Loads the Master 1H History parquet file for grading 1st Half props.
+    """
+    path = cfg.MASTER_1H_FILE
+    if not path.exists():
+        logging.warning("Master 1H file does not exist. 1H props cannot be graded.")
+        return pd.DataFrame()
+    
+    try:
+        df = pd.read_parquet(path)
+        # Standardize Date
+        if 'GAME_DATE' in df.columns:
+            df[Cols.DATE] = pd.to_datetime(df['GAME_DATE']).dt.normalize()
+        return df
+    except Exception as e:
+        logging.error(f"Error loading Master 1H History: {e}")
         return pd.DataFrame()
 
 def load_vs_opponent_data():

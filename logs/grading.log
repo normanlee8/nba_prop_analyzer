@@ -210,3 +210,81 @@
 2025-12-14 17:32:04 [INFO] root: Grading 257 predictions against 34503 historical records...
 2025-12-14 17:32:04 [INFO] root: Graded results saved to: input/records/graded_props_2025-12-14.csv
 2025-12-14 17:32:04 [INFO] root: Summary: {'LOSS': 130, 'WIN': 127}
+2025-12-14 21:34:38 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-14 21:34:38 [INFO] root: Loading historical data for grading...
+2025-12-14 21:34:38 [INFO] root: Grading 155 predictions...
+2025-12-14 21:34:38 [INFO] root: ----------------------------------------
+2025-12-14 21:34:38 [INFO] root: >>> GRADING REPORT <<<
+2025-12-14 21:34:38 [INFO] root: Total Props: 47.7% (61/128) [Pushes: 0]
+2025-12-14 21:34:38 [INFO] root: S Tier Props: 80.0% (4/5) [Pushes: 0]
+2025-12-14 21:34:38 [INFO] root: A Tier Props: 50.0% (3/6) [Pushes: 0]
+2025-12-14 21:34:38 [INFO] root: B Tier Props: 44.7% (21/47) [Pushes: 0]
+2025-12-14 21:34:38 [INFO] root: ----------------------------------------
+2025-12-14 21:34:38 [INFO] root: Full graded dataset saved to: output/graded_history/graded_props_2025-12-14.parquet
+2025-12-14 21:43:42 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-14 21:43:42 [INFO] root: Loading historical data for grading...
+2025-12-14 21:43:42 [INFO] root: Grading 155 predictions...
+2025-12-14 21:43:42 [INFO] root: ----------------------------------------
+2025-12-14 21:43:42 [INFO] root: >>> GRADING REPORT <<<
+2025-12-14 21:43:42 [INFO] root: Total Props: 48.4% (62/128) [Pushes: 0]
+2025-12-14 21:43:42 [INFO] root: S Tier Props: 50.0% (4/8) [Pushes: 0]
+2025-12-14 21:43:42 [INFO] root: A Tier Props: 50.0% (2/4) [Pushes: 0]
+2025-12-14 21:43:42 [INFO] root: B Tier Props: 44.7% (21/47) [Pushes: 0]
+2025-12-14 21:43:42 [INFO] root: ----------------------------------------
+2025-12-14 21:43:42 [INFO] root: Graded results saved to: output/graded_history/graded_2025-12-14.csv
+2025-12-14 21:44:37 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-14 21:44:37 [INFO] root: Loading historical data for grading...
+2025-12-14 21:44:37 [INFO] root: Grading 155 predictions...
+2025-12-14 21:44:38 [INFO] root: ----------------------------------------
+2025-12-14 21:44:38 [INFO] root: >>> GRADING REPORT <<<
+2025-12-14 21:44:38 [INFO] root: Total Props: 48.4% (62/128) [Pushes: 0]
+2025-12-14 21:44:38 [INFO] root: S Tier Props: 50.0% (4/8) [Pushes: 0]
+2025-12-14 21:44:38 [INFO] root: A Tier Props: 50.0% (2/4) [Pushes: 0]
+2025-12-14 21:44:38 [INFO] root: B Tier Props: 44.7% (21/47) [Pushes: 0]
+2025-12-14 21:44:38 [INFO] root: ----------------------------------------
+2025-12-14 21:44:38 [INFO] root: Graded results saved to: output/graded_history/graded_2025-12-14.csv
+2025-12-14 21:50:28 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-14 21:50:28 [INFO] root: Loading historical data for grading...
+2025-12-14 21:50:28 [INFO] root: Grading 155 predictions...
+2025-12-14 21:50:28 [INFO] root: ----------------------------------------
+2025-12-14 21:50:28 [INFO] root: >>> GRADING REPORT <<<
+2025-12-14 21:50:28 [INFO] root: Total Props: 48.4% (62/128) [Pushes: 0]
+2025-12-14 21:50:28 [INFO] root: S Tier Props: 50.0% (4/8) [Pushes: 0]
+2025-12-14 21:50:28 [INFO] root: A Tier Props: 50.0% (2/4) [Pushes: 0]
+2025-12-14 21:50:28 [INFO] root: B Tier Props: 44.7% (21/47) [Pushes: 0]
+2025-12-14 21:50:28 [INFO] root: ----------------------------------------
+2025-12-14 21:50:29 [INFO] root: System history (AI) saved to: output/graded_history/graded_2025-12-14.csv
+2025-12-14 21:50:29 [INFO] root: User Scorecard saved to: output/graded_history/user_scorecard_2025-12-14.csv
+2025-12-14 21:50:29 [INFO] root: (Open this file to see your wins/losses easily)
+2025-12-14 21:55:20 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-14 21:55:21 [INFO] root: Loading historical data for grading...
+2025-12-14 21:55:21 [INFO] root: Grading 155 predictions...
+2025-12-14 21:55:21 [INFO] root: ----------------------------------------
+2025-12-14 21:55:21 [INFO] root: >>> GRADING REPORT <<<
+2025-12-14 21:55:21 [INFO] root: Total Props: 48.4% (62/128) [Pushes: 0]
+2025-12-14 21:55:21 [INFO] root: S Tier Props: 50.0% (4/8) [Pushes: 0]
+2025-12-14 21:55:21 [INFO] root: A Tier Props: 50.0% (2/4) [Pushes: 0]
+2025-12-14 21:55:21 [INFO] root: B Tier Props: 44.7% (21/47) [Pushes: 0]
+2025-12-14 21:55:21 [INFO] root: ----------------------------------------
+2025-12-14 21:55:21 [ERROR] root: Failed to save user scorecard: The '.style' accessor requires jinja2
+2025-12-14 21:56:01 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-14 21:56:01 [INFO] root: Loading historical data for grading...
+2025-12-14 21:56:01 [INFO] root: Grading 155 predictions...
+2025-12-14 21:56:02 [INFO] root: ----------------------------------------
+2025-12-14 21:56:02 [INFO] root: >>> GRADING REPORT <<<
+2025-12-14 21:56:02 [INFO] root: Total Props: 48.4% (62/128) [Pushes: 0]
+2025-12-14 21:56:02 [INFO] root: S Tier Props: 50.0% (4/8) [Pushes: 0]
+2025-12-14 21:56:02 [INFO] root: A Tier Props: 50.0% (2/4) [Pushes: 0]
+2025-12-14 21:56:02 [INFO] root: B Tier Props: 44.7% (21/47) [Pushes: 0]
+2025-12-14 21:56:02 [INFO] root: ----------------------------------------
+2025-12-14 21:56:02 [ERROR] root: Failed to save user scorecard: No module named 'openpyxl'
+2025-12-14 21:57:10 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-14 21:57:10 [INFO] root: Loading historical data for grading...
+2025-12-14 21:57:10 [INFO] root: Grading 155 predictions...
+2025-12-14 21:57:11 [INFO] root: ----------------------------------------
+2025-12-14 21:57:11 [INFO] root: >>> GRADING REPORT <<<
+2025-12-14 21:57:11 [INFO] root: Total Props: 48.4% (62/128) [Pushes: 0]
+2025-12-14 21:57:11 [INFO] root: S Tier Props: 50.0% (4/8) [Pushes: 0]
+2025-12-14 21:57:11 [INFO] root: A Tier Props: 50.0% (2/4) [Pushes: 0]
+2025-12-14 21:57:11 [INFO] root: B Tier Props: 44.7% (21/47) [Pushes: 0]
+2025-12-14 21:57:11 [INFO] root: ----------------------------------------

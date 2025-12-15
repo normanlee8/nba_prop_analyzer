@@ -8,7 +8,7 @@ from prop_analyzer.data import loader
 
 def add_rolling_stats_history(df, stats_to_roll=None):
     """
-    Calculates historical rolling features on a dataset (Full Game or Q1).
+    Calculates historical rolling features on a dataset (Full Game, Q1, or 1H).
     """
     if Cols.PLAYER_ID not in df.columns or Cols.DATE not in df.columns:
         logging.error(f"Missing ID/Date columns. Cols found: {df.columns}")
@@ -58,7 +58,9 @@ def build_feature_set(props_df):
     
     # 1. Load Data
     box_scores = loader.load_box_scores()
-    q1_history = loader.load_master_q1_history() # Load Q1 Data
+    q1_history = loader.load_master_q1_history()
+    h1_history = loader.load_master_1h_history() # <--- NEW LOAD
+    
     player_stats_static, team_stats, _ = loader.load_static_data()
     vs_opp_df = loader.load_vs_opponent_data()
     
@@ -130,36 +132,30 @@ def build_feature_set(props_df):
     else:
         features_df = pd.merge(props_df, player_stats_static, on=Cols.PLAYER_ID, how='left')
 
-    # 4. Time-Travel Feature Engineering (Q1) - NEW
+    # 4. Time-Travel Feature Engineering (Q1)
     if not q1_history.empty:
         logging.info("Calculating Q1 rolling stats...")
-        # Prepare Q1 Data
         q1_history[Cols.PLAYER_ID] = q1_history[Cols.PLAYER_ID].fillna(0).astype('int64')
         if Cols.DATE in q1_history.columns:
             q1_history[Cols.DATE] = pd.to_datetime(q1_history[Cols.DATE])
         
-        # Calculate derived Q1 stats (PRA, etc)
         if 'PRA' not in q1_history.columns and 'PTS' in q1_history.columns:
              q1_history['PRA'] = q1_history['PTS'] + q1_history['REB'] + q1_history['AST']
         
-        # Roll stats
         q1_rolled = add_rolling_stats_history(
             q1_history.copy(), 
             stats_to_roll=['PTS', 'REB', 'AST', 'FG3M', 'PRA']
         )
         
-        # Rename columns to prevent collision with full game stats (e.g. PTS_SZN_AVG -> Q1_PTS_SZN_AVG)
         cols_to_rename = {}
         for col in q1_rolled.columns:
             if '_SZN_' in col or '_L5_' in col or '_L10_' in col:
                 cols_to_rename[col] = f"Q1_{col}"
         q1_rolled.rename(columns=cols_to_rename, inplace=True)
         
-        # Merge into main features
         q1_rolled = q1_rolled.sort_values(Cols.DATE)
         features_df = features_df.sort_values(Cols.DATE)
         
-        # Select only the new Q1 feature columns + Keys
         q1_feats_only = q1_rolled[[Cols.PLAYER_ID, Cols.DATE] + list(cols_to_rename.values())]
         
         features_df = pd.merge_asof(
@@ -168,7 +164,39 @@ def build_feature_set(props_df):
             direction='backward'
         )
 
-    # 5. Merge Team/Opponent
+    # 5. Time-Travel Feature Engineering (1H) - NEW BLOCK
+    if not h1_history.empty:
+        logging.info("Calculating 1H rolling stats...")
+        h1_history[Cols.PLAYER_ID] = h1_history[Cols.PLAYER_ID].fillna(0).astype('int64')
+        if Cols.DATE in h1_history.columns:
+            h1_history[Cols.DATE] = pd.to_datetime(h1_history[Cols.DATE])
+            
+        if 'PRA' not in h1_history.columns and 'PTS' in h1_history.columns:
+             h1_history['PRA'] = h1_history['PTS'] + h1_history['REB'] + h1_history['AST']
+             
+        h1_rolled = add_rolling_stats_history(
+            h1_history.copy(), 
+            stats_to_roll=['PTS', 'REB', 'AST', 'FG3M', 'PRA']
+        )
+        
+        cols_to_rename = {}
+        for col in h1_rolled.columns:
+            if '_SZN_' in col or '_L5_' in col or '_L10_' in col:
+                cols_to_rename[col] = f"1H_{col}"
+        h1_rolled.rename(columns=cols_to_rename, inplace=True)
+        
+        h1_rolled = h1_rolled.sort_values(Cols.DATE)
+        features_df = features_df.sort_values(Cols.DATE)
+        
+        h1_feats = h1_rolled[[Cols.PLAYER_ID, Cols.DATE] + list(cols_to_rename.values())]
+        
+        features_df = pd.merge_asof(
+            features_df, h1_feats,
+            on=Cols.DATE, by=Cols.PLAYER_ID,
+            direction='backward'
+        )
+
+    # 6. Merge Team/Opponent
     if 'TEAM_ABBREVIATION' not in features_df.columns and Cols.TEAM in features_df.columns:
         features_df['TEAM_ABBREVIATION'] = features_df[Cols.TEAM]
         
@@ -181,7 +209,7 @@ def build_feature_set(props_df):
         opp_stats_renamed = team_stats.add_prefix('OPP_')
         features_df = pd.merge(features_df, opp_stats_renamed, left_on=Cols.OPPONENT, right_index=True, how='left')
 
-    # 6. Merge DVP
+    # 7. Merge DVP
     if dvp_df is not None:
         if 'Pos' not in features_df.columns and player_stats_static is not None:
              if Cols.PLAYER_ID in player_stats_static.columns:
@@ -205,7 +233,7 @@ def build_feature_set(props_df):
             how='left'
         )
 
-    # 7. Merge H2H
+    # 8. Merge H2H
     if not vs_opp_df.empty:
         features_df = pd.merge(
             features_df, vs_opp_df,
@@ -214,7 +242,7 @@ def build_feature_set(props_df):
             how='left'
         )
 
-    # 8. Final Polish
+    # 9. Final Polish
     if 'TEAM_Possessions per Game' in features_df.columns:
         features_df['GAME_PACE'] = features_df['TEAM_Possessions per Game']
         
