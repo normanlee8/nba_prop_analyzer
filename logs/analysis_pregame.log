@@ -1059,3 +1059,314 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0xa4 in position 7: invalid 
 2025-12-13 02:07:42 [WARNING] root: Skipping Goga Bitadze (Q1_REB) - Missing History (SZN Avg is 0/NaN)
 2025-12-13 02:07:42 [INFO] root: Saved Excel analysis to: output/processed_props.xlsx
 2025-12-13 02:07:42 [INFO] root: <<< ANALYSIS COMPLETE >>>
+2025-12-13 02:24:34 [INFO] root: Logging initialized. Writing to logs/analysis_pregame.log
+2025-12-13 02:24:34 [INFO] root: >>> STARTING PRE-GAME PROP ANALYSIS <<<
+2025-12-13 02:24:34 [INFO] root: Loaded 290 props.
+2025-12-13 02:24:34 [INFO] root: Building feature set with Point-in-Time safety...
+2025-12-13 02:24:34 [INFO] root: --- Loading Static Data Files (Parquet) ---
+2025-12-13 02:24:34 [INFO] root: Calculating dynamic historical stats...
+2025-12-13 02:24:34 [INFO] root: Feature set built. Final Shape: (290, 1143)
+2025-12-13 02:24:34 [INFO] root: Running Machine Learning Inference...
+2025-12-13 02:24:34 [INFO] root: Starting batch inference on 290 props...
+2025-12-13 02:24:36 [WARNING] root: Skipping Chet Holmgren (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:36 [WARNING] root: Skipping Chet Holmgren (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:36 [WARNING] root: Skipping Stephon Castle (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:36 [WARNING] root: Skipping Stephon Castle (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:36 [WARNING] root: Skipping Victor Wembanyama (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:36 [WARNING] root: Skipping Victor Wembanyama (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:36 [WARNING] root: Skipping Victor Wembanyama (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:36 [WARNING] root: Skipping De'Aaron Fox (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:37 [WARNING] root: Skipping Keldon Johnson (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:37 [WARNING] root: Skipping Isaiah Hartenstein (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:37 [WARNING] root: Skipping Shai Gilgeous-Alexander (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:37 [WARNING] root: Skipping Shai Gilgeous-Alexander (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:37 [WARNING] root: Skipping Shai Gilgeous-Alexander (Q1_AST) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:37 [WARNING] root: Skipping Jalen Williams (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:37 [WARNING] root: Skipping Jalen Williams (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:37 [WARNING] root: Skipping Shai Gilgeous-Alexander (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:37 [WARNING] root: Skipping Jalen Suggs (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:37 [WARNING] root: Skipping Jalen Suggs (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Mitchell Robinson (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Josh Hart (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Karl-Anthony Towns (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Karl-Anthony Towns (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Paolo Banchero (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Paolo Banchero (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Mikal Bridges (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Mikal Bridges (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Wendell Carter Jr. (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Anthony Black (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Anthony Black (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping OG Anunoby (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:38 [WARNING] root: Skipping Jalen Brunson (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:39 [WARNING] root: Skipping Desmond Bane (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:39 [WARNING] root: Skipping Goga Bitadze (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-13 02:24:39 [INFO] root: Saved Excel analysis to: output/processed_props.xlsx
+2025-12-13 02:24:39 [INFO] root: <<< ANALYSIS COMPLETE >>>
+2025-12-14 17:32:10 [INFO] root: Logging initialized. Writing to logs/analysis_pregame.log
+2025-12-14 17:32:10 [INFO] root: >>> STARTING PRE-GAME PROP ANALYSIS <<<
+2025-12-14 17:32:10 [INFO] root: Loaded 290 props.
+2025-12-14 17:32:10 [INFO] root: Building feature set with Point-in-Time safety...
+2025-12-14 17:32:10 [INFO] root: --- Loading Static Data Files (Parquet) ---
+2025-12-14 17:32:10 [INFO] root: Calculating dynamic historical stats...
+2025-12-14 17:32:11 [INFO] root: Feature set built. Final Shape: (290, 1143)
+2025-12-14 17:32:11 [INFO] root: Running Machine Learning Inference...
+2025-12-14 17:32:11 [INFO] root: Starting batch inference on 290 props...
+2025-12-14 17:32:13 [WARNING] root: Skipping Chet Holmgren (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:13 [WARNING] root: Skipping Chet Holmgren (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:13 [WARNING] root: Skipping Stephon Castle (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:13 [WARNING] root: Skipping Stephon Castle (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:13 [WARNING] root: Skipping Victor Wembanyama (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:13 [WARNING] root: Skipping Victor Wembanyama (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:13 [WARNING] root: Skipping Victor Wembanyama (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:13 [WARNING] root: Skipping De'Aaron Fox (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:14 [WARNING] root: Skipping Keldon Johnson (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:14 [WARNING] root: Skipping Isaiah Hartenstein (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:14 [WARNING] root: Skipping Shai Gilgeous-Alexander (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:14 [WARNING] root: Skipping Shai Gilgeous-Alexander (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:14 [WARNING] root: Skipping Shai Gilgeous-Alexander (Q1_AST) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:14 [WARNING] root: Skipping Jalen Williams (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:14 [WARNING] root: Skipping Jalen Williams (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:14 [WARNING] root: Skipping Shai Gilgeous-Alexander (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:14 [WARNING] root: Skipping Jalen Suggs (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:14 [WARNING] root: Skipping Jalen Suggs (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:15 [WARNING] root: Skipping Mitchell Robinson (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:15 [WARNING] root: Skipping Josh Hart (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:15 [WARNING] root: Skipping Karl-Anthony Towns (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:15 [WARNING] root: Skipping Karl-Anthony Towns (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:15 [WARNING] root: Skipping Paolo Banchero (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:15 [WARNING] root: Skipping Paolo Banchero (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:15 [WARNING] root: Skipping Mikal Bridges (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:15 [WARNING] root: Skipping Mikal Bridges (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:15 [WARNING] root: Skipping Wendell Carter Jr. (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:15 [WARNING] root: Skipping Anthony Black (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:15 [WARNING] root: Skipping Anthony Black (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:16 [WARNING] root: Skipping OG Anunoby (STK) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:16 [WARNING] root: Skipping Jalen Brunson (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:16 [WARNING] root: Skipping Desmond Bane (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:16 [WARNING] root: Skipping Goga Bitadze (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 17:32:16 [INFO] root: Saved Excel analysis to: output/processed_props.xlsx
+2025-12-14 17:32:16 [INFO] root: <<< ANALYSIS COMPLETE >>>
+2025-12-14 18:43:55 [INFO] root: Logging initialized. Writing to logs/analysis_pregame.log
+2025-12-14 18:43:55 [INFO] root: >>> STARTING PRE-GAME PROP ANALYSIS <<<
+2025-12-14 18:43:55 [INFO] root: Loaded 163 props.
+2025-12-14 18:43:55 [INFO] root: Building feature set with Point-in-Time safety...
+2025-12-14 18:43:55 [INFO] root: --- Loading Static Data Files (Parquet) ---
+2025-12-14 18:43:55 [INFO] root: Calculating dynamic historical stats...
+2025-12-14 18:43:56 [INFO] root: Feature set built. Final Shape: (163, 1143)
+2025-12-14 18:43:56 [INFO] root: Running Machine Learning Inference...
+2025-12-14 18:43:56 [INFO] root: Starting batch inference on 163 props...
+2025-12-14 18:43:57 [WARNING] root: Skipping Jerami Grant (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Deni Avdija (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Deni Avdija (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Deni Avdija (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Jerami Grant (FTM) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Jerami Grant (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Jimmy Butler (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Jimmy Butler (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Jimmy Butler (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Jimmy Butler (FTM) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Jimmy Butler (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Jimmy Butler (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Jerami Grant (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Jerami Grant (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Deni Avdija (FTM) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Deni Avdija (1H_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Robert Williams (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Shaedon Sharpe (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Shaedon Sharpe (FTM) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Deni Avdija (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Deni Avdija (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Shaedon Sharpe (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Shaedon Sharpe (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Deni Avdija (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:58 [WARNING] root: Skipping Draymond Green (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Draymond Green (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Stephen Curry (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Stephen Curry (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Stephen Curry (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Stephen Curry (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Stephen Curry (FTM) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Stephen Curry (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Stephen Curry (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Toumani Camara (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Toumani Camara (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Toumani Camara (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Toumani Camara (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Quinten Post (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Quinten Post (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Donovan Clingan (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Donovan Clingan (1H_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [WARNING] root: Skipping Donovan Clingan (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:43:59 [CRITICAL] root: FATAL ERROR in Analysis Pipeline: module 'prop_analyzer.config' has no attribute 'PROCESSED_OUTPUT_CSV'
+Traceback (most recent call last):
+  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_analysis.py", line 220, in main
+    results_df.to_csv(cfg.PROCESSED_OUTPUT_CSV, index=False)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'prop_analyzer.config' has no attribute 'PROCESSED_OUTPUT_CSV'. Did you mean: 'PROCESSED_OUTPUT_XLSX'?
+2025-12-14 18:47:20 [INFO] root: Logging initialized. Writing to logs/analysis_pregame.log
+2025-12-14 18:47:20 [INFO] root: >>> STARTING PRE-GAME PROP ANALYSIS <<<
+2025-12-14 18:47:20 [INFO] root: Loaded 163 props.
+2025-12-14 18:47:20 [INFO] root: Building feature set with Point-in-Time safety...
+2025-12-14 18:47:20 [INFO] root: --- Loading Static Data Files (Parquet) ---
+2025-12-14 18:47:20 [INFO] root: Calculating dynamic historical stats...
+2025-12-14 18:47:20 [INFO] root: Feature set built. Final Shape: (163, 1143)
+2025-12-14 18:47:20 [INFO] root: Running Machine Learning Inference...
+2025-12-14 18:47:20 [INFO] root: Starting batch inference on 163 props...
+2025-12-14 18:47:22 [WARNING] root: Skipping Jerami Grant (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Deni Avdija (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Deni Avdija (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Deni Avdija (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Jerami Grant (FTM) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Jerami Grant (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Jimmy Butler (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Jimmy Butler (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Jimmy Butler (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Jimmy Butler (FTM) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Jimmy Butler (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Jimmy Butler (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Jerami Grant (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Jerami Grant (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Deni Avdija (FTM) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Deni Avdija (1H_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Robert Williams (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Shaedon Sharpe (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Shaedon Sharpe (FTM) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Deni Avdija (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:22 [WARNING] root: Skipping Deni Avdija (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Shaedon Sharpe (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Shaedon Sharpe (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Deni Avdija (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Draymond Green (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Draymond Green (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Stephen Curry (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Stephen Curry (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Stephen Curry (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Stephen Curry (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Stephen Curry (FTM) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Stephen Curry (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Stephen Curry (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Toumani Camara (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Toumani Camara (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Toumani Camara (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Toumani Camara (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Quinten Post (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Quinten Post (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Donovan Clingan (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Donovan Clingan (1H_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [WARNING] root: Skipping Donovan Clingan (OREB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:47:23 [INFO] root: Saved system results to output/processed_props.parquet
+2025-12-14 18:47:24 [INFO] root: Saved Excel analysis to: output/processed_props.xlsx
+2025-12-14 18:47:24 [INFO] root: <<< ANALYSIS COMPLETE >>>
+2025-12-14 18:51:48 [INFO] root: Logging initialized. Writing to logs/analysis_pregame.log
+2025-12-14 18:51:48 [INFO] root: >>> STARTING PRE-GAME PROP ANALYSIS <<<
+2025-12-14 18:51:48 [INFO] root: Loaded 163 props.
+2025-12-14 18:51:48 [INFO] root: Building feature set with Point-in-Time safety...
+2025-12-14 18:51:48 [WARNING] root: Master Q1 file does not exist. 1Q props cannot be graded.
+2025-12-14 18:51:48 [INFO] root: --- Loading Static Data Files (Parquet) ---
+2025-12-14 18:51:48 [INFO] root: Calculating Full Game rolling stats...
+2025-12-14 18:51:49 [INFO] root: Feature set built. Final Shape: (163, 1151)
+2025-12-14 18:51:49 [INFO] root: Running Machine Learning Inference...
+2025-12-14 18:51:49 [INFO] root: Starting batch inference on 163 props...
+2025-12-14 18:51:50 [WARNING] root: Skipping Jerami Grant (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:50 [WARNING] root: Skipping Deni Avdija (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:50 [WARNING] root: Skipping Deni Avdija (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:50 [WARNING] root: Skipping Deni Avdija (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:50 [WARNING] root: Skipping Jerami Grant (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:50 [WARNING] root: Skipping Jimmy Butler (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:50 [WARNING] root: Skipping Jimmy Butler (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:50 [WARNING] root: Skipping Jimmy Butler (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Jimmy Butler (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Jerami Grant (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Jerami Grant (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Deni Avdija (1H_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Robert Williams (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Shaedon Sharpe (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Deni Avdija (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Shaedon Sharpe (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Shaedon Sharpe (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Deni Avdija (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Draymond Green (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Stephen Curry (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Stephen Curry (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Stephen Curry (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Stephen Curry (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Stephen Curry (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Stephen Curry (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Toumani Camara (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:51 [WARNING] root: Skipping Toumani Camara (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:52 [WARNING] root: Skipping Toumani Camara (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:52 [WARNING] root: Skipping Quinten Post (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:52 [WARNING] root: Skipping Donovan Clingan (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:52 [WARNING] root: Skipping Donovan Clingan (1H_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:51:52 [INFO] root: Saved system results to output/processed_props.parquet
+2025-12-14 18:51:52 [INFO] root: Saved Excel analysis to: output/processed_props.xlsx
+2025-12-14 18:51:52 [INFO] root: <<< ANALYSIS COMPLETE >>>
+2025-12-14 18:55:22 [INFO] root: Logging initialized. Writing to logs/analysis_pregame.log
+2025-12-14 18:55:22 [INFO] root: >>> STARTING PRE-GAME PROP ANALYSIS <<<
+2025-12-14 18:55:22 [INFO] root: Loaded 163 props.
+2025-12-14 18:55:22 [INFO] root: Building feature set with Point-in-Time safety...
+2025-12-14 18:55:23 [INFO] root: --- Loading Static Data Files (Parquet) ---
+2025-12-14 18:55:23 [INFO] root: Calculating Full Game rolling stats...
+2025-12-14 18:55:23 [INFO] root: Calculating Q1 rolling stats...
+2025-12-14 18:55:23 [INFO] root: Feature set built. Final Shape: (163, 1171)
+2025-12-14 18:55:23 [INFO] root: Running Machine Learning Inference...
+2025-12-14 18:55:23 [INFO] root: Starting batch inference on 163 props...
+2025-12-14 18:55:24 [WARNING] root: Skipping Stephen Curry (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:24 [WARNING] root: Skipping Stephen Curry (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:24 [WARNING] root: Skipping Stephen Curry (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:24 [WARNING] root: Skipping Stephen Curry (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:24 [WARNING] root: Skipping Stephen Curry (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:24 [WARNING] root: Skipping Stephen Curry (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Draymond Green (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Donovan Clingan (1H_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Donovan Clingan (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Toumani Camara (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Toumani Camara (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Toumani Camara (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Quinten Post (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Deni Avdija (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Jimmy Butler (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Jimmy Butler (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Jimmy Butler (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Jimmy Butler (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Jerami Grant (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Jerami Grant (Q1_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Jerami Grant (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Jerami Grant (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Deni Avdija (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Deni Avdija (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Deni Avdija (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Deni Avdija (1H_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:25 [WARNING] root: Skipping Deni Avdija (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:26 [WARNING] root: Skipping Shaedon Sharpe (Q1_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:26 [WARNING] root: Skipping Shaedon Sharpe (Q1_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:26 [WARNING] root: Skipping Shaedon Sharpe (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:26 [WARNING] root: Skipping Robert Williams (Q1_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 18:55:26 [INFO] root: Saved system results to output/processed_props.parquet
+2025-12-14 18:55:26 [INFO] root: Saved Excel analysis to: output/processed_props.xlsx
+2025-12-14 18:55:26 [INFO] root: <<< ANALYSIS COMPLETE >>>
+2025-12-14 20:09:00 [INFO] root: Logging initialized. Writing to logs/analysis_pregame.log
+2025-12-14 20:09:00 [INFO] root: >>> STARTING PRE-GAME PROP ANALYSIS <<<
+2025-12-14 20:09:00 [INFO] root: Loaded 163 props.
+2025-12-14 20:09:00 [INFO] root: Building feature set with Point-in-Time safety...
+2025-12-14 20:09:00 [INFO] root: --- Loading Static Data Files (Parquet) ---
+2025-12-14 20:09:00 [INFO] root: Calculating Full Game rolling stats...
+2025-12-14 20:09:00 [INFO] root: Calculating Q1 rolling stats...
+2025-12-14 20:09:00 [INFO] root: Feature set built. Final Shape: (163, 1171)
+2025-12-14 20:09:00 [INFO] root: Running Machine Learning Inference...
+2025-12-14 20:09:00 [INFO] root: Starting batch inference on 163 props...
+2025-12-14 20:09:02 [WARNING] root: Skipping Stephen Curry (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 20:09:02 [WARNING] root: Skipping Stephen Curry (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 20:09:02 [WARNING] root: Skipping Stephen Curry (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 20:09:02 [WARNING] root: Skipping Donovan Clingan (1H_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 20:09:03 [WARNING] root: Skipping Toumani Camara (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 20:09:03 [WARNING] root: Skipping Deni Avdija (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 20:09:03 [WARNING] root: Skipping Jimmy Butler (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 20:09:03 [WARNING] root: Skipping Jerami Grant (1H_FG3M) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 20:09:03 [WARNING] root: Skipping Deni Avdija (1H_REB) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 20:09:03 [WARNING] root: Skipping Deni Avdija (1H_PRA) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 20:09:03 [WARNING] root: Skipping Shaedon Sharpe (1H_PTS) - Missing History (SZN Avg is 0/NaN)
+2025-12-14 20:09:04 [INFO] root: Saved system results to output/processed_props.parquet
+2025-12-14 20:09:04 [INFO] root: Saved Excel analysis to: output/processed_props.xlsx
+2025-12-14 20:09:04 [INFO] root: <<< ANALYSIS COMPLETE >>>

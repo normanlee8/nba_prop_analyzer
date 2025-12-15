@@ -200,3 +200,13 @@
 2025-12-12 22:03:09 [INFO] root: Accuracy on 113 S-Tier Props: 54.87% (62/113)
 2025-12-12 22:03:09 [INFO] root: Accuracy on 43 A-Tier Props: 39.53% (17/43)
 2025-12-12 22:03:09 [INFO] root: ----------------------------------------
+2025-12-13 22:39:27 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-13 22:39:27 [INFO] root: Loading master box scores (Parquet)...
+2025-12-13 22:39:27 [INFO] root: Grading 257 predictions against 34503 historical records...
+2025-12-13 22:39:28 [INFO] root: Graded results saved to: input/records/graded_props_2025-12-13.csv
+2025-12-13 22:39:28 [INFO] root: Summary: {'LOSS': 130, 'WIN': 127}
+2025-12-14 17:32:04 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-14 17:32:04 [INFO] root: Loading master box scores (Parquet)...
+2025-12-14 17:32:04 [INFO] root: Grading 257 predictions against 34503 historical records...
+2025-12-14 17:32:04 [INFO] root: Graded results saved to: input/records/graded_props_2025-12-14.csv
+2025-12-14 17:32:04 [INFO] root: Summary: {'LOSS': 130, 'WIN': 127}

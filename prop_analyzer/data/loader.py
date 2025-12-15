@@ -116,6 +116,25 @@ def load_box_scores(player_ids=None):
         logging.critical(f"FATAL: Failed to load box scores: {e}", exc_info=True)
         return None
 
+def load_master_q1_history():
+    """
+    NEW: Loads the Master Q1 History parquet file for grading 1st Quarter props.
+    """
+    path = cfg.MASTER_Q1_FILE
+    if not path.exists():
+        logging.warning("Master Q1 file does not exist. 1Q props cannot be graded.")
+        return pd.DataFrame()
+    
+    try:
+        df = pd.read_parquet(path)
+        # Standardize Date
+        if 'GAME_DATE' in df.columns:
+            df[Cols.DATE] = pd.to_datetime(df['GAME_DATE']).dt.normalize()
+        return df
+    except Exception as e:
+        logging.error(f"Error loading Master Q1 History: {e}")
+        return pd.DataFrame()
+
 def load_vs_opponent_data():
     """Loads aggregated H2H stats from Parquet."""
     path = cfg.MASTER_VS_OPP_FILE
@@ -137,7 +156,7 @@ def load_vs_opponent_data():
 
 def get_cached_injury_data():
     """
-    Loads injury data. Keeps CSV format as this usually comes from external scrapers/inputs.
+    Loads injury data. Now looks for Parquet first, then CSV.
     """
     global _INJURY_CACHE, _INJURY_WARNING_SHOWN
     
@@ -149,14 +168,23 @@ def get_cached_injury_data():
     if cfg.DATA_DIR.exists():
         season_folders = sorted([f for f in cfg.DATA_DIR.iterdir() if f.is_dir() and re.match(r'\d{4}-\d{2}', f.name)], reverse=True)
         if season_folders:
+            # Check latest season folder for Parquet then CSV
+            search_paths.append(season_folders[0] / "daily_injuries.parquet")
             search_paths.append(season_folders[0] / "daily_injuries.csv")
     
+    # Check root data dir
+    search_paths.append(cfg.DATA_DIR / "daily_injuries.parquet")
     search_paths.append(cfg.DATA_DIR / "daily_injuries.csv")
     
     for p in search_paths:
         if p.exists():
             try:
-                df = pd.read_csv(p)
+                if p.suffix == '.parquet':
+                    df = pd.read_parquet(p)
+                else:
+                    df = pd.read_csv(p)
+                
+                # Standardize Status
                 if 'Status_Clean' not in df.columns and 'Injury Status' in df.columns:
                     df['Status_Clean'] = df['Injury Status'].apply(
                         lambda x: 'OUT' if 'out' in str(x).lower() else 'GTD' if 'question' in str(x).lower() else 'UNKNOWN'
@@ -167,7 +195,7 @@ def get_cached_injury_data():
                 logging.warning(f"Failed to read injury file {p}: {e}")
             
     if not _INJURY_WARNING_SHOWN:
-        logging.warning("daily_injuries.csv not found in any season folder.")
+        logging.warning("daily_injuries file not found in any season folder.")
         _INJURY_WARNING_SHOWN = True
         
     return None

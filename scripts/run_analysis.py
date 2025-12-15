@@ -31,13 +31,8 @@ def save_pretty_excel(df, output_path):
         worksheet = writer.sheets['Picks']
         
         # --- Formats ---
-        # Green text with light green background for Good picks
         green_fmt = workbook.add_format({'bg_color': '#C6EFCE', 'font_color': '#006100'})
-        # Red text with light red background for Bad picks
-        red_fmt = workbook.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006'})
-        # Percent format
         pct_fmt = workbook.add_format({'num_format': '0.0%'})
-        # Header format
         header_fmt = workbook.add_format({'bold': True, 'bottom': 1, 'bg_color': '#F0F0F0'})
 
         # Apply Header Format
@@ -46,23 +41,16 @@ def save_pretty_excel(df, output_path):
 
         # Apply Column Widths & Num Formats
         for i, col in enumerate(df.columns):
-            # Dynamic width based on max length of data
-            max_len = max(
-                df[col].astype(str).map(len).max(),
-                len(str(col))
-            )
-            width = min(max_len + 2, 50) # Cap width at 50
+            max_len = max(df[col].astype(str).map(len).max(), len(str(col)))
+            width = min(max_len + 2, 50)
             
-            # Apply percentage format to 'Prob' column
             if col == 'Prob':
                 worksheet.set_column(i, i, width, pct_fmt)
-                
-                # Conditional Formatting for Probability
-                # Note: Rows are 0-indexed, data starts at row 1
+                # Conditional Formatting
                 worksheet.conditional_format(1, i, len(df), i, {
                     'type': 'cell',
                     'criteria': '>=',
-                    'value': 0.585, # S-Tier Threshold
+                    'value': 0.585,
                     'format': green_fmt
                 })
             else:
@@ -75,27 +63,13 @@ def save_pretty_excel(df, output_path):
         logging.error(f"Failed to save Excel file: {e}")
 
 def print_pretty_table(df, title="TOP 20 DISCOVERED EDGES"):
-    """
-    Prints a DataFrame in a clean, grid-like format using | and =.
-    """
     if df.empty:
         print("No results to display.")
         return
 
-    # Convert all data to string to calculate widths
     df_str = df.astype(str)
-    
-    # Calculate column widths based on max length of data or header
-    widths = []
-    for col in df.columns:
-        max_len = max(df_str[col].apply(len).max(), len(col))
-        widths.append(max_len + 2)
-
-    # Create format string
-    fmt_parts = []
-    for w in widths:
-        fmt_parts.append(f"{{:<{w}}}")
-    fmt = "| " + " | ".join(fmt_parts) + " |"
+    widths = [max(df_str[col].apply(len).max(), len(col)) + 2 for col in df.columns]
+    fmt = "| " + " | ".join([f"{{:<{w}}}" for w in widths]) + " |"
 
     try:
         header_str = fmt.format(*df.columns)
@@ -110,7 +84,7 @@ def print_pretty_table(df, title="TOP 20 DISCOVERED EDGES"):
             print(fmt.format(*row.values))
 
         print(sep_line + "\n")
-    except Exception as e:
+    except Exception:
         print(df.head(20))
 
 def main():
@@ -122,7 +96,6 @@ def main():
         props_path = cfg.PROPS_FILE
         if not props_path.exists():
             logging.critical(f"Props file not found: {props_path}")
-            logging.critical("Please run 'scripts/run_converter.py' or provide input.")
             return
 
         try:
@@ -133,7 +106,6 @@ def main():
                 
             props_df.columns = props_df.columns.str.strip()
             
-            # Validate Schema
             required = Cols.get_required_input_cols()
             missing = [c for c in required if c not in props_df.columns]
             
@@ -173,17 +145,14 @@ def main():
         if Cols.CONFIDENCE not in results_df.columns:
             results_df[Cols.CONFIDENCE] = 0.0
         
-        # Sorting
         tier_map = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
         results_df['Tier_Rank'] = results_df[Cols.TIER].map(tier_map).fillna(99)
         results_df.sort_values(by=['Tier_Rank', Cols.CONFIDENCE], ascending=[True, False], inplace=True)
         
-        # Standardize Date
         if Cols.DATE in results_df.columns:
             results_df[Cols.DATE] = pd.to_datetime(results_df[Cols.DATE], errors='coerce').dt.strftime('%Y-%m-%d')
             results_df[Cols.DATE] = results_df[Cols.DATE].fillna("N/A")
 
-        # Select columns for Human/Excel Output
         keep_cols = [
             Cols.PLAYER_NAME, Cols.TEAM, Cols.OPPONENT, Cols.PROP_TYPE, Cols.PROP_LINE, 
             Cols.DATE,
@@ -191,16 +160,9 @@ def main():
             f'Diff%', f'{Cols.L5_AVG}', f'{Cols.SZN_AVG}'
         ]
         
-        final_cols = []
-        for c in keep_cols:
-            if c in results_df.columns:
-                final_cols.append(c)
-            elif c == f'{Cols.SZN_AVG}' and 'SZN_AVG' in results_df.columns:
-                 final_cols.append('SZN_AVG')
-
+        final_cols = [c for c in keep_cols if c in results_df.columns]
         final_output = results_df[final_cols].copy()
 
-        # Rename for Readability
         display_map = {
             Cols.PLAYER_NAME: 'Player',
             Cols.PROP_TYPE: 'Prop',
@@ -214,18 +176,15 @@ def main():
         }
         final_output.rename(columns=display_map, inplace=True)
 
-        # 5. Save Results
-        # A. Save System CSV (Raw Results for Grading)
-        # Note: We save the full 'results_df' to CSV so grading has all columns
-        results_df.to_csv(cfg.PROCESSED_OUTPUT_CSV, index=False)
+        # 5. Save Results (FIXED)
+        # A. Save System Parquet (Replaces CSV)
+        results_df.to_parquet(cfg.PROCESSED_OUTPUT_SYSTEM, index=False)
+        logging.info(f"Saved system results to {cfg.PROCESSED_OUTPUT_SYSTEM}")
         
-        # B. Save Human Excel (Formatted)
-        # We use 'final_output' which has clean names
-        # 'Prob' is still numeric here (0.65), perfect for Excel
+        # B. Save Human Excel
         save_pretty_excel(final_output, cfg.PROCESSED_OUTPUT_XLSX)
         
-        # C. Print to Console
-        # Convert Prob to string for pretty printing (e.g. 65.0%)
+        # C. Console
         console_output = final_output.copy()
         if 'Prob' in console_output.columns:
             console_output['Prob'] = console_output['Prob'].apply(lambda x: f"{x*100:.1f}%")

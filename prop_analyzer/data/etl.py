@@ -72,53 +72,66 @@ def get_season_folders(data_dir):
     folders = [f for f in data_dir.iterdir() if f.is_dir() and re.match(r'\d{4}-\d{2}', f.name)]
     return sorted(folders)
 
-def load_clean_csv(filepath, required_cols):
-    """Loads raw CSV data from scraper output."""
-    if not filepath.exists():
-        return None
-            
+def load_clean_data(filepath_stem, required_cols=[]):
+    """
+    Smart loader: Prefers Parquet, falls back to CSV.
+    filepath_stem: Path object without extension OR string.
+    """
+    if isinstance(filepath_stem, Path):
+        path_str = str(filepath_stem)
+        base = re.sub(r'\.(csv|parquet)$', '', path_str)
+    else:
+        base = str(filepath_stem)
+    
+    parquet_path = Path(base + ".parquet")
+    csv_path = Path(base + ".csv")
+
     try:
-        df = pd.read_csv(filepath, low_memory=False)
-        if df.empty: return None
+        df = None
+        if parquet_path.exists():
+            df = pd.read_parquet(parquet_path)
+        elif csv_path.exists():
+            df = pd.read_csv(csv_path, low_memory=False)
+        else:
+            return None
             
-        missing = [col for col in required_cols if col not in df.columns]
-        if missing:
-            logging.warning(f"File {filepath.name} is missing cols: {missing}.")
+        if df is not None and not df.empty and required_cols:
+            missing = [col for col in required_cols if col not in df.columns]
+            if missing:
+                pass 
         
         return df
     except Exception as e:
-        logging.error(f"Error loading {filepath}: {e}")
+        logging.error(f"Error loading {base}: {e}")
         return None
-
-def get_metric_from_filename(filename, prefix="NBA Team "):
-    if not filename.startswith(prefix) or not filename.endswith(".csv"):
-        return None
-    return filename[len(prefix):-len(".csv")]
 
 def sniff_file_type(filepath):
-    try:
-        with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
-            line = f.readline()
-            if 'Team' in line and '20' in line: return 'teamrankings'
-            if 'TEAM_ID' in line and 'TEAM_NAME' in line: return 'nba_api'
-        return None 
-    except: return None
+    fname = filepath.name
+    if 'NBA Team' in fname:
+        if 'Defense' in fname or 'General' in fname: return 'nba_api'
+        return 'teamrankings'
+    return 'nba_api' 
+
+def get_metric_from_filename(filename, prefix="NBA Team "):
+    clean_name = re.sub(r'\.(csv|parquet)$', '', filename)
+    if not clean_name.startswith(prefix):
+        return None
+    return clean_name[len(prefix):]
 
 def create_player_id_map(data_dir, season_folders):
     logging.info("Creating Player ID Map across all seasons...")
     all_player_dfs = []
-    
-    # Use standard keys for the map
     required_cols = [Cols.PLAYER_ID, 'PLAYER_NAME', 'TEAM_ID', 'TEAM_ABBREVIATION']
 
     for folder in season_folders:
         for friendly_name in ["Home", "Away:Road", "Last 5 Games"]:
-            filepath = folder / f"NBA Player Stats {friendly_name}.csv"
-            df = load_clean_csv(filepath, required_cols=required_cols)
+            file_stem = folder / f"NBA Player Stats {friendly_name}"
+            df = load_clean_data(file_stem, required_cols=required_cols)
+            
             if df is not None:
-                # Ensure PLAYER_ID is int
                 df[Cols.PLAYER_ID] = pd.to_numeric(df[Cols.PLAYER_ID], errors='coerce').fillna(0).astype(int)
-                all_player_dfs.append(df[required_cols])
+                existing_cols = [c for c in required_cols if c in df.columns]
+                all_player_dfs.append(df[existing_cols])
     
     if not all_player_dfs:
         logging.critical("CRITICAL: No valid player stat files found in any season folder.")
@@ -126,8 +139,6 @@ def create_player_id_map(data_dir, season_folders):
         
     player_map_df = pd.concat(all_player_dfs)
     player_map_df.drop_duplicates(subset=[Cols.PLAYER_ID], inplace=True)
-    
-    # Standardize player name for fuzzy matching
     player_map_df['Player_Clean'] = player_map_df['PLAYER_NAME'].apply(lambda x: unidecode(str(x)).lower().strip())
     return player_map_df
 
@@ -139,18 +150,15 @@ def process_master_player_stats(player_id_map, season_folders, output_dir):
         try:
             api_player_stats = []
             for file_prefix, friendly_name in PLAYER_STAT_PREFIX_MAP.items():
-                filepath = folder / f"NBA Player Stats {friendly_name}.csv"
-                df = load_clean_csv(filepath, required_cols=[Cols.PLAYER_ID, 'PLAYER_NAME'])
+                file_stem = folder / f"NBA Player Stats {friendly_name}"
+                df = load_clean_data(file_stem, required_cols=[Cols.PLAYER_ID, 'PLAYER_NAME'])
                 if df is not None:
-                    # Enforce INT for merge keys
                     df[Cols.PLAYER_ID] = pd.to_numeric(df[Cols.PLAYER_ID], errors='coerce').fillna(0).astype(int)
-                    
                     df = df.add_prefix(f"{file_prefix}_")
                     df.rename(columns={f"{file_prefix}_{Cols.PLAYER_ID}": Cols.PLAYER_ID, f"{file_prefix}_PLAYER_NAME": "PLAYER_NAME"}, inplace=True)
                     api_player_stats.append(df)
 
             if not api_player_stats:
-                logging.warning(f"No player stats found for season {season_id}. Skipping.")
                 continue
                 
             season_player_df = api_player_stats[0]
@@ -159,11 +167,10 @@ def process_master_player_stats(player_id_map, season_folders, output_dir):
             
             # Quarter Stats
             for q in range(1, 5):
-                filepath = folder / f"NBA Player Q{q}.csv"
-                df_q = load_clean_csv(filepath, required_cols=[Cols.PLAYER_ID, 'PTS', 'MIN'])
+                file_stem = folder / f"NBA Player Q{q}"
+                df_q = load_clean_data(file_stem, required_cols=[Cols.PLAYER_ID, 'PTS', 'MIN'])
                 if df_q is not None:
                     df_q[Cols.PLAYER_ID] = pd.to_numeric(df_q[Cols.PLAYER_ID], errors='coerce').fillna(0).astype(int)
-                    
                     cols_to_norm = ['MIN', 'FGM', 'FGA', 'FG3M', 'FG3A', 'FTM', 'FTA', 'OREB', 'DREB', 'REB', 'AST', 'TOV', 'STL', 'BLK', 'PF', 'PTS']
                     cols_to_norm = [c for c in cols_to_norm if c in df_q.columns]
                     
@@ -176,8 +183,9 @@ def process_master_player_stats(player_id_map, season_folders, output_dir):
                     df_q.rename(columns={f"Q{q}_{Cols.PLAYER_ID}": Cols.PLAYER_ID}, inplace=True)
                     season_player_df = pd.merge(season_player_df, df_q, on=Cols.PLAYER_ID, how="left")
 
-            # Bball-Ref Stats (Per Game Averages)
-            bball_ref_df = load_clean_csv(folder / "NBA Player Per Game Averages.csv", required_cols=['Player', 'PTS'])
+            # Bball-Ref Stats
+            bball_ref_stem = folder / "NBA Player Per Game Averages"
+            bball_ref_df = load_clean_data(bball_ref_stem, required_cols=['Player', 'PTS'])
             if bball_ref_df is not None:
                 bball_ref_df['Player_Clean'] = bball_ref_df['Player'].apply(lambda x: unidecode(str(x)).lower().strip())
                 bball_ref_df = bball_ref_df.rename(columns=BBREF_COLUMN_MAP)
@@ -199,8 +207,9 @@ def process_master_player_stats(player_id_map, season_folders, output_dir):
                 cols_exist = [col for col in season_cols if col in bball_ref_df.columns]
                 season_player_df = pd.merge(season_player_df, bball_ref_df[cols_exist], on=Cols.PLAYER_ID, how="left")
                 
-                # Advanced Stats
-                adv_df = load_clean_csv(folder / "NBA Player Advanced Stats.csv", required_cols=['Player', 'USG%'])
+                # Advanced
+                adv_stem = folder / "NBA Player Advanced Stats"
+                adv_df = load_clean_data(adv_stem, required_cols=['Player', 'USG%'])
                 if adv_df is not None:
                     adv_df['Player_Clean'] = adv_df['Player'].apply(lambda x: unidecode(str(x)).lower().strip())
                     adv_df[Cols.PLAYER_ID] = adv_df['Player_Clean'].apply(find_match)
@@ -216,7 +225,6 @@ def process_master_player_stats(player_id_map, season_folders, output_dir):
             season_player_df = pd.merge(player_id_map[[Cols.PLAYER_ID, 'Player_Clean', 'TEAM_ID', 'TEAM_ABBREVIATION']], season_player_df, on=Cols.PLAYER_ID, how="right")
             season_player_df.rename(columns={'Player_Clean': 'clean_name'}, inplace=True)
             
-            # --- SAVE SEPARATE FILE (PARQUET) ---
             out_name = f"master_player_stats_{season_id}.parquet"
             season_player_df.to_parquet(output_dir / out_name, index=False)
             logging.info(f"Saved {out_name}")
@@ -233,17 +241,19 @@ def process_master_team_stats(player_id_map, season_folders, output_dir):
         season_id = folder.name
         season_team_dfs = []
         
-        for filepath in folder.glob("NBA Team *.csv"):
+        files = list(folder.glob("NBA Team *.csv")) + list(folder.glob("NBA Team *.parquet"))
+        
+        for filepath in files:
             file_type = sniff_file_type(filepath)
-            
+            df = load_clean_data(filepath.parent / filepath.stem)
+            if df is None: continue
+
             if file_type == 'teamrankings':
-                df = load_clean_csv(filepath, required_cols=['Team'])
-                if df is None: continue
                 metric_name = get_metric_from_filename(filepath.name)
                 if not metric_name: continue
                 
                 year_cols = [col for col in df.columns if re.match(r'202\d', str(col))]
-                val_col = max(year_cols, key=lambda x: int(x)) if year_cols else (df.columns[2] if len(df.columns) > 2 else None)
+                val_col = max(year_cols, key=lambda x: str(x)) if year_cols else (df.columns[2] if len(df.columns) > 2 else None)
 
                 if not val_col: continue
 
@@ -253,10 +263,11 @@ def process_master_team_stats(player_id_map, season_folders, output_dir):
                 season_team_dfs.append(df[['TEAM_ABBREVIATION', metric_name]])
 
             elif file_type == 'nba_api':
-                df = load_clean_csv(filepath, required_cols=['TEAM_ID'])
-                if df is None: continue
                 metric_name = get_metric_from_filename(filepath.name)
                 prefix = re.sub(r'[^A-Z_]', '', metric_name.upper()[:4])
+                
+                if 'TEAM_ID' not in df.columns: continue
+                
                 df['TEAM_ABBREVIATION'] = df['TEAM_ID'].map(team_id_to_abbr)
                 df = df[df['TEAM_ABBREVIATION'].notna()]
                 cols = [col for col in df.columns if col not in ['TEAM_ABBREVIATION', 'TEAM_ID', 'TEAM_NAME']]
@@ -270,24 +281,18 @@ def process_master_team_stats(player_id_map, season_folders, output_dir):
             
             season_master['SEASON_ID'] = season_id
             
-            # --- SAVE SEPARATE FILE (PARQUET) ---
             out_name = f"master_team_stats_{season_id}.parquet"
             season_master.to_parquet(output_dir / out_name, index=False)
             logging.info(f"Saved {out_name}")
 
 def calculate_historical_vacancy(bs_df, player_df):
-    """
-    Ensures vacancy columns exist in the dataset.
-    """
     logging.info("--- Initializing Historical Vacancy Columns (Placeholder) ---")
-    
     vacancy_cols = ['TEAM_MISSING_USG', 'TEAM_MISSING_MIN', 'MISSING_USG_G', 'MISSING_USG_F']
     for c in vacancy_cols:
         if c not in bs_df.columns:
             bs_df[c] = 0.0
         else:
             bs_df[c] = bs_df[c].fillna(0.0)
-            
     return bs_df
 
 def process_master_box_scores(player_id_map, season_folders, output_dir):
@@ -296,35 +301,36 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
     for folder in season_folders:
         season_id = folder.name
         try:
-            bs_df = load_clean_csv(folder / "NBA Player Box Scores.csv", required_cols=['Player_ID', 'Game_ID', 'PTS'])
+            file_stem = folder / "NBA Player Box Scores"
+            bs_df = load_clean_data(file_stem, required_cols=['Player_ID', 'Game_ID', 'PTS'])
             if bs_df is None: continue
 
-            # Standardize ID column
             bs_df.rename(columns={'Player_ID': Cols.PLAYER_ID}, inplace=True)
             bs_df.dropna(subset=[Cols.PLAYER_ID], inplace=True)
             bs_df[Cols.PLAYER_ID] = bs_df[Cols.PLAYER_ID].astype(int)
             
-            # Standardize Date column
             if 'GAME_DATE' in bs_df.columns: 
                 bs_df[Cols.DATE] = pd.to_datetime(bs_df['GAME_DATE'], errors='coerce')
             
-            # Add identity info
             id_map = player_id_map[[Cols.PLAYER_ID, 'PLAYER_NAME', 'TEAM_ABBREVIATION', 'Player_Clean']].drop_duplicates(subset=[Cols.PLAYER_ID])
             bs_df = pd.merge(bs_df, id_map, on=Cols.PLAYER_ID, how='left')
             
-            # Load specific player stats for this season to get Position (PARQUET READ)
             p_stats_path = output_dir / f"master_player_stats_{season_id}.parquet"
             if p_stats_path.exists():
                 p_stats = pd.read_parquet(p_stats_path)
-                # Ensure merge key is int
                 if Cols.PLAYER_ID in p_stats.columns:
                     p_stats[Cols.PLAYER_ID] = pd.to_numeric(p_stats[Cols.PLAYER_ID], errors='coerce').fillna(0).astype(int)
                     p_stats_szn = p_stats[[Cols.PLAYER_ID, 'Pos']].drop_duplicates(subset=[Cols.PLAYER_ID])
                     bs_df = pd.merge(bs_df, p_stats_szn, on=Cols.PLAYER_ID, how='left')
 
-            # Ensure numeric types
-            for col in ['PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 'FGM', 'FGA', 'FTA', 'MIN']:
-                if col in bs_df.columns: bs_df[col] = pd.to_numeric(bs_df[col], errors='coerce').fillna(0)
+            # --- FIX: Added FTM, FTA, OREB, DREB to numeric conversion list ---
+            numeric_cols = [
+                'PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 
+                'FGM', 'FGA', 'FTA', 'FTM', 'OREB', 'DREB', 'MIN'
+            ]
+            for col in numeric_cols:
+                if col in bs_df.columns: 
+                    bs_df[col] = pd.to_numeric(bs_df[col], errors='coerce').fillna(0)
             
             # Derived Stats
             bs_df['PRA'] = bs_df['PTS'] + bs_df['REB'] + bs_df['AST']
@@ -334,7 +340,6 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
             bs_df['STK'] = bs_df['STL'] + bs_df['BLK']
             bs_df['FANTASY_PTS'] = bs_df['PTS'] + (bs_df['REB']*1.2) + (bs_df['AST']*1.5) + (bs_df['STL']*3) + (bs_df['BLK']*3) - bs_df['TOV']
             
-            # --- DOUBLE/TRIPLE DOUBLE CALCULATION ---
             dd_cols = ['PTS', 'REB', 'AST', 'STL', 'BLK']
             if all(c in bs_df.columns for c in dd_cols):
                 counts = bs_df[dd_cols].ge(10).sum(axis=1)
@@ -351,7 +356,6 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
             usg_num = (bs_df['FGA'] + 0.44 * bs_df['FTA'] + bs_df['TOV'])
             bs_df['USG_PROXY'] = np.where(bs_df['MIN'] > 0, usg_num / bs_df['MIN'], 0.0)
 
-            # Per 36
             per_36_cols = ['PTS', 'REB', 'AST', 'PRA', 'FG3M', 'STL', 'BLK', 'TOV']
             for col in per_36_cols:
                 if col in bs_df.columns:
@@ -359,17 +363,14 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
 
             bs_df['SEASON_ID'] = season_id
             
-            # Vacancy Calc (Initialize columns)
             if p_stats_path.exists():
                 bs_df = calculate_historical_vacancy(bs_df, pd.read_parquet(p_stats_path))
             
-            # Opponent Parsing
             def get_opponent(matchup):
                 if not isinstance(matchup, str): return "UNKNOWN"
                 return matchup.split(" vs. ")[-1] if " vs. " in matchup else matchup.split(" @ ")[-1] if " @ " in matchup else "UNKNOWN"
             bs_df['OPPONENT_ABBREV'] = bs_df['MATCHUP'].apply(get_opponent)
             
-            # --- SAVE SEPARATE FILE (PARQUET) ---
             out_name = f"master_box_scores_{season_id}.parquet"
             bs_df.to_parquet(output_dir / out_name, index=False)
             logging.info(f"Saved {out_name} ({len(bs_df)} rows)")
@@ -379,7 +380,6 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
 
 def process_vs_opponent_stats(data_dir, output_dir):
     logging.info("--- Starting: process_vs_opponent_stats ---")
-    # GLOB FOR PARQUET
     all_files = sorted(output_dir.glob("master_box_scores_*.parquet"))
     if not all_files: return
 
@@ -392,24 +392,20 @@ def process_vs_opponent_stats(data_dir, output_dir):
     if not dfs: return
     df = pd.concat(dfs, ignore_index=True)
     
-    # Add DD/TD to aggregation list
     agg_cols = {k: 'mean' for k in ['PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 'PRA', 'PR', 'PA', 'RA', 'FANTASY_PTS', 'MIN', 'DD', 'TD'] if k in df.columns}
     if 'Game_ID' in df.columns: agg_cols['Game_ID'] = 'count'
     
     vs_opp_df = df.groupby([Cols.PLAYER_ID, 'PLAYER_NAME', 'OPPONENT_ABBREV']).agg(agg_cols).reset_index()
     if 'Game_ID' in vs_opp_df.columns: vs_opp_df.rename(columns={'Game_ID': 'GAMES_PLAYED'}, inplace=True)
     
-    # SAVE AS PARQUET
     vs_opp_df.round(2).to_parquet(output_dir / "master_vs_opponent.parquet", index=False)
     logging.info("Saved master_vs_opponent.parquet")
 
 def process_dvp_stats(output_dir):
     logging.info("--- Starting: process_dvp_stats ---")
-    # GLOB FOR PARQUET
     files = sorted(output_dir.glob("master_box_scores_*.parquet"))
     if not files: return
     
-    # Use last file (latest year)
     latest_file = files[-1]
     logging.info(f"Calculating DvP using: {latest_file.name}")
     
@@ -447,8 +443,45 @@ def process_dvp_stats(output_dir):
             rename_map[col] = f"DVP_{base_stat}"
             
         dvp_df.rename(columns=rename_map, inplace=True)
-        # SAVE AS PARQUET
         dvp_df.round(2).to_parquet(output_dir / "master_dvp_stats.parquet", index=False)
         logging.info("Saved master_dvp_stats.parquet")
     except Exception as e:
         logging.error(f"Error in process_dvp_stats: {e}")
+
+def process_q1_history(output_dir):
+    """
+    NEW: Aggregates daily Q1 log snapshots into a single Master Q1 Parquet.
+    """
+    logging.info("--- Processing Q1 History for Grading ---")
+    files = sorted(output_dir.rglob("daily_q1_stats_*.parquet"))
+        
+    if not files:
+        logging.warning("No daily Q1 stats found (daily_q1_stats_*.parquet). Grading 1Q props will fail.")
+        return
+
+    dfs = []
+    for f in files:
+        try:
+            df = pd.read_parquet(f)
+            dfs.append(df)
+        except Exception as e:
+            logging.warning(f"Failed to read Q1 file {f}: {e}")
+        
+    if dfs:
+        full_q1 = pd.concat(dfs, ignore_index=True)
+        if 'GAME_DATE' in full_q1.columns:
+            full_q1['GAME_DATE'] = pd.to_datetime(full_q1['GAME_DATE']).dt.normalize()
+            
+        if Cols.PLAYER_ID in full_q1.columns:
+            full_q1 = full_q1.drop_duplicates(subset=[Cols.PLAYER_ID, 'GAME_DATE'], keep='last')
+            
+            # --- FIX: Ensure Q1 numeric columns are numeric ---
+            numeric_cols = ['PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV', 'FGM', 'FGA', 'MIN']
+            for col in numeric_cols:
+                if col in full_q1.columns:
+                    full_q1[col] = pd.to_numeric(full_q1[col], errors='coerce').fillna(0)
+
+            full_q1.to_parquet(cfg.MASTER_Q1_FILE, index=False)
+            logging.info(f"Saved Master Q1 History: {len(full_q1)} records to {cfg.MASTER_Q1_FILE}")
+    else:
+        logging.warning("No Q1 data available to process.")

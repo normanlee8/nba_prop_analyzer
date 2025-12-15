@@ -46,6 +46,7 @@ HIST_FEATURES = [
 # For Feature Pruning: Defines which VS_OPP and HIST stats are relevant 
 # for a specific target prop. (e.g. Don't use VS_OPP_AST to predict BLOCKS)
 PROP_FEATURE_MAP = {
+    # Full Game
     'PTS': ['PTS', 'FG3M', 'PRA', 'PR', 'PA', 'USG_PROXY', 'TS_PCT'],
     'REB': ['REB', 'PRA', 'PR', 'RA'],
     'AST': ['AST', 'PRA', 'PA', 'RA', 'TOV'],
@@ -54,10 +55,29 @@ PROP_FEATURE_MAP = {
     'PA':  ['PA', 'PTS', 'AST', 'PRA'],
     'RA':  ['RA', 'REB', 'AST', 'PRA'],
     'FG3M': ['FG3M', 'PTS', 'USG_PROXY'],
-    'STL': ['STL', 'STK', 'TOV'], # Steals often correlate with chaos/turnovers
-    'BLK': ['BLK', 'STK', 'REB'], # Blocks correlate with defensive rebounding (bigs)
+    'STL': ['STL', 'STK', 'TOV'], 
+    'BLK': ['BLK', 'STK', 'REB'], 
     'TOV': ['TOV', 'AST', 'USG_PROXY'],
     'FANTASY_PTS': ['FANTASY_PTS', 'PTS', 'REB', 'AST', 'STL', 'BLK', 'TOV'],
+    'OREB': ['OREB', 'REB', 'RA', 'PR'],
+    'FTM': ['FTM', 'PTS', 'FGA'],
+    'DD': ['DD', 'PTS', 'REB', 'AST'],
+    'TD': ['TD', 'PTS', 'REB', 'AST'],
+    'STK': ['STK', 'STL', 'BLK'],
+    
+    # 1st Quarter (Explicitly look for Q1 stats)
+    'Q1_PTS': ['Q1_PTS', 'Q1_FG3M', 'Q1_PRA', 'PTS'],
+    'Q1_REB': ['Q1_REB', 'Q1_PRA', 'REB'],
+    'Q1_AST': ['Q1_AST', 'Q1_PRA', 'AST'],
+    'Q1_PRA': ['Q1_PRA', 'Q1_PTS', 'Q1_REB', 'Q1_AST', 'PRA'],
+    'Q1_FG3M': ['Q1_FG3M', 'Q1_PTS', 'FG3M'],
+    
+    # 1st Half
+    '1H_PTS': ['1H_PTS', '1H_FG3M', '1H_PRA', 'PTS'],
+    '1H_REB': ['1H_REB', '1H_PRA', 'REB'],
+    '1H_AST': ['1H_AST', '1H_PRA', 'AST'],
+    '1H_PRA': ['1H_PRA', '1H_PTS', '1H_REB', '1H_AST', 'PRA'],
+    '1H_FG3M': ['1H_FG3M', '1H_PTS', 'FG3M'],
 }
 
 # Keywords to look for in "Team Stats" columns (e.g. Rank columns)
@@ -71,4 +91,23 @@ RELEVANT_KEYWORDS = {
     'STL': ['Steal', 'Turnover', 'Opponent Turnovers'],
     'BLK': ['Block', 'BLK', 'Opponent Field Goals Attempted'],
     'PRA': ['Points', 'Rebound', 'Assist', 'Offensive Efficiency'],
+    'OREB': ['Offensive Rebound', 'OREB', 'Opponent Defensive Rebounds'],
+    'FTM': ['Free Throw', 'FT', 'Opponent Personal Fouls'],
+    'DD': ['Points', 'Rebound', 'Assist'],
+    'TD': ['Points', 'Rebound', 'Assist'],
+    'STK': ['Steal', 'Block'],
+    
+    # Q1 Specific Keywords
+    'Q1_PTS': ['1st Quarter Points', '1Q', 'Points'],
+    'Q1_REB': ['1st Quarter', '1Q', 'Rebounds'],
+    'Q1_AST': ['1st Quarter', '1Q', 'Assists'],
+    'Q1_PRA': ['1st Quarter', '1Q', 'Points', 'Rebounds', 'Assists'],
+    'Q1_FG3M': ['1st Quarter', '1Q', 'Three'],
+    
+    # 1H Specific Keywords
+    '1H_PTS': ['1st Half Points', '1H', 'Points'],
+    '1H_REB': ['1st Half', '1H', 'Rebounds'],
+    '1H_AST': ['1st Half', '1H', 'Assists'],
+    '1H_PRA': ['1st Half', '1H', 'Points', 'Rebounds', 'Assists'],
+    '1H_FG3M': ['1st Half', '1H', 'Three'],
 }

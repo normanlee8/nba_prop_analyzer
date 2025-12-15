@@ -50,7 +50,8 @@ class SmartDateDetector:
             return {}
 
     def _load_history(self):
-        """Loads the last N days of matchups."""
+        """Loads the last N days of matchups from Master Parquet files."""
+        # Config now points to master_box_scores_*.parquet
         files = sorted(cfg.DATA_DIR.glob(cfg.MASTER_BOX_SCORES_PATTERN))
         if not files: return
 
@@ -58,10 +59,12 @@ class SmartDateDetector:
             dfs = []
             for f in files:
                 try:
-                    # Only load what we need
-                    d = pd.read_csv(f, usecols=['TEAM_ABBREVIATION', 'OPPONENT_ABBREV', 'GAME_DATE'])
+                    # UPDATED: Read Parquet instead of CSV
+                    # 'columns' is the parquet equivalent of 'usecols'
+                    d = pd.read_parquet(f, columns=['TEAM_ABBREVIATION', 'OPPONENT_ABBREV', 'GAME_DATE'])
                     dfs.append(d)
-                except: continue
+                except Exception as e: 
+                    continue
             
             if not dfs: return
 

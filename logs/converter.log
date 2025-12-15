@@ -361,3 +361,48 @@
 2025-12-13 00:48:50 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
 2025-12-13 00:48:50 [INFO] root: Successfully converted props to input/props_today.csv (290 rows)
 2025-12-13 00:48:50 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-14 17:53:05 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-14 17:53:05 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-14 17:53:05 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-14 17:53:05 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-14 17:53:05 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=1Q 3-Pointers Made, Line=0.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=FT Made, Line=4.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=1H 3-Pointers Made, Line=2.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=Pts+Reb+Ast in First 5 Min., Line=5.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=Points in First 5 Min., Line=3.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Draymond Green, Prop=Offensive Rebounds, Line=0.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Donovan Clingan, Prop=Offensive Rebounds, Line=4.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Toumani Camara, Prop=1Q 3-Pointers Made, Line=0.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Toumani Camara, Prop=1H 3-Pointers Made, Line=1.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Toumani Camara, Prop=Offensive Rebounds, Line=2.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Quinten Post, Prop=Offensive Rebounds, Line=1.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=FT Made, Line=6.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=Points in First 5 Min., Line=2.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=Offensive Rebounds, Line=2.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jerami Grant, Prop=1Q 3-Pointers Made, Line=0.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jerami Grant, Prop=FT Made, Line=5.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jerami Grant, Prop=1H 3-Pointers Made, Line=1.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=FT Made, Line=7.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=Points in First 5 Min., Line=2.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=Offensive Rebounds, Line=1.5
+2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Shaedon Sharpe, Prop=FT Made, Line=3.5
+2025-12-14 17:53:05 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-14 17:53:05 [INFO] root: Successfully converted props to input/props_today.csv (146 rows)
+2025-12-14 17:53:05 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-14 17:57:38 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-14 17:57:38 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-14 17:57:38 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-14 17:57:38 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-14 17:57:38 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=Pts+Reb+Ast in First 5 Min., Line=5.5
+2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=Points in First 5 Min., Line=3.5
+2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
+2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=Points in First 5 Min., Line=2.5
+2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
+2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=Points in First 5 Min., Line=2.5
+2025-12-14 17:57:39 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-14 17:57:39 [INFO] root: Successfully converted props to input/props_today.csv (163 rows)
+2025-12-14 17:57:39 [INFO] root: <<< CONVERTER COMPLETE >>>
