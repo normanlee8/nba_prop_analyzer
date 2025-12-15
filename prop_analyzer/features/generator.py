@@ -9,11 +9,13 @@ from prop_analyzer.data import loader
 def add_rolling_stats_history(df, stats_to_roll=None):
     """
     Calculates historical rolling features on a dataset (Full Game, Q1, or 1H).
+    CRITICAL FIX: All rolling stats are shifted by 1 to represent "stats entering the game".
     """
     if Cols.PLAYER_ID not in df.columns or Cols.DATE not in df.columns:
         logging.error(f"Missing ID/Date columns. Cols found: {df.columns}")
         return df
 
+    # Ensure strictly sorted by Player then Date for correct shifting
     df = df.sort_values(by=[Cols.PLAYER_ID, Cols.DATE]).reset_index(drop=True)
     
     if stats_to_roll is None:
@@ -24,42 +26,47 @@ def add_rolling_stats_history(df, stats_to_roll=None):
             'FTM', 'OREB' 
         ]
         
-    # Ensure stats exist
+    # Ensure stats exist (fill missing with 0 to prevent errors)
     for col in stats_to_roll:
-        if col not in df.columns: df[col] = 0.0
+        if col not in df.columns: 
+            df[col] = 0.0
 
     grouped = df.groupby(Cols.PLAYER_ID)
 
     for col in stats_to_roll:
+        # --- CRITICAL FIX: .shift(1) applied to all aggregations ---
+        # This ensures the feature for Game X only contains data from Games 1 to X-1.
+        
         # SZN Avg (Expanding Mean)
-        df[f'{col}_{Cols.SZN_AVG}'] = grouped[col].expanding().mean().values
+        # Note: min_periods=1 allows the first game to have a value (likely NaN after shift, handled by Imputer)
+        df[f'{col}_{Cols.SZN_AVG}'] = grouped[col].expanding().mean().shift(1).values
         
         # L5 Avg (Rolling 5)
-        df[f'{col}_{Cols.L5_AVG}'] = grouped[col].rolling(window=5, min_periods=1).mean().values
+        df[f'{col}_{Cols.L5_AVG}'] = grouped[col].rolling(window=5, min_periods=1).mean().shift(1).values
         
         # L10 Std Dev
-        df[f'{col}_L10_STD'] = grouped[col].rolling(window=10, min_periods=3).std().values
+        df[f'{col}_L10_STD'] = grouped[col].rolling(window=10, min_periods=3).std().shift(1).values
         
-        # EWMA
-        df[f'{col}_L5_EWMA'] = grouped[col].ewm(alpha=0.15, adjust=False).mean().values
+        # EWMA (Exponential Weighted Moving Average)
+        df[f'{col}_L5_EWMA'] = grouped[col].ewm(alpha=0.15, adjust=False).mean().shift(1).values
 
     # Advanced Stats (Only if present)
     if 'USG_PROXY' in df.columns:
-        df['SZN_USG_PROXY'] = grouped['USG_PROXY'].expanding().mean().values
-        df['L5_USG_PROXY'] = grouped['USG_PROXY'].rolling(window=5).mean().values
+        df['SZN_USG_PROXY'] = grouped['USG_PROXY'].expanding().mean().shift(1).values
+        df['L5_USG_PROXY'] = grouped['USG_PROXY'].rolling(window=5).mean().shift(1).values
         
     if 'TS_PCT' in df.columns:
-        df['SZN_TS_PCT'] = grouped['TS_PCT'].expanding().mean().values
+        df['SZN_TS_PCT'] = grouped['TS_PCT'].expanding().mean().shift(1).values
         
     return df
 
 def build_feature_set(props_df):
-    logging.info("Building feature set with Point-in-Time safety...")
+    logging.info("Building feature set with Point-in-Time safety (Leakage Fixed)...")
     
     # 1. Load Data
     box_scores = loader.load_box_scores()
     q1_history = loader.load_master_q1_history()
-    h1_history = loader.load_master_1h_history() # <--- NEW LOAD
+    h1_history = loader.load_master_1h_history()
     
     player_stats_static, team_stats, _ = loader.load_static_data()
     vs_opp_df = loader.load_vs_opponent_data()
@@ -75,9 +82,11 @@ def build_feature_set(props_df):
     # 2. Map Player Names to IDs
     if Cols.PLAYER_ID not in props_df.columns:
         if player_stats_static is not None:
+            # Create cleaner name map
             name_map = player_stats_static.set_index('clean_name')[Cols.PLAYER_ID].to_dict()
             props_df['clean_name'] = props_df[Cols.PLAYER_NAME].apply(lambda x: str(x).lower().strip())
             
+            # Manual Mapping overrides
             manual_map = {
                 'deuce mcbride': 'miles mcbride',
                 'cam johnson': 'cameron johnson',
@@ -88,16 +97,21 @@ def build_feature_set(props_df):
                 'robert williams': 'robert williams iii',
                 'trey murphy': 'trey murphy iii',
                 'kelly oubre': 'kelly oubre jr.',
-                'michael porter': 'michael porter jr.'
+                'michael porter': 'michael porter jr.',
+                'nick richards': 'nick richards', # Example placeholder
+                'gg jackson': 'gg jackson ii'
             }
             props_df['clean_name'] = props_df['clean_name'].replace(manual_map)
             props_df[Cols.PLAYER_ID] = props_df['clean_name'].map(name_map)
             
             props_df = props_df.dropna(subset=[Cols.PLAYER_ID]).copy()
-            if props_df.empty: return pd.DataFrame()
+            if props_df.empty: 
+                logging.warning("No players matched ID map. Check naming conventions.")
+                return pd.DataFrame()
 
             props_df[Cols.PLAYER_ID] = props_df[Cols.PLAYER_ID].astype('int64')
         else:
+            logging.error("Static player stats missing. Cannot map IDs.")
             return pd.DataFrame()
 
     # 3. Time-Travel Feature Engineering (Full Game)
@@ -112,6 +126,7 @@ def build_feature_set(props_df):
         elif 'GAME_DATE' in box_scores.columns:
              box_scores[Cols.DATE] = pd.to_datetime(box_scores['GAME_DATE'])
 
+        # Calculate history with shifts
         history_df = add_rolling_stats_history(box_scores.copy())
         
         props_df[Cols.DATE] = pd.to_datetime(props_df[Cols.DATE])
@@ -120,6 +135,7 @@ def build_feature_set(props_df):
         props_df = props_df.sort_values(Cols.DATE)
         history_df = history_df.sort_values(Cols.DATE)
         
+        # Merge point-in-time stats
         features_df = pd.merge_asof(
             props_df, history_df, on=Cols.DATE, by=Cols.PLAYER_ID,
             direction='backward', suffixes=('', '_hist')
@@ -133,27 +149,30 @@ def build_feature_set(props_df):
         features_df = pd.merge(props_df, player_stats_static, on=Cols.PLAYER_ID, how='left')
 
     # 4. Time-Travel Feature Engineering (Q1)
-    if not q1_history.empty:
+    if q1_history is not None and not q1_history.empty:
         logging.info("Calculating Q1 rolling stats...")
         q1_history[Cols.PLAYER_ID] = q1_history[Cols.PLAYER_ID].fillna(0).astype('int64')
         if Cols.DATE in q1_history.columns:
             q1_history[Cols.DATE] = pd.to_datetime(q1_history[Cols.DATE])
         
-        # --- Calculate Combo Stats for Q1 ---
-        if 'PRA' not in q1_history.columns and 'PTS' in q1_history.columns:
-             q1_history['PRA'] = q1_history['PTS'] + q1_history['REB'] + q1_history['AST']
-        if 'PR' not in q1_history.columns and 'PTS' in q1_history.columns:
-             q1_history['PR'] = q1_history['PTS'] + q1_history['REB']
-        if 'PA' not in q1_history.columns and 'PTS' in q1_history.columns:
-             q1_history['PA'] = q1_history['PTS'] + q1_history['AST']
-        if 'RA' not in q1_history.columns and 'REB' in q1_history.columns:
-             q1_history['RA'] = q1_history['REB'] + q1_history['AST']
+        # Ensure Combo Stats
+        for base, combo in [('PTS', 'PRA'), ('PTS', 'PR'), ('PTS', 'PA'), ('REB', 'RA')]:
+            if combo not in q1_history.columns and base in q1_history.columns:
+                q1_history[combo] = 0 # Placeholder if components missing, logic handled in ETL ideally
+                
+        # Recalculate combos for safety if components exist
+        if {'PTS','REB','AST'}.issubset(q1_history.columns):
+            q1_history['PRA'] = q1_history['PTS'] + q1_history['REB'] + q1_history['AST']
+            q1_history['PR'] = q1_history['PTS'] + q1_history['REB']
+            q1_history['PA'] = q1_history['PTS'] + q1_history['AST']
+            q1_history['RA'] = q1_history['REB'] + q1_history['AST']
         
         q1_rolled = add_rolling_stats_history(
             q1_history.copy(), 
             stats_to_roll=['PTS', 'REB', 'AST', 'FG3M', 'PRA', 'PR', 'PA', 'RA']
         )
         
+        # Rename Q1 columns
         cols_to_rename = {}
         for col in q1_rolled.columns:
             if '_SZN_' in col or '_L5_' in col or '_L10_' in col:
@@ -171,28 +190,26 @@ def build_feature_set(props_df):
             direction='backward'
         )
 
-    # 5. Time-Travel Feature Engineering (1H) - NEW BLOCK
-    if not h1_history.empty:
+    # 5. Time-Travel Feature Engineering (1H)
+    if h1_history is not None and not h1_history.empty:
         logging.info("Calculating 1H rolling stats...")
         h1_history[Cols.PLAYER_ID] = h1_history[Cols.PLAYER_ID].fillna(0).astype('int64')
         if Cols.DATE in h1_history.columns:
             h1_history[Cols.DATE] = pd.to_datetime(h1_history[Cols.DATE])
             
-        # --- Calculate Combo Stats for 1H ---
-        if 'PRA' not in h1_history.columns and 'PTS' in h1_history.columns:
-             h1_history['PRA'] = h1_history['PTS'] + h1_history['REB'] + h1_history['AST']
-        if 'PR' not in h1_history.columns and 'PTS' in h1_history.columns:
-             h1_history['PR'] = h1_history['PTS'] + h1_history['REB']
-        if 'PA' not in h1_history.columns and 'PTS' in h1_history.columns:
-             h1_history['PA'] = h1_history['PTS'] + h1_history['AST']
-        if 'RA' not in h1_history.columns and 'REB' in h1_history.columns:
-             h1_history['RA'] = h1_history['REB'] + h1_history['AST']
+        # Recalculate combos
+        if {'PTS','REB','AST'}.issubset(h1_history.columns):
+            h1_history['PRA'] = h1_history['PTS'] + h1_history['REB'] + h1_history['AST']
+            h1_history['PR'] = h1_history['PTS'] + h1_history['REB']
+            h1_history['PA'] = h1_history['PTS'] + h1_history['AST']
+            h1_history['RA'] = h1_history['REB'] + h1_history['AST']
              
         h1_rolled = add_rolling_stats_history(
             h1_history.copy(), 
             stats_to_roll=['PTS', 'REB', 'AST', 'FG3M', 'PRA', 'PR', 'PA', 'RA']
         )
         
+        # Rename 1H columns
         cols_to_rename = {}
         for col in h1_rolled.columns:
             if '_SZN_' in col or '_L5_' in col or '_L10_' in col:
@@ -225,6 +242,7 @@ def build_feature_set(props_df):
 
     # 7. Merge DVP
     if dvp_df is not None:
+        # Standardize Position
         if 'Pos' not in features_df.columns and player_stats_static is not None:
              if Cols.PLAYER_ID in player_stats_static.columns:
                  pos_map = player_stats_static.set_index(Cols.PLAYER_ID)['Pos'].to_dict()
@@ -238,17 +256,19 @@ def build_feature_set(props_df):
             
         features_df['Primary_Pos'] = features_df.get('Pos', 'PG').apply(normalize_pos)
         features_df['Primary_Pos'] = features_df['Primary_Pos'].astype(str)
-        dvp_df['Primary_Pos'] = dvp_df['Primary_Pos'].astype(str)
+        
+        if 'Primary_Pos' in dvp_df.columns:
+            dvp_df['Primary_Pos'] = dvp_df['Primary_Pos'].astype(str)
 
-        features_df = pd.merge(
-            features_df, dvp_df, 
-            left_on=[Cols.OPPONENT, 'Primary_Pos'], 
-            right_on=['OPPONENT_ABBREV', 'Primary_Pos'], 
-            how='left'
-        )
+            features_df = pd.merge(
+                features_df, dvp_df, 
+                left_on=[Cols.OPPONENT, 'Primary_Pos'], 
+                right_on=['OPPONENT_ABBREV', 'Primary_Pos'], 
+                how='left'
+            )
 
-    # 8. Merge H2H
-    if not vs_opp_df.empty:
+    # 8. Merge H2H (Head to Head)
+    if vs_opp_df is not None and not vs_opp_df.empty:
         features_df = pd.merge(
             features_df, vs_opp_df,
             left_on=[Cols.PLAYER_ID, Cols.OPPONENT],

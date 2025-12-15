@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import math
 from datetime import timedelta
 from rapidfuzz import process, fuzz
 from prop_analyzer import config as cfg
@@ -28,7 +29,7 @@ def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, p
     elif 'GAME_DATE' in player_history.columns:
         date_col = 'GAME_DATE'
     else:
-        return {} # Should not happen with standardized ETL
+        return {} 
 
     prop_date_dt = pd.to_datetime(prop_game_date).normalize()
     player_history = player_history[pd.to_datetime(player_history[date_col]) < prop_date_dt]
@@ -63,11 +64,18 @@ def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, p
         return defaults | stats
 
     all_stats = player_season_df[prop_col].values
-
-    # Bayesian Smoothed Season Avg
     sample_mean = np.mean(all_stats)
-    n_prior = cfg.BAYESIAN_PRIOR_WEIGHT 
+
+    # --- 1. DYNAMIC BAYESIAN SMOOTHING ---
+    # As games_played increases, we rely less on the Prior.
+    # Decay Factor: 10 / (10 + Games). 
+    # At 0 games: 1.0 (Full Prior)
+    # At 10 games: 0.5 (Half Prior)
+    # At 25 games: ~0.28 (Mostly Sample Mean)
+    decay_factor = 10.0 / (10.0 + games_played)
+    n_prior = cfg.BAYESIAN_PRIOR_WEIGHT * decay_factor
     prior_mean = cfg.BAYESIAN_PRIORS.get(prop_category, sample_mean) 
+    
     stats['szn_avg'] = round(((n_prior * prior_mean) + (games_played * sample_mean)) / (n_prior + games_played), 2)
     
     # Advanced SZN Stats
@@ -75,18 +83,37 @@ def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, p
     stats['szn_avg_efg'] = round(player_season_df['EFG_PCT'].mean(), 4) if 'EFG_PCT' in player_season_df else 0
     stats['szn_avg_usg'] = round(player_season_df['USG_PROXY'].mean(), 4) if 'USG_PROXY' in player_season_df else 0
 
-    # Volatility
-    stats['szn_std_dev'] = round(np.std(all_stats), 2)
-    stats['cov_pct'] = round((stats['szn_std_dev'] / stats['szn_avg']) * 100, 1) if stats['szn_avg'] != 0 else 100.0
+    # --- 2. POISSON-ADJUSTED VOLATILITY ---
+    # For low-count props (Steals, Blocks), strict Gaussian StdDev is misleading.
+    # Theoretical Poisson StdDev is sqrt(mean).
+    # We blend Actual StdDev with Theoretical to handle overdispersion cleanly.
+    low_count_props = ['STL', 'BLK', 'FG3M', 'TOV', 'Q1_FG3M']
+    
+    actual_std = np.std(all_stats)
+    if prop_category in low_count_props:
+        poisson_std = np.sqrt(sample_mean)
+        # Blend: 70% Actual (Reality), 30% Poisson (Theory)
+        stats['szn_std_dev'] = round((0.7 * actual_std) + (0.3 * poisson_std), 2)
+    else:
+        stats['szn_std_dev'] = round(actual_std, 2)
+
+    stats['cov_pct'] = round((stats['szn_std_dev'] / stats['szn_avg']) * 100, 1) if stats['szn_avg'] > 0 else 100.0
 
     # Location Splits
     loc_filter = 'vs.' if is_home else '@'
     if 'MATCHUP' in player_season_df.columns:
         loc_stats_df = player_season_df[player_season_df['MATCHUP'].str.contains(loc_filter, na=False)]
         stats['loc_avg'] = round(loc_stats_df[prop_col].mean(), 2) if not loc_stats_df.empty else stats['szn_avg']
-        stats['loc_avg_ts'] = round(loc_stats_df['TS_PCT'].mean(), 4) if not loc_stats_df.empty and 'TS_PCT' in loc_stats_df else stats['szn_avg_ts']
-        stats['loc_avg_efg'] = round(loc_stats_df['EFG_PCT'].mean(), 4) if not loc_stats_df.empty and 'EFG_PCT' in loc_stats_df else stats['szn_avg_efg']
-        stats['loc_avg_usg'] = round(loc_stats_df['USG_PROXY'].mean(), 4) if not loc_stats_df.empty and 'USG_PROXY' in loc_stats_df else stats['szn_avg_usg']
+        
+        # Location Advanced
+        if not loc_stats_df.empty:
+            stats['loc_avg_ts'] = round(loc_stats_df['TS_PCT'].mean(), 4) if 'TS_PCT' in loc_stats_df else stats['szn_avg_ts']
+            stats['loc_avg_efg'] = round(loc_stats_df['EFG_PCT'].mean(), 4) if 'EFG_PCT' in loc_stats_df else stats['szn_avg_efg']
+            stats['loc_avg_usg'] = round(loc_stats_df['USG_PROXY'].mean(), 4) if 'USG_PROXY' in loc_stats_df else stats['szn_avg_usg']
+        else:
+            stats['loc_avg_ts'] = stats['szn_avg_ts']
+            stats['loc_avg_efg'] = stats['szn_avg_efg']
+            stats['loc_avg_usg'] = stats['szn_avg_usg']
 
     # Rolling Windows
     player_season_df_asc = player_season_df.sort_values(by=date_col, ascending=True)
@@ -157,7 +184,6 @@ def get_schedule_fatigue_metrics(player_id, box_scores_df, prop_game_date):
 def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
     """
     Calculates the total missing Usage and Minutes for a team based on the injury report.
-    Includes strict name matching to prevent 'Jalen' vs 'Jaylin' errors.
     Returns: (missing_usg, missing_min, missing_usg_g, missing_usg_f)
     """
     if inj_df is None or inj_df.empty or full_roster_df is None or full_roster_df.empty:
@@ -173,13 +199,11 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
         return 0.0, 0.0, 0.0, 0.0
 
     # 2. Filter Roster for this Team
-    # Ensure correct column check for team
     if 'TEAM_ABBREVIATION' in full_roster_df.columns:
         team_col = 'TEAM_ABBREVIATION'
     elif Cols.TEAM in full_roster_df.columns:
         team_col = Cols.TEAM
     else:
-        # Cannot filter by team, return safe 0s
         return 0.0, 0.0, 0.0, 0.0
 
     team_roster = full_roster_df[full_roster_df[team_col] == team_abbr].copy()
@@ -205,7 +229,6 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
     pos_col = 'Pos' if 'Pos' in team_roster.columns else None
 
     # 4. Create Lookup Maps
-    # A. Exact Match Map (Priority)
     team_roster['match_name'] = team_roster['clean_name'].fillna('').str.lower().str.strip()
     
     cols_to_pull = [usg_col, min_col]
@@ -228,8 +251,7 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
             matched_name = clean_inj_name
             stats = roster_map[matched_name]
         else:
-            # Step 2: Fuzzy Match with STRICT threshold
-            # Increased cutoff from 85 -> 90 to avoid Jalen/Jaylin mixups
+            # Step 2: Fuzzy Match (Strict)
             match = process.extractOne(clean_inj_name, roster_names, scorer=fuzz.token_sort_ratio, score_cutoff=90)
             if match:
                 matched_name = match[0]
@@ -240,14 +262,12 @@ def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
         if stats:
             avg_min = float(stats.get(min_col, 0))
             
-            # Only count vacancy if the player plays significant minutes (>12)
             if avg_min > 12.0:
                 u_val = float(stats.get(usg_col, 0))
                 
                 missing_usg += u_val
                 missing_min += avg_min
                 
-                # Split Logic (Guard vs Forward/Center)
                 if pos_col:
                     raw_pos = str(stats.get(pos_col, '')).upper()
                     if 'G' in raw_pos:

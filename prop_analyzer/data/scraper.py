@@ -18,12 +18,11 @@ from nba_api.stats.static import players
 from prop_analyzer import config as cfg
 
 try:
-    from nba_api.stats.endpoints.playergamelog import PlayerGameLog
+    # We primarily use LeagueDashPlayerStats now for batch fetching
     from nba_api.stats.endpoints.leaguedashplayerstats import LeagueDashPlayerStats
     from nba_api.stats.endpoints.leaguedashteamstats import LeagueDashTeamStats
     from nba_api.stats.endpoints.leaguedashptdefend import LeagueDashPtDefend
     from nba_api.stats.endpoints.leaguedashoppptshot import LeagueDashOppPtShot
-    from nba_api.stats.endpoints.commonallplayers import CommonAllPlayers
 except ImportError as e:
     print("--- FATAL ERROR ---")
     print(f"Failed to import a module from 'nba-api': {e}")
@@ -63,7 +62,7 @@ def get_season_config():
     ]
 
 MAX_WORKERS = 5 
-NBA_API_TIMEOUT = 15 # Reduced to fail fast on stalls
+NBA_API_TIMEOUT = 25 # Increased slightly for daily batch calls
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
@@ -258,7 +257,7 @@ TEAMRANKINGS_SLUG_MAP = {
 }
 
 MASTER_FILE_MAP = {
-    "NBA Player Box Scores.csv": ("nba_api", "player_box_scores"),
+    # NOTE: "NBA Player Box Scores" is now generated dynamically by date-batch
     "NBA Player Stats Away:Road.csv": ("nba_api", "player_stats_road"),
     "NBA Player Stats Home.csv": ("nba_api", "player_stats_home"),
     "NBA Player Stats Last 5 Games.csv": ("nba_api", "player_stats_last_5"),
@@ -280,7 +279,7 @@ def create_robust_session():
     session = requests.Session()
     retry_strategy = Retry(
         total=5,
-        backoff_factor=2, # Slower backoff (1s, 2s, 4s, 8s, 16s)
+        backoff_factor=2, 
         status_forcelist=[429, 500, 502, 503, 504],
         allowed_methods=["GET", "POST"]
     )
@@ -293,7 +292,6 @@ def create_robust_session():
 def save_clean_parquet(df, filename_stem, output_dir):
     """
     Saves DataFrame as Parquet (Uniform Storage).
-    Replaces save_clean_csv.
     """
     try:
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -313,8 +311,6 @@ def save_clean_parquet(df, filename_stem, output_dir):
 def deduplicate_columns(df):
     """
     Renames duplicate columns by appending a numerical suffix.
-    Example: ['FG%', 'FG%'] -> ['FG%', 'FG%_1']
-    Essential for Parquet compatibility.
     """
     cols = pd.Series(df.columns)
     for dup in cols[cols.duplicated()].unique(): 
@@ -328,7 +324,7 @@ def deduplicate_columns(df):
 def scrape_daily_injuries(session, output_dir):
     logging.info("--- Scraping Daily Injury Report (CBS Sports) ---")
     url = "https://www.cbssports.com/nba/injuries/"
-    filename = "daily_injuries" # Will append .parquet
+    filename = "daily_injuries" 
     
     try:
         response = session.get(url, timeout=30)
@@ -407,7 +403,6 @@ def scrape_daily_injuries(session, output_dir):
             
             injury_df['Status_Clean'] = injury_df['Injury Status'].apply(clean_status)
         
-        # Save as Parquet
         save_clean_parquet(injury_df, filename, output_dir)
         logging.info(f"Scraped {len(injury_df)} injury records.")
         
@@ -416,7 +411,6 @@ def scrape_daily_injuries(session, output_dir):
 
 def scrape_teamrankings(session, slug, filename, season_cfg, output_dir):
     url = f"https://www.teamrankings.com/nba/stat/{slug}"
-    
     if season_cfg['tr_date_param']:
         url += f"?date={season_cfg['tr_date_param']}"
         
@@ -440,16 +434,14 @@ def scrape_teamrankings(session, slug, filename, season_cfg, output_dir):
         df = dfs[0]
         
         if isinstance(df.columns, pd.MultiIndex):
-             # Simple Flatten
              df.columns = [col[1] if len(col) > 1 else col[0] for col in df.columns]
         else:
             df.columns = [str(col) for col in df.columns]
 
-        # DEDUPLICATE
         df = deduplicate_columns(df)
 
         if len(df.columns) >= 8:
-            cols_to_keep = [0, 1, 2, 3, 4, 5, 6] # Rank, Team, [SeasonStat], Last 3, Last 1, Home, Away
+            cols_to_keep = [0, 1, 2, 3, 4, 5, 6] 
             df = df.iloc[:, cols_to_keep].copy()
             season_year = season_cfg['bball_ref_year']
             df.columns = ["Rank", "Team", str(season_year), "Last 3", "Last 1", "Home", "Away"]
@@ -492,21 +484,16 @@ def scrape_bball_ref(session, url_template, table_id, filename, season_cfg, outp
             
         df = pd.read_html(io.StringIO(str(table)))[0]
         
-        # --- FIX FOR DUPLICATE HEADERS ---
         if isinstance(df.columns, pd.MultiIndex):
-            # Flatten to single level first using the bottom row
             new_cols = []
             for col in df.columns:
-                # col is tuple like ('Shooting', 'FG%') or ('Unnamed: 0_level_0', 'Player')
                 c_name = col[1] if len(col) > 1 else col[0]
                 new_cols.append(str(c_name))
             df.columns = new_cols
         else:
             df.columns = [str(col) for col in df.columns]
 
-        # Apply deduplication logic (e.g., 'FG%', 'FG%' -> 'FG%', 'FG%_1')
         df = deduplicate_columns(df)
-        # ---------------------------------
 
         if 'Rk' in df.columns:
             df = df[df['Rk'] != 'Rk']
@@ -522,7 +509,6 @@ def scrape_bball_ref(session, url_template, table_id, filename, season_cfg, outp
         time.sleep(3) 
 
 def fetch_and_save_parquet(filename, api_class, output_dir, **kwargs):
-    # Retry wrapper for Generic API calls
     retries = 3
     for attempt in range(retries):
         try:
@@ -536,119 +522,91 @@ def fetch_and_save_parquet(filename, api_class, output_dir, **kwargs):
             else:
                 logging.error(f"Failed to fetch {filename} after {retries} attempts: {e}")
 
-def scrape_recent_quarter_stats(output_dir):
+def get_season_dates(season_str):
     """
-    Fetches yesterday's Q1 AND Q2 stats specifically for grading purposes.
-    Standard box scores often don't contain quarter splits per player.
+    Returns start_date, end_date for a given season ID (e.g. '2024-25').
     """
-    yesterday_dt = datetime.now() - timedelta(days=1)
-    yesterday_str = yesterday_dt.strftime('%m/%d/%Y') # Format: MM/DD/YYYY
-    save_str = yesterday_dt.strftime('%Y-%m-%d')
+    start_year = int(season_str.split('-')[0])
     
-    logging.info(f"--- Fetching Q1 & Q2 Box Scores for Grading ({yesterday_str}) ---")
+    # NBA usually starts mid-Oct and ends mid-April
+    start_date = datetime(start_year, 10, 22) # Safe approx
+    end_date = datetime(start_year + 1, 4, 15)
     
-    for period in [1, 2]:
-        try:
-            # LeagueDashPlayerStats with Period=X gives us the Q{X} box score
-            stats = LeagueDashPlayerStats(
-                period=period,
-                date_from_nullable=yesterday_str,
-                date_to_nullable=yesterday_str,
-                season_type_all_star='Regular Season',
-                timeout=NBA_API_TIMEOUT
-            )
-            df = stats.get_data_frames()[0]
-            
-            if not df.empty:
-                df['GAME_DATE'] = save_str
-                # Save to specific sub-folder (q1_logs or q2_logs)
-                q_dir = output_dir / f"q{period}_logs"
-                filename = f"daily_q{period}_stats_{save_str}"
-                
-                save_clean_parquet(df, filename, q_dir)
-                logging.info(f"Saved Q{period} stats for {save_str}")
-            else:
-                logging.info(f"No Q{period} stats found for {yesterday_str}")
-                
-            time.sleep(1.0 + random.random()) # Polite delay
-            
-        except Exception as e:
-            logging.error(f"Failed to scrape Q{period} stats: {e}")
+    # Cap end date at today
+    if end_date > datetime.now():
+        end_date = datetime.now() - timedelta(days=1)
+        
+    return start_date, end_date
+
+def fetch_daily_player_stats(target_date, timeout=20):
+    """
+    Fetches stats for ALL players on a specific date in ONE call.
+    """
+    date_str = target_date.strftime('%m/%d/%Y')
+    try:
+        # LeagueDashPlayerStats returns rows for everyone who played in the window
+        logs = LeagueDashPlayerStats(
+            date_from_nullable=date_str,
+            date_to_nullable=date_str,
+            season_type_all_star='Regular Season',
+            timeout=timeout
+        )
+        df = logs.get_data_frames()[0]
+        if not df.empty:
+            df['GAME_DATE'] = target_date.strftime('%Y-%m-%d')
+        return df
+    except Exception as e:
+        logging.warning(f"Failed to fetch daily stats for {date_str}: {e}")
+        return pd.DataFrame()
 
 def scrape_nba_api_stats(season_cfg, output_dir):
     target_season = season_cfg['season_str']
     logging.info(f"--- Fetching all nba-api data (Season: {target_season}) ---")
     
     try:
-        logging.info("Fetching Player Box Scores...")
+        # --- BATCH FETCHING FOR BOX SCORES ---
+        logging.info("Fetching Player Box Scores (Batch by Date)...")
         
-        # Fetch dynamic roster
-        logging.info(f"Fetching live roster for season {target_season}...")
-        roster_api = CommonAllPlayers(
-            is_only_current_season=1, 
-            league_id='00', 
-            season=target_season
-        )
-        roster_df = roster_api.get_data_frames()[0]
+        start_date, end_date = get_season_dates(target_season)
+        current_date = start_date
         
-        active_players = []
-        for _, row in roster_df.iterrows():
-            active_players.append({
-                'id': row['PERSON_ID'],
-                'full_name': row['DISPLAY_FIRST_LAST'],
-                'is_active': True 
-            })
-
-        total_active = len(active_players)
-        logging.info(f"Found {total_active} active players (Dynamic Fetch). Starting sequential scrape...")
+        all_daily_stats = []
+        dates_to_fetch = []
         
-        all_logs = []
-
-        for i, player in enumerate(active_players):
-            if (i + 1) % 20 == 0:
-                logging.info(f"  Scraped {i + 1}/{total_active} player box scores...")
+        while current_date <= end_date:
+            dates_to_fetch.append(current_date)
+            current_date += timedelta(days=1)
             
-            max_retries = 2 # REDUCED (was 3)
-            success = False
+        logging.info(f"Queued {len(dates_to_fetch)} days to fetch.")
+        
+        # Parallel Fetching by Date
+        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            future_to_date = {executor.submit(fetch_daily_player_stats, d): d for d in dates_to_fetch}
             
-            for attempt in range(max_retries):
+            completed = 0
+            for future in concurrent.futures.as_completed(future_to_date):
+                date_val = future_to_date[future]
                 try:
-                    time.sleep(random.uniform(0.6, 1.0))
-                    
-                    log = PlayerGameLog(
-                        player_id=player['id'],
-                        season=target_season,
-                        season_type_all_star="Regular Season",
-                        timeout=NBA_API_TIMEOUT
-                    )
-                    df = log.get_data_frames()[0]
+                    df = future.result()
                     if not df.empty:
-                        all_logs.append(df)
-                    success = True
-                    break 
-                    
+                        all_daily_stats.append(df)
                 except Exception as e:
-                    # UPDATED: Log the specific player failure
-                    if attempt == max_retries - 1:
-                        logging.warning(f"Error scraping {player['full_name']} (ID: {player['id']}): {e}")
-                    
-                    if attempt < max_retries - 1:
-                        time.sleep((attempt + 1) * 3) # Reduced wait time
-                    else:
-                        pass # Move to next player
-            
-            if not success:
-                # Anti-stall: Ensure loop continues
-                continue
+                    logging.error(f"Error fetching {date_val}: {e}")
+                
+                completed += 1
+                if completed % 10 == 0:
+                    logging.info(f"  Fetches complete: {completed}/{len(dates_to_fetch)}")
 
-        if not all_logs:
-            box_scores_df = pd.DataFrame() 
+        if not all_daily_stats:
+            box_scores_df = pd.DataFrame()
         else:
-            box_scores_df = pd.concat(all_logs, ignore_index=True)
+            box_scores_df = pd.concat(all_daily_stats, ignore_index=True)
             
         save_clean_parquet(box_scores_df, "NBA Player Box Scores", output_dir)
-        
-        logging.info("Fetching remaining Player and Team Stats (parallel)...")
+        logging.info(f"Saved aggregated box scores: {len(box_scores_df)} rows.")
+
+        # --- REMAINING GENERAL STATS ---
+        logging.info("Fetching remaining Player and Team Stats (Parallel)...")
         
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             futures = []
@@ -676,7 +634,7 @@ def scrape_nba_api_stats(season_cfg, output_dir):
             for future in concurrent.futures.as_completed(futures):
                 future.result() 
 
-        # --- Q1/Q2 GRADING FETCH ---
+        # --- Q1/Q2 RECENT GRADING FETCH ---
         if season_cfg['is_current']:
             scrape_recent_quarter_stats(output_dir)
 
@@ -685,10 +643,44 @@ def scrape_nba_api_stats(season_cfg, output_dir):
     except Exception as e:
         logging.error(f"CRITICAL FAILURE in nba-api section: {e}", exc_info=True)
 
+def scrape_recent_quarter_stats(output_dir):
+    """
+    Fetches yesterday's Q1 AND Q2 stats specifically for grading purposes.
+    """
+    yesterday_dt = datetime.now() - timedelta(days=1)
+    yesterday_str = yesterday_dt.strftime('%m/%d/%Y') 
+    save_str = yesterday_dt.strftime('%Y-%m-%d')
+    
+    logging.info(f"--- Fetching Q1 & Q2 Box Scores for Grading ({yesterday_str}) ---")
+    
+    for period in [1, 2]:
+        try:
+            stats = LeagueDashPlayerStats(
+                period=period,
+                date_from_nullable=yesterday_str,
+                date_to_nullable=yesterday_str,
+                season_type_all_star='Regular Season',
+                timeout=NBA_API_TIMEOUT
+            )
+            df = stats.get_data_frames()[0]
+            
+            if not df.empty:
+                df['GAME_DATE'] = save_str
+                q_dir = output_dir / f"q{period}_logs"
+                q_dir.mkdir(parents=True, exist_ok=True)
+                filename = f"daily_q{period}_stats_{save_str}"
+                
+                save_clean_parquet(df, filename, q_dir)
+                logging.info(f"Saved Q{period} stats for {save_str}")
+            else:
+                logging.info(f"No Q{period} stats found for {yesterday_str}")
+                
+            time.sleep(1.0 + random.random()) 
+            
+        except Exception as e:
+            logging.error(f"Failed to scrape Q{period} stats: {e}")
+
 def should_skip_season_file(output_dir, filename_stem, is_current_season):
-    """
-    Checks if a parquet file exists.
-    """
     if is_current_season:
         return False 
     
@@ -703,10 +695,9 @@ def should_skip_season_file(output_dir, filename_stem, is_current_season):
 def main():
     start_time = time.time()
     
-    logging.info("========= STARTING NBA DATA SCRAPER (PARQUET OPTIMIZED) =========")
+    logging.info("========= STARTING NBA DATA SCRAPER (BATCH OPTIMIZED) =========")
     
     session = create_robust_session()
-    
     seasons_to_scrape = get_season_config()
     
     for season_cfg in seasons_to_scrape:
@@ -736,7 +727,8 @@ def main():
             for future in concurrent.futures.as_completed(futures):
                 future.result() 
                 
-        if should_skip_season_file(output_dir, "NBA Team General Stats", is_current):
+        # Always run NBA API scrape for current season to get fresh box scores
+        if not is_current and should_skip_season_file(output_dir, "NBA Team General Stats", is_current):
             logging.info("Skipping NBA API stats (Cached)")
         else:
             scrape_nba_api_stats(season_cfg, output_dir)
@@ -747,7 +739,7 @@ def main():
             for friendly_name, slug in TEAMRANKINGS_SLUG_MAP.items():
                 sanitized_name = re.sub(r"\(.*\)", "", friendly_name).strip()
                 sanitized_name = sanitized_name.replace(" / ", " per ").replace("/", " per ")
-                filename = f"NBA Team {sanitized_name}" # Extension handled by saver
+                filename = f"NBA Team {sanitized_name}" 
                 
                 if should_skip_season_file(output_dir, filename, is_current):
                     continue

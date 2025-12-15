@@ -38,7 +38,7 @@ MASTER_BOX_SCORES_PATTERN = "master_box_scores_*.parquet"
 
 # NEW: Quarter/Half Masters
 MASTER_Q1_FILE = DATA_DIR / "master_q1_stats.parquet"
-MASTER_1H_FILE = DATA_DIR / "master_1h_stats.parquet"  # <--- ADDED THIS
+MASTER_1H_FILE = DATA_DIR / "master_1h_stats.parquet"
 
 MASTER_VS_OPP_FILE = DATA_DIR / "master_vs_opponent.parquet"
 MASTER_DVP_FILE = DATA_DIR / "master_dvp_stats.parquet"
@@ -73,13 +73,13 @@ class Cols:
         return [cls.PLAYER_NAME, cls.TEAM, cls.OPPONENT, cls.MATCHUP, cls.PROP_TYPE, cls.PROP_LINE, cls.DATE]
 
 # --- THRESHOLDS ---
-MIN_PROB_FOR_S_TIER = 0.585
+MIN_PROB_FOR_S_TIER = 0.59  # Slightly stricter given improved model honesty
 MIN_EDGE_FOR_S_TIER = 1.5
 MIN_EDGE_FOR_A_TIER = 1.0
 LIVE_MIN_PROB_THRESHOLD = 0.65
 LIVE_BLOWOUT_THRESHOLD = 20
-BAYESIAN_PRIOR_WEIGHT = 12
-EWMA_DECAY_FACTOR = 0.85
+BAYESIAN_PRIOR_WEIGHT = 6.0  # Reduced from 12.0 to allow mid-season stats to dominate
+EWMA_DECAY_FACTOR = 0.80     # Reduced from 0.85 to make L5 trends more responsive
 MIN_GAMES_FOR_ANALYSIS = 5
 
 # --- PRIORS ---
