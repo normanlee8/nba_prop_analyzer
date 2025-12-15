@@ -21,9 +21,22 @@ PROP_MAP = {
     'Reb+Ast': 'RA',
     'Fantasy Points': 'FANTASY_PTS',
     
-    # Explicit Quarter/Half Mappings (Pass-through)
-    'Q1_PTS': 'Q1_PTS', 'Q1_REB': 'Q1_REB', 'Q1_AST': 'Q1_AST', 'Q1_PRA': 'Q1_PRA',
-    '1H_PTS': '1H_PTS', '1H_REB': '1H_REB', '1H_AST': '1H_AST', '1H_PRA': '1H_PRA'
+    # Explicit Quarter/Half Mappings (Pass-through + Combo Props)
+    'Q1_PTS': 'Q1_PTS', 'Q1 Points': 'Q1_PTS',
+    'Q1_REB': 'Q1_REB', 'Q1 Rebounds': 'Q1_REB',
+    'Q1_AST': 'Q1_AST', 'Q1 Assists': 'Q1_AST',
+    'Q1_PRA': 'Q1_PRA', 'Q1 Pts+Reb+Ast': 'Q1_PRA',
+    'Q1_PR':  'Q1_PR',  'Q1 Pts+Reb': 'Q1_PR',
+    'Q1_PA':  'Q1_PA',  'Q1 Pts+Ast': 'Q1_PA',
+    'Q1_RA':  'Q1_RA',  'Q1 Reb+Ast': 'Q1_RA',
+    
+    '1H_PTS': '1H_PTS', '1H Points': '1H_PTS',
+    '1H_REB': '1H_REB', '1H Rebounds': '1H_REB',
+    '1H_AST': '1H_AST', '1H Assists': '1H_AST',
+    '1H_PRA': '1H_PRA', '1H Pts+Reb+Ast': '1H_PRA',
+    '1H_PR':  '1H_PR',  '1H Pts+Reb': '1H_PR',
+    '1H_PA':  '1H_PA',  '1H Pts+Ast': '1H_PA',
+    '1H_RA':  '1H_RA',  '1H Reb+Ast': '1H_RA'
 }
 
 def rename_features_for_inference(feature_dict, prop_cat):

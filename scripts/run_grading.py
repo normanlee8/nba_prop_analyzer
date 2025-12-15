@@ -112,6 +112,28 @@ def grade_predictions():
     q1_game_df = loader.load_master_q1_history()
     h1_game_df = loader.load_master_1h_history()
 
+    # --- ADDED: Calculate Combo Stats for Grading ---
+    # Ensure Q1/1H combo stats exist for grading
+    if not q1_game_df.empty:
+        # Fill missing base stats with 0 just in case
+        for col in ['PTS', 'REB', 'AST']:
+            if col not in q1_game_df.columns: q1_game_df[col] = 0
+            
+        q1_game_df['PRA'] = q1_game_df['PTS'] + q1_game_df['REB'] + q1_game_df['AST']
+        q1_game_df['PR'] = q1_game_df['PTS'] + q1_game_df['REB']
+        q1_game_df['PA'] = q1_game_df['PTS'] + q1_game_df['AST']
+        q1_game_df['RA'] = q1_game_df['REB'] + q1_game_df['AST']
+
+    if not h1_game_df.empty:
+        for col in ['PTS', 'REB', 'AST']:
+            if col not in h1_game_df.columns: h1_game_df[col] = 0
+            
+        h1_game_df['PRA'] = h1_game_df['PTS'] + h1_game_df['REB'] + h1_game_df['AST']
+        h1_game_df['PR'] = h1_game_df['PTS'] + h1_game_df['REB']
+        h1_game_df['PA'] = h1_game_df['PTS'] + h1_game_df['AST']
+        h1_game_df['RA'] = h1_game_df['REB'] + h1_game_df['AST']
+    # ------------------------------------------------
+
     if full_game_df is None or full_game_df.empty:
         logging.warning("No master box scores found. Full game props cannot be graded.")
         full_game_df = pd.DataFrame()

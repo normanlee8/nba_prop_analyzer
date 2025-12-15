@@ -139,12 +139,19 @@ def build_feature_set(props_df):
         if Cols.DATE in q1_history.columns:
             q1_history[Cols.DATE] = pd.to_datetime(q1_history[Cols.DATE])
         
+        # --- Calculate Combo Stats for Q1 ---
         if 'PRA' not in q1_history.columns and 'PTS' in q1_history.columns:
              q1_history['PRA'] = q1_history['PTS'] + q1_history['REB'] + q1_history['AST']
+        if 'PR' not in q1_history.columns and 'PTS' in q1_history.columns:
+             q1_history['PR'] = q1_history['PTS'] + q1_history['REB']
+        if 'PA' not in q1_history.columns and 'PTS' in q1_history.columns:
+             q1_history['PA'] = q1_history['PTS'] + q1_history['AST']
+        if 'RA' not in q1_history.columns and 'REB' in q1_history.columns:
+             q1_history['RA'] = q1_history['REB'] + q1_history['AST']
         
         q1_rolled = add_rolling_stats_history(
             q1_history.copy(), 
-            stats_to_roll=['PTS', 'REB', 'AST', 'FG3M', 'PRA']
+            stats_to_roll=['PTS', 'REB', 'AST', 'FG3M', 'PRA', 'PR', 'PA', 'RA']
         )
         
         cols_to_rename = {}
@@ -171,12 +178,19 @@ def build_feature_set(props_df):
         if Cols.DATE in h1_history.columns:
             h1_history[Cols.DATE] = pd.to_datetime(h1_history[Cols.DATE])
             
+        # --- Calculate Combo Stats for 1H ---
         if 'PRA' not in h1_history.columns and 'PTS' in h1_history.columns:
              h1_history['PRA'] = h1_history['PTS'] + h1_history['REB'] + h1_history['AST']
+        if 'PR' not in h1_history.columns and 'PTS' in h1_history.columns:
+             h1_history['PR'] = h1_history['PTS'] + h1_history['REB']
+        if 'PA' not in h1_history.columns and 'PTS' in h1_history.columns:
+             h1_history['PA'] = h1_history['PTS'] + h1_history['AST']
+        if 'RA' not in h1_history.columns and 'REB' in h1_history.columns:
+             h1_history['RA'] = h1_history['REB'] + h1_history['AST']
              
         h1_rolled = add_rolling_stats_history(
             h1_history.copy(), 
-            stats_to_roll=['PTS', 'REB', 'AST', 'FG3M', 'PRA']
+            stats_to_roll=['PTS', 'REB', 'AST', 'FG3M', 'PRA', 'PR', 'PA', 'RA']
         )
         
         cols_to_rename = {}

@@ -37,6 +37,16 @@ PROP_KEY_MAP = {
     'PRA': 'PRA', 'Pts+Reb+Ast': 'PRA', 
     'Pts+Reb': 'PR', 'Pts+Ast': 'PA', 'Reb+Ast': 'RA',
     'Fantasy Points': 'FANTASY_PTS',
+    
+    # Q1 / 1H Specific Maps
+    'Q1_PTS': 'Q1_PTS', 'Q1_REB': 'Q1_REB', 'Q1_AST': 'Q1_AST',
+    'Q1_PRA': 'Q1_PRA', 'Q1_PR': 'Q1_PR', 'Q1_PA': 'Q1_PA', 'Q1_RA': 'Q1_RA',
+    'Q1_FG3M': 'Q1_FG3M',
+    
+    '1H_PTS': '1H_PTS', '1H_REB': '1H_REB', '1H_AST': '1H_AST',
+    '1H_PRA': '1H_PRA', '1H_PR': '1H_PR', '1H_PA': '1H_PA', '1H_RA': '1H_RA',
+    '1H_FG3M': '1H_FG3M',
+
     # Direct mappings
     'PTS': 'PTS', 'REB': 'REB', 'AST': 'AST', 'FG3M': 'FG3M',
     'STL': 'STL', 'BLK': 'BLK', 'TOV': 'TOV', 'STK': 'STK',

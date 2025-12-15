@@ -70,6 +70,9 @@ PROP_FEATURE_MAP = {
     'Q1_REB': ['Q1_REB', 'Q1_PRA', 'REB'],
     'Q1_AST': ['Q1_AST', 'Q1_PRA', 'AST'],
     'Q1_PRA': ['Q1_PRA', 'Q1_PTS', 'Q1_REB', 'Q1_AST', 'PRA'],
+    'Q1_PR':  ['Q1_PR', 'Q1_PTS', 'Q1_REB', 'Q1_PRA', 'PR'],  # <--- Added
+    'Q1_PA':  ['Q1_PA', 'Q1_PTS', 'Q1_AST', 'Q1_PRA', 'PA'],  # <--- Added
+    'Q1_RA':  ['Q1_RA', 'Q1_REB', 'Q1_AST', 'Q1_PRA', 'RA'],  # <--- Added
     'Q1_FG3M': ['Q1_FG3M', 'Q1_PTS', 'FG3M'],
     
     # 1st Half
@@ -77,6 +80,9 @@ PROP_FEATURE_MAP = {
     '1H_REB': ['1H_REB', '1H_PRA', 'REB'],
     '1H_AST': ['1H_AST', '1H_PRA', 'AST'],
     '1H_PRA': ['1H_PRA', '1H_PTS', '1H_REB', '1H_AST', 'PRA'],
+    '1H_PR':  ['1H_PR', '1H_PTS', '1H_REB', '1H_PRA', 'PR'],  # <--- Added
+    '1H_PA':  ['1H_PA', '1H_PTS', '1H_AST', '1H_PRA', 'PA'],  # <--- Added
+    '1H_RA':  ['1H_RA', '1H_REB', '1H_AST', '1H_PRA', 'RA'],  # <--- Added
     '1H_FG3M': ['1H_FG3M', '1H_PTS', 'FG3M'],
 }
 
@@ -91,6 +97,9 @@ RELEVANT_KEYWORDS = {
     'STL': ['Steal', 'Turnover', 'Opponent Turnovers'],
     'BLK': ['Block', 'BLK', 'Opponent Field Goals Attempted'],
     'PRA': ['Points', 'Rebound', 'Assist', 'Offensive Efficiency'],
+    'PR': ['Points', 'Rebound'],
+    'PA': ['Points', 'Assist'],
+    'RA': ['Rebound', 'Assist'],
     'OREB': ['Offensive Rebound', 'OREB', 'Opponent Defensive Rebounds'],
     'FTM': ['Free Throw', 'FT', 'Opponent Personal Fouls'],
     'DD': ['Points', 'Rebound', 'Assist'],
@@ -102,6 +111,9 @@ RELEVANT_KEYWORDS = {
     'Q1_REB': ['1st Quarter', '1Q', 'Rebounds'],
     'Q1_AST': ['1st Quarter', '1Q', 'Assists'],
     'Q1_PRA': ['1st Quarter', '1Q', 'Points', 'Rebounds', 'Assists'],
+    'Q1_PR': ['1st Quarter', '1Q', 'Points', 'Rebounds'],
+    'Q1_PA': ['1st Quarter', '1Q', 'Points', 'Assists'],
+    'Q1_RA': ['1st Quarter', '1Q', 'Rebounds', 'Assists'],
     'Q1_FG3M': ['1st Quarter', '1Q', 'Three'],
     
     # 1H Specific Keywords
@@ -109,5 +121,8 @@ RELEVANT_KEYWORDS = {
     '1H_REB': ['1st Half', '1H', 'Rebounds'],
     '1H_AST': ['1st Half', '1H', 'Assists'],
     '1H_PRA': ['1st Half', '1H', 'Points', 'Rebounds', 'Assists'],
+    '1H_PR': ['1st Half', '1H', 'Points', 'Rebounds'],
+    '1H_PA': ['1st Half', '1H', 'Points', 'Assists'],
+    '1H_RA': ['1st Half', '1H', 'Rebounds', 'Assists'],
     '1H_FG3M': ['1st Half', '1H', 'Three'],
 }

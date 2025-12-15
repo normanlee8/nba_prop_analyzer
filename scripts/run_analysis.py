@@ -15,7 +15,7 @@ from prop_analyzer.utils import common
 
 def save_pretty_excel(df, output_path):
     """
-    Saves the dataframe to Excel with conditional formatting for probabilities.
+    Saves the dataframe to Excel.
     """
     try:
         if df.empty: return
@@ -31,7 +31,6 @@ def save_pretty_excel(df, output_path):
         worksheet = writer.sheets['Picks']
         
         # --- Formats ---
-        green_fmt = workbook.add_format({'bg_color': '#C6EFCE', 'font_color': '#006100'})
         pct_fmt = workbook.add_format({'num_format': '0.0%'})
         header_fmt = workbook.add_format({'bold': True, 'bottom': 1, 'bg_color': '#F0F0F0'})
 
@@ -46,13 +45,6 @@ def save_pretty_excel(df, output_path):
             
             if col == 'Prob':
                 worksheet.set_column(i, i, width, pct_fmt)
-                # Conditional Formatting
-                worksheet.conditional_format(1, i, len(df), i, {
-                    'type': 'cell',
-                    'criteria': '>=',
-                    'value': 0.585,
-                    'format': green_fmt
-                })
             else:
                 worksheet.set_column(i, i, width)
 

@@ -1028,3 +1028,36 @@ pyarrow.lib.ArrowTypeError: ("Expected bytes, got a 'int' object", 'Conversion f
 2025-12-14 21:34:32 [INFO] root: Saving training set with 179 columns...
 2025-12-14 21:34:33 [INFO] root: Saved to prop_data/master_training_dataset.parquet
 2025-12-14 21:34:33 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
+2025-12-14 22:38:59 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-14 22:38:59 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-14 22:38:59 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-14 22:38:59 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-14 22:38:59 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-14 22:38:59 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-14 22:38:59 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-14 22:38:59 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-14 22:38:59 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-14 22:39:00 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-14 22:39:00 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-14 22:39:00 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-14 22:39:00 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-14 22:39:00 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
+2025-12-14 22:39:00 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-14 22:39:00 [INFO] root: Saved master_box_scores_2025-26.parquet (8363 rows)
+2025-12-14 22:39:00 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-14 22:39:00 [INFO] root: Saved master_vs_opponent.parquet
+2025-12-14 22:39:00 [INFO] root: --- Starting: process_dvp_stats ---
+2025-12-14 22:39:00 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
+2025-12-14 22:39:00 [INFO] root: Saved master_dvp_stats.parquet
+2025-12-14 22:39:00 [INFO] root: --- Processing Quarter/Half History ---
+2025-12-14 22:39:01 [INFO] root: Saved Master Q1: 28931 rows
+2025-12-14 22:39:01 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
+2025-12-14 22:39:01 [INFO] root: Saved Master 1H: 27487 rows
+2025-12-14 22:39:01 [INFO] root: Step 2: Building Final Training Dataset...
+2025-12-14 22:39:01 [INFO] root: --- Building Final Training Dataset ---
+2025-12-14 22:39:01 [INFO] root: Merging 28931 Q1 records...
+2025-12-14 22:39:01 [INFO] root: Merging 27487 1H records...
+2025-12-14 22:39:01 [INFO] root: Calculating features for training set...
+2025-12-14 22:39:02 [INFO] root: Saving training set with 209 columns...
+2025-12-14 22:39:02 [INFO] root: Saved to prop_data/master_training_dataset.parquet
+2025-12-14 22:39:02 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
