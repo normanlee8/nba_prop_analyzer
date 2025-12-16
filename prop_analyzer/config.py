@@ -48,6 +48,7 @@ MASTER_TRAINING_FILE = DATA_DIR / "master_training_dataset.parquet"
 class Cols:
     PLAYER_NAME = 'Player Name'
     PLAYER_ID = 'PLAYER_ID'
+    GAME_ID = 'GAME_ID'  # Added GAME_ID
     TEAM = 'Team'
     OPPONENT = 'Opponent'
     MATCHUP = 'Matchup'

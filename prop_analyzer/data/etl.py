@@ -96,8 +96,10 @@ def load_clean_data(filepath_stem, required_cols=[]):
             return None
             
         if df is not None and not df.empty and required_cols:
+            # Check for missing columns but don't fail immediately
             missing = [col for col in required_cols if col not in df.columns]
             if missing:
+                # Optional: log warning if critical
                 pass 
         
         return df
@@ -302,19 +304,39 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
         season_id = folder.name
         try:
             file_stem = folder / "NBA Player Box Scores"
-            bs_df = load_clean_data(file_stem, required_cols=['Player_ID', 'Game_ID', 'PTS'])
-            if bs_df is None: continue
+            # Attempt to load with potential GAME_ID
+            bs_df = load_clean_data(file_stem)
+            
+            if bs_df is None or bs_df.empty: 
+                continue
 
-            bs_df.rename(columns={'Player_ID': Cols.PLAYER_ID}, inplace=True)
+            # Standardize Column Names
+            # Note: Scraper now attempts to provide Cols.GAME_ID
+            rename_map = {}
+            if 'Player_ID' in bs_df.columns and Cols.PLAYER_ID not in bs_df.columns:
+                rename_map['Player_ID'] = Cols.PLAYER_ID
+            if 'Game_ID' in bs_df.columns and Cols.GAME_ID not in bs_df.columns:
+                rename_map['Game_ID'] = Cols.GAME_ID
+            
+            if rename_map:
+                bs_df.rename(columns=rename_map, inplace=True)
+
             bs_df.dropna(subset=[Cols.PLAYER_ID], inplace=True)
             bs_df[Cols.PLAYER_ID] = bs_df[Cols.PLAYER_ID].astype(int)
             
+            # Ensure GAME_ID is numeric if present
+            if Cols.GAME_ID in bs_df.columns:
+                bs_df[Cols.GAME_ID] = pd.to_numeric(bs_df[Cols.GAME_ID], errors='coerce').fillna(0).astype(int)
+            
+            # Handle Date
             if 'GAME_DATE' in bs_df.columns: 
                 bs_df[Cols.DATE] = pd.to_datetime(bs_df['GAME_DATE'], errors='coerce')
             
+            # Merge Player Info
             id_map = player_id_map[[Cols.PLAYER_ID, 'PLAYER_NAME', 'TEAM_ABBREVIATION', 'Player_Clean']].drop_duplicates(subset=[Cols.PLAYER_ID])
             bs_df = pd.merge(bs_df, id_map, on=Cols.PLAYER_ID, how='left')
             
+            # Merge Position Info
             p_stats_path = output_dir / f"master_player_stats_{season_id}.parquet"
             if p_stats_path.exists():
                 p_stats = pd.read_parquet(p_stats_path)
@@ -323,6 +345,7 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
                     p_stats_szn = p_stats[[Cols.PLAYER_ID, 'Pos']].drop_duplicates(subset=[Cols.PLAYER_ID])
                     bs_df = pd.merge(bs_df, p_stats_szn, on=Cols.PLAYER_ID, how='left')
 
+            # Numeric Conversions
             numeric_cols = [
                 'PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 
                 'FGM', 'FGA', 'FTA', 'FTM', 'OREB', 'DREB', 'MIN'
@@ -339,6 +362,7 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
             bs_df['STK'] = bs_df['STL'] + bs_df['BLK']
             bs_df['FANTASY_PTS'] = bs_df['PTS'] + (bs_df['REB']*1.2) + (bs_df['AST']*1.5) + (bs_df['STL']*3) + (bs_df['BLK']*3) - bs_df['TOV']
             
+            # Double/Triple Doubles
             dd_cols = ['PTS', 'REB', 'AST', 'STL', 'BLK']
             if all(c in bs_df.columns for c in dd_cols):
                 counts = bs_df[dd_cols].ge(10).sum(axis=1)
@@ -368,14 +392,26 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
             def get_opponent(matchup):
                 if not isinstance(matchup, str): return "UNKNOWN"
                 return matchup.split(" vs. ")[-1] if " vs. " in matchup else matchup.split(" @ ")[-1] if " @ " in matchup else "UNKNOWN"
-            bs_df['OPPONENT_ABBREV'] = bs_df['MATCHUP'].apply(get_opponent)
+            
+            # Safeguard if MATCHUP column is missing (though PlayerGameLogs usually has it)
+            if 'MATCHUP' in bs_df.columns:
+                bs_df['OPPONENT_ABBREV'] = bs_df['MATCHUP'].apply(get_opponent)
+            else:
+                bs_df['OPPONENT_ABBREV'] = "UNK"
+
+            # Deduplication: Prefer GAME_ID + PLAYER_ID if available
+            subset_cols = [Cols.PLAYER_ID, Cols.DATE]
+            if Cols.GAME_ID in bs_df.columns:
+                subset_cols.insert(1, Cols.GAME_ID)
+            
+            bs_df.drop_duplicates(subset=subset_cols, keep='last', inplace=True)
             
             out_name = f"master_box_scores_{season_id}.parquet"
             bs_df.to_parquet(output_dir / out_name, index=False)
             logging.info(f"Saved {out_name} ({len(bs_df)} rows)")
             
         except Exception as e:
-            logging.error(f"Error processing box scores for {season_id}: {e}")
+            logging.error(f"Error processing box scores for {season_id}: {e}", exc_info=True)
 
 def process_vs_opponent_stats(data_dir, output_dir):
     logging.info("--- Starting: process_vs_opponent_stats ---")
@@ -392,10 +428,15 @@ def process_vs_opponent_stats(data_dir, output_dir):
     df = pd.concat(dfs, ignore_index=True)
     
     agg_cols = {k: 'mean' for k in ['PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 'PRA', 'PR', 'PA', 'RA', 'FANTASY_PTS', 'MIN', 'DD', 'TD'] if k in df.columns}
-    if 'Game_ID' in df.columns: agg_cols['Game_ID'] = 'count'
+    
+    # Use GAME_ID for count if available, else Game_ID or something else
+    count_col = Cols.GAME_ID if Cols.GAME_ID in df.columns else 'Game_ID'
+    if count_col in df.columns: 
+        agg_cols[count_col] = 'count'
     
     vs_opp_df = df.groupby([Cols.PLAYER_ID, 'PLAYER_NAME', 'OPPONENT_ABBREV']).agg(agg_cols).reset_index()
-    if 'Game_ID' in vs_opp_df.columns: vs_opp_df.rename(columns={'Game_ID': 'GAMES_PLAYED'}, inplace=True)
+    if count_col in vs_opp_df.columns: 
+        vs_opp_df.rename(columns={count_col: 'GAMES_PLAYED'}, inplace=True)
     
     vs_opp_df.round(2).to_parquet(output_dir / "master_vs_opponent.parquet", index=False)
     logging.info("Saved master_vs_opponent.parquet")
@@ -468,7 +509,13 @@ def process_q1_history(output_dir):
             # Cleanup Q1
             if 'GAME_DATE' in full_q1.columns:
                 full_q1['GAME_DATE'] = pd.to_datetime(full_q1['GAME_DATE']).dt.normalize()
-            full_q1 = full_q1.drop_duplicates(subset=[Cols.PLAYER_ID, 'GAME_DATE'], keep='last')
+            
+            # Robust drop duplicates
+            dedup_subset = [Cols.PLAYER_ID, 'GAME_DATE']
+            if Cols.GAME_ID in full_q1.columns:
+                dedup_subset.append(Cols.GAME_ID)
+                
+            full_q1 = full_q1.drop_duplicates(subset=dedup_subset, keep='last')
             
             # Numeric conversion
             cols_num = ['PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV', 'FGM', 'FGA', 'MIN']
@@ -494,17 +541,26 @@ def process_q1_history(output_dir):
             full_q2 = pd.concat(dfs_q2, ignore_index=True)
             if 'GAME_DATE' in full_q2.columns:
                 full_q2['GAME_DATE'] = pd.to_datetime(full_q2['GAME_DATE']).dt.normalize()
-            full_q2 = full_q2.drop_duplicates(subset=[Cols.PLAYER_ID, 'GAME_DATE'], keep='last')
+            
+            dedup_subset = [Cols.PLAYER_ID, 'GAME_DATE']
+            if Cols.GAME_ID in full_q2.columns:
+                dedup_subset.append(Cols.GAME_ID)
+            
+            full_q2 = full_q2.drop_duplicates(subset=dedup_subset, keep='last')
             
             cols_num = ['PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV', 'FGM', 'FGA', 'MIN']
             for c in cols_num:
                 if c in full_q2.columns: full_q2[c] = pd.to_numeric(full_q2[c], errors='coerce').fillna(0)
 
             # Merge Q1 + Q2 on Player/Date
-            # Suffixes: _q1, _q2
+            # Use GAME_ID if available for tighter merge
+            merge_on = [Cols.PLAYER_ID, 'GAME_DATE', 'PLAYER_NAME', 'TEAM_ABBREVIATION']
+            if Cols.GAME_ID in full_q1.columns and Cols.GAME_ID in full_q2.columns:
+                merge_on.append(Cols.GAME_ID)
+
             merged = pd.merge(
                 full_q1, full_q2, 
-                on=[Cols.PLAYER_ID, 'GAME_DATE', 'PLAYER_NAME', 'TEAM_ABBREVIATION'], 
+                on=merge_on, 
                 how='inner', 
                 suffixes=('_q1', '_q2')
             )
@@ -517,7 +573,11 @@ def process_q1_history(output_dir):
             
             # Save 1H Master
             # Keep only standard cols + ID
-            keep_cols = [Cols.PLAYER_ID, 'GAME_DATE', 'PLAYER_NAME', 'TEAM_ABBREVIATION'] + stats_to_sum
+            keep_cols = [Cols.PLAYER_ID, 'GAME_DATE', 'PLAYER_NAME', 'TEAM_ABBREVIATION']
+            if Cols.GAME_ID in merged.columns:
+                keep_cols.append(Cols.GAME_ID)
+            keep_cols += stats_to_sum
+            
             final_1h = merged[keep_cols].copy()
             
             final_1h.to_parquet(cfg.MASTER_1H_FILE, index=False)

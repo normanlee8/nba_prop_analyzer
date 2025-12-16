@@ -23,6 +23,9 @@ def create_training_dataset():
         logging.error("No box scores available. Cannot build training set.")
         return
 
+    # Check for GAME_ID presence to improve merge accuracy
+    has_game_id = Cols.GAME_ID in box_scores.columns
+
     # 2. Load Quarter/Half Targets
     q1_df = loader.load_master_q1_history()
     h1_df = loader.load_master_1h_history()
@@ -51,17 +54,24 @@ def create_training_dataset():
         
         # Select only necessary columns to avoid conflicts
         cols_to_merge = [
-            Cols.PLAYER_ID, 'GAME_DATE', 
+            Cols.PLAYER_ID, Cols.DATE, 
             'Q1_PTS', 'Q1_REB', 'Q1_AST', 'Q1_FG3M', 
             'Q1_PRA', 'Q1_PR', 'Q1_PA', 'Q1_RA'
         ]
+        
+        # Add GAME_ID to merge keys if available in both
+        merge_keys = [Cols.PLAYER_ID, Cols.DATE]
+        if has_game_id and Cols.GAME_ID in q1_df.columns:
+            cols_to_merge.append(Cols.GAME_ID)
+            merge_keys.append(Cols.GAME_ID)
+        
         q1_subset = q1_df[[c for c in cols_to_merge if c in q1_df.columns]]
         
         # Merge onto Box Scores
         box_scores = pd.merge(
             box_scores, 
             q1_subset,
-            on=[Cols.PLAYER_ID, 'GAME_DATE'],
+            on=merge_keys,
             how='left'
         )
     
@@ -86,16 +96,23 @@ def create_training_dataset():
         })
         
         cols_to_merge = [
-            Cols.PLAYER_ID, 'GAME_DATE', 
+            Cols.PLAYER_ID, Cols.DATE, 
             '1H_PTS', '1H_REB', '1H_AST', '1H_FG3M', 
             '1H_PRA', '1H_PR', '1H_PA', '1H_RA'
         ]
+        
+        # Add GAME_ID to merge keys if available in both
+        merge_keys = [Cols.PLAYER_ID, Cols.DATE]
+        if has_game_id and Cols.GAME_ID in h1_df.columns:
+            cols_to_merge.append(Cols.GAME_ID)
+            merge_keys.append(Cols.GAME_ID)
+            
         h1_subset = h1_df[[c for c in cols_to_merge if c in h1_df.columns]]
         
         box_scores = pd.merge(
             box_scores,
             h1_subset,
-            on=[Cols.PLAYER_ID, 'GAME_DATE'],
+            on=merge_keys,
             how='left'
         )
 

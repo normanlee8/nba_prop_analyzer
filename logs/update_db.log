@@ -138,3 +138,13 @@
 2025-12-13 01:59:05 [INFO] root: Merging Team Stats...
 2025-12-13 01:59:06 [INFO] root: Saved training dataset to prop_data/master_training_dataset.parquet with 34313 rows.
 2025-12-13 01:59:06 [INFO] root: <<< DATASET BUILD COMPLETE >>>
+2025-12-15 23:06:20 [INFO] root: Logging initialized. Writing to logs/update_db.log
+2025-12-15 23:06:20 [INFO] root: >>> STARTING DATABASE UPDATE (Results Integration) <<<
+2025-12-15 23:06:20 [INFO] root: Loaded 352 graded results from graded_2025-12-15.csv
+2025-12-15 23:06:20 [INFO] root: Loaded Master Dataset: 12612 rows
+2025-12-15 23:06:20 [INFO] root: NOTE: With the new Parquet pipeline, `run_build_db.py` automatically imports
+2025-12-15 23:06:20 [INFO] root: the latest box scores and updates the training history.
+2025-12-15 23:06:20 [INFO] root: This script will verify data integrity instead.
+2025-12-15 23:06:20 [INFO] root: Verified 325 records from recent results exist in Master Dataset.
+2025-12-15 23:06:20 [INFO] root: Database is fully synchronized.
+2025-12-15 23:06:20 [INFO] root: <<< UPDATE COMPLETE >>>

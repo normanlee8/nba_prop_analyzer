@@ -12,13 +12,14 @@ from datetime import datetime, timedelta
 from bs4 import BeautifulSoup, Comment
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from nba_api.stats.static import players
 
 # Import project config
 from prop_analyzer import config as cfg
+from prop_analyzer.config import Cols  # Import Cols to use GAME_ID
 
 try:
-    # We primarily use LeagueDashPlayerStats now for batch fetching
+    # UPDATED: Added PlayerGameLogs for Game_ID support
+    from nba_api.stats.endpoints.playergamelogs import PlayerGameLogs
     from nba_api.stats.endpoints.leaguedashplayerstats import LeagueDashPlayerStats
     from nba_api.stats.endpoints.leaguedashteamstats import LeagueDashTeamStats
     from nba_api.stats.endpoints.leaguedashptdefend import LeagueDashPtDefend
@@ -62,8 +63,6 @@ def get_season_config():
     ]
 
 # --- TUNING SETTINGS ---
-# 2 Workers is the safest for stability.
-# Timeout increased to 120s to handle server stalls.
 MAX_WORKERS = 2  
 NBA_API_TIMEOUT = 120
 
@@ -529,10 +528,10 @@ def get_season_dates(season_str):
         
     return start_date, end_date
 
-def fetch_daily_player_stats(target_date, timeout=120):
+def fetch_daily_player_stats(target_date, season_str, timeout=120):
     """
     Fetches stats for ALL players on a specific date in ONE call.
-    Includes explicit retry logic for READ TIMEOUTS and Stagger Delay.
+    UPDATED: Uses PlayerGameLogs to capture GAME_ID.
     """
     # STAGGER DELAY: Prevents 2 requests from hitting API at exact same ms
     time.sleep(random.uniform(0.5, 1.5))
@@ -542,16 +541,24 @@ def fetch_daily_player_stats(target_date, timeout=120):
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            # LeagueDashPlayerStats returns rows for everyone who played in the window
-            logs = LeagueDashPlayerStats(
+            # UPDATED: Use PlayerGameLogs to get GAME_ID
+            logs = PlayerGameLogs(
                 date_from_nullable=date_str,
                 date_to_nullable=date_str,
-                season_type_all_star='Regular Season',
+                season_nullable=season_str, 
+                season_type_nullable='Regular Season',
                 timeout=timeout
             )
             df = logs.get_data_frames()[0]
             if not df.empty:
-                df['GAME_DATE'] = target_date.strftime('%Y-%m-%d')
+                df[Cols.DATE] = target_date.strftime('%Y-%m-%d')
+                
+                # Normalize column names to match system expectations if needed
+                # PlayerGameLogs typically returns UPPERCASE standard columns
+                # We ensure GAME_ID is present
+                if Cols.GAME_ID not in df.columns and 'Game_ID' in df.columns:
+                    df.rename(columns={'Game_ID': Cols.GAME_ID}, inplace=True)
+                    
             return df
             
         except Exception as e:
@@ -567,47 +574,81 @@ def scrape_nba_api_stats(season_cfg, output_dir):
     logging.info(f"--- Fetching all nba-api data (Season: {target_season}) ---")
     
     try:
-        # --- BATCH FETCHING FOR BOX SCORES ---
-        logging.info("Fetching Player Box Scores (Batch by Date)...")
+        # --- BATCH FETCHING FOR BOX SCORES (INCREMENTAL) ---
+        logging.info("Fetching Player Box Scores (Incremental)...")
         
+        box_scores_file = output_dir / "NBA Player Box Scores.parquet"
+        existing_df = pd.DataFrame()
         start_date, end_date = get_season_dates(target_season)
         current_date = start_date
-        
+
+        # CHECK FOR EXISTING DATA
+        if box_scores_file.exists():
+            try:
+                existing_df = pd.read_parquet(box_scores_file)
+                if Cols.DATE in existing_df.columns and not existing_df.empty:
+                    # Find the last date we have data for
+                    last_date_str = existing_df[Cols.DATE].max()
+                    last_date = datetime.strptime(last_date_str, '%Y-%m-%d')
+                    # Start fetching from the NEXT day
+                    current_date = last_date + timedelta(days=1)
+                    logging.info(f"Found existing data up to {last_date_str}. Resuming fetch from {current_date.strftime('%Y-%m-%d')}...")
+            except Exception as e:
+                logging.warning(f"Could not read existing box scores ({e}). Re-scraping full season.")
+
         all_daily_stats = []
         dates_to_fetch = []
         
-        while current_date <= end_date:
-            dates_to_fetch.append(current_date)
-            current_date += timedelta(days=1)
+        # Only fetch if we are behind
+        if current_date <= end_date:
+            while current_date <= end_date:
+                dates_to_fetch.append(current_date)
+                current_date += timedelta(days=1)
             
-        logging.info(f"Queued {len(dates_to_fetch)} days to fetch.")
-        
-        # Parallel Fetching by Date
-        # Uses tuned settings: MAX_WORKERS=2, TIMEOUT=120
-        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            future_to_date = {executor.submit(fetch_daily_player_stats, d, NBA_API_TIMEOUT): d for d in dates_to_fetch}
+            logging.info(f"Queued {len(dates_to_fetch)} new days to fetch.")
             
-            completed = 0
-            for future in concurrent.futures.as_completed(future_to_date):
-                date_val = future_to_date[future]
-                try:
-                    df = future.result()
-                    if not df.empty:
-                        all_daily_stats.append(df)
-                except Exception as e:
-                    logging.error(f"Error fetching {date_val}: {e}")
+            # Parallel Fetching by Date
+            with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+                # UPDATED: Pass target_season string to fetch_daily_player_stats
+                future_to_date = {executor.submit(fetch_daily_player_stats, d, target_season, NBA_API_TIMEOUT): d for d in dates_to_fetch}
                 
-                completed += 1
-                if completed % 5 == 0:
-                    logging.info(f"  Fetches complete: {completed}/{len(dates_to_fetch)}")
+                completed = 0
+                for future in concurrent.futures.as_completed(future_to_date):
+                    date_val = future_to_date[future]
+                    try:
+                        df = future.result()
+                        if not df.empty:
+                            all_daily_stats.append(df)
+                    except Exception as e:
+                        logging.error(f"Error fetching {date_val}: {e}")
+                    
+                    completed += 1
+                    if completed % 5 == 0:
+                        logging.info(f"  Fetches complete: {completed}/{len(dates_to_fetch)}")
 
-        if not all_daily_stats:
-            box_scores_df = pd.DataFrame()
+            if all_daily_stats:
+                new_data_df = pd.concat(all_daily_stats, ignore_index=True)
+                
+                # Concatenate with existing
+                if not existing_df.empty:
+                    final_df = pd.concat([existing_df, new_data_df], ignore_index=True)
+                else:
+                    final_df = new_data_df
+                
+                # CLEANUP: Dedup based on GAME_ID and PLAYER_ID
+                # This prevents partial writes or overlap from corrupting data
+                subset_cols = [Cols.PLAYER_ID, Cols.DATE]
+                if Cols.GAME_ID in final_df.columns:
+                    subset_cols.append(Cols.GAME_ID)
+                
+                final_df.drop_duplicates(subset=subset_cols, keep='last', inplace=True)
+                
+                save_clean_parquet(final_df, "NBA Player Box Scores", output_dir)
+                logging.info(f"Updated aggregated box scores. Total rows: {len(final_df)}")
+            else:
+                logging.info("No new data fetched.")
         else:
-            box_scores_df = pd.concat(all_daily_stats, ignore_index=True)
-            
-        save_clean_parquet(box_scores_df, "NBA Player Box Scores", output_dir)
-        logging.info(f"Saved aggregated box scores: {len(box_scores_df)} rows.")
+            logging.info("Box scores are already up to date.")
 
         # --- REMAINING GENERAL STATS ---
         logging.info("Fetching remaining Player and Team Stats (Parallel)...")
@@ -651,7 +692,6 @@ def scrape_recent_quarter_stats(output_dir):
     """
     Fetches Q1 AND Q2 stats for TODAY to allow immediate post-game grading.
     """
-    # Changed from Yesterday to Today as requested
     target_dt = datetime.now()
     target_str = target_dt.strftime('%m/%d/%Y') 
     save_str = target_dt.strftime('%Y-%m-%d')
@@ -670,7 +710,7 @@ def scrape_recent_quarter_stats(output_dir):
             df = stats.get_data_frames()[0]
             
             if not df.empty:
-                df['GAME_DATE'] = save_str
+                df[Cols.DATE] = save_str
                 q_dir = output_dir / f"q{period}_logs"
                 q_dir.mkdir(parents=True, exist_ok=True)
                 filename = f"daily_q{period}_stats_{save_str}"
