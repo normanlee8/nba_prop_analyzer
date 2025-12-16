@@ -288,3 +288,27 @@
 2025-12-14 21:57:11 [INFO] root: A Tier Props: 50.0% (2/4) [Pushes: 0]
 2025-12-14 21:57:11 [INFO] root: B Tier Props: 44.7% (21/47) [Pushes: 0]
 2025-12-14 21:57:11 [INFO] root: ----------------------------------------
+2025-12-15 22:00:21 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-15 22:00:21 [INFO] root: Loading historical data for grading...
+2025-12-15 22:00:21 [INFO] root: Grading 352 predictions...
+2025-12-15 22:00:22 [INFO] root: ----------------------------------------
+2025-12-15 22:00:22 [INFO] root: >>> GRADING REPORT <<<
+2025-12-15 22:00:22 [INFO] root: ----------------------------------------
+2025-12-15 22:32:55 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-15 22:32:55 [INFO] root: Loading historical data for grading...
+2025-12-15 22:32:55 [INFO] root: Grading 352 predictions...
+2025-12-15 22:32:56 [INFO] root: ----------------------------------------
+2025-12-15 22:32:56 [INFO] root: >>> GRADING REPORT <<<
+2025-12-15 22:32:56 [INFO] root: Total Props: 64.7% (33/51) [Pushes: 0]
+2025-12-15 22:32:56 [INFO] root: A Tier Props: 66.7% (4/6) [Pushes: 0]
+2025-12-15 22:32:56 [INFO] root: B Tier Props: 66.7% (16/24) [Pushes: 0]
+2025-12-15 22:32:56 [INFO] root: ----------------------------------------
+2025-12-15 22:41:04 [INFO] root: Logging initialized. Writing to logs/grading.log
+2025-12-15 22:41:04 [INFO] root: Loading historical data for grading...
+2025-12-15 22:41:04 [INFO] root: Grading 352 predictions...
+2025-12-15 22:41:05 [INFO] root: ----------------------------------------
+2025-12-15 22:41:05 [INFO] root: >>> GRADING REPORT <<<
+2025-12-15 22:41:05 [INFO] root: Total Props: 64.7% (33/51) [Pushes: 0]
+2025-12-15 22:41:05 [INFO] root: A Tier Props: 66.7% (4/6) [Pushes: 0]
+2025-12-15 22:41:05 [INFO] root: B Tier Props: 66.7% (16/24) [Pushes: 0]
+2025-12-15 22:41:05 [INFO] root: ----------------------------------------

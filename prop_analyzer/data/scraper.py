@@ -61,8 +61,11 @@ def get_season_config():
         }
     ]
 
-MAX_WORKERS = 5 
-NBA_API_TIMEOUT = 25 # Increased slightly for daily batch calls
+# --- TUNING SETTINGS ---
+# 2 Workers is the safest for stability.
+# Timeout increased to 120s to handle server stalls.
+MAX_WORKERS = 2  
+NBA_API_TIMEOUT = 120
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
@@ -257,7 +260,6 @@ TEAMRANKINGS_SLUG_MAP = {
 }
 
 MASTER_FILE_MAP = {
-    # NOTE: "NBA Player Box Scores" is now generated dynamically by date-batch
     "NBA Player Stats Away:Road.csv": ("nba_api", "player_stats_road"),
     "NBA Player Stats Home.csv": ("nba_api", "player_stats_home"),
     "NBA Player Stats Last 5 Games.csv": ("nba_api", "player_stats_last_5"),
@@ -273,9 +275,6 @@ MASTER_FILE_MAP = {
 }
 
 def create_robust_session():
-    """
-    Creates a requests session with automatic retries and backoff.
-    """
     session = requests.Session()
     retry_strategy = Retry(
         total=5,
@@ -290,16 +289,11 @@ def create_robust_session():
     return session
 
 def save_clean_parquet(df, filename_stem, output_dir):
-    """
-    Saves DataFrame as Parquet (Uniform Storage).
-    """
     try:
         output_dir.mkdir(parents=True, exist_ok=True)
-        # Force extension to .parquet
         clean_name = filename_stem.replace('.csv', '') + ".parquet"
         file_path = output_dir / clean_name
         
-        # Ensure compatible types for Parquet (Object -> String)
         for col in df.select_dtypes(include=['object']).columns:
             df[col] = df[col].astype(str)
             
@@ -309,9 +303,6 @@ def save_clean_parquet(df, filename_stem, output_dir):
         logging.error(f"FAILED to save {filename_stem}: {e}")
 
 def deduplicate_columns(df):
-    """
-    Renames duplicate columns by appending a numerical suffix.
-    """
     cols = pd.Series(df.columns)
     for dup in cols[cols.duplicated()].unique(): 
         cols[cols[cols == dup].index.values.tolist()] = [
@@ -532,32 +523,44 @@ def get_season_dates(season_str):
     start_date = datetime(start_year, 10, 22) # Safe approx
     end_date = datetime(start_year + 1, 4, 15)
     
-    # Cap end date at today
+    # Cap end date at today (inclusive)
     if end_date > datetime.now():
-        end_date = datetime.now() - timedelta(days=1)
+        end_date = datetime.now()
         
     return start_date, end_date
 
-def fetch_daily_player_stats(target_date, timeout=20):
+def fetch_daily_player_stats(target_date, timeout=120):
     """
     Fetches stats for ALL players on a specific date in ONE call.
+    Includes explicit retry logic for READ TIMEOUTS and Stagger Delay.
     """
+    # STAGGER DELAY: Prevents 2 requests from hitting API at exact same ms
+    time.sleep(random.uniform(0.5, 1.5))
+    
     date_str = target_date.strftime('%m/%d/%Y')
-    try:
-        # LeagueDashPlayerStats returns rows for everyone who played in the window
-        logs = LeagueDashPlayerStats(
-            date_from_nullable=date_str,
-            date_to_nullable=date_str,
-            season_type_all_star='Regular Season',
-            timeout=timeout
-        )
-        df = logs.get_data_frames()[0]
-        if not df.empty:
-            df['GAME_DATE'] = target_date.strftime('%Y-%m-%d')
-        return df
-    except Exception as e:
-        logging.warning(f"Failed to fetch daily stats for {date_str}: {e}")
-        return pd.DataFrame()
+    
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            # LeagueDashPlayerStats returns rows for everyone who played in the window
+            logs = LeagueDashPlayerStats(
+                date_from_nullable=date_str,
+                date_to_nullable=date_str,
+                season_type_all_star='Regular Season',
+                timeout=timeout
+            )
+            df = logs.get_data_frames()[0]
+            if not df.empty:
+                df['GAME_DATE'] = target_date.strftime('%Y-%m-%d')
+            return df
+            
+        except Exception as e:
+            logging.warning(f"Attempt {attempt+1}/{max_retries} failed for {date_str}: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(3 * (attempt + 1)) # Backoff: 3s, 6s...
+            else:
+                logging.error(f"Final failure for {date_str}")
+                return pd.DataFrame()
 
 def scrape_nba_api_stats(season_cfg, output_dir):
     target_season = season_cfg['season_str']
@@ -580,8 +583,9 @@ def scrape_nba_api_stats(season_cfg, output_dir):
         logging.info(f"Queued {len(dates_to_fetch)} days to fetch.")
         
         # Parallel Fetching by Date
+        # Uses tuned settings: MAX_WORKERS=2, TIMEOUT=120
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            future_to_date = {executor.submit(fetch_daily_player_stats, d): d for d in dates_to_fetch}
+            future_to_date = {executor.submit(fetch_daily_player_stats, d, NBA_API_TIMEOUT): d for d in dates_to_fetch}
             
             completed = 0
             for future in concurrent.futures.as_completed(future_to_date):
@@ -594,7 +598,7 @@ def scrape_nba_api_stats(season_cfg, output_dir):
                     logging.error(f"Error fetching {date_val}: {e}")
                 
                 completed += 1
-                if completed % 10 == 0:
+                if completed % 5 == 0:
                     logging.info(f"  Fetches complete: {completed}/{len(dates_to_fetch)}")
 
         if not all_daily_stats:
@@ -645,20 +649,21 @@ def scrape_nba_api_stats(season_cfg, output_dir):
 
 def scrape_recent_quarter_stats(output_dir):
     """
-    Fetches yesterday's Q1 AND Q2 stats specifically for grading purposes.
+    Fetches Q1 AND Q2 stats for TODAY to allow immediate post-game grading.
     """
-    yesterday_dt = datetime.now() - timedelta(days=1)
-    yesterday_str = yesterday_dt.strftime('%m/%d/%Y') 
-    save_str = yesterday_dt.strftime('%Y-%m-%d')
+    # Changed from Yesterday to Today as requested
+    target_dt = datetime.now()
+    target_str = target_dt.strftime('%m/%d/%Y') 
+    save_str = target_dt.strftime('%Y-%m-%d')
     
-    logging.info(f"--- Fetching Q1 & Q2 Box Scores for Grading ({yesterday_str}) ---")
+    logging.info(f"--- Fetching Q1 & Q2 Box Scores for Grading ({target_str}) ---")
     
     for period in [1, 2]:
         try:
             stats = LeagueDashPlayerStats(
                 period=period,
-                date_from_nullable=yesterday_str,
-                date_to_nullable=yesterday_str,
+                date_from_nullable=target_str,
+                date_to_nullable=target_str,
                 season_type_all_star='Regular Season',
                 timeout=NBA_API_TIMEOUT
             )
@@ -673,7 +678,7 @@ def scrape_recent_quarter_stats(output_dir):
                 save_clean_parquet(df, filename, q_dir)
                 logging.info(f"Saved Q{period} stats for {save_str}")
             else:
-                logging.info(f"No Q{period} stats found for {yesterday_str}")
+                logging.info(f"No Q{period} stats found for {target_str} (Games might not be finished)")
                 
             time.sleep(1.0 + random.random()) 
             
