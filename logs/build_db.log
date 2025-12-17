@@ -1,1294 +1,355 @@
-2025-11-27 14:43:03 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-27 14:43:03 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-27 14:43:03 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-27 14:43:03 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-27 14:43:03 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-27 14:43:03 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-27 14:43:04 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-27 14:43:04 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-27 14:43:04 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-27 14:43:04 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-27 14:43:04 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-27 14:43:04 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-27 14:43:04 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-27 14:43:05 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-27 14:43:05 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-27 14:43:05 [INFO] root: Saved master_box_scores_2025-26.csv (5330 rows)
-2025-11-27 14:43:05 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-27 14:43:05 [INFO] root: Saved master_vs_opponent.csv
-2025-11-27 14:43:05 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-27 14:43:05 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-27 14:43:05 [INFO] root: Saved master_dvp_stats.csv
-2025-11-27 14:43:05 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-27 14:43:05 [INFO] root: --- Building Master Training Dataset ---
-2025-11-27 14:43:05 [INFO] root: --- Loading Static Data Files ---
-2025-11-27 14:43:05 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-27 14:43:05 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-27 14:43:06 [INFO] root: Merging Team Stats...
-2025-11-27 14:46:11 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-27 14:46:11 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-27 14:46:11 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-27 14:46:11 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-27 14:46:11 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-27 14:46:11 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-27 14:46:12 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-27 14:46:12 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-27 14:46:12 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-27 14:46:12 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-27 14:46:12 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-27 14:46:12 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-27 14:46:12 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-27 14:46:13 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-27 14:46:13 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-27 14:46:13 [INFO] root: Saved master_box_scores_2025-26.csv (5330 rows)
-2025-11-27 14:46:13 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-27 14:46:13 [INFO] root: Saved master_vs_opponent.csv
-2025-11-27 14:46:13 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-27 14:46:13 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-27 14:46:13 [INFO] root: Saved master_dvp_stats.csv
-2025-11-27 14:46:13 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-27 14:46:13 [INFO] root: --- Building Master Training Dataset ---
-2025-11-27 14:46:13 [INFO] root: --- Loading Static Data Files ---
-2025-11-27 14:46:13 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-27 14:46:13 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-27 14:46:14 [INFO] root: Merging Team Stats...
-2025-11-27 14:46:19 [INFO] root: Saved master_training_dataset.csv with 31514 rows and 642 features.
-2025-11-27 14:46:19 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-11-27 14:47:37 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-27 14:47:37 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-27 14:47:37 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-27 14:47:37 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-27 14:47:37 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-27 14:47:37 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-27 14:47:37 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-27 14:47:37 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-27 14:47:37 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-27 14:47:37 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-27 14:47:38 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-27 14:47:38 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-27 14:47:38 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-27 14:47:38 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-27 14:47:38 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-27 14:47:38 [INFO] root: Saved master_box_scores_2025-26.csv (5330 rows)
-2025-11-27 14:47:38 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-27 14:47:38 [INFO] root: Saved master_vs_opponent.csv
-2025-11-27 14:47:38 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-27 14:47:38 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-27 14:47:38 [INFO] root: Saved master_dvp_stats.csv
-2025-11-27 14:47:38 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-27 14:47:38 [INFO] root: --- Building Master Training Dataset ---
-2025-11-27 14:47:38 [INFO] root: --- Loading Static Data Files ---
-2025-11-27 14:47:39 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-27 14:47:39 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-27 14:47:39 [INFO] root: Merging Team Stats...
-2025-11-27 14:47:45 [INFO] root: Saved master_training_dataset.csv with 31514 rows and 642 features.
-2025-11-27 14:47:45 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-11-28 12:51:20 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-28 12:51:20 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-28 12:51:20 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-28 12:51:20 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-28 12:51:20 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-28 12:51:20 [WARNING] root: File prop_data/2024-25/NBA Player Stats Home.csv is missing cols: ['PLAYER_ID', 'PLAYER_NAME', 'TEAM_ID', 'TEAM_ABBREVIATION'].
-2025-11-28 13:00:28 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-28 13:00:28 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-28 13:00:28 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-28 13:00:28 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-28 13:00:28 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-28 13:00:28 [WARNING] root: File prop_data/2024-25/NBA Player Stats Home.csv is missing cols: ['PLAYER_ID', 'PLAYER_NAME', 'TEAM_ID', 'TEAM_ABBREVIATION'].
-2025-11-28 13:05:51 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-28 13:05:51 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-28 13:05:51 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-28 13:05:51 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-28 13:05:51 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-28 13:05:51 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-28 13:05:51 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-28 13:05:52 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-28 13:05:52 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-28 13:05:52 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-28 13:05:52 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-28 13:05:52 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-28 13:05:52 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-28 13:05:52 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-28 13:05:53 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-28 13:05:53 [INFO] root: Saved master_box_scores_2025-26.csv (5330 rows)
-2025-11-28 13:05:53 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-28 13:05:53 [INFO] root: Saved master_vs_opponent.csv
-2025-11-28 13:05:53 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-28 13:05:53 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-28 13:05:53 [INFO] root: Saved master_dvp_stats.csv
-2025-11-28 13:05:53 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-28 13:05:53 [INFO] root: --- Building Master Training Dataset ---
-2025-11-28 13:05:53 [INFO] root: --- Loading Static Data Files ---
-2025-11-28 13:05:53 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-28 13:05:53 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-28 13:05:53 [INFO] root: Merging Team Stats...
-2025-11-28 13:05:59 [INFO] root: Saved master_training_dataset.csv with 31514 rows and 642 features.
-2025-11-28 13:05:59 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-11-29 02:04:19 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-29 02:04:19 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-29 02:04:19 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-29 02:04:19 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-29 02:04:19 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-29 02:04:19 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-29 02:04:19 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-29 02:04:19 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-29 02:04:19 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-29 02:04:19 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-29 02:04:19 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-29 02:04:19 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-29 02:04:20 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 02:04:20 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-29 02:04:20 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 02:04:20 [INFO] root: Saved master_box_scores_2025-26.csv (5533 rows)
-2025-11-29 02:04:20 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-29 02:04:20 [INFO] root: Saved master_vs_opponent.csv
-2025-11-29 02:04:20 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-29 02:04:20 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-29 02:04:20 [INFO] root: Saved master_dvp_stats.csv
-2025-11-29 02:04:20 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-29 02:04:20 [INFO] root: --- Building Master Training Dataset ---
-2025-11-29 02:04:20 [INFO] root: --- Loading Static Data Files ---
-2025-11-29 02:04:20 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-29 02:04:21 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-29 02:04:21 [INFO] root: Merging Team Stats...
-2025-11-29 02:04:27 [INFO] root: Saved master_training_dataset.csv with 31717 rows and 642 features.
-2025-11-29 02:04:27 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-11-29 12:56:28 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-29 12:56:28 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-29 12:56:28 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-29 12:56:28 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-29 12:56:28 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-29 12:56:28 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-29 12:56:28 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-29 12:56:28 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-29 12:56:28 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-29 12:56:28 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-29 12:56:29 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-29 12:56:29 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-29 12:56:29 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 12:56:29 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-29 12:56:29 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 12:56:29 [INFO] root: Saved master_box_scores_2025-26.csv (5533 rows)
-2025-11-29 12:56:29 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-29 12:56:29 [INFO] root: Saved master_vs_opponent.csv
-2025-11-29 12:56:29 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-29 12:56:29 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-29 12:56:29 [INFO] root: Saved master_dvp_stats.csv
-2025-11-29 12:56:29 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-29 12:56:29 [INFO] root: --- Building Master Training Dataset ---
-2025-11-29 12:56:29 [INFO] root: --- Loading Static Data Files ---
-2025-11-29 12:56:29 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-29 12:56:30 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-29 12:56:30 [INFO] root: Merging Team Stats...
-2025-11-29 12:56:36 [INFO] root: Saved master_training_dataset.csv with 31717 rows and 642 features.
-2025-11-29 12:56:36 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-11-29 13:54:56 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-29 13:54:56 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-29 13:54:56 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-29 13:54:56 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-29 13:54:56 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-29 13:54:56 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-29 13:54:56 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-29 13:54:57 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-29 13:54:57 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-29 13:54:57 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-29 13:54:57 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-29 13:54:57 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-29 13:54:57 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 13:54:57 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-29 13:54:58 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 13:54:58 [INFO] root: Saved master_box_scores_2025-26.csv (5533 rows)
-2025-11-29 13:54:58 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-29 13:54:58 [INFO] root: Saved master_vs_opponent.csv
-2025-11-29 13:54:58 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-29 13:54:58 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-29 13:54:58 [INFO] root: Saved master_dvp_stats.csv
-2025-11-29 13:54:58 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-29 13:54:58 [INFO] root: --- Building Master Training Dataset ---
-2025-11-29 13:54:58 [INFO] root: --- Loading Static Data Files ---
-2025-11-29 13:54:58 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-29 13:54:58 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-29 13:54:58 [INFO] root: Merging Team Stats...
-2025-11-29 13:55:05 [INFO] root: Saved master_training_dataset.csv with 31717 rows and 642 features.
-2025-11-29 13:55:05 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-11-29 13:58:33 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-29 13:58:33 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-29 13:58:33 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-29 13:58:33 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-29 13:58:33 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-29 13:58:33 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-29 13:58:33 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-29 13:58:33 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-29 13:58:33 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-29 13:58:33 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-29 13:58:34 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-29 13:58:34 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-29 13:58:34 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 13:58:34 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-29 13:58:34 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 13:58:34 [INFO] root: Saved master_box_scores_2025-26.csv (5533 rows)
-2025-11-29 13:58:34 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-29 13:58:34 [INFO] root: Saved master_vs_opponent.csv
-2025-11-29 13:58:34 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-29 13:58:34 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-29 13:58:34 [INFO] root: Saved master_dvp_stats.csv
-2025-11-29 13:58:34 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-29 13:58:34 [INFO] root: --- Building Master Training Dataset ---
-2025-11-29 13:58:34 [INFO] root: --- Loading Static Data Files ---
-2025-11-29 13:58:34 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-29 13:58:35 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-29 13:58:35 [INFO] root: Merging Team Stats...
-2025-11-29 13:58:41 [INFO] root: Saved master_training_dataset.csv with 31717 rows and 642 features.
-2025-11-29 13:58:41 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-11-29 14:06:19 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-29 14:06:19 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-29 14:06:19 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-29 14:06:19 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-29 14:06:19 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-29 14:06:19 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-29 14:06:20 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-29 14:06:20 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-29 14:06:20 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-29 14:06:20 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-29 14:06:20 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-29 14:06:20 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-29 14:06:20 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 14:06:20 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-29 14:06:21 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 14:06:21 [INFO] root: Saved master_box_scores_2025-26.csv (5533 rows)
-2025-11-29 14:06:21 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-29 14:06:21 [INFO] root: Saved master_vs_opponent.csv
-2025-11-29 14:06:21 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-29 14:06:21 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-29 14:06:21 [INFO] root: Saved master_dvp_stats.csv
-2025-11-29 14:06:21 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-29 14:06:21 [INFO] root: --- Building Master Training Dataset ---
-2025-11-29 14:06:21 [INFO] root: --- Loading Static Data Files ---
-2025-11-29 14:06:21 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-29 14:06:21 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-29 14:06:21 [INFO] root: Merging Team Stats...
-2025-11-29 14:06:27 [INFO] root: Saved master_training_dataset.csv with 31717 rows and 642 features.
-2025-11-29 14:06:27 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-11-29 14:10:28 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-29 14:10:28 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-29 14:10:28 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-29 14:10:28 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-29 14:10:28 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-29 14:10:28 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-29 14:10:28 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-29 14:10:29 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-29 14:10:29 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-29 14:10:29 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-29 14:10:29 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-29 14:10:29 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-29 14:10:29 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 14:10:29 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-29 14:10:29 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 14:10:29 [INFO] root: Saved master_box_scores_2025-26.csv (5533 rows)
-2025-11-29 14:10:29 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-29 14:10:30 [INFO] root: Saved master_vs_opponent.csv
-2025-11-29 14:10:30 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-29 14:10:30 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-29 14:10:30 [INFO] root: Saved master_dvp_stats.csv
-2025-11-29 14:10:30 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-29 14:10:30 [INFO] root: --- Building Master Training Dataset ---
-2025-11-29 14:10:30 [INFO] root: --- Loading Static Data Files ---
-2025-11-29 14:10:30 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-29 14:10:30 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-29 14:10:30 [INFO] root: Merging Team Stats...
-2025-11-29 14:10:36 [INFO] root: Saved master_training_dataset.csv with 31717 rows and 642 features.
-2025-11-29 14:10:36 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-11-29 14:17:46 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-29 14:17:46 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-29 14:17:46 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-29 14:17:46 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-29 14:17:46 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-29 14:17:46 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-29 14:17:46 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-29 14:17:46 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-29 14:17:46 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-29 14:17:47 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-29 14:17:47 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-29 14:17:47 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-29 14:17:47 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 14:17:47 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-29 14:17:47 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 14:17:47 [INFO] root: Saved master_box_scores_2025-26.csv (5533 rows)
-2025-11-29 14:17:47 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-29 14:17:48 [INFO] root: Saved master_vs_opponent.csv
-2025-11-29 14:17:48 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-29 14:17:48 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-29 14:17:48 [INFO] root: Saved master_dvp_stats.csv
-2025-11-29 14:17:48 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-29 14:17:48 [INFO] root: --- Building Master Training Dataset ---
-2025-11-29 14:17:48 [INFO] root: --- Loading Static Data Files ---
-2025-11-29 14:17:48 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-29 14:17:48 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-29 14:17:48 [INFO] root: Merging Team Stats...
-2025-11-29 14:17:54 [INFO] root: Saved master_training_dataset.csv with 31717 rows and 642 features.
-2025-11-29 14:17:54 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-11-29 22:05:05 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-29 22:05:05 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-29 22:05:05 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-29 22:05:05 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-29 22:05:05 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-29 22:05:05 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-29 22:05:05 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-29 22:05:05 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-29 22:05:05 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-29 22:05:05 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-29 22:05:06 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-29 22:05:06 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-29 22:05:06 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 22:05:06 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-29 22:05:06 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 22:05:06 [INFO] root: Saved master_box_scores_2025-26.csv (5663 rows)
-2025-11-29 22:05:06 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-29 22:05:06 [INFO] root: Saved master_vs_opponent.csv
-2025-11-29 22:05:06 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-29 22:05:06 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-29 22:05:06 [INFO] root: Saved master_dvp_stats.csv
-2025-11-29 22:05:06 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-29 22:05:06 [INFO] root: --- Building Master Training Dataset ---
-2025-11-29 22:05:06 [INFO] root: --- Loading Static Data Files ---
-2025-11-29 22:05:06 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-29 22:05:07 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-29 22:05:07 [INFO] root: Merging Team Stats...
-2025-11-29 22:05:13 [INFO] root: Saved master_training_dataset.csv with 31847 rows and 642 features.
-2025-11-29 22:05:13 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-11-29 22:35:06 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-11-29 22:35:06 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-11-29 22:35:06 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-11-29 22:35:06 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-11-29 22:35:06 [INFO] root: Creating Player ID Map across all seasons...
-2025-11-29 22:35:06 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-11-29 22:35:06 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-11-29 22:35:07 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-11-29 22:35:07 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-11-29 22:35:07 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-11-29 22:35:07 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-11-29 22:35:07 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-11-29 22:35:07 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 22:35:07 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-11-29 22:35:08 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-11-29 22:35:08 [INFO] root: Saved master_box_scores_2025-26.csv (5677 rows)
-2025-11-29 22:35:08 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-11-29 22:35:08 [INFO] root: Saved master_vs_opponent.csv
-2025-11-29 22:35:08 [INFO] root: --- Starting: process_dvp_stats ---
-2025-11-29 22:35:08 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-11-29 22:35:08 [INFO] root: Saved master_dvp_stats.csv
-2025-11-29 22:35:08 [INFO] root: Step 2: Building Final Training Dataset...
-2025-11-29 22:35:08 [INFO] root: --- Building Master Training Dataset ---
-2025-11-29 22:35:08 [INFO] root: --- Loading Static Data Files ---
-2025-11-29 22:35:08 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-11-29 22:35:08 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-11-29 22:35:08 [INFO] root: Merging Team Stats...
-2025-11-29 22:35:15 [INFO] root: Saved master_training_dataset.csv with 31861 rows and 642 features.
-2025-11-29 22:35:15 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-01 15:45:29 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-01 15:45:29 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-12-01 15:45:29 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-01 15:45:29 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-01 15:45:29 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-01 15:45:29 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-01 15:45:29 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-12-01 15:45:29 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-12-01 15:45:29 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-01 15:45:29 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-12-01 15:45:29 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-12-01 15:45:29 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-01 15:45:29 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-01 15:45:30 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-12-01 15:45:30 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-01 15:45:30 [INFO] root: Saved master_box_scores_2025-26.csv (5826 rows)
-2025-12-01 15:45:30 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-01 15:45:30 [INFO] root: Saved master_vs_opponent.csv
-2025-12-01 15:45:30 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-01 15:45:30 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-12-01 15:45:30 [INFO] root: Saved master_dvp_stats.csv
-2025-12-01 15:45:30 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-01 15:45:30 [INFO] root: --- Building Master Training Dataset ---
-2025-12-01 15:45:30 [INFO] root: --- Loading Static Data Files ---
-2025-12-01 15:45:30 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-01 15:45:31 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-01 15:45:31 [INFO] root: Merging Team Stats...
-2025-12-01 15:45:36 [INFO] root: Saved master_training_dataset.csv with 32010 rows and 642 features.
-2025-12-01 15:45:36 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-01 16:02:49 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-01 16:02:49 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-12-01 16:02:49 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-01 16:02:49 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-01 16:02:49 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-01 16:02:49 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-01 16:02:49 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-12-01 16:02:50 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-12-01 16:02:50 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-01 16:02:50 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-12-01 16:02:50 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-12-01 16:02:50 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-01 16:02:50 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-01 16:02:50 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-12-01 16:02:50 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-01 16:02:50 [INFO] root: Saved master_box_scores_2025-26.csv (6575 rows)
-2025-12-01 16:02:50 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-01 16:02:51 [INFO] root: Saved master_vs_opponent.csv
-2025-12-01 16:02:51 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-01 16:02:51 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-12-01 16:02:51 [INFO] root: Saved master_dvp_stats.csv
-2025-12-01 16:02:51 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-01 16:02:51 [INFO] root: --- Building Master Training Dataset ---
-2025-12-01 16:02:51 [INFO] root: --- Loading Static Data Files ---
-2025-12-01 16:02:51 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-01 16:02:51 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-01 16:02:51 [INFO] root: Merging Team Stats...
-2025-12-01 16:02:57 [INFO] root: Saved master_training_dataset.csv with 32749 rows and 642 features.
-2025-12-01 16:02:57 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-01 16:08:15 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-01 16:08:15 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-12-01 16:08:15 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-01 16:08:15 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-01 16:08:15 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-01 16:08:15 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-01 16:08:15 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-12-01 16:08:15 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-12-01 16:08:15 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-01 16:08:15 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-12-01 16:08:16 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-12-01 16:08:16 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-01 16:08:16 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-01 16:08:16 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-12-01 16:08:16 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-01 16:08:16 [INFO] root: Saved master_box_scores_2025-26.csv (6575 rows)
-2025-12-01 16:08:16 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-01 16:08:16 [INFO] root: Saved master_vs_opponent.csv
-2025-12-01 16:08:16 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-01 16:08:16 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-12-01 16:08:16 [INFO] root: Saved master_dvp_stats.csv
-2025-12-01 16:08:16 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-01 16:08:16 [INFO] root: --- Building Master Training Dataset ---
-2025-12-01 16:08:16 [INFO] root: --- Loading Static Data Files ---
-2025-12-01 16:08:16 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-01 16:08:17 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-01 16:08:17 [INFO] root: Merging Team Stats...
-2025-12-01 16:08:23 [INFO] root: Saved master_training_dataset.csv with 32749 rows and 642 features.
-2025-12-01 16:08:23 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-02 14:19:15 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-02 14:19:15 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-12-02 14:19:15 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-02 14:19:15 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-02 14:19:15 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-02 14:19:15 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-02 14:19:15 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-12-02 14:19:15 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-12-02 14:19:15 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-02 14:19:15 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-12-02 14:19:16 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-12-02 14:19:16 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-02 14:19:16 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-02 14:19:16 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-12-02 14:19:16 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-02 14:19:16 [INFO] root: Saved master_box_scores_2025-26.csv (6767 rows)
-2025-12-02 14:19:16 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-02 14:19:16 [INFO] root: Saved master_vs_opponent.csv
-2025-12-02 14:19:16 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-02 14:19:16 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-12-02 14:19:16 [INFO] root: Saved master_dvp_stats.csv
-2025-12-02 14:19:16 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-02 14:19:16 [INFO] root: --- Building Master Training Dataset ---
-2025-12-02 14:19:16 [INFO] root: --- Loading Static Data Files ---
-2025-12-02 14:19:16 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-02 14:19:17 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-02 14:19:17 [INFO] root: Merging Team Stats...
-2025-12-02 14:19:23 [INFO] root: Saved master_training_dataset.csv with 32941 rows and 642 features.
-2025-12-02 14:19:23 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-02 23:22:58 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-02 23:22:58 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-12-02 23:22:58 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-02 23:22:58 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-02 23:22:58 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-02 23:22:58 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-02 23:22:58 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-12-02 23:22:58 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-12-02 23:22:58 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-02 23:22:59 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-12-02 23:22:59 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-12-02 23:22:59 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-02 23:22:59 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-02 23:22:59 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-12-02 23:22:59 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-02 23:22:59 [INFO] root: Saved master_box_scores_2025-26.csv (6880 rows)
-2025-12-02 23:22:59 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-02 23:23:00 [INFO] root: Saved master_vs_opponent.csv
-2025-12-02 23:23:00 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-02 23:23:00 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-12-02 23:23:00 [INFO] root: Saved master_dvp_stats.csv
-2025-12-02 23:23:00 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-02 23:23:00 [INFO] root: --- Building Master Training Dataset ---
-2025-12-02 23:23:00 [INFO] root: --- Loading Static Data Files ---
-2025-12-02 23:23:00 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-02 23:23:00 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-02 23:23:00 [INFO] root: Merging Team Stats...
-2025-12-02 23:23:07 [INFO] root: Saved master_training_dataset.csv with 33052 rows and 642 features.
-2025-12-02 23:23:07 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-03 20:14:37 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-03 20:14:37 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-12-03 20:14:37 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-03 20:14:37 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-03 20:14:37 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-03 20:14:37 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-03 20:14:37 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-12-03 20:14:37 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-12-03 20:14:37 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-03 20:14:37 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-12-03 20:14:38 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-12-03 20:14:38 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-03 20:14:38 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-03 20:14:38 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-12-03 20:14:38 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-03 20:14:38 [INFO] root: Saved master_box_scores_2025-26.csv (7051 rows)
-2025-12-03 20:14:38 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-03 20:14:38 [INFO] root: Saved master_vs_opponent.csv
-2025-12-03 20:14:38 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-03 20:14:38 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-12-03 20:14:38 [INFO] root: Saved master_dvp_stats.csv
-2025-12-03 20:14:38 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-03 20:14:38 [INFO] root: --- Building Master Training Dataset ---
-2025-12-03 20:14:38 [INFO] root: --- Loading Static Data Files ---
-2025-12-03 20:14:38 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-03 20:14:39 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-03 20:14:39 [INFO] root: Merging Team Stats...
-2025-12-03 20:14:45 [INFO] root: Saved master_training_dataset.csv with 33222 rows and 642 features.
-2025-12-03 20:14:45 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-10 21:59:40 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-10 21:59:40 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-12-10 21:59:40 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-10 21:59:40 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-10 21:59:40 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-10 21:59:40 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-10 21:59:40 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-12-10 21:59:41 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-12-10 21:59:41 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-10 21:59:41 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-12-10 21:59:41 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-12-10 21:59:41 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-10 21:59:41 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-10 21:59:41 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-12-10 21:59:41 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-10 21:59:42 [INFO] root: Saved master_box_scores_2025-26.csv (7908 rows)
-2025-12-10 21:59:42 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-10 21:59:42 [INFO] root: Saved master_vs_opponent.csv
-2025-12-10 21:59:42 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-10 21:59:42 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-12-10 21:59:42 [INFO] root: Saved master_dvp_stats.csv
-2025-12-10 21:59:42 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-10 21:59:42 [INFO] root: --- Building Master Training Dataset ---
-2025-12-10 21:59:42 [INFO] root: --- Loading Static Data Files ---
-2025-12-10 21:59:42 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-10 21:59:42 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-10 21:59:42 [INFO] root: Merging Team Stats...
-2025-12-10 21:59:48 [INFO] root: Saved master_training_dataset.csv with 34076 rows and 642 features.
-2025-12-10 21:59:48 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-12 11:39:30 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-12 11:39:30 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-12-12 11:39:30 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-12 11:39:30 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-12 11:39:30 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-12 11:39:30 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-12 11:39:31 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-12-12 11:39:31 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-12-12 11:39:31 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-12 11:39:31 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-12-12 11:39:31 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-12-12 11:39:31 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-12 11:39:31 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-12 11:39:32 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-12-12 11:39:32 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-12 11:39:32 [INFO] root: Saved master_box_scores_2025-26.csv (8016 rows)
-2025-12-12 11:39:32 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-12 11:39:32 [INFO] root: Saved master_vs_opponent.csv
-2025-12-12 11:39:32 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-12 11:39:32 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-12-12 11:39:32 [INFO] root: Saved master_dvp_stats.csv
-2025-12-12 11:39:32 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-12 11:39:32 [INFO] root: --- Building Master Training Dataset ---
-2025-12-12 11:39:32 [INFO] root: --- Loading Static Data Files ---
-2025-12-12 11:39:32 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-12 11:39:33 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-12 11:39:33 [INFO] root: Merging Team Stats...
-2025-12-12 11:39:39 [INFO] root: Saved master_training_dataset.csv with 34184 rows and 642 features.
-2025-12-12 11:39:39 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-12 22:02:47 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-12 22:02:47 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-12-12 22:02:47 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-12 22:02:47 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-12 22:02:47 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-12 22:02:47 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-12 22:02:47 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-12-12 22:02:47 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-12-12 22:02:47 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-12 22:02:47 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-12-12 22:02:48 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-12-12 22:02:48 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-12 22:02:48 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-12 22:02:48 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-12-12 22:02:48 [INFO] root: --- Calculating Historical Usage Vacancy ---
-2025-12-12 22:02:48 [INFO] root: Saved master_box_scores_2025-26.csv (8145 rows)
-2025-12-12 22:02:48 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-12 22:02:48 [INFO] root: Saved master_vs_opponent.csv
-2025-12-12 22:02:48 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-12 22:02:48 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-12-12 22:02:48 [INFO] root: Saved master_dvp_stats.csv
-2025-12-12 22:02:48 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-12 22:02:48 [INFO] root: --- Building Master Training Dataset ---
-2025-12-12 22:02:48 [INFO] root: --- Loading Static Data Files ---
-2025-12-12 22:02:48 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-12 22:02:49 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-12 22:02:49 [INFO] root: Merging Team Stats...
-2025-12-12 22:02:55 [INFO] root: Saved master_training_dataset.csv with 34313 rows and 642 features.
-2025-12-12 22:02:55 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-13 00:50:43 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-13 00:50:43 [INFO] root: >>> STARTING ETL PIPELINE (Multi-Season) <<<
-2025-12-13 00:50:43 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-13 00:50:43 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-13 00:50:43 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-13 00:50:43 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-13 00:50:44 [INFO] root: Saved master_player_stats_2024-25.csv
-2025-12-13 00:50:44 [INFO] root: Saved master_player_stats_2025-26.csv
-2025-12-13 00:50:44 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-13 00:50:44 [INFO] root: Saved master_team_stats_2024-25.csv
-2025-12-13 00:50:44 [INFO] root: Saved master_team_stats_2025-26.csv
-2025-12-13 00:50:44 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-13 00:50:44 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-13 00:50:45 [INFO] root: Saved master_box_scores_2024-25.csv (26306 rows)
-2025-12-13 00:50:45 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-13 00:50:45 [INFO] root: Saved master_box_scores_2025-26.csv (8145 rows)
-2025-12-13 00:50:45 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-13 00:50:45 [INFO] root: Saved master_vs_opponent.csv
-2025-12-13 00:50:45 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-13 00:50:45 [INFO] root: Calculating DvP using: master_box_scores_2025-26.csv
-2025-12-13 00:50:45 [INFO] root: Saved master_dvp_stats.csv
-2025-12-13 00:50:45 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-13 00:50:45 [INFO] root: --- Building Master Training Dataset ---
-2025-12-13 00:50:45 [INFO] root: --- Loading Static Data Files ---
-2025-12-13 00:50:45 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-13 00:50:46 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-13 00:50:46 [INFO] root: Merging Team Stats...
-2025-12-13 00:50:53 [INFO] root: Saved master_training_dataset.csv with 34313 rows and 664 features.
-2025-12-13 00:50:53 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-13 01:51:19 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-13 01:51:19 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-13 01:51:19 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-13 01:51:19 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-13 01:51:19 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-13 01:51:19 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-13 01:51:21 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-13 01:51:21 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-13 01:51:21 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-13 01:51:48 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-13 01:51:48 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-13 01:51:48 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-13 01:51:48 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-13 01:51:48 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-13 01:51:48 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-13 01:51:48 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-13 01:51:48 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-13 01:51:48 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-13 01:51:49 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-13 01:51:49 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-13 01:51:49 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-13 01:51:51 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-13 01:51:51 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
-2025-12-13 01:51:51 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-13 01:51:51 [INFO] root: Saved master_box_scores_2025-26.parquet (8145 rows)
-2025-12-13 01:51:51 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-13 01:51:51 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-13 01:51:51 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-13 01:51:51 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-13 01:51:51 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-13 01:51:51 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-13 01:51:51 [INFO] root: --- Building Master Training Dataset ---
-2025-12-13 01:51:51 [INFO] root: --- Loading Static Data Files (Parquet) ---
-2025-12-13 01:51:51 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-13 01:51:52 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-13 01:51:52 [INFO] root: Merging Team Stats...
-2025-12-13 01:51:52 [CRITICAL] root: FATAL ERROR in Database Build: ("Expected bytes, got a 'int' object", 'Conversion failed for column Pos with type object')
+2025-12-17 12:55:20 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-17 12:55:20 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-17 12:55:20 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-17 12:55:20 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-17 12:55:20 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-17 12:55:20 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-17 12:55:20 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-17 12:55:20 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-17 12:55:20 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-17 12:55:21 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-17 12:55:21 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-17 12:55:21 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-17 12:55:21 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 12:55:21 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
+2025-12-17 12:55:21 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 12:55:21 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
+2025-12-17 12:55:21 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-17 12:55:21 [CRITICAL] root: FATAL ERROR in Database Build: 'PLAYER_NAME'
 Traceback (most recent call last):
-  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_build_db.py", line 55, in main
-    dataset.create_training_dataset()
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/data/dataset.py", line 192, in create_training_dataset
-    bs_df.to_parquet(output_path, index=False)
-    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/util/_decorators.py", line 333, in wrapper
-    return func(*args, **kwargs)
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 3124, in to_parquet
-    return to_parquet(
-        self,
-    ...<6 lines>...
-        **kwargs,
+  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_build_db.py", line 45, in main
+    etl.process_vs_opponent_stats(cfg.DATA_DIR, cfg.DATA_DIR)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/data/etl.py", line 437, in process_vs_opponent_stats
+    vs_opp_df = df.groupby([Cols.PLAYER_ID, 'PLAYER_NAME', 'OPPONENT_ABBREV']).agg(agg_cols).reset_index()
+                ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 9210, in groupby
+    return DataFrameGroupBy(
+        obj=self,
+    ...<7 lines>...
+        dropna=dropna,
     )
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/io/parquet.py", line 482, in to_parquet
-    impl.write(
-    ~~~~~~~~~~^
-        df,
-        ^^^
-    ...<6 lines>...
-        **kwargs,
-        ^^^^^^^^^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/groupby/groupby.py", line 1331, in __init__
+    grouper, exclusions, obj = get_grouper(
+                               ~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<5 lines>...
+        dropna=self.dropna,
+        ^^^^^^^^^^^^^^^^^^^
     )
     ^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/io/parquet.py", line 191, in write
-    table = self.api.Table.from_pandas(df, **from_pandas_kwargs)
-  File "pyarrow/table.pxi", line 4795, in pyarrow.lib.Table.from_pandas
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pyarrow/pandas_compat.py", line 640, in dataframe_to_arrays
-    arrays = [convert_column(c, f)
-              ~~~~~~~~~~~~~~^^^^^^
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pyarrow/pandas_compat.py", line 628, in convert_column
-    raise e
-  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pyarrow/pandas_compat.py", line 622, in convert_column
-    result = pa.array(col, type=type_, from_pandas=True, safe=safe)
-  File "pyarrow/array.pxi", line 365, in pyarrow.lib.array
-  File "pyarrow/array.pxi", line 91, in pyarrow.lib._ndarray_to_array
-  File "pyarrow/error.pxi", line 92, in pyarrow.lib.check_status
-pyarrow.lib.ArrowTypeError: ("Expected bytes, got a 'int' object", 'Conversion failed for column Pos with type object')
-2025-12-13 01:58:50 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-13 01:58:50 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-13 01:58:50 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-13 01:58:50 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-13 01:58:50 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-13 01:58:50 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-13 01:58:50 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-13 01:58:50 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-13 01:58:50 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-13 01:58:50 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-13 01:58:51 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-13 01:58:51 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-13 01:58:51 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-13 01:58:51 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
-2025-12-13 01:58:51 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-13 01:58:51 [INFO] root: Saved master_box_scores_2025-26.parquet (8145 rows)
-2025-12-13 01:58:51 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-13 01:58:51 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-13 01:58:51 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-13 01:58:51 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-13 01:58:51 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-13 01:58:51 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-13 01:58:51 [INFO] root: --- Building Master Training Dataset ---
-2025-12-13 01:58:51 [INFO] root: --- Loading Static Data Files (Parquet) ---
-2025-12-13 01:58:51 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-13 01:58:52 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-13 01:58:52 [INFO] root: Merging Team Stats...
-2025-12-13 01:58:52 [INFO] root: Saved training dataset to prop_data/master_training_dataset.parquet with 34313 rows.
-2025-12-13 01:58:52 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-13 22:37:17 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-13 22:37:17 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-13 22:37:17 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-13 22:37:17 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-13 22:37:17 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-13 22:37:17 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-13 22:37:18 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-13 22:37:18 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-13 22:37:18 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-13 22:37:18 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-13 22:37:18 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-13 22:37:18 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-13 22:37:18 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-13 22:37:18 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
-2025-12-13 22:37:18 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-13 22:37:18 [INFO] root: Saved master_box_scores_2025-26.parquet (8197 rows)
-2025-12-13 22:37:18 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-13 22:37:18 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-13 22:37:18 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-13 22:37:18 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-13 22:37:18 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-13 22:37:18 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-13 22:37:18 [INFO] root: --- Building Master Training Dataset ---
-2025-12-13 22:37:18 [INFO] root: --- Loading Static Data Files (Parquet) ---
-2025-12-13 22:37:19 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-13 22:37:19 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-13 22:37:19 [INFO] root: Merging Team Stats...
-2025-12-13 22:37:20 [INFO] root: Saved training dataset to prop_data/master_training_dataset.parquet with 34365 rows.
-2025-12-13 22:37:20 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-14 18:43:43 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-14 18:43:43 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-14 18:43:43 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-14 18:43:43 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-14 18:43:43 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-14 18:43:43 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-14 18:43:43 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-14 18:43:44 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-14 18:43:44 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-14 18:43:44 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-14 18:43:44 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-14 18:43:44 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-14 18:43:44 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 18:43:44 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-14 18:43:44 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 18:43:44 [INFO] root: Saved master_box_scores_2025-26.parquet (8283 rows)
-2025-12-14 18:43:44 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-14 18:43:44 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-14 18:43:44 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-14 18:43:44 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-14 18:43:44 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-14 18:43:44 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-14 18:43:44 [INFO] root: --- Building Master Training Dataset ---
-2025-12-14 18:43:44 [INFO] root: --- Loading Static Data Files (Parquet) ---
-2025-12-14 18:43:44 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-14 18:43:45 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-14 18:43:45 [INFO] root: Merging Team Stats...
-2025-12-14 18:43:45 [INFO] root: Saved training dataset to prop_data/master_training_dataset.parquet with 12400 rows.
-2025-12-14 18:43:45 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-14 18:51:24 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-14 18:51:24 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-14 18:51:24 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-14 18:51:24 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-14 18:51:24 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-14 18:51:25 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-14 18:51:25 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-14 18:51:25 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-14 18:51:25 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-14 18:51:25 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-14 18:51:26 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-14 18:51:26 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-14 18:51:26 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 18:51:26 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-14 18:51:26 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 18:51:26 [INFO] root: Saved master_box_scores_2025-26.parquet (8283 rows)
-2025-12-14 18:51:26 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-14 18:51:26 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-14 18:51:26 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-14 18:51:26 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-14 18:51:26 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-14 18:51:26 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-14 18:51:26 [INFO] root: --- Building Master Training Dataset ---
-2025-12-14 18:51:26 [INFO] root: --- Loading Static Data Files (Parquet) ---
-2025-12-14 18:51:26 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-14 18:51:26 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-14 18:51:26 [INFO] root: Merging Team Stats...
-2025-12-14 18:51:27 [INFO] root: Saved training dataset to prop_data/master_training_dataset.parquet with 12400 rows.
-2025-12-14 18:51:27 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-14 18:55:16 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-14 18:55:16 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-14 18:55:16 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-14 18:55:16 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-14 18:55:16 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-14 18:55:16 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-14 18:55:16 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-14 18:55:17 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-14 18:55:17 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-14 18:55:17 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-14 18:55:17 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-14 18:55:17 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-14 18:55:17 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 18:55:17 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-14 18:55:17 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 18:55:17 [INFO] root: Saved master_box_scores_2025-26.parquet (8283 rows)
-2025-12-14 18:55:17 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-14 18:55:17 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-14 18:55:17 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-14 18:55:17 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-14 18:55:17 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-14 18:55:17 [INFO] root: --- Processing Q1 History for Grading ---
-2025-12-14 18:55:17 [INFO] root: Saved Master Q1 History: 36 records to prop_data/master_q1_stats.parquet
-2025-12-14 18:55:17 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-14 18:55:17 [INFO] root: --- Building Master Training Dataset ---
-2025-12-14 18:55:17 [INFO] root: --- Loading Static Data Files (Parquet) ---
-2025-12-14 18:55:17 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-14 18:55:18 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-14 18:55:18 [INFO] root: Merging Team Stats...
-2025-12-14 18:55:18 [INFO] root: Saved training dataset to prop_data/master_training_dataset.parquet with 12400 rows.
-2025-12-14 18:55:18 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-14 20:08:42 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-14 20:08:42 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-14 20:08:42 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-14 20:08:42 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-14 20:08:42 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-14 20:08:42 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-14 20:08:43 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-14 20:08:43 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-14 20:08:43 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-14 20:08:43 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-14 20:08:43 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-14 20:08:43 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-14 20:08:43 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 20:08:43 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-14 20:08:43 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 20:08:43 [INFO] root: Saved master_box_scores_2025-26.parquet (8283 rows)
-2025-12-14 20:08:43 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-14 20:08:43 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-14 20:08:43 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-14 20:08:43 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-14 20:08:43 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-14 20:08:44 [INFO] root: --- Processing Q1 History for Grading ---
-2025-12-14 20:08:44 [INFO] root: Saved Master Q1 History: 28931 records to prop_data/master_q1_stats.parquet
-2025-12-14 20:08:44 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-14 20:08:44 [INFO] root: --- Building Master Training Dataset ---
-2025-12-14 20:08:44 [INFO] root: --- Loading Static Data Files (Parquet) ---
-2025-12-14 20:08:44 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-14 20:08:45 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-14 20:08:45 [INFO] root: Merging Team Stats...
-2025-12-14 20:08:45 [INFO] root: Saved training dataset to prop_data/master_training_dataset.parquet with 12400 rows.
-2025-12-14 20:08:45 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-14 20:58:33 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-14 20:58:33 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-14 20:58:33 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-14 20:58:33 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-14 20:58:33 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-14 20:58:33 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-14 20:58:33 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-14 20:58:33 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-14 20:58:33 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-14 20:58:33 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-14 20:58:34 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-14 20:58:34 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-14 20:58:34 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 20:58:34 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-14 20:58:34 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 20:58:34 [INFO] root: Saved master_box_scores_2025-26.parquet (8283 rows)
-2025-12-14 20:58:34 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-14 20:58:34 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-14 20:58:34 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-14 20:58:34 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-14 20:58:34 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-14 20:58:34 [INFO] root: --- Processing Quarter/Half History ---
-2025-12-14 20:58:34 [INFO] root: Saved Master Q1: 28931 rows
-2025-12-14 20:58:34 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
-2025-12-14 20:58:35 [INFO] root: Saved Master 1H: 27487 rows
-2025-12-14 20:58:35 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-14 20:58:35 [INFO] root: --- Building Master Training Dataset ---
-2025-12-14 20:58:35 [INFO] root: --- Loading Static Data Files (Parquet) ---
-2025-12-14 20:58:35 [INFO] root: Calculating historical rolling features (this may take a moment)...
-2025-12-14 20:58:36 [INFO] root: Merging Defense vs Position (DVP) stats...
-2025-12-14 20:58:36 [INFO] root: Merging Team Stats...
-2025-12-14 20:58:36 [INFO] root: Saved training dataset to prop_data/master_training_dataset.parquet with 12400 rows.
-2025-12-14 20:58:36 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-14 21:18:10 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-14 21:18:10 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-14 21:18:10 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-14 21:18:10 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-14 21:18:10 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-14 21:18:10 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-14 21:18:10 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-14 21:18:10 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-14 21:18:10 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-14 21:18:11 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-14 21:18:11 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-14 21:18:11 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-14 21:18:11 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 21:18:11 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-14 21:18:11 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 21:18:11 [INFO] root: Saved master_box_scores_2025-26.parquet (8283 rows)
-2025-12-14 21:18:11 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-14 21:18:11 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-14 21:18:11 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-14 21:18:11 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-14 21:18:11 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-14 21:18:11 [INFO] root: --- Processing Quarter/Half History ---
-2025-12-14 21:18:12 [INFO] root: Saved Master Q1: 28931 rows
-2025-12-14 21:18:12 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
-2025-12-14 21:18:12 [INFO] root: Saved Master 1H: 27487 rows
-2025-12-14 21:18:12 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-14 21:18:12 [INFO] root: --- Building Final Training Dataset ---
-2025-12-14 21:18:12 [INFO] root: Merging 28931 Q1 records...
-2025-12-14 21:18:12 [INFO] root: Merging 27487 1H records...
-2025-12-14 21:18:12 [INFO] root: Calculating features for training set...
-2025-12-14 21:18:13 [INFO] root: Saving training set with 179 columns...
-2025-12-14 21:18:13 [INFO] root: Saved to prop_data/master_training_dataset.parquet
-2025-12-14 21:18:13 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-14 21:34:29 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-14 21:34:29 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-14 21:34:29 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-14 21:34:29 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-14 21:34:29 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-14 21:34:29 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-14 21:34:30 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-14 21:34:30 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-14 21:34:30 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-14 21:34:30 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-14 21:34:30 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-14 21:34:30 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-14 21:34:30 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 21:34:30 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-14 21:34:30 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 21:34:30 [INFO] root: Saved master_box_scores_2025-26.parquet (8363 rows)
-2025-12-14 21:34:30 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-14 21:34:30 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-14 21:34:30 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-14 21:34:30 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-14 21:34:30 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-14 21:34:30 [INFO] root: --- Processing Quarter/Half History ---
-2025-12-14 21:34:31 [INFO] root: Saved Master Q1: 28931 rows
-2025-12-14 21:34:31 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
-2025-12-14 21:34:32 [INFO] root: Saved Master 1H: 27487 rows
-2025-12-14 21:34:32 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-14 21:34:32 [INFO] root: --- Building Final Training Dataset ---
-2025-12-14 21:34:32 [INFO] root: Merging 28931 Q1 records...
-2025-12-14 21:34:32 [INFO] root: Merging 27487 1H records...
-2025-12-14 21:34:32 [INFO] root: Calculating features for training set...
-2025-12-14 21:34:32 [INFO] root: Saving training set with 179 columns...
-2025-12-14 21:34:33 [INFO] root: Saved to prop_data/master_training_dataset.parquet
-2025-12-14 21:34:33 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-14 22:38:59 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-14 22:38:59 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-14 22:38:59 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-14 22:38:59 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-14 22:38:59 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-14 22:38:59 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-14 22:38:59 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-14 22:38:59 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-14 22:38:59 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-14 22:39:00 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-14 22:39:00 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-14 22:39:00 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-14 22:39:00 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 22:39:00 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-14 22:39:00 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-14 22:39:00 [INFO] root: Saved master_box_scores_2025-26.parquet (8363 rows)
-2025-12-14 22:39:00 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-14 22:39:00 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-14 22:39:00 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-14 22:39:00 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-14 22:39:00 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-14 22:39:00 [INFO] root: --- Processing Quarter/Half History ---
-2025-12-14 22:39:01 [INFO] root: Saved Master Q1: 28931 rows
-2025-12-14 22:39:01 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
-2025-12-14 22:39:01 [INFO] root: Saved Master 1H: 27487 rows
-2025-12-14 22:39:01 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-14 22:39:01 [INFO] root: --- Building Final Training Dataset ---
-2025-12-14 22:39:01 [INFO] root: Merging 28931 Q1 records...
-2025-12-14 22:39:01 [INFO] root: Merging 27487 1H records...
-2025-12-14 22:39:01 [INFO] root: Calculating features for training set...
-2025-12-14 22:39:02 [INFO] root: Saving training set with 209 columns...
-2025-12-14 22:39:02 [INFO] root: Saved to prop_data/master_training_dataset.parquet
-2025-12-14 22:39:02 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-15 01:41:39 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-15 01:41:39 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-15 01:41:39 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-15 01:41:39 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-15 01:41:39 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-15 01:41:39 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-15 01:41:39 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-15 01:41:39 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-15 01:41:39 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-15 01:41:39 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-15 01:41:40 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-15 01:41:40 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-15 01:41:40 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 01:41:40 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-15 01:41:40 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 01:41:40 [ERROR] root: Error processing box scores for 2025-26: 'MATCHUP'
-2025-12-15 01:41:40 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-15 01:41:40 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-15 01:41:40 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-15 01:41:40 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-15 01:41:40 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-15 01:41:40 [INFO] root: --- Processing Quarter/Half History ---
-2025-12-15 01:41:40 [INFO] root: Saved Master Q1: 29078 rows
-2025-12-15 01:41:40 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
-2025-12-15 01:41:41 [INFO] root: Saved Master 1H: 27628 rows
-2025-12-15 01:41:41 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-15 01:41:41 [INFO] root: --- Building Final Training Dataset ---
-2025-12-15 01:41:41 [INFO] root: Merging 29078 Q1 records...
-2025-12-15 01:41:41 [INFO] root: Merging 27628 1H records...
-2025-12-15 01:41:41 [INFO] root: Calculating features for training set...
-2025-12-15 01:41:42 [INFO] root: Saving training set with 209 columns...
-2025-12-15 01:41:42 [INFO] root: Saved to prop_data/master_training_dataset.parquet
-2025-12-15 01:41:42 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-15 22:00:10 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-15 22:00:10 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-15 22:00:10 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-15 22:00:10 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-15 22:00:10 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-15 22:00:10 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-15 22:00:10 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-15 22:00:10 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-15 22:00:10 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-15 22:00:10 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-15 22:00:11 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-15 22:00:11 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-15 22:00:11 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 22:00:11 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-15 22:00:11 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 22:00:11 [ERROR] root: Error processing box scores for 2025-26: 'MATCHUP'
-2025-12-15 22:00:11 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-15 22:00:11 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-15 22:00:11 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-15 22:00:11 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-15 22:00:11 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-15 22:00:11 [INFO] root: --- Processing Quarter/Half History ---
-2025-12-15 22:00:11 [INFO] root: Saved Master Q1: 29078 rows
-2025-12-15 22:00:11 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
-2025-12-15 22:00:12 [INFO] root: Saved Master 1H: 27628 rows
-2025-12-15 22:00:12 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-15 22:00:12 [INFO] root: --- Building Final Training Dataset ---
-2025-12-15 22:00:12 [INFO] root: Merging 29078 Q1 records...
-2025-12-15 22:00:12 [INFO] root: Merging 27628 1H records...
-2025-12-15 22:00:12 [INFO] root: Calculating features for training set...
-2025-12-15 22:00:13 [INFO] root: Saving training set with 209 columns...
-2025-12-15 22:00:13 [INFO] root: Saved to prop_data/master_training_dataset.parquet
-2025-12-15 22:00:13 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-15 22:32:29 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-15 22:32:29 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-15 22:32:29 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-15 22:32:29 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-15 22:32:29 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-15 22:32:30 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-15 22:32:30 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-15 22:32:30 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-15 22:32:30 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-15 22:32:30 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-15 22:32:31 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-15 22:32:31 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-15 22:32:31 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 22:32:31 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-15 22:32:31 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 22:32:31 [ERROR] root: Error processing box scores for 2025-26: 'MATCHUP'
-2025-12-15 22:32:31 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-15 22:32:31 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-15 22:32:31 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-15 22:32:31 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-15 22:32:31 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-15 22:32:31 [INFO] root: --- Processing Quarter/Half History ---
-2025-12-15 22:32:31 [INFO] root: Saved Master Q1: 29168 rows
-2025-12-15 22:32:31 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
-2025-12-15 22:32:32 [INFO] root: Saved Master 1H: 27714 rows
-2025-12-15 22:32:32 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-15 22:32:32 [INFO] root: --- Building Final Training Dataset ---
-2025-12-15 22:32:32 [INFO] root: Merging 29168 Q1 records...
-2025-12-15 22:32:32 [INFO] root: Merging 27714 1H records...
-2025-12-15 22:32:32 [INFO] root: Calculating features for training set...
-2025-12-15 22:32:33 [INFO] root: Saving training set with 209 columns...
-2025-12-15 22:32:33 [INFO] root: Saved to prop_data/master_training_dataset.parquet
-2025-12-15 22:32:33 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-15 22:40:19 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-15 22:40:19 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-15 22:40:19 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-15 22:40:19 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-15 22:40:19 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-15 22:40:19 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-15 22:40:19 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-15 22:40:19 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-15 22:40:19 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-15 22:40:19 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-15 22:40:20 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-15 22:40:20 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-15 22:40:20 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 22:40:20 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-15 22:40:20 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 22:40:20 [ERROR] root: Error processing box scores for 2025-26: 'MATCHUP'
-2025-12-15 22:40:20 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-15 22:40:20 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-15 22:40:20 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-15 22:40:20 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-15 22:40:20 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-15 22:40:20 [INFO] root: --- Processing Quarter/Half History ---
-2025-12-15 22:40:20 [INFO] root: Saved Master Q1: 29168 rows
-2025-12-15 22:40:20 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
-2025-12-15 22:40:21 [INFO] root: Saved Master 1H: 27714 rows
-2025-12-15 22:40:21 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-15 22:40:21 [INFO] root: --- Building Final Training Dataset ---
-2025-12-15 22:40:21 [INFO] root: Merging 29168 Q1 records...
-2025-12-15 22:40:21 [INFO] root: Merging 27714 1H records...
-2025-12-15 22:40:21 [INFO] root: Calculating features for training set...
-2025-12-15 22:40:22 [INFO] root: Saving training set with 209 columns...
-2025-12-15 22:40:22 [INFO] root: Saved to prop_data/master_training_dataset.parquet
-2025-12-15 22:40:22 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-15 23:04:35 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-15 23:04:35 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-15 23:04:35 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-15 23:04:35 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-15 23:04:35 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-15 23:04:35 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-15 23:04:35 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-15 23:04:36 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-15 23:04:36 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-15 23:04:36 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-15 23:04:36 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-15 23:04:36 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-15 23:04:36 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 23:04:36 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-15 23:04:36 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 23:04:36 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
-2025-12-15 23:04:36 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-15 23:04:36 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-15 23:04:36 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-15 23:04:36 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-15 23:04:36 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-15 23:04:36 [INFO] root: --- Processing Quarter/Half History ---
-2025-12-15 23:04:37 [INFO] root: Saved Master Q1: 29168 rows
-2025-12-15 23:04:37 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
-2025-12-15 23:04:38 [INFO] root: Saved Master 1H: 27714 rows
-2025-12-15 23:04:38 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-15 23:04:38 [INFO] root: --- Building Final Training Dataset ---
-2025-12-15 23:04:38 [INFO] root: Merging 29168 Q1 records...
-2025-12-15 23:04:38 [INFO] root: Merging 27714 1H records...
-2025-12-15 23:04:38 [INFO] root: Calculating features for training set...
-2025-12-15 23:04:38 [INFO] root: Saving training set with 257 columns...
-2025-12-15 23:04:39 [INFO] root: Saved to prop_data/master_training_dataset.parquet
-2025-12-15 23:04:39 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-15 23:48:03 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-15 23:48:03 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-15 23:48:03 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-15 23:48:03 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-15 23:48:03 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-15 23:48:03 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-15 23:48:03 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-15 23:48:03 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-15 23:48:03 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-15 23:48:03 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-15 23:48:04 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-15 23:48:04 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-15 23:48:04 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 23:48:04 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-15 23:48:04 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-15 23:48:04 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
-2025-12-15 23:48:04 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-15 23:48:04 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-15 23:48:04 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-15 23:48:04 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-15 23:48:04 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-15 23:48:04 [INFO] root: --- Processing Quarter/Half History ---
-2025-12-15 23:48:04 [INFO] root: Saved Master Q1: 29168 rows
-2025-12-15 23:48:04 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
-2025-12-15 23:48:05 [INFO] root: Saved Master 1H: 27714 rows
-2025-12-15 23:48:05 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-15 23:48:05 [INFO] root: --- Building Final Training Dataset ---
-2025-12-15 23:48:05 [INFO] root: Merging 29168 Q1 records...
-2025-12-15 23:48:05 [INFO] root: Merging 27714 1H records...
-2025-12-15 23:48:05 [INFO] root: Calculating features for training set...
-2025-12-15 23:48:06 [INFO] root: Saving training set with 260 columns...
-2025-12-15 23:48:06 [INFO] root: Saved to prop_data/master_training_dataset.parquet
-2025-12-15 23:48:06 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
-2025-12-16 11:22:42 [INFO] root: Logging initialized. Writing to logs/build_db.log
-2025-12-16 11:22:42 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
-2025-12-16 11:22:42 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
-2025-12-16 11:22:42 [INFO] root: Found Seasons: ['2024-25', '2025-26']
-2025-12-16 11:22:42 [INFO] root: Creating Player ID Map across all seasons...
-2025-12-16 11:22:42 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
-2025-12-16 11:22:42 [INFO] root: Saved master_player_stats_2024-25.parquet
-2025-12-16 11:22:43 [INFO] root: Saved master_player_stats_2025-26.parquet
-2025-12-16 11:22:43 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
-2025-12-16 11:22:43 [INFO] root: Saved master_team_stats_2024-25.parquet
-2025-12-16 11:22:43 [INFO] root: Saved master_team_stats_2025-26.parquet
-2025-12-16 11:22:43 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
-2025-12-16 11:22:43 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-16 11:22:43 [INFO] root: Saved master_box_scores_2024-25.parquet (4187 rows)
-2025-12-16 11:22:43 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
-2025-12-16 11:22:43 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
-2025-12-16 11:22:43 [INFO] root: --- Starting: process_vs_opponent_stats ---
-2025-12-16 11:22:43 [INFO] root: Saved master_vs_opponent.parquet
-2025-12-16 11:22:43 [INFO] root: --- Starting: process_dvp_stats ---
-2025-12-16 11:22:43 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
-2025-12-16 11:22:43 [INFO] root: Saved master_dvp_stats.parquet
-2025-12-16 11:22:43 [INFO] root: --- Processing Quarter/Half History ---
-2025-12-16 11:22:44 [INFO] root: Saved Master Q1: 29168 rows
-2025-12-16 11:22:44 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
-2025-12-16 11:22:45 [INFO] root: Saved Master 1H: 27714 rows
-2025-12-16 11:22:45 [INFO] root: Step 2: Building Final Training Dataset...
-2025-12-16 11:22:45 [INFO] root: --- Building Final Training Dataset ---
-2025-12-16 11:22:45 [INFO] root: Merging 29168 Q1 records...
-2025-12-16 11:22:45 [INFO] root: Merging 27714 1H records...
-2025-12-16 11:22:45 [INFO] root: Calculating features for training set...
-2025-12-16 11:22:45 [INFO] root: Saving training set with 257 columns...
-2025-12-16 11:22:46 [INFO] root: Saved to prop_data/master_training_dataset.parquet
-2025-12-16 11:22:46 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/groupby/grouper.py", line 1043, in get_grouper
+    raise KeyError(gpr)
+KeyError: 'PLAYER_NAME'
+2025-12-17 13:01:49 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-17 13:01:49 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-17 13:01:49 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-17 13:01:49 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-17 13:01:49 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-17 13:01:49 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-17 13:01:49 [ERROR] root: Error processing player stats for prop_data/2024-25: Duplicate column names found: ['PLAYER_ID', 'clean_name', 'TEAM_ID', 'TEAM_ABBREVIATION', 'PLAYER_NAME', 'HOME_NICKNAME', 'HOME_TEAM_ID', 'HOME_TEAM_ABBREVIATION', 'HOME_AGE', 'HOME_GP', 'HOME_W', 'HOME_L', 'HOME_W_PCT', 'HOME_MIN', 'HOME_FGM', 'HOME_FGA', 'HOME_FG_PCT', 'HOME_FG3M', 'HOME_FG3A', 'HOME_FG3_PCT', 'HOME_FTM', 'HOME_FTA', 'HOME_FT_PCT', 'HOME_OREB', 'HOME_DREB', 'HOME_REB', 'HOME_AST', 'HOME_TOV', 'HOME_STL', 'HOME_BLK', 'HOME_BLKA', 'HOME_PF', 'HOME_PFD', 'HOME_PTS', 'HOME_PLUS_MINUS', 'HOME_NBA_FANTASY_PTS', 'HOME_DD2', 'HOME_TD3', 'HOME_WNBA_FANTASY_PTS', 'HOME_GP_RANK', 'HOME_W_RANK', 'HOME_L_RANK', 'HOME_W_PCT_RANK', 'HOME_MIN_RANK', 'HOME_FGM_RANK', 'HOME_FGA_RANK', 'HOME_FG_PCT_RANK', 'HOME_FG3M_RANK', 'HOME_FG3A_RANK', 'HOME_FG3_PCT_RANK', 'HOME_FTM_RANK', 'HOME_FTA_RANK', 'HOME_FT_PCT_RANK', 'HOME_OREB_RANK', 'HOME_DREB_RANK', 'HOME_REB_RANK', 'HOME_AST_RANK', 'HOME_TOV_RANK', 'HOME_STL_RANK', 'HOME_BLK_RANK', 'HOME_BLKA_RANK', 'HOME_PF_RANK', 'HOME_PFD_RANK', 'HOME_PTS_RANK', 'HOME_PLUS_MINUS_RANK', 'HOME_NBA_FANTASY_PTS_RANK', 'HOME_DD2_RANK', 'HOME_TD3_RANK', 'HOME_WNBA_FANTASY_PTS_RANK', 'HOME_TEAM_COUNT', 'AWAY_NICKNAME', 'AWAY_TEAM_ID', 'AWAY_TEAM_ABBREVIATION', 'AWAY_AGE', 'AWAY_GP', 'AWAY_W', 'AWAY_L', 'AWAY_W_PCT', 'AWAY_MIN', 'AWAY_FGM', 'AWAY_FGA', 'AWAY_FG_PCT', 'AWAY_FG3M', 'AWAY_FG3A', 'AWAY_FG3_PCT', 'AWAY_FTM', 'AWAY_FTA', 'AWAY_FT_PCT', 'AWAY_OREB', 'AWAY_DREB', 'AWAY_REB', 'AWAY_AST', 'AWAY_TOV', 'AWAY_STL', 'AWAY_BLK', 'AWAY_BLKA', 'AWAY_PF', 'AWAY_PFD', 'AWAY_PTS', 'AWAY_PLUS_MINUS', 'AWAY_NBA_FANTASY_PTS', 'AWAY_DD2', 'AWAY_TD3', 'AWAY_WNBA_FANTASY_PTS', 'AWAY_GP_RANK', 'AWAY_W_RANK', 'AWAY_L_RANK', 'AWAY_W_PCT_RANK', 'AWAY_MIN_RANK', 'AWAY_FGM_RANK', 'AWAY_FGA_RANK', 'AWAY_FG_PCT_RANK', 'AWAY_FG3M_RANK', 'AWAY_FG3A_RANK', 'AWAY_FG3_PCT_RANK', 'AWAY_FTM_RANK', 'AWAY_FTA_RANK', 'AWAY_FT_PCT_RANK', 'AWAY_OREB_RANK', 'AWAY_DREB_RANK', 'AWAY_REB_RANK', 'AWAY_AST_RANK', 'AWAY_TOV_RANK', 'AWAY_STL_RANK', 'AWAY_BLK_RANK', 'AWAY_BLKA_RANK', 'AWAY_PF_RANK', 'AWAY_PFD_RANK', 'AWAY_PTS_RANK', 'AWAY_PLUS_MINUS_RANK', 'AWAY_NBA_FANTASY_PTS_RANK', 'AWAY_DD2_RANK', 'AWAY_TD3_RANK', 'AWAY_WNBA_FANTASY_PTS_RANK', 'AWAY_TEAM_COUNT', 'L5_NICKNAME', 'L5_TEAM_ID', 'L5_TEAM_ABBREVIATION', 'L5_AGE', 'L5_GP', 'L5_W', 'L5_L', 'L5_W_PCT', 'L5_MIN', 'L5_FGM', 'L5_FGA', 'L5_FG_PCT', 'L5_FG3M', 'L5_FG3A', 'L5_FG3_PCT', 'L5_FTM', 'L5_FTA', 'L5_FT_PCT', 'L5_OREB', 'L5_DREB', 'L5_REB', 'L5_AST', 'L5_TOV', 'L5_STL', 'L5_BLK', 'L5_BLKA', 'L5_PF', 'L5_PFD', 'L5_PTS', 'L5_PLUS_MINUS', 'L5_NBA_FANTASY_PTS', 'L5_DD2', 'L5_TD3', 'L5_WNBA_FANTASY_PTS', 'L5_GP_RANK', 'L5_W_RANK', 'L5_L_RANK', 'L5_W_PCT_RANK', 'L5_MIN_RANK', 'L5_FGM_RANK', 'L5_FGA_RANK', 'L5_FG_PCT_RANK', 'L5_FG3M_RANK', 'L5_FG3A_RANK', 'L5_FG3_PCT_RANK', 'L5_FTM_RANK', 'L5_FTA_RANK', 'L5_FT_PCT_RANK', 'L5_OREB_RANK', 'L5_DREB_RANK', 'L5_REB_RANK', 'L5_AST_RANK', 'L5_TOV_RANK', 'L5_STL_RANK', 'L5_BLK_RANK', 'L5_BLKA_RANK', 'L5_PF_RANK', 'L5_PFD_RANK', 'L5_PTS_RANK', 'L5_PLUS_MINUS_RANK', 'L5_NBA_FANTASY_PTS_RANK', 'L5_DD2_RANK', 'L5_TD3_RANK', 'L5_WNBA_FANTASY_PTS_RANK', 'L5_TEAM_COUNT', 'Q1_PLAYER_NAME', 'Q1_NICKNAME', 'Q1_TEAM_ID', 'Q1_TEAM_ABBREVIATION', 'Q1_AGE', 'Q1_GP', 'Q1_W', 'Q1_L', 'Q1_W_PCT', 'Q1_MIN', 'Q1_FGM', 'Q1_FGA', 'Q1_FG_PCT', 'Q1_FG3M', 'Q1_FG3A', 'Q1_FG3_PCT', 'Q1_FTM', 'Q1_FTA', 'Q1_FT_PCT', 'Q1_OREB', 'Q1_DREB', 'Q1_REB', 'Q1_AST', 'Q1_TOV', 'Q1_STL', 'Q1_BLK', 'Q1_BLKA', 'Q1_PF', 'Q1_PFD', 'Q1_PTS', 'Q1_PLUS_MINUS', 'Q1_NBA_FANTASY_PTS', 'Q1_DD2', 'Q1_TD3', 'Q1_WNBA_FANTASY_PTS', 'Q1_GP_RANK', 'Q1_W_RANK', 'Q1_L_RANK', 'Q1_W_PCT_RANK', 'Q1_MIN_RANK', 'Q1_FGM_RANK', 'Q1_FGA_RANK', 'Q1_FG_PCT_RANK', 'Q1_FG3M_RANK', 'Q1_FG3A_RANK', 'Q1_FG3_PCT_RANK', 'Q1_FTM_RANK', 'Q1_FTA_RANK', 'Q1_FT_PCT_RANK', 'Q1_OREB_RANK', 'Q1_DREB_RANK', 'Q1_REB_RANK', 'Q1_AST_RANK', 'Q1_TOV_RANK', 'Q1_STL_RANK', 'Q1_BLK_RANK', 'Q1_BLKA_RANK', 'Q1_PF_RANK', 'Q1_PFD_RANK', 'Q1_PTS_RANK', 'Q1_PLUS_MINUS_RANK', 'Q1_NBA_FANTASY_PTS_RANK', 'Q1_DD2_RANK', 'Q1_TD3_RANK', 'Q1_WNBA_FANTASY_PTS_RANK', 'Q1_TEAM_COUNT', 'Q2_PLAYER_NAME', 'Q2_NICKNAME', 'Q2_TEAM_ID', 'Q2_TEAM_ABBREVIATION', 'Q2_AGE', 'Q2_GP', 'Q2_W', 'Q2_L', 'Q2_W_PCT', 'Q2_MIN', 'Q2_FGM', 'Q2_FGA', 'Q2_FG_PCT', 'Q2_FG3M', 'Q2_FG3A', 'Q2_FG3_PCT', 'Q2_FTM', 'Q2_FTA', 'Q2_FT_PCT', 'Q2_OREB', 'Q2_DREB', 'Q2_REB', 'Q2_AST', 'Q2_TOV', 'Q2_STL', 'Q2_BLK', 'Q2_BLKA', 'Q2_PF', 'Q2_PFD', 'Q2_PTS', 'Q2_PLUS_MINUS', 'Q2_NBA_FANTASY_PTS', 'Q2_DD2', 'Q2_TD3', 'Q2_WNBA_FANTASY_PTS', 'Q2_GP_RANK', 'Q2_W_RANK', 'Q2_L_RANK', 'Q2_W_PCT_RANK', 'Q2_MIN_RANK', 'Q2_FGM_RANK', 'Q2_FGA_RANK', 'Q2_FG_PCT_RANK', 'Q2_FG3M_RANK', 'Q2_FG3A_RANK', 'Q2_FG3_PCT_RANK', 'Q2_FTM_RANK', 'Q2_FTA_RANK', 'Q2_FT_PCT_RANK', 'Q2_OREB_RANK', 'Q2_DREB_RANK', 'Q2_REB_RANK', 'Q2_AST_RANK', 'Q2_TOV_RANK', 'Q2_STL_RANK', 'Q2_BLK_RANK', 'Q2_BLKA_RANK', 'Q2_PF_RANK', 'Q2_PFD_RANK', 'Q2_PTS_RANK', 'Q2_PLUS_MINUS_RANK', 'Q2_NBA_FANTASY_PTS_RANK', 'Q2_DD2_RANK', 'Q2_TD3_RANK', 'Q2_WNBA_FANTASY_PTS_RANK', 'Q2_TEAM_COUNT', 'Q3_PLAYER_NAME', 'Q3_NICKNAME', 'Q3_TEAM_ID', 'Q3_TEAM_ABBREVIATION', 'Q3_AGE', 'Q3_GP', 'Q3_W', 'Q3_L', 'Q3_W_PCT', 'Q3_MIN', 'Q3_FGM', 'Q3_FGA', 'Q3_FG_PCT', 'Q3_FG3M', 'Q3_FG3A', 'Q3_FG3_PCT', 'Q3_FTM', 'Q3_FTA', 'Q3_FT_PCT', 'Q3_OREB', 'Q3_DREB', 'Q3_REB', 'Q3_AST', 'Q3_TOV', 'Q3_STL', 'Q3_BLK', 'Q3_BLKA', 'Q3_PF', 'Q3_PFD', 'Q3_PTS', 'Q3_PLUS_MINUS', 'Q3_NBA_FANTASY_PTS', 'Q3_DD2', 'Q3_TD3', 'Q3_WNBA_FANTASY_PTS', 'Q3_GP_RANK', 'Q3_W_RANK', 'Q3_L_RANK', 'Q3_W_PCT_RANK', 'Q3_MIN_RANK', 'Q3_FGM_RANK', 'Q3_FGA_RANK', 'Q3_FG_PCT_RANK', 'Q3_FG3M_RANK', 'Q3_FG3A_RANK', 'Q3_FG3_PCT_RANK', 'Q3_FTM_RANK', 'Q3_FTA_RANK', 'Q3_FT_PCT_RANK', 'Q3_OREB_RANK', 'Q3_DREB_RANK', 'Q3_REB_RANK', 'Q3_AST_RANK', 'Q3_TOV_RANK', 'Q3_STL_RANK', 'Q3_BLK_RANK', 'Q3_BLKA_RANK', 'Q3_PF_RANK', 'Q3_PFD_RANK', 'Q3_PTS_RANK', 'Q3_PLUS_MINUS_RANK', 'Q3_NBA_FANTASY_PTS_RANK', 'Q3_DD2_RANK', 'Q3_TD3_RANK', 'Q3_WNBA_FANTASY_PTS_RANK', 'Q3_TEAM_COUNT', 'Q4_PLAYER_NAME', 'Q4_NICKNAME', 'Q4_TEAM_ID', 'Q4_TEAM_ABBREVIATION', 'Q4_AGE', 'Q4_GP', 'Q4_W', 'Q4_L', 'Q4_W_PCT', 'Q4_MIN', 'Q4_FGM', 'Q4_FGA', 'Q4_FG_PCT', 'Q4_FG3M', 'Q4_FG3A', 'Q4_FG3_PCT', 'Q4_FTM', 'Q4_FTA', 'Q4_FT_PCT', 'Q4_OREB', 'Q4_DREB', 'Q4_REB', 'Q4_AST', 'Q4_TOV', 'Q4_STL', 'Q4_BLK', 'Q4_BLKA', 'Q4_PF', 'Q4_PFD', 'Q4_PTS', 'Q4_PLUS_MINUS', 'Q4_NBA_FANTASY_PTS', 'Q4_DD2', 'Q4_TD3', 'Q4_WNBA_FANTASY_PTS', 'Q4_GP_RANK', 'Q4_W_RANK', 'Q4_L_RANK', 'Q4_W_PCT_RANK', 'Q4_MIN_RANK', 'Q4_FGM_RANK', 'Q4_FGA_RANK', 'Q4_FG_PCT_RANK', 'Q4_FG3M_RANK', 'Q4_FG3A_RANK', 'Q4_FG3_PCT_RANK', 'Q4_FTM_RANK', 'Q4_FTA_RANK', 'Q4_FT_PCT_RANK', 'Q4_OREB_RANK', 'Q4_DREB_RANK', 'Q4_REB_RANK', 'Q4_AST_RANK', 'Q4_TOV_RANK', 'Q4_STL_RANK', 'Q4_BLK_RANK', 'Q4_BLKA_RANK', 'Q4_PF_RANK', 'Q4_PFD_RANK', 'Q4_PTS_RANK', 'Q4_PLUS_MINUS_RANK', 'Q4_NBA_FANTASY_PTS_RANK', 'Q4_DD2_RANK', 'Q4_TD3_RANK', 'Q4_WNBA_FANTASY_PTS_RANK', 'Q4_TEAM_COUNT', 'Pos', 'SEASON_G', 'SEASON_PTS', 'SEASON_TRB', 'SEASON_STL', 'SEASON_STL', 'SEASON_BLK', 'SEASON_FG3M', 'TS%', 'USG%', 'PER', 'SEASON_ID']
+2025-12-17 13:01:49 [ERROR] root: Error processing player stats for prop_data/2025-26: Duplicate column names found: ['PLAYER_ID', 'clean_name', 'TEAM_ID', 'TEAM_ABBREVIATION', 'PLAYER_NAME', 'HOME_NICKNAME', 'HOME_TEAM_ID', 'HOME_TEAM_ABBREVIATION', 'HOME_AGE', 'HOME_GP', 'HOME_W', 'HOME_L', 'HOME_W_PCT', 'HOME_MIN', 'HOME_FGM', 'HOME_FGA', 'HOME_FG_PCT', 'HOME_FG3M', 'HOME_FG3A', 'HOME_FG3_PCT', 'HOME_FTM', 'HOME_FTA', 'HOME_FT_PCT', 'HOME_OREB', 'HOME_DREB', 'HOME_REB', 'HOME_AST', 'HOME_TOV', 'HOME_STL', 'HOME_BLK', 'HOME_BLKA', 'HOME_PF', 'HOME_PFD', 'HOME_PTS', 'HOME_PLUS_MINUS', 'HOME_NBA_FANTASY_PTS', 'HOME_DD2', 'HOME_TD3', 'HOME_WNBA_FANTASY_PTS', 'HOME_GP_RANK', 'HOME_W_RANK', 'HOME_L_RANK', 'HOME_W_PCT_RANK', 'HOME_MIN_RANK', 'HOME_FGM_RANK', 'HOME_FGA_RANK', 'HOME_FG_PCT_RANK', 'HOME_FG3M_RANK', 'HOME_FG3A_RANK', 'HOME_FG3_PCT_RANK', 'HOME_FTM_RANK', 'HOME_FTA_RANK', 'HOME_FT_PCT_RANK', 'HOME_OREB_RANK', 'HOME_DREB_RANK', 'HOME_REB_RANK', 'HOME_AST_RANK', 'HOME_TOV_RANK', 'HOME_STL_RANK', 'HOME_BLK_RANK', 'HOME_BLKA_RANK', 'HOME_PF_RANK', 'HOME_PFD_RANK', 'HOME_PTS_RANK', 'HOME_PLUS_MINUS_RANK', 'HOME_NBA_FANTASY_PTS_RANK', 'HOME_DD2_RANK', 'HOME_TD3_RANK', 'HOME_WNBA_FANTASY_PTS_RANK', 'HOME_TEAM_COUNT', 'AWAY_NICKNAME', 'AWAY_TEAM_ID', 'AWAY_TEAM_ABBREVIATION', 'AWAY_AGE', 'AWAY_GP', 'AWAY_W', 'AWAY_L', 'AWAY_W_PCT', 'AWAY_MIN', 'AWAY_FGM', 'AWAY_FGA', 'AWAY_FG_PCT', 'AWAY_FG3M', 'AWAY_FG3A', 'AWAY_FG3_PCT', 'AWAY_FTM', 'AWAY_FTA', 'AWAY_FT_PCT', 'AWAY_OREB', 'AWAY_DREB', 'AWAY_REB', 'AWAY_AST', 'AWAY_TOV', 'AWAY_STL', 'AWAY_BLK', 'AWAY_BLKA', 'AWAY_PF', 'AWAY_PFD', 'AWAY_PTS', 'AWAY_PLUS_MINUS', 'AWAY_NBA_FANTASY_PTS', 'AWAY_DD2', 'AWAY_TD3', 'AWAY_WNBA_FANTASY_PTS', 'AWAY_GP_RANK', 'AWAY_W_RANK', 'AWAY_L_RANK', 'AWAY_W_PCT_RANK', 'AWAY_MIN_RANK', 'AWAY_FGM_RANK', 'AWAY_FGA_RANK', 'AWAY_FG_PCT_RANK', 'AWAY_FG3M_RANK', 'AWAY_FG3A_RANK', 'AWAY_FG3_PCT_RANK', 'AWAY_FTM_RANK', 'AWAY_FTA_RANK', 'AWAY_FT_PCT_RANK', 'AWAY_OREB_RANK', 'AWAY_DREB_RANK', 'AWAY_REB_RANK', 'AWAY_AST_RANK', 'AWAY_TOV_RANK', 'AWAY_STL_RANK', 'AWAY_BLK_RANK', 'AWAY_BLKA_RANK', 'AWAY_PF_RANK', 'AWAY_PFD_RANK', 'AWAY_PTS_RANK', 'AWAY_PLUS_MINUS_RANK', 'AWAY_NBA_FANTASY_PTS_RANK', 'AWAY_DD2_RANK', 'AWAY_TD3_RANK', 'AWAY_WNBA_FANTASY_PTS_RANK', 'AWAY_TEAM_COUNT', 'L5_NICKNAME', 'L5_TEAM_ID', 'L5_TEAM_ABBREVIATION', 'L5_AGE', 'L5_GP', 'L5_W', 'L5_L', 'L5_W_PCT', 'L5_MIN', 'L5_FGM', 'L5_FGA', 'L5_FG_PCT', 'L5_FG3M', 'L5_FG3A', 'L5_FG3_PCT', 'L5_FTM', 'L5_FTA', 'L5_FT_PCT', 'L5_OREB', 'L5_DREB', 'L5_REB', 'L5_AST', 'L5_TOV', 'L5_STL', 'L5_BLK', 'L5_BLKA', 'L5_PF', 'L5_PFD', 'L5_PTS', 'L5_PLUS_MINUS', 'L5_NBA_FANTASY_PTS', 'L5_DD2', 'L5_TD3', 'L5_WNBA_FANTASY_PTS', 'L5_GP_RANK', 'L5_W_RANK', 'L5_L_RANK', 'L5_W_PCT_RANK', 'L5_MIN_RANK', 'L5_FGM_RANK', 'L5_FGA_RANK', 'L5_FG_PCT_RANK', 'L5_FG3M_RANK', 'L5_FG3A_RANK', 'L5_FG3_PCT_RANK', 'L5_FTM_RANK', 'L5_FTA_RANK', 'L5_FT_PCT_RANK', 'L5_OREB_RANK', 'L5_DREB_RANK', 'L5_REB_RANK', 'L5_AST_RANK', 'L5_TOV_RANK', 'L5_STL_RANK', 'L5_BLK_RANK', 'L5_BLKA_RANK', 'L5_PF_RANK', 'L5_PFD_RANK', 'L5_PTS_RANK', 'L5_PLUS_MINUS_RANK', 'L5_NBA_FANTASY_PTS_RANK', 'L5_DD2_RANK', 'L5_TD3_RANK', 'L5_WNBA_FANTASY_PTS_RANK', 'L5_TEAM_COUNT', 'Q1_PLAYER_NAME', 'Q1_NICKNAME', 'Q1_TEAM_ID', 'Q1_TEAM_ABBREVIATION', 'Q1_AGE', 'Q1_GP', 'Q1_W', 'Q1_L', 'Q1_W_PCT', 'Q1_MIN', 'Q1_FGM', 'Q1_FGA', 'Q1_FG_PCT', 'Q1_FG3M', 'Q1_FG3A', 'Q1_FG3_PCT', 'Q1_FTM', 'Q1_FTA', 'Q1_FT_PCT', 'Q1_OREB', 'Q1_DREB', 'Q1_REB', 'Q1_AST', 'Q1_TOV', 'Q1_STL', 'Q1_BLK', 'Q1_BLKA', 'Q1_PF', 'Q1_PFD', 'Q1_PTS', 'Q1_PLUS_MINUS', 'Q1_NBA_FANTASY_PTS', 'Q1_DD2', 'Q1_TD3', 'Q1_WNBA_FANTASY_PTS', 'Q1_GP_RANK', 'Q1_W_RANK', 'Q1_L_RANK', 'Q1_W_PCT_RANK', 'Q1_MIN_RANK', 'Q1_FGM_RANK', 'Q1_FGA_RANK', 'Q1_FG_PCT_RANK', 'Q1_FG3M_RANK', 'Q1_FG3A_RANK', 'Q1_FG3_PCT_RANK', 'Q1_FTM_RANK', 'Q1_FTA_RANK', 'Q1_FT_PCT_RANK', 'Q1_OREB_RANK', 'Q1_DREB_RANK', 'Q1_REB_RANK', 'Q1_AST_RANK', 'Q1_TOV_RANK', 'Q1_STL_RANK', 'Q1_BLK_RANK', 'Q1_BLKA_RANK', 'Q1_PF_RANK', 'Q1_PFD_RANK', 'Q1_PTS_RANK', 'Q1_PLUS_MINUS_RANK', 'Q1_NBA_FANTASY_PTS_RANK', 'Q1_DD2_RANK', 'Q1_TD3_RANK', 'Q1_WNBA_FANTASY_PTS_RANK', 'Q1_TEAM_COUNT', 'Q2_PLAYER_NAME', 'Q2_NICKNAME', 'Q2_TEAM_ID', 'Q2_TEAM_ABBREVIATION', 'Q2_AGE', 'Q2_GP', 'Q2_W', 'Q2_L', 'Q2_W_PCT', 'Q2_MIN', 'Q2_FGM', 'Q2_FGA', 'Q2_FG_PCT', 'Q2_FG3M', 'Q2_FG3A', 'Q2_FG3_PCT', 'Q2_FTM', 'Q2_FTA', 'Q2_FT_PCT', 'Q2_OREB', 'Q2_DREB', 'Q2_REB', 'Q2_AST', 'Q2_TOV', 'Q2_STL', 'Q2_BLK', 'Q2_BLKA', 'Q2_PF', 'Q2_PFD', 'Q2_PTS', 'Q2_PLUS_MINUS', 'Q2_NBA_FANTASY_PTS', 'Q2_DD2', 'Q2_TD3', 'Q2_WNBA_FANTASY_PTS', 'Q2_GP_RANK', 'Q2_W_RANK', 'Q2_L_RANK', 'Q2_W_PCT_RANK', 'Q2_MIN_RANK', 'Q2_FGM_RANK', 'Q2_FGA_RANK', 'Q2_FG_PCT_RANK', 'Q2_FG3M_RANK', 'Q2_FG3A_RANK', 'Q2_FG3_PCT_RANK', 'Q2_FTM_RANK', 'Q2_FTA_RANK', 'Q2_FT_PCT_RANK', 'Q2_OREB_RANK', 'Q2_DREB_RANK', 'Q2_REB_RANK', 'Q2_AST_RANK', 'Q2_TOV_RANK', 'Q2_STL_RANK', 'Q2_BLK_RANK', 'Q2_BLKA_RANK', 'Q2_PF_RANK', 'Q2_PFD_RANK', 'Q2_PTS_RANK', 'Q2_PLUS_MINUS_RANK', 'Q2_NBA_FANTASY_PTS_RANK', 'Q2_DD2_RANK', 'Q2_TD3_RANK', 'Q2_WNBA_FANTASY_PTS_RANK', 'Q2_TEAM_COUNT', 'Q3_PLAYER_NAME', 'Q3_NICKNAME', 'Q3_TEAM_ID', 'Q3_TEAM_ABBREVIATION', 'Q3_AGE', 'Q3_GP', 'Q3_W', 'Q3_L', 'Q3_W_PCT', 'Q3_MIN', 'Q3_FGM', 'Q3_FGA', 'Q3_FG_PCT', 'Q3_FG3M', 'Q3_FG3A', 'Q3_FG3_PCT', 'Q3_FTM', 'Q3_FTA', 'Q3_FT_PCT', 'Q3_OREB', 'Q3_DREB', 'Q3_REB', 'Q3_AST', 'Q3_TOV', 'Q3_STL', 'Q3_BLK', 'Q3_BLKA', 'Q3_PF', 'Q3_PFD', 'Q3_PTS', 'Q3_PLUS_MINUS', 'Q3_NBA_FANTASY_PTS', 'Q3_DD2', 'Q3_TD3', 'Q3_WNBA_FANTASY_PTS', 'Q3_GP_RANK', 'Q3_W_RANK', 'Q3_L_RANK', 'Q3_W_PCT_RANK', 'Q3_MIN_RANK', 'Q3_FGM_RANK', 'Q3_FGA_RANK', 'Q3_FG_PCT_RANK', 'Q3_FG3M_RANK', 'Q3_FG3A_RANK', 'Q3_FG3_PCT_RANK', 'Q3_FTM_RANK', 'Q3_FTA_RANK', 'Q3_FT_PCT_RANK', 'Q3_OREB_RANK', 'Q3_DREB_RANK', 'Q3_REB_RANK', 'Q3_AST_RANK', 'Q3_TOV_RANK', 'Q3_STL_RANK', 'Q3_BLK_RANK', 'Q3_BLKA_RANK', 'Q3_PF_RANK', 'Q3_PFD_RANK', 'Q3_PTS_RANK', 'Q3_PLUS_MINUS_RANK', 'Q3_NBA_FANTASY_PTS_RANK', 'Q3_DD2_RANK', 'Q3_TD3_RANK', 'Q3_WNBA_FANTASY_PTS_RANK', 'Q3_TEAM_COUNT', 'Q4_PLAYER_NAME', 'Q4_NICKNAME', 'Q4_TEAM_ID', 'Q4_TEAM_ABBREVIATION', 'Q4_AGE', 'Q4_GP', 'Q4_W', 'Q4_L', 'Q4_W_PCT', 'Q4_MIN', 'Q4_FGM', 'Q4_FGA', 'Q4_FG_PCT', 'Q4_FG3M', 'Q4_FG3A', 'Q4_FG3_PCT', 'Q4_FTM', 'Q4_FTA', 'Q4_FT_PCT', 'Q4_OREB', 'Q4_DREB', 'Q4_REB', 'Q4_AST', 'Q4_TOV', 'Q4_STL', 'Q4_BLK', 'Q4_BLKA', 'Q4_PF', 'Q4_PFD', 'Q4_PTS', 'Q4_PLUS_MINUS', 'Q4_NBA_FANTASY_PTS', 'Q4_DD2', 'Q4_TD3', 'Q4_WNBA_FANTASY_PTS', 'Q4_GP_RANK', 'Q4_W_RANK', 'Q4_L_RANK', 'Q4_W_PCT_RANK', 'Q4_MIN_RANK', 'Q4_FGM_RANK', 'Q4_FGA_RANK', 'Q4_FG_PCT_RANK', 'Q4_FG3M_RANK', 'Q4_FG3A_RANK', 'Q4_FG3_PCT_RANK', 'Q4_FTM_RANK', 'Q4_FTA_RANK', 'Q4_FT_PCT_RANK', 'Q4_OREB_RANK', 'Q4_DREB_RANK', 'Q4_REB_RANK', 'Q4_AST_RANK', 'Q4_TOV_RANK', 'Q4_STL_RANK', 'Q4_BLK_RANK', 'Q4_BLKA_RANK', 'Q4_PF_RANK', 'Q4_PFD_RANK', 'Q4_PTS_RANK', 'Q4_PLUS_MINUS_RANK', 'Q4_NBA_FANTASY_PTS_RANK', 'Q4_DD2_RANK', 'Q4_TD3_RANK', 'Q4_WNBA_FANTASY_PTS_RANK', 'Q4_TEAM_COUNT', 'Pos', 'SEASON_G', 'SEASON_PTS', 'SEASON_TRB', 'SEASON_STL', 'SEASON_STL', 'SEASON_BLK', 'SEASON_FG3M', 'TS%', 'USG%', 'PER', 'SEASON_ID']
+2025-12-17 13:01:49 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-17 13:01:49 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-17 13:01:49 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-17 13:01:49 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-17 13:01:50 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:01:50 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
+2025-12-17 13:01:50 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:01:50 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
+2025-12-17 13:01:50 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-17 13:01:50 [INFO] root: Saved master_vs_opponent.parquet
+2025-12-17 13:01:50 [INFO] root: --- Starting: process_dvp_stats ---
+2025-12-17 13:01:50 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
+2025-12-17 13:01:50 [INFO] root: Saved master_dvp_stats.parquet
+2025-12-17 13:01:50 [INFO] root: --- Processing Quarter/Half History ---
+2025-12-17 13:01:50 [WARNING] root: Missing Q2 files. Cannot build 1H history.
+2025-12-17 13:01:50 [INFO] root: Step 2: Building Final Training Dataset...
+2025-12-17 13:01:50 [INFO] root: --- Building Final Training Dataset ---
+2025-12-17 13:01:50 [WARNING] root: Master Q1 file does not exist. 1Q props cannot be graded.
+2025-12-17 13:01:50 [WARNING] root: Master 1H file does not exist. 1H props cannot be graded.
+2025-12-17 13:01:50 [INFO] root: Calculating features for training set...
+2025-12-17 13:01:50 [INFO] root: Saving training set with 173 columns...
+2025-12-17 13:01:50 [INFO] root: Saved to prop_data/master_training_dataset.parquet
+2025-12-17 13:01:50 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
+2025-12-17 13:03:09 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-17 13:03:09 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-17 13:03:09 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-17 13:03:09 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-17 13:03:09 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-17 13:03:09 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-17 13:03:10 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-17 13:03:10 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-17 13:03:10 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-17 13:03:10 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-17 13:03:10 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-17 13:03:10 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-17 13:03:10 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:03:11 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
+2025-12-17 13:03:11 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:03:11 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
+2025-12-17 13:03:11 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-17 13:03:11 [INFO] root: Saved master_vs_opponent.parquet
+2025-12-17 13:03:11 [INFO] root: --- Starting: process_dvp_stats ---
+2025-12-17 13:03:11 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
+2025-12-17 13:03:11 [INFO] root: Saved master_dvp_stats.parquet
+2025-12-17 13:03:11 [INFO] root: --- Processing Quarter/Half History ---
+2025-12-17 13:03:11 [WARNING] root: Missing Q2 files. Cannot build 1H history.
+2025-12-17 13:03:11 [INFO] root: Step 2: Building Final Training Dataset...
+2025-12-17 13:03:11 [INFO] root: --- Building Final Training Dataset ---
+2025-12-17 13:03:11 [WARNING] root: Master Q1 file does not exist. 1Q props cannot be graded.
+2025-12-17 13:03:11 [WARNING] root: Master 1H file does not exist. 1H props cannot be graded.
+2025-12-17 13:03:11 [INFO] root: Calculating features for training set...
+2025-12-17 13:03:11 [INFO] root: Saving training set with 173 columns...
+2025-12-17 13:03:11 [INFO] root: Saved to prop_data/master_training_dataset.parquet
+2025-12-17 13:03:11 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
+2025-12-17 13:03:45 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-17 13:03:45 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-17 13:03:45 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-17 13:03:45 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-17 13:03:45 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-17 13:03:45 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-17 13:03:45 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-17 13:03:45 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-17 13:03:45 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-17 13:03:45 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-17 13:03:46 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-17 13:03:46 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-17 13:03:46 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:03:46 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
+2025-12-17 13:03:46 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:03:46 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
+2025-12-17 13:03:46 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-17 13:03:46 [CRITICAL] root: FATAL ERROR in Database Build: 'PLAYER_NAME'
+Traceback (most recent call last):
+  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_build_db.py", line 45, in main
+    etl.process_vs_opponent_stats(cfg.DATA_DIR, cfg.DATA_DIR)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/data/etl.py", line 437, in process_vs_opponent_stats
+    vs_opp_df = df.groupby([Cols.PLAYER_ID, 'PLAYER_NAME', 'OPPONENT_ABBREV']).agg(agg_cols).reset_index()
+                ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 9210, in groupby
+    return DataFrameGroupBy(
+        obj=self,
+    ...<7 lines>...
+        dropna=dropna,
+    )
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/groupby/groupby.py", line 1331, in __init__
+    grouper, exclusions, obj = get_grouper(
+                               ~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<5 lines>...
+        dropna=self.dropna,
+        ^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/groupby/grouper.py", line 1043, in get_grouper
+    raise KeyError(gpr)
+KeyError: 'PLAYER_NAME'
+2025-12-17 13:08:27 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-17 13:08:27 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-17 13:08:27 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-17 13:08:27 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-17 13:08:27 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-17 13:08:27 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-17 13:08:28 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-17 13:08:28 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-17 13:08:28 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-17 13:08:28 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-17 13:08:28 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-17 13:08:28 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-17 13:08:28 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:08:29 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
+2025-12-17 13:08:29 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:08:29 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
+2025-12-17 13:08:29 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-17 13:08:29 [CRITICAL] root: FATAL ERROR in Database Build: 'Player Name'
+Traceback (most recent call last):
+  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_build_db.py", line 45, in main
+    etl.process_vs_opponent_stats(cfg.DATA_DIR, cfg.DATA_DIR)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/data/etl.py", line 437, in process_vs_opponent_stats
+    vs_opp_df = df.groupby([Cols.PLAYER_ID, Cols.PLAYER_NAME, 'OPPONENT_ABBREV']).agg(agg_cols).reset_index()
+                ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 9210, in groupby
+    return DataFrameGroupBy(
+        obj=self,
+    ...<7 lines>...
+        dropna=dropna,
+    )
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/groupby/groupby.py", line 1331, in __init__
+    grouper, exclusions, obj = get_grouper(
+                               ~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<5 lines>...
+        dropna=self.dropna,
+        ^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/groupby/grouper.py", line 1043, in get_grouper
+    raise KeyError(gpr)
+KeyError: 'Player Name'
+2025-12-17 13:14:58 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-17 13:14:58 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-17 13:14:58 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-17 13:14:58 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-17 13:14:58 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-17 13:14:58 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-17 13:14:58 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-17 13:14:58 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-17 13:14:58 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-17 13:14:58 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-17 13:14:59 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-17 13:14:59 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-17 13:14:59 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:14:59 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
+2025-12-17 13:14:59 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:14:59 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
+2025-12-17 13:14:59 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-17 13:14:59 [CRITICAL] root: FATAL ERROR in Database Build: 'Player Name'
+Traceback (most recent call last):
+  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_build_db.py", line 45, in main
+    etl.process_vs_opponent_stats(cfg.DATA_DIR, cfg.DATA_DIR)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/data/etl.py", line 437, in process_vs_opponent_stats
+    vs_opp_df = df.groupby([Cols.PLAYER_ID, Cols.PLAYER_NAME, 'OPPONENT_ABBREV']).agg(agg_cols).reset_index()
+                ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 9210, in groupby
+    return DataFrameGroupBy(
+        obj=self,
+    ...<7 lines>...
+        dropna=dropna,
+    )
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/groupby/groupby.py", line 1331, in __init__
+    grouper, exclusions, obj = get_grouper(
+                               ~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<5 lines>...
+        dropna=self.dropna,
+        ^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/groupby/grouper.py", line 1043, in get_grouper
+    raise KeyError(gpr)
+KeyError: 'Player Name'
+2025-12-17 13:23:34 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-17 13:23:34 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-17 13:23:34 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-17 13:23:34 [CRITICAL] root: FATAL ERROR in Database Build: module 'prop_analyzer.data.etl' has no attribute 'get_season_folders'
+Traceback (most recent call last):
+  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_build_db.py", line 23, in main
+    season_folders = etl.get_season_folders(cfg.DATA_DIR)
+                     ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'prop_analyzer.data.etl' has no attribute 'get_season_folders'
+2025-12-17 13:24:07 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-17 13:24:07 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-17 13:24:07 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-17 13:24:07 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-17 13:24:07 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-17 13:24:07 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-17 13:24:07 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-17 13:24:07 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-17 13:24:07 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-17 13:24:07 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-17 13:24:08 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-17 13:24:08 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-17 13:24:08 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:24:08 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
+2025-12-17 13:24:08 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:24:08 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
+2025-12-17 13:24:08 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-17 13:24:08 [CRITICAL] root: FATAL ERROR in Database Build: 'PLAYER_NAME'
+Traceback (most recent call last):
+  File "/Users/normanlee/Projects/nba_prop_analyzer/scripts/run_build_db.py", line 45, in main
+    etl.process_vs_opponent_stats(cfg.DATA_DIR, cfg.DATA_DIR)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/nba_prop_analyzer/prop_analyzer/data/etl.py", line 437, in process_vs_opponent_stats
+    vs_opp_df = df.groupby([Cols.PLAYER_ID, 'PLAYER_NAME', 'OPPONENT_ABBREV']).agg(agg_cols).reset_index()
+                ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/frame.py", line 9210, in groupby
+    return DataFrameGroupBy(
+        obj=self,
+    ...<7 lines>...
+        dropna=dropna,
+    )
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/groupby/groupby.py", line 1331, in __init__
+    grouper, exclusions, obj = get_grouper(
+                               ~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<5 lines>...
+        dropna=self.dropna,
+        ^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/normanlee/Projects/prop_analyzer/venv/lib/python3.14/site-packages/pandas/core/groupby/grouper.py", line 1043, in get_grouper
+    raise KeyError(gpr)
+KeyError: 'PLAYER_NAME'
+2025-12-17 13:33:10 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-17 13:33:10 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-17 13:33:10 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-17 13:33:10 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-17 13:33:10 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-17 13:33:11 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-17 13:33:11 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-17 13:33:11 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-17 13:33:11 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-17 13:33:11 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-17 13:33:11 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-17 13:33:11 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-17 13:33:12 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:33:12 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
+2025-12-17 13:33:12 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 13:33:12 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
+2025-12-17 13:33:12 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-17 13:33:12 [INFO] root: Saved master_vs_opponent.parquet
+2025-12-17 13:33:12 [INFO] root: --- Starting: process_dvp_stats ---
+2025-12-17 13:33:12 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
+2025-12-17 13:33:12 [INFO] root: Saved master_dvp_stats.parquet
+2025-12-17 13:33:12 [INFO] root: --- Processing Quarter/Half History ---
+2025-12-17 13:33:12 [WARNING] root: Missing Q2 files. Cannot build 1H history.
+2025-12-17 13:33:12 [INFO] root: Step 2: Building Final Training Dataset...
+2025-12-17 13:33:12 [INFO] root: --- Building Final Training Dataset ---
+2025-12-17 13:33:12 [WARNING] root: Master Q1 file does not exist. 1Q props cannot be graded.
+2025-12-17 13:33:12 [WARNING] root: Master 1H file does not exist. 1H props cannot be graded.
+2025-12-17 13:33:12 [INFO] root: Calculating features for training set...
+2025-12-17 13:33:12 [INFO] root: Saving training set with 171 columns...
+2025-12-17 13:33:12 [INFO] root: Saved to prop_data/master_training_dataset.parquet
+2025-12-17 13:33:12 [INFO] root: <<< DATABASE BUILD COMPLETE >>>
+2025-12-17 14:29:54 [INFO] root: Logging initialized. Writing to logs/build_db.log
+2025-12-17 14:29:54 [INFO] root: >>> STARTING ETL PIPELINE (Parquet Optimized) <<<
+2025-12-17 14:29:54 [INFO] root: Step 1: Aggregating Master Files from Season Folders...
+2025-12-17 14:29:54 [INFO] root: Found Seasons: ['2024-25', '2025-26']
+2025-12-17 14:29:54 [INFO] root: Creating Player ID Map across all seasons...
+2025-12-17 14:29:54 [INFO] root: --- Starting: process_master_player_stats (Separate Files) ---
+2025-12-17 14:29:54 [INFO] root: Saved master_player_stats_2024-25.parquet
+2025-12-17 14:29:54 [INFO] root: Saved master_player_stats_2025-26.parquet
+2025-12-17 14:29:54 [INFO] root: --- Starting: process_master_team_stats (Separate Files) ---
+2025-12-17 14:29:54 [INFO] root: Saved master_team_stats_2024-25.parquet
+2025-12-17 14:29:55 [INFO] root: Saved master_team_stats_2025-26.parquet
+2025-12-17 14:29:55 [INFO] root: --- Starting: process_master_box_scores (Separate Files) ---
+2025-12-17 14:29:55 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 14:29:55 [INFO] root: Saved master_box_scores_2024-25.parquet (26306 rows)
+2025-12-17 14:29:55 [INFO] root: --- Initializing Historical Vacancy Columns (Placeholder) ---
+2025-12-17 14:29:55 [INFO] root: Saved master_box_scores_2025-26.parquet (8425 rows)
+2025-12-17 14:29:55 [INFO] root: --- Starting: process_vs_opponent_stats ---
+2025-12-17 14:29:55 [INFO] root: Saved master_vs_opponent.parquet
+2025-12-17 14:29:55 [INFO] root: --- Starting: process_dvp_stats ---
+2025-12-17 14:29:55 [INFO] root: Calculating DvP using: master_box_scores_2025-26.parquet
+2025-12-17 14:29:55 [INFO] root: Saved master_dvp_stats.parquet
+2025-12-17 14:29:55 [INFO] root: --- Processing Quarter/Half History ---
+2025-12-17 14:29:56 [INFO] root: Saved Master Q1: 29129 rows
+2025-12-17 14:29:56 [INFO] root: Building 1st Half (1H) stats from Q1 + Q2...
+2025-12-17 14:29:56 [INFO] root: Saved Master 1H: 27887 rows
+2025-12-17 14:29:56 [INFO] root: Step 2: Building Final Training Dataset...
+2025-12-17 14:29:56 [INFO] root: --- Building Final Training Dataset ---
+2025-12-17 14:29:56 [INFO] root: Merging 29129 Q1 records...
+2025-12-17 14:29:56 [INFO] root: Merging 27887 1H records...
+2025-12-17 14:29:56 [INFO] root: Calculating features for training set...
+2025-12-17 14:29:57 [INFO] root: Saving training set with 251 columns...
+2025-12-17 14:29:58 [INFO] root: Saved to prop_data/master_training_dataset.parquet
+2025-12-17 14:29:58 [INFO] root: <<< DATABASE BUILD COMPLETE >>>

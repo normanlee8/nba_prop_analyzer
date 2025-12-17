@@ -33,27 +33,12 @@ def add_rolling_stats_history(df, stats_to_roll=None):
 
     grouped = df.groupby(Cols.PLAYER_ID)
 
-    # --- CRITICAL UPDATE: Minutes Volatility ---
-    if 'MIN' in df.columns:
-        # Ensure MIN is numeric
-        if df['MIN'].dtype == 'object':
-             try:
-                 df['MIN'] = pd.to_numeric(df['MIN'], errors='coerce').fillna(0.0)
-             except:
-                 pass
-
-        # 1. Season Average Minutes (Entering Game)
-        df['MIN_SZN_AVG'] = grouped['MIN'].expanding().mean().shift(1).values
-        
-        # 2. Last 5 Average Minutes (Recent Role)
-        df['MIN_L5_AVG'] = grouped['MIN'].rolling(window=5, min_periods=1).mean().shift(1).values
-        
-        # 3. Minutes Volatility (Standard Deviation of last 5 games)
-        # We fill NaNs with 8.0 (high volatility) to penalize players with < 2 games history
-        df['MIN_L5_STD'] = grouped['MIN'].rolling(window=5, min_periods=2).std().shift(1).fillna(8.0).values
-
     for col in stats_to_roll:
+        # --- CRITICAL FIX: .shift(1) applied to all aggregations ---
+        # This ensures the feature for Game X only contains data from Games 1 to X-1.
+        
         # SZN Avg (Expanding Mean)
+        # Note: min_periods=1 allows the first game to have a value (likely NaN after shift, handled by Imputer)
         df[f'{col}_{Cols.SZN_AVG}'] = grouped[col].expanding().mean().shift(1).values
         
         # L5 Avg (Rolling 5)
@@ -75,10 +60,7 @@ def add_rolling_stats_history(df, stats_to_roll=None):
         
     return df
 
-def generate_features(props_df):
-    """
-    Main entry point for generating features for today's props.
-    """
+def build_feature_set(props_df):
     logging.info("Building feature set with Point-in-Time safety (Leakage Fixed)...")
     
     # 1. Load Data
@@ -116,7 +98,7 @@ def generate_features(props_df):
                 'trey murphy': 'trey murphy iii',
                 'kelly oubre': 'kelly oubre jr.',
                 'michael porter': 'michael porter jr.',
-                'nick richards': 'nick richards', 
+                'nick richards': 'nick richards', # Example placeholder
                 'gg jackson': 'gg jackson ii'
             }
             props_df['clean_name'] = props_df['clean_name'].replace(manual_map)
@@ -160,7 +142,6 @@ def generate_features(props_df):
         )
         
         if player_stats_static is not None:
-            # CLEAN MERGE: Drop columns that already exist in features_df from the right side
             cols_to_use = [c for c in player_stats_static.columns 
                            if c not in features_df.columns or c == Cols.PLAYER_ID]
             features_df = pd.merge(features_df, player_stats_static[cols_to_use], on=Cols.PLAYER_ID, how='left')
@@ -177,7 +158,7 @@ def generate_features(props_df):
         # Ensure Combo Stats
         for base, combo in [('PTS', 'PRA'), ('PTS', 'PR'), ('PTS', 'PA'), ('REB', 'RA')]:
             if combo not in q1_history.columns and base in q1_history.columns:
-                q1_history[combo] = 0 
+                q1_history[combo] = 0 # Placeholder if components missing, logic handled in ETL ideally
                 
         # Recalculate combos for safety if components exist
         if {'PTS','REB','AST'}.issubset(q1_history.columns):
@@ -254,24 +235,10 @@ def generate_features(props_df):
         team_stats_renamed = team_stats.add_prefix('TEAM_')
         if 'TEAM_TEAM_ABBREVIATION' in team_stats_renamed.columns:
              team_stats_renamed = team_stats_renamed.rename(columns={'TEAM_TEAM_ABBREVIATION': 'TEAM_ABBREVIATION'})
-        
-        # Filter duplicates
-        cols_team = [c for c in team_stats_renamed.columns if c not in features_df.columns or c == 'TEAM_ABBREVIATION']
-        if 'TEAM_ABBREVIATION' in cols_team:
-             features_df = pd.merge(features_df, team_stats_renamed[cols_team], on='TEAM_ABBREVIATION', how='left')
-        else:
-             features_df = pd.merge(features_df, team_stats_renamed[cols_team], left_on='TEAM_ABBREVIATION', right_index=True, how='left')
+        features_df = pd.merge(features_df, team_stats_renamed, left_on='TEAM_ABBREVIATION', right_index=True, how='left')
         
         opp_stats_renamed = team_stats.add_prefix('OPP_')
-        # Filter duplicates for Opponent
-        # Note: We merge on OPPONENT column
-        if 'OPP_TEAM_ABBREVIATION' in opp_stats_renamed.columns:
-             opp_stats_renamed = opp_stats_renamed.rename(columns={'OPP_TEAM_ABBREVIATION': 'OPP_ABBREV'})
-        
-        cols_opp = [c for c in opp_stats_renamed.columns if c not in features_df.columns]
-        
-        # Check if we can merge
-        features_df = pd.merge(features_df, opp_stats_renamed[cols_opp], left_on=Cols.OPPONENT, right_index=True, how='left')
+        features_df = pd.merge(features_df, opp_stats_renamed, left_on=Cols.OPPONENT, right_index=True, how='left')
 
     # 7. Merge DVP
     if dvp_df is not None:
@@ -292,40 +259,21 @@ def generate_features(props_df):
         
         if 'Primary_Pos' in dvp_df.columns:
             dvp_df['Primary_Pos'] = dvp_df['Primary_Pos'].astype(str)
-            
-            # CLEAN MERGE: Drop potential duplicates from DVP (like ID or Name if they exist)
-            cols_to_use_dvp = [c for c in dvp_df.columns if c not in features_df.columns or c in ['OPPONENT_ABBREV', 'Primary_Pos']]
-            
+
             features_df = pd.merge(
-                features_df, dvp_df[cols_to_use_dvp], 
+                features_df, dvp_df, 
                 left_on=[Cols.OPPONENT, 'Primary_Pos'], 
                 right_on=['OPPONENT_ABBREV', 'Primary_Pos'], 
                 how='left'
             )
 
-    # 8. Merge H2H
+    # 8. Merge H2H (Head to Head)
     if vs_opp_df is not None and not vs_opp_df.empty:
-        # CLEAN MERGE: Exclude Redundant Columns from vs_opp_df
-        # We only want the STATS, not the Player Name or Team or Position again.
-        
-        # Identify columns to drop (identifiers already in features_df)
-        drop_cols = [
-            'PLAYER_NAME', 'Player Name', 'TEAM_ABBREVIATION', 'TEAM', 'Team', 
-            'MATCHUP', 'Matchup', 'GAME_DATE', 'DATE'
-        ]
-        
-        # Filter vs_opp_df columns to only keep what we need + keys
-        right_cols = [c for c in vs_opp_df.columns if c not in drop_cols]
-        # Ensure we keep the join keys
-        if Cols.PLAYER_ID not in right_cols: right_cols.append(Cols.PLAYER_ID)
-        if 'OPPONENT_ABBREV' not in right_cols and 'OPPONENT_ABBREV' in vs_opp_df.columns: right_cols.append('OPPONENT_ABBREV')
-        
         features_df = pd.merge(
-            features_df, vs_opp_df[right_cols],
+            features_df, vs_opp_df,
             left_on=[Cols.PLAYER_ID, Cols.OPPONENT],
             right_on=[Cols.PLAYER_ID, 'OPPONENT_ABBREV'],
-            how='left',
-            suffixes=('', '_h2h') # Add explicit suffix just in case stats overlap
+            how='left'
         )
 
     # 9. Final Polish

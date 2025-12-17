@@ -311,7 +311,6 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
                 continue
 
             # Standardize Column Names
-            # Note: Scraper now attempts to provide Cols.GAME_ID
             rename_map = {}
             if 'Player_ID' in bs_df.columns and Cols.PLAYER_ID not in bs_df.columns:
                 rename_map['Player_ID'] = Cols.PLAYER_ID
@@ -320,6 +319,12 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
             
             if rename_map:
                 bs_df.rename(columns=rename_map, inplace=True)
+
+            # === FIX START: Drop redundant columns to prevent '_x' / '_y' suffixes ===
+            # We trust the id_map for these values, so we drop them from the raw box scores
+            cols_to_drop = ['PLAYER_NAME', 'TEAM_ABBREVIATION', 'Player_Clean']
+            bs_df.drop(columns=[c for c in cols_to_drop if c in bs_df.columns], inplace=True)
+            # === FIX END ===
 
             bs_df.dropna(subset=[Cols.PLAYER_ID], inplace=True)
             bs_df[Cols.PLAYER_ID] = bs_df[Cols.PLAYER_ID].astype(int)

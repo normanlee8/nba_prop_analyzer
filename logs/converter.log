@@ -1,424 +1,143 @@
-2025-11-27 13:08:10 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-27 13:08:10 [INFO] root: Successfully converted props to input/props_today.csv (665 rows)
-2025-11-27 13:10:01 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-27 13:10:01 [INFO] root: Successfully converted props to input/props_today.csv (389 rows)
-2025-11-27 14:29:03 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-27 14:29:03 [INFO] root: Smart Date Detector initialized with 591 recent matchups.
-2025-11-27 14:29:03 [INFO] root: Successfully converted props to input/props_today.csv (389 rows)
-2025-11-27 15:15:57 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-27 15:15:57 [INFO] root: Smart Date Detector initialized with 591 recent matchups.
-2025-11-27 15:15:57 [INFO] root: Successfully converted props to input/props_today.csv (389 rows)
-2025-11-27 15:20:36 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-27 15:20:36 [INFO] root: Smart Date Detector initialized with 591 recent matchups.
-2025-11-27 15:20:36 [INFO] root: Successfully converted props to input/props_today.csv (389 rows)
-2025-11-27 15:26:35 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-27 15:26:35 [INFO] root: Smart Date Detector initialized with 591 recent matchups.
-2025-11-27 15:26:35 [INFO] root: Successfully converted props to input/props_today.csv (389 rows)
-2025-11-27 15:51:07 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-27 15:51:08 [INFO] root: Smart Date Detector initialized with 591 recent matchups.
-2025-11-27 15:51:08 [INFO] root: Successfully converted props to input/props_today.csv (661 rows)
-2025-11-29 02:45:52 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-29 02:45:53 [INFO] root: Successfully converted props to input/props_today.csv (661 rows)
-2025-11-29 12:01:21 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:22 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:27 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:01:32 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:38 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:01:43 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:01:48 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:01:53 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:01:58 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:02:04 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:02:09 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:02:14 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:02:19 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:02:24 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:02:29 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:02:34 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:02:39 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:02:39 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:39 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:40 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:41 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:41 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:41 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:46 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:47 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:47 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:47 [WARNING] root: Could not fetch schedule for 2025-11-30: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:47 [WARNING] root: Could not fetch schedule for 2025-11-29: 'HOME_TEAM_EST_TO'
-2025-11-29 12:02:52 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:02:57 [WARNING] root: Could not fetch schedule for 2025-11-29: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:03:02 [WARNING] root: Could not fetch schedule for 2025-11-30: HTTPSConnectionPool(host='stats.nba.com', port=443): Read timed out. (read timeout=5)
-2025-11-29 12:12:20 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-29 12:12:20 [INFO] root: Successfully converted props to input/props_today.csv (890 rows)
-2025-11-29 12:12:49 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-29 12:12:49 [INFO] root: Successfully converted props to input/props_today.csv (661 rows)
-2025-11-29 12:12:59 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-11-29 12:12:59 [INFO] root: Successfully converted props to input/props_today.csv (890 rows)
-2025-12-01 16:20:19 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-01 16:20:19 [INFO] root: Successfully converted props to input/props_today.csv (796 rows)
-2025-12-02 14:35:21 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 14:35:21 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 14:45:10 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 14:45:10 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 14:45:14 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 14:45:14 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 14:46:44 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 14:46:44 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 14:46:54 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 14:46:55 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 14:49:04 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 14:49:05 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 14:49:19 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 14:49:19 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 14:52:14 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 14:52:15 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 14:52:29 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 14:52:30 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 14:56:17 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 14:56:17 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 15:02:16 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 15:02:16 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 15:07:56 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 15:07:56 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 15:10:45 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 15:10:45 [INFO] root: Successfully converted 735 props to input/props_today.csv
-2025-12-02 15:13:48 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 15:13:48 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 15:47:16 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 15:47:16 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 15:47:21 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 15:47:21 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 15:48:53 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 15:48:53 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 15:53:27 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 15:53:27 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-02 15:58:58 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-02 15:58:58 [INFO] root: Successfully converted props to input/props_today.csv (735 rows)
-2025-12-03 16:13:29 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-03 16:13:29 [INFO] root: Successfully converted props to input/props_today.csv (703 rows)
-2025-12-03 20:49:55 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-03 20:49:55 [INFO] root: Successfully converted props to input/props_today.csv (362 rows)
-2025-12-10 22:06:07 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-10 22:06:07 [INFO] root: Successfully converted props to input/props_today.csv (954 rows)
-2025-12-10 22:07:58 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-10 22:07:58 [INFO] root: Successfully converted props to input/props_today.csv (325 rows)
-2025-12-10 22:09:26 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-10 22:09:26 [INFO] root: Successfully converted props to input/props_today.csv (954 rows)
-2025-12-10 22:17:53 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-10 22:17:54 [INFO] root: Successfully converted props to input/props_today.csv (458 rows)
-2025-12-10 22:18:59 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-10 22:18:59 [INFO] root: Successfully converted props to input/props_today.csv (458 rows)
-2025-12-11 13:48:51 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-11 13:48:52 [INFO] root: Successfully converted props to input/props_today.csv (458 rows)
-2025-12-12 11:50:17 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-12 11:50:17 [INFO] root: Successfully converted props to input/props_today.csv (1169 rows)
-2025-12-12 22:20:08 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-12 22:20:09 [INFO] root: Successfully converted props to input/props_today.csv (244 rows)
-2025-12-12 23:46:20 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-12 23:46:20 [INFO] root: >>> STARTING PROP CONVERTER <<<
-2025-12-12 23:46:20 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
-2025-12-12 23:46:20 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
-2025-12-12 23:46:20 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=3s Attempted, Line=5.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=FG Attempted, Line=14.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=FG Attempted, Line=15.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=3s Attempted, Line=4.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=Blocks + Steals, Line=2.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=3s Attempted, Line=6.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Triple Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=3s Attempted, Line=4.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Goga Bitadze, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=FG Attempted, Line=21.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=3s Attempted, Line=7.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=3s Attempted, Line=5.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=FG Attempted, Line=16.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=OG Anunoby, Prop=Blocks + Steals, Line=2.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=OG Anunoby, Prop=3s Attempted, Line=5.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Mikal Bridges, Prop=Blocks + Steals, Line=2.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Mikal Bridges, Prop=3s Attempted, Line=5.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Wendell Carter Jr., Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Anthony Black, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Tristan da Silva, Prop=3s Attempted, Line=4.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=Blocks + Steals, Line=3.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=3s Attempted, Line=4.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=3s Attempted, Line=6.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=FG Attempted, Line=15.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Chet Holmgren, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Devin Vassell, Prop=3s Attempted, Line=5.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Lu Dort, Prop=3s Attempted, Line=4.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Stephon Castle, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Julian Champagnie, Prop=3s Attempted, Line=4.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=Blocks + Steals, Line=2.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=FG Attempted, Line=18.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=3s Attempted, Line=4.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=FG Attempted, Line=14.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Harrison Barnes, Prop=3s Attempted, Line=4.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Keldon Johnson, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: Skipped incomplete prop: Player=Isaiah Hartenstein, Prop=Double Doubles, Line=0.5
-2025-12-12 23:46:20 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
-2025-12-12 23:46:20 [INFO] root: Successfully converted props to input/props_today.csv (244 rows)
-2025-12-12 23:46:20 [INFO] root: <<< CONVERTER COMPLETE >>>
-2025-12-13 00:05:23 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-13 00:05:23 [INFO] root: >>> STARTING PROP CONVERTER <<<
-2025-12-13 00:05:23 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
-2025-12-13 00:05:23 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
-2025-12-13 00:05:23 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=3s Attempted, Line=5.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=FG Attempted, Line=14.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=FG Attempted, Line=15.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=3s Attempted, Line=4.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=3s Attempted, Line=6.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Triple Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=3s Attempted, Line=4.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Goga Bitadze, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=FG Attempted, Line=21.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=3s Attempted, Line=7.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=3s Attempted, Line=5.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=FG Attempted, Line=16.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=OG Anunoby, Prop=3s Attempted, Line=5.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Mikal Bridges, Prop=3s Attempted, Line=5.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Wendell Carter Jr., Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Anthony Black, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Tristan da Silva, Prop=3s Attempted, Line=4.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=3s Attempted, Line=4.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=3s Attempted, Line=6.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=FG Attempted, Line=15.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Chet Holmgren, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Devin Vassell, Prop=3s Attempted, Line=5.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Lu Dort, Prop=3s Attempted, Line=4.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Stephon Castle, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Julian Champagnie, Prop=3s Attempted, Line=4.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=FG Attempted, Line=18.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=3s Attempted, Line=4.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=FG Attempted, Line=14.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Harrison Barnes, Prop=3s Attempted, Line=4.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Keldon Johnson, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: Skipped incomplete prop: Player=Isaiah Hartenstein, Prop=Double Doubles, Line=0.5
-2025-12-13 00:05:24 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
-2025-12-13 00:05:24 [INFO] root: Successfully converted props to input/props_today.csv (249 rows)
-2025-12-13 00:05:24 [INFO] root: <<< CONVERTER COMPLETE >>>
-2025-12-13 00:07:04 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-13 00:07:04 [INFO] root: >>> STARTING PROP CONVERTER <<<
-2025-12-13 00:07:04 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
-2025-12-13 00:07:04 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
-2025-12-13 00:07:04 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=3s Attempted, Line=5.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=FG Attempted, Line=14.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=FG Attempted, Line=15.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=3s Attempted, Line=4.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=3s Attempted, Line=6.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Triple Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=3s Attempted, Line=4.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Goga Bitadze, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=FG Attempted, Line=21.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=3s Attempted, Line=7.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=3s Attempted, Line=5.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=FG Attempted, Line=16.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=OG Anunoby, Prop=3s Attempted, Line=5.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Mikal Bridges, Prop=3s Attempted, Line=5.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Wendell Carter Jr., Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Anthony Black, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Tristan da Silva, Prop=3s Attempted, Line=4.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=3s Attempted, Line=4.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=3s Attempted, Line=6.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=FG Attempted, Line=15.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Chet Holmgren, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Devin Vassell, Prop=3s Attempted, Line=5.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Lu Dort, Prop=3s Attempted, Line=4.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Stephon Castle, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Julian Champagnie, Prop=3s Attempted, Line=4.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=FG Attempted, Line=18.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=3s Attempted, Line=4.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=FG Attempted, Line=14.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Harrison Barnes, Prop=3s Attempted, Line=4.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Keldon Johnson, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: Skipped incomplete prop: Player=Isaiah Hartenstein, Prop=Double Doubles, Line=0.5
-2025-12-13 00:07:05 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
-2025-12-13 00:07:05 [INFO] root: Successfully converted props to input/props_today.csv (249 rows)
-2025-12-13 00:07:05 [INFO] root: <<< CONVERTER COMPLETE >>>
-2025-12-13 00:27:57 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-13 00:27:57 [INFO] root: >>> STARTING PROP CONVERTER <<<
-2025-12-13 00:27:58 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
-2025-12-13 00:27:58 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
-2025-12-13 00:27:58 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Karl-Anthony Towns, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Paolo Banchero, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Jalen Suggs, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Triple Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Goga Bitadze, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Jalen Brunson, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Desmond Bane, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Wendell Carter Jr., Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Anthony Black, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Victor Wembanyama, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=De'Aaron Fox, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Chet Holmgren, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Stephon Castle, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Shai Gilgeous-Alexander, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Jalen Williams, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Keldon Johnson, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: Skipped incomplete prop: Player=Isaiah Hartenstein, Prop=Double Doubles, Line=0.5
-2025-12-13 00:27:58 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
-2025-12-13 00:27:58 [INFO] root: Successfully converted props to input/props_today.csv (272 rows)
-2025-12-13 00:27:58 [INFO] root: <<< CONVERTER COMPLETE >>>
-2025-12-13 00:42:11 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-13 00:42:11 [INFO] root: >>> STARTING PROP CONVERTER <<<
-2025-12-13 00:42:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
-2025-12-13 00:42:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
-2025-12-13 00:42:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
-2025-12-13 00:42:11 [WARNING] root: Skipped incomplete prop: Player=Josh Hart, Prop=Triple Doubles, Line=0.5
-2025-12-13 00:42:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
-2025-12-13 00:42:11 [INFO] root: Successfully converted props to input/props_today.csv (289 rows)
-2025-12-13 00:42:11 [INFO] root: <<< CONVERTER COMPLETE >>>
-2025-12-13 00:48:49 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-13 00:48:49 [INFO] root: >>> STARTING PROP CONVERTER <<<
-2025-12-13 00:48:49 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
-2025-12-13 00:48:49 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
-2025-12-13 00:48:49 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
-2025-12-13 00:48:50 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
-2025-12-13 00:48:50 [INFO] root: Successfully converted props to input/props_today.csv (290 rows)
-2025-12-13 00:48:50 [INFO] root: <<< CONVERTER COMPLETE >>>
-2025-12-14 17:53:05 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-14 17:53:05 [INFO] root: >>> STARTING PROP CONVERTER <<<
-2025-12-14 17:53:05 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
-2025-12-14 17:53:05 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
-2025-12-14 17:53:05 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=1Q 3-Pointers Made, Line=0.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=FT Made, Line=4.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=1H 3-Pointers Made, Line=2.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=Pts+Reb+Ast in First 5 Min., Line=5.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=Points in First 5 Min., Line=3.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Draymond Green, Prop=Offensive Rebounds, Line=0.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Donovan Clingan, Prop=Offensive Rebounds, Line=4.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Toumani Camara, Prop=1Q 3-Pointers Made, Line=0.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Toumani Camara, Prop=1H 3-Pointers Made, Line=1.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Toumani Camara, Prop=Offensive Rebounds, Line=2.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Quinten Post, Prop=Offensive Rebounds, Line=1.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=FT Made, Line=6.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=Points in First 5 Min., Line=2.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=Offensive Rebounds, Line=2.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jerami Grant, Prop=1Q 3-Pointers Made, Line=0.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jerami Grant, Prop=FT Made, Line=5.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Jerami Grant, Prop=1H 3-Pointers Made, Line=1.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=FT Made, Line=7.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=Points in First 5 Min., Line=2.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=Offensive Rebounds, Line=1.5
-2025-12-14 17:53:05 [WARNING] root: Skipped incomplete prop: Player=Shaedon Sharpe, Prop=FT Made, Line=3.5
-2025-12-14 17:53:05 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
-2025-12-14 17:53:05 [INFO] root: Successfully converted props to input/props_today.csv (146 rows)
-2025-12-14 17:53:05 [INFO] root: <<< CONVERTER COMPLETE >>>
-2025-12-14 17:57:38 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-14 17:57:38 [INFO] root: >>> STARTING PROP CONVERTER <<<
-2025-12-14 17:57:38 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
-2025-12-14 17:57:38 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
-2025-12-14 17:57:38 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
-2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=Pts+Reb+Ast in First 5 Min., Line=5.5
-2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Stephen Curry, Prop=Points in First 5 Min., Line=3.5
-2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
-2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Jimmy Butler, Prop=Points in First 5 Min., Line=2.5
-2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
-2025-12-14 17:57:39 [WARNING] root: Skipped incomplete prop: Player=Deni Avdija, Prop=Points in First 5 Min., Line=2.5
-2025-12-14 17:57:39 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
-2025-12-14 17:57:39 [INFO] root: Successfully converted props to input/props_today.csv (163 rows)
-2025-12-14 17:57:39 [INFO] root: <<< CONVERTER COMPLETE >>>
-2025-12-14 22:14:06 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-14 22:14:06 [INFO] root: >>> STARTING PROP CONVERTER <<<
-2025-12-14 22:14:06 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
-2025-12-14 22:14:06 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
-2025-12-14 22:14:06 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
-2025-12-14 22:14:07 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
-2025-12-14 22:14:07 [INFO] root: Successfully converted props to input/props_today.csv (352 rows)
-2025-12-14 22:14:07 [INFO] root: <<< CONVERTER COMPLETE >>>
-2025-12-16 00:07:12 [INFO] root: Logging initialized. Writing to logs/converter.log
-2025-12-16 00:07:12 [INFO] root: >>> STARTING PROP CONVERTER <<<
-2025-12-16 00:07:12 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
-2025-12-16 00:07:12 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
-2025-12-16 00:07:12 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
-2025-12-16 00:07:12 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
-2025-12-16 00:07:12 [INFO] root: Successfully converted props to input/props_today.csv (32 rows)
-2025-12-16 00:07:12 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-17 14:35:11 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-17 14:35:11 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:35:11 [WARNING] root: Skipped incomplete prop: Player=Lower, Prop=Points in First 5 Min., Line=3.5
+2025-12-17 14:35:11 [WARNING] root: Skipped incomplete prop: Player=Lower, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (8)'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (2)'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (3)'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:00PM PST'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:30PM PST'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:30PM PST'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 7:00PM PST'
+2025-12-17 14:35:11 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-17 14:35:11 [INFO] root: Successfully converted props to input/props_today.csv (75 rows)
+2025-12-17 14:35:11 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-17 14:35:40 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-17 14:35:40 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:35:40 [WARNING] root: Skipped incomplete prop: Player=Lower, Prop=Points in First 5 Min., Line=3.5
+2025-12-17 14:35:40 [WARNING] root: Skipped incomplete prop: Player=Lower, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (8)'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (2)'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (3)'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:00PM PST'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:30PM PST'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:30PM PST'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 7:00PM PST'
+2025-12-17 14:35:40 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-17 14:35:40 [INFO] root: Successfully converted props to input/props_today.csv (75 rows)
+2025-12-17 14:35:40 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-17 14:35:56 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-17 14:35:56 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:35:56 [WARNING] root: Skipped incomplete prop: Player=Lower, Prop=Points in First 5 Min., Line=3.5
+2025-12-17 14:35:56 [WARNING] root: Skipped incomplete prop: Player=Lower, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (8)'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (2)'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (3)'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:00PM PST'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:30PM PST'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:30PM PST'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 7:00PM PST'
+2025-12-17 14:35:56 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-17 14:35:56 [INFO] root: Successfully converted props to input/props_today.csv (75 rows)
+2025-12-17 14:35:56 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-17 14:36:27 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-17 14:36:27 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '$0.00'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Get up to $1,000 in bonus!'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Claim Your 50% Deposit Match • Deposit'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:36:27 [WARNING] root: Skipped incomplete prop: Player=Lower, Prop=Points in First 5 Min., Line=3.5
+2025-12-17 14:36:27 [WARNING] root: Skipped incomplete prop: Player=Lower, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (8)'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (2)'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'More picks (3)'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:00PM PST'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:30PM PST'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:30PM PST'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 7:00PM PST'
+2025-12-17 14:36:27 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-17 14:36:27 [INFO] root: Successfully converted props to input/props_today.csv (75 rows)
+2025-12-17 14:36:27 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-17 14:39:00 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-17 14:39:00 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:39:00 [WARNING] root: Skipped incomplete prop: Player=Donovan Mitchell, Prop=Points in First 5 Min., Line=3.5
+2025-12-17 14:39:00 [WARNING] root: Skipped incomplete prop: Player=Josh Giddey, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:00PM PST'
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:30PM PST'
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:30PM PST'
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 7:00PM PST'
+2025-12-17 14:39:00 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-17 14:39:00 [INFO] root: Successfully converted props to input/props_today.csv (75 rows)
+2025-12-17 14:39:00 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-17 14:39:15 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-17 14:39:15 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-17 14:39:15 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-17 14:39:15 [INFO] root: Successfully converted props to input/props_today.csv (352 rows)
+2025-12-17 14:39:15 [INFO] root: <<< CONVERTER COMPLETE >>>
+2025-12-17 14:39:28 [INFO] root: Logging initialized. Writing to logs/converter.log
+2025-12-17 14:39:28 [INFO] root: >>> STARTING PROP CONVERTER <<<
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:39:28 [WARNING] root: Skipped incomplete prop: Player=Donovan Mitchell, Prop=Points in First 5 Min., Line=3.5
+2025-12-17 14:39:28 [WARNING] root: Skipped incomplete prop: Player=Josh Giddey, Prop=Pts+Reb+Ast in First 5 Min., Line=4.5
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: '5:00PM PST'
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:00PM PST'
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 4:30PM PST'
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:00PM PST'
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 5:30PM PST'
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 6:00PM PST'
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Thu 7:00PM PST'
+2025-12-17 14:39:28 [WARNING] root: SUSPICIOUS: Line interpreted as Player Name but contains digits/keywords: 'Pick a minimum of 2 players from at least two different teams.'
+2025-12-17 14:39:28 [INFO] root: Successfully converted props to input/props_today.csv (75 rows)
+2025-12-17 14:39:28 [INFO] root: <<< CONVERTER COMPLETE >>>

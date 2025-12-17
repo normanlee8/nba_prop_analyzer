@@ -48,7 +48,7 @@ MASTER_TRAINING_FILE = DATA_DIR / "master_training_dataset.parquet"
 class Cols:
     PLAYER_NAME = 'Player Name'
     PLAYER_ID = 'PLAYER_ID'
-    GAME_ID = 'GAME_ID'
+    GAME_ID = 'GAME_ID'  # Added GAME_ID
     TEAM = 'Team'
     OPPONENT = 'Opponent'
     MATCHUP = 'Matchup'
@@ -57,43 +57,30 @@ class Cols:
     PROP_TYPE = 'Prop Category'
     PROP_LINE = 'Prop Line'
     
-    # Model Outputs
     PREDICTION = 'Model_Pred'
     CONFIDENCE = 'Model_Conf'
     EDGE_TYPE = 'Edge_Type'
     TIER = 'Tier'
-    SPREAD_PCT = 'Spread_Pct' # New: Volatility Metric
     
-    # Grading
     ACTUAL_VAL = 'Actual Value'
     RESULT = 'Result'
     CORRECTNESS = 'Correctness'
     
-    # Features
     SZN_AVG = 'SZN_AVG'
     L5_AVG = 'L5_AVG'
-    MIN_SZN_AVG = 'MIN_SZN_AVG' # New: Role Baseline
-    MIN_L5_STD = 'MIN_L5_STD'   # New: Role Volatility
     
     @classmethod
     def get_required_input_cols(cls):
         return [cls.PLAYER_NAME, cls.TEAM, cls.OPPONENT, cls.MATCHUP, cls.PROP_TYPE, cls.PROP_LINE, cls.DATE]
 
 # --- THRESHOLDS ---
-# Probability Settings (Using Z-Score Implied Probability)
-MIN_PROB_FOR_S_TIER = 0.59  # Stricter requirement for S-Tier (59%+)
-MIN_EDGE_FOR_S_TIER = 1.5   # Projection must beat line by 1.5+ (for Points/PRA)
+MIN_PROB_FOR_S_TIER = 0.59  # Slightly stricter given improved model honesty
+MIN_EDGE_FOR_S_TIER = 1.5
 MIN_EDGE_FOR_A_TIER = 1.0
-
-# Parlay Safety Settings
-MAX_PARLAY_SPREAD_PCT = 0.40  # Exclude players whose range is > 40% of the line
-MIN_PARLAY_PROB = 0.56        # Minimum confidence for a parlay leg
-
-# Live Betting / General
 LIVE_MIN_PROB_THRESHOLD = 0.65
 LIVE_BLOWOUT_THRESHOLD = 20
-BAYESIAN_PRIOR_WEIGHT = 6.0  
-EWMA_DECAY_FACTOR = 0.80     
+BAYESIAN_PRIOR_WEIGHT = 6.0  # Reduced from 12.0 to allow mid-season stats to dominate
+EWMA_DECAY_FACTOR = 0.80     # Reduced from 0.85 to make L5 trends more responsive
 MIN_GAMES_FOR_ANALYSIS = 5
 
 # --- PRIORS ---
