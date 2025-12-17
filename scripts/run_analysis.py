@@ -1,193 +1,186 @@
-import sys
 import pandas as pd
+import os
+import sys
 import logging
-from pathlib import Path
 from datetime import datetime
+import colorama
+from colorama import Fore, Style
+
+# Initialize colorama
+colorama.init(autoreset=True)
 
 # Add project root to path
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from prop_analyzer import config as cfg
-from prop_analyzer.config import Cols
-from prop_analyzer.features import generator
-from prop_analyzer.models import inference
-from prop_analyzer.utils import common
+from prop_analyzer.features.generator import generate_features
+from prop_analyzer.models.inference import predict_props
 
-def save_pretty_excel(df, output_path):
+# --- CONFIGURATION ---
+INPUT_PROPS_PATH = os.path.join(cfg.BASE_DIR, 'input', 'props_today.csv')
+OUTPUT_FILE = os.path.join(cfg.BASE_DIR, 'output', 'processed_props.xlsx')
+LOG_DIR = os.path.join(cfg.BASE_DIR, 'logs')
+
+# Parlay Safety Thresholds
+MAX_PARLAY_SPREAD_PCT = 0.40  # Max allowed volatility (Spread / Line)
+MIN_PARLAY_PROB = 0.56       # Minimum implied probability for parlay inclusion
+
+def setup_logging():
+    os.makedirs(LOG_DIR, exist_ok=True)
+    logging.basicConfig(
+        filename=os.path.join(LOG_DIR, 'analysis_pregame.log'),
+        level=logging.INFO,
+        format='%(asctime)s [%(levelname)s] %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    console = logging.StreamHandler()
+    console.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s', datefmt='%H:%M:%S')
+    console.setFormatter(formatter)
+    logging.getLogger('').addHandler(console)
+
+def load_todays_props():
+    if not os.path.exists(INPUT_PROPS_PATH):
+        logging.error(f"props_today.csv not found at {INPUT_PROPS_PATH}")
+        sys.exit(1)
+    
+    df = pd.read_csv(INPUT_PROPS_PATH)
+    # Ensure clean formatting
+    df['Prop Line'] = pd.to_numeric(df['Prop Line'], errors='coerce')
+    df = df.dropna(subset=['Prop Line', 'Player Name'])
+    return df
+
+def build_parlay(df, n_picks=6):
     """
-    Saves the dataframe to Excel.
+    Selects the best n_picks ensuring:
+    1. Highest Win Probability
+    2. Low Volatility (Spread_Pct)
+    3. Game Independence (1 pick per game)
     """
-    try:
-        if df.empty: return
-
-        # Create a Pandas Excel writer using XlsxWriter as the engine.
-        writer = pd.ExcelWriter(output_path, engine='xlsxwriter')
+    # Filter candidates
+    candidates = df[
+        (df['Tier'].isin(['S Tier', 'A Tier', 'B Tier'])) &
+        (df['Spread_Pct'] <= MAX_PARLAY_SPREAD_PCT) &
+        (df['Win_Prob'] >= MIN_PARLAY_PROB)
+    ].copy()
+    
+    # Sort by Confidence (Win_Prob) -> Edge (Diff%)
+    candidates = candidates.sort_values(by=['Win_Prob', 'Diff%'], ascending=[False, False])
+    
+    selected_picks = []
+    used_teams = set()
+    
+    for _, row in candidates.iterrows():
+        # Identify the game (Team vs Opponent)
+        team = row.get('Team', 'UNK')
+        opp = row.get('Opponent', 'UNK')
         
-        # Write data
-        df.to_excel(writer, sheet_name='Picks', index=False)
-        
-        # Get workbook/worksheet objects
-        workbook = writer.book
-        worksheet = writer.sheets['Picks']
-        
-        # --- Formats ---
-        pct_fmt = workbook.add_format({'num_format': '0.0%'})
-        header_fmt = workbook.add_format({'bold': True, 'bottom': 1, 'bg_color': '#F0F0F0'})
-
-        # Apply Header Format
-        for col_num, value in enumerate(df.columns.values):
-            worksheet.write(0, col_num, value, header_fmt)
-
-        # Apply Column Widths & Num Formats
-        for i, col in enumerate(df.columns):
-            max_len = max(df[col].astype(str).map(len).max(), len(str(col)))
-            width = min(max_len + 2, 50)
+        # Check if this game is already covered
+        if team in used_teams or opp in used_teams:
+            continue
             
-            if col == 'Prob':
-                worksheet.set_column(i, i, width, pct_fmt)
-            else:
-                worksheet.set_column(i, i, width)
-
-        writer.close()
-        logging.info(f"Saved Excel analysis to: {output_path}")
+        selected_picks.append(row)
+        used_teams.add(team)
+        used_teams.add(opp)
         
-    except Exception as e:
-        logging.error(f"Failed to save Excel file: {e}")
-
-def print_pretty_table(df, title="TOP 20 DISCOVERED EDGES"):
-    if df.empty:
-        print("No results to display.")
-        return
-
-    df_str = df.astype(str)
-    widths = [max(df_str[col].apply(len).max(), len(col)) + 2 for col in df.columns]
-    fmt = "| " + " | ".join([f"{{:<{w}}}" for w in widths]) + " |"
-
-    try:
-        header_str = fmt.format(*df.columns)
-        sep_line = "=" * len(header_str)
-
-        print(f"\n{title}")
-        print(sep_line)
-        print(header_str)
-        print(sep_line)
-
-        for _, row in df.iterrows():
-            print(fmt.format(*row.values))
-
-        print(sep_line + "\n")
-    except Exception:
-        print(df.head(20))
+        if len(selected_picks) >= n_picks:
+            break
+            
+    return pd.DataFrame(selected_picks)
 
 def main():
-    common.setup_logging(name="analysis_pregame")
-    logging.info(">>> STARTING PRE-GAME PROP ANALYSIS <<<")
+    setup_logging()
+    logging.info(">>> STARTING DAILY PROP ANALYSIS <<<")
     
+    # 1. Load Input
+    raw_props = load_todays_props()
+    logging.info(f"Loaded {len(raw_props)} props from input.")
+    
+    # 2. Generate Features
+    logging.info("Generating features (aggregating stats)...")
     try:
-        # 1. Load Today's Props
-        props_path = cfg.PROPS_FILE
-        if not props_path.exists():
-            logging.critical(f"Props file not found: {props_path}")
-            return
-
-        try:
-            props_df = pd.read_csv(props_path)
-            if props_df.empty:
-                logging.warning("props_today.csv is empty.")
-                return
-                
-            props_df.columns = props_df.columns.str.strip()
-            
-            required = Cols.get_required_input_cols()
-            missing = [c for c in required if c not in props_df.columns]
-            
-            if missing:
-                logging.critical(f"CRITICAL ERROR: Input file missing required columns: {missing}")
-                return
-
-            logging.info(f"Loaded {len(props_df)} props.")
-            
-        except Exception as e:
-            logging.critical(f"Failed to read props file: {e}")
-            return
-
-        # 2. Build Feature Vectors
-        try:
-            features_df = generator.build_feature_set(props_df)
-            if features_df.empty:
-                logging.critical("Feature generation returned empty dataset.")
-                return
-        except Exception as e:
-            logging.critical(f"Feature generation failed: {e}", exc_info=True)
-            return
-
-        # 3. Run Inference
-        logging.info("Running Machine Learning Inference...")
-        try:
-            results_df = inference.predict_props(features_df)
-        except Exception as e:
-            logging.critical(f"Inference process crashed: {e}", exc_info=True)
-            return
-        
-        if results_df is None or results_df.empty:
-            logging.warning("No predictions were generated.")
-            return
-
-        # 4. Filter & Format Output
-        if Cols.CONFIDENCE not in results_df.columns:
-            results_df[Cols.CONFIDENCE] = 0.0
-        
-        tier_map = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
-        results_df['Tier_Rank'] = results_df[Cols.TIER].map(tier_map).fillna(99)
-        results_df.sort_values(by=['Tier_Rank', Cols.CONFIDENCE], ascending=[True, False], inplace=True)
-        
-        if Cols.DATE in results_df.columns:
-            results_df[Cols.DATE] = pd.to_datetime(results_df[Cols.DATE], errors='coerce').dt.strftime('%Y-%m-%d')
-            results_df[Cols.DATE] = results_df[Cols.DATE].fillna("N/A")
-
-        keep_cols = [
-            Cols.PLAYER_NAME, Cols.TEAM, Cols.OPPONENT, Cols.PROP_TYPE, Cols.PROP_LINE, 
-            Cols.DATE,
-            Cols.PREDICTION, Cols.CONFIDENCE, Cols.EDGE_TYPE, Cols.TIER,
-            f'Diff%', f'{Cols.L5_AVG}', f'{Cols.SZN_AVG}'
-        ]
-        
-        final_cols = [c for c in keep_cols if c in results_df.columns]
-        final_output = results_df[final_cols].copy()
-
-        display_map = {
-            Cols.PLAYER_NAME: 'Player',
-            Cols.PROP_TYPE: 'Prop',
-            Cols.PROP_LINE: 'Line',
-            Cols.PREDICTION: 'Proj',
-            Cols.CONFIDENCE: 'Prob',
-            Cols.EDGE_TYPE: 'Pick',
-            Cols.DATE: 'Date',
-            f'{Cols.L5_AVG}': 'L5',
-            f'{Cols.SZN_AVG}': 'SZN'
-        }
-        final_output.rename(columns=display_map, inplace=True)
-
-        # 5. Save Results (FIXED)
-        # A. Save System Parquet (Replaces CSV)
-        results_df.to_parquet(cfg.PROCESSED_OUTPUT_SYSTEM, index=False)
-        logging.info(f"Saved system results to {cfg.PROCESSED_OUTPUT_SYSTEM}")
-        
-        # B. Save Human Excel
-        save_pretty_excel(final_output, cfg.PROCESSED_OUTPUT_XLSX)
-        
-        # C. Console
-        console_output = final_output.copy()
-        if 'Prob' in console_output.columns:
-            console_output['Prob'] = console_output['Prob'].apply(lambda x: f"{x*100:.1f}%")
-            
-        print_pretty_table(console_output.head(20))
-
-        logging.info("<<< ANALYSIS COMPLETE >>>")
-        
+        features_df = generate_features(raw_props)
     except Exception as e:
-        logging.critical(f"FATAL ERROR in Analysis Pipeline: {e}", exc_info=True)
+        logging.error(f"Feature generation failed: {e}")
         sys.exit(1)
+        
+    if features_df.empty:
+        logging.warning("No features generated. Exiting.")
+        sys.exit(0)
+
+    # 3. Run Inference (Models)
+    logging.info("Running ML Models...")
+    predictions = predict_props(features_df)
+    
+    if predictions.empty:
+        logging.warning("No predictions made.")
+        sys.exit(0)
+
+    # 4. Post-Processing & Sorting
+    # Sort primarily by Tier Rank, then Win Probability
+    tier_map = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3, 'Void': 4}
+    predictions['Tier_Rank'] = predictions['Tier'].map(tier_map)
+    
+    final_df = predictions.sort_values(
+        by=['Tier_Rank', 'Win_Prob', 'Diff%'], 
+        ascending=[True, False, False]
+    ).drop(columns=['Tier_Rank'])
+
+    # 5. Export to Excel
+    try:
+        final_df.to_excel(OUTPUT_FILE, index=False)
+        logging.info(f"Analysis saved to {OUTPUT_FILE}")
+    except Exception as e:
+        logging.error(f"Failed to save Excel output: {e}")
+
+    # 6. Terminal Output
+    print("\n" + "="*60)
+    print(f"{Fore.CYAN}>>> TOP RECOMMENDED PLAYS (S & A Tier) <<<{Style.RESET_ALL}")
+    print("="*60)
+    
+    top_plays = final_df[final_df['Tier'].isin(['S Tier', 'A Tier'])].head(15)
+    
+    if top_plays.empty:
+        print(f"{Fore.YELLOW}No S or A Tier plays found today.{Style.RESET_ALL}")
+    else:
+        print(f"{'Player':<20} | {'Prop':<15} | {'Line':<5} | {'Pick':<5} | {'Prob':<5} | {'Spread%':<7} | {'Tier'}")
+        print("-" * 85)
+        for _, row in top_plays.iterrows():
+            # Color code the tier
+            tier_color = Fore.GREEN if row['Tier'] == 'S Tier' else Fore.YELLOW
+            # Color code probability
+            prob_str = f"{row['Win_Prob']:.1%}"
+            
+            print(f"{row['Player Name']:<20} | {row['Prop Category']:<15} | {row['Prop Line']:<5} | "
+                  f"{row['Edge_Type']:<5} | {prob_str:<5} | {row['Spread_Pct']:<7.1%} | "
+                  f"{tier_color}{row['Tier']}{Style.RESET_ALL}")
+
+    # 7. Parlay Builder Output
+    print("\n" + "="*60)
+    print(f"{Fore.MAGENTA}>>> SUGGESTED 6-LEG PARLAY (Low Volatility / Independent Games) <<<{Style.RESET_ALL}")
+    print("="*60)
+    
+    parlay_picks = build_parlay(final_df, n_picks=6)
+    
+    if parlay_picks.empty:
+        print("Not enough high-confidence independent picks for a parlay today.")
+    else:
+        print(f"{'Player':<20} | {'Team':<4} | {'Opp':<4} | {'Prop':<12} | {'Pick':<5} | {'Conf':<6}")
+        print("-" * 70)
+        for _, row in parlay_picks.iterrows():
+            print(f"{row['Player Name']:<20} | {row.get('Team', 'UNK'):<4} | {row.get('Opponent', 'UNK'):<4} | "
+                  f"{row['Prop Category']:<12} | {row['Edge_Type']:<5} | {row['Win_Prob']:.1%}")
+        
+        # Calculate combined probability (naive)
+        combined_prob = parlay_picks['Win_Prob'].prod()
+        # Implied odds (1/prob)
+        implied_odds = (1 / combined_prob) if combined_prob > 0 else 0
+        print("-" * 70)
+        print(f"Est. Parlay Win Probability: {Fore.GREEN}{combined_prob:.2%}{Style.RESET_ALL}")
+        print(f"Fair Implied Odds: +{int(implied_odds * 100) if implied_odds > 0 else 0}")
+
+    print("\n")
+    logging.info("Analysis run complete.")
 
 if __name__ == "__main__":
     main()
