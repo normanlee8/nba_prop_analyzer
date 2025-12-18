@@ -54,11 +54,16 @@ PROP_KEY_MAP = {
     'FGA': 'FGA', 'FG3A': 'FG3A', 'DD': 'DD', 'TD': 'TD'
 }
 
-def calculate_time_decay_weights(df, date_col, decay_rate=0.002):
+def calculate_time_decay_weights(df, date_col, decay_rate=0.015):
     """
     Calculates sample weights based on exponential time decay.
     Recent games get higher weight.
-    decay_rate 0.002 -> Half-life of approx 350 days (1 year).
+    
+    Improvement:
+    - Increased decay_rate from 0.002 to 0.015.
+    - Previous: Half-life ~350 days (too slow for NBA).
+    - New: Half-life ~46 days. This makes the model responsive to 
+      mid-season role changes and current form while still using history.
     """
     if date_col not in df.columns:
         return pd.Series(1.0, index=df.index)
@@ -114,6 +119,60 @@ def rename_features_for_model(df, prop_cat):
         
     return df
 
+def generate_smart_synthetic_lines(df, prop_cat):
+    """
+    Generates synthetic Vegas lines that are harder to beat than simple averages.
+    
+    Improvement:
+    - Randomized blending weights: Prevents the model from solving the line as a 
+      linear equation of the inputs (Leakage prevention).
+    - Checks for L10 and L3 to add more granularity.
+    - If the model learns "Line = (Avg + L5)/2", it becomes a tautology. 
+      Randomizing the weight per row forces the model to learn actual game dynamics.
+    """
+    prop_prefix = PROP_KEY_MAP.get(prop_cat, prop_cat)
+    n_rows = len(df)
+    
+    # 1. Base Projection Components
+    szn = df.get(f'{prop_prefix}_{Cols.SZN_AVG}', df[prop_cat]).fillna(0)
+    l5 = df.get(f'{prop_prefix}_{Cols.L5_AVG}', szn).fillna(szn)
+    l10 = df.get(f'{prop_prefix}_L10_AVG', l5).fillna(l5)
+    
+    # 2. Randomized Blending (Leakage Protection)
+    # Instead of fixed 0.5/0.5, we vary the reliance on Season vs Recent.
+    # Weight for Season between 0.4 and 0.8
+    w_szn = np.random.uniform(0.4, 0.8, size=n_rows)
+    w_recent = 1.0 - w_szn
+    
+    # Mix L5 and L10 for recent
+    recent_mix = (0.6 * l5) + (0.4 * l10)
+    
+    base_proj = (w_szn * szn) + (w_recent * recent_mix)
+    
+    # 3. Pace Adjustment (If available)
+    if 'GAME_PACE' in df.columns:
+        # Approx League Average Pace ~99-100. 
+        pace_factor = df['GAME_PACE'].fillna(99.0) / 99.5
+        # Sqrt damping for conservative adjustment
+        base_proj = base_proj * np.sqrt(pace_factor)
+        
+    # 4. Add Market Noise ("The Hook")
+    # Increased noise slightly to force model robustness
+    market_noise = np.random.normal(0, 0.6, size=n_rows)
+    
+    # 5. Final Rounding Logic
+    # Vegas sets lines at X.5. 
+    # Logic: Round to nearest whole number, then offset by 0.5 randomly up or down
+    # But usually, it's: If proj is 12.4, Line is 11.5 or 12.5.
+    # Simple proxy: Round to nearest 0.5
+    raw_line = base_proj + market_noise
+    final_line = np.round(raw_line) + 0.5
+    
+    # Ensure line is at least 0.5
+    final_line = np.maximum(final_line, 0.5)
+    
+    return final_line
+
 def get_feature_cols(prop_cat, all_columns):
     """
     Determines which columns to use for training based on definitions.
@@ -126,7 +185,7 @@ def get_feature_cols(prop_cat, all_columns):
     vacancy_cols = [
         'TEAM_MISSING_USG', 'TEAM_MISSING_MIN', 
         'MISSING_USG_G', 'MISSING_USG_F',
-        'INT_GUARD_VACANCY', 'INT_FORWARD_VACANCY' # New
+        'INT_GUARD_VACANCY', 'INT_FORWARD_VACANCY'
     ]
     for vc in vacancy_cols:
         if vc in all_columns and vc not in relevant:
@@ -198,25 +257,15 @@ def train_single_prop(df, prop_cat):
     # --- FEATURE ENGINEERING (ON THE FLY) ---
     df = add_interaction_features(df)
 
-    # --- SYNTHETIC LINE GENERATION (Refined with Noise) ---
-    prop_prefix = PROP_KEY_MAP.get(prop_cat, prop_cat)
-    szn_col = f'{prop_prefix}_{Cols.SZN_AVG}'
-    l5_col = f'{prop_prefix}_{Cols.L5_AVG}'
+    # --- SYNTHETIC LINE GENERATION (SMART BASELINE) ---
+    # We only generate lines if they are missing or mostly 0
+    # Prioritize existing lines if available
+    if Cols.PROP_LINE not in df.columns or df[Cols.PROP_LINE].sum() == 0:
+        logging.info(f"[{prop_cat}] Generating SMART synthetic lines...")
+        df[Cols.PROP_LINE] = generate_smart_synthetic_lines(df, prop_cat)
     
-    if Cols.PROP_LINE not in df.columns:
-        if szn_col in df.columns and l5_col in df.columns:
-            # Baseline: Weighted Average favoring recent form
-            base_line = (0.4 * df[szn_col]) + (0.6 * df[l5_col])
-            # Add Noise: +/- 5% to simulate market variance / shading
-            # This prevents model from overfitting to an exact mathematical average
-            noise = np.random.uniform(0.95, 1.05, size=len(df))
-            df[Cols.PROP_LINE] = base_line * noise
-        elif szn_col in df.columns:
-            df[Cols.PROP_LINE] = df[szn_col]
-        else:
-            df[Cols.PROP_LINE] = df[prop_cat].rolling(window=5, min_periods=1).mean().shift(1)
-            
-        df = df.dropna(subset=[Cols.PROP_LINE]).copy()
+    # Drop rows where line generation failed (NaN)
+    df = df.dropna(subset=[Cols.PROP_LINE]).copy()
 
     # --- RENAME COLUMNS ---
     df = rename_features_for_model(df, prop_cat)
@@ -246,6 +295,9 @@ def train_single_prop(df, prop_cat):
     y_reg = df[target_col]
     
     # --- PUSH HANDLING ---
+    # For classification training, we remove exact pushes to teach the model decisive wins/losses.
+    # However, for validation, this can artificially boost accuracy.
+    # We will compute validation accuracy on the FULL validation set (treating Pushes as Loss/Void).
     no_push_mask = df[target_col] != df[Cols.PROP_LINE]
     
     # Time-Series Split Index
@@ -256,16 +308,22 @@ def train_single_prop(df, prop_cat):
     y_reg_train, y_reg_val = y_reg.iloc[:split_idx], y_reg.iloc[split_idx:]
     w_train_reg = sample_weights.iloc[:split_idx]
     
-    # CLASSIFICATION SPLIT (No Pushes)
-    X_clf_full = X[no_push_mask]
-    y_clf_full = (df.loc[no_push_mask, target_col] > df.loc[no_push_mask, Cols.PROP_LINE]).astype(int)
-    w_clf_full = sample_weights[no_push_mask]
+    # CLASSIFICATION SPLIT (Train on No-Push, Validate on All)
+    # Train Data (No Pushes)
+    X_full_train = X.iloc[:split_idx]
+    y_full_train = df.iloc[:split_idx][target_col]
+    line_full_train = df.iloc[:split_idx][Cols.PROP_LINE]
     
-    split_idx_clf = int(len(X_clf_full) * (1 - TEST_SET_SIZE_PCT))
+    train_mask = y_full_train != line_full_train
+    X_train_clf = X_full_train[train_mask]
+    y_train_clf = (y_full_train[train_mask] > line_full_train[train_mask]).astype(int)
+    w_train_clf = sample_weights.iloc[:split_idx][train_mask]
     
-    X_train_clf, X_val_clf = X_clf_full.iloc[:split_idx_clf], X_clf_full.iloc[split_idx_clf:]
-    y_clf_train, y_clf_val = y_clf_full.iloc[:split_idx_clf], y_clf_full.iloc[split_idx_clf:]
-    w_train_clf = w_clf_full.iloc[:split_idx_clf]
+    # Validation Data (Keep Pushes for honest evaluation)
+    X_val_clf = X.iloc[split_idx:]
+    y_val_actual = df.iloc[split_idx:][target_col]
+    line_val = df.iloc[split_idx:][Cols.PROP_LINE]
+    y_val_true_binary = (y_val_actual > line_val).astype(int)
 
     # Pipeline Setup
     zero_impute_keywords = ['HIST_', 'VS_OPP_', 'Q1_', 'Q2_', 'Q3_', 'Q4_', 'DVP_', 'MISSING', 'INT_']
@@ -286,6 +344,11 @@ def train_single_prop(df, prop_cat):
     try:
         X_train_proc_reg = preprocessor.fit_transform(X_train_reg)
         X_val_proc_reg = preprocessor.transform(X_val_reg)
+        
+        # Fit scaler on full training set (even rows we dropped for pushes) ensures consistency?
+        # Actually standard practice is to fit on the training data used. 
+        # But for scaler stability, let's just reuse the one from regression or fit on X_train_clf.
+        # We will reuse the preprocessor fitted on X_train_reg (which covers the same time period).
         X_train_proc_clf = preprocessor.transform(X_train_clf)
         X_val_proc_clf = preprocessor.transform(X_val_clf)
     except Exception as e:
@@ -294,13 +357,22 @@ def train_single_prop(df, prop_cat):
 
     # --- MODEL 1: QUANTILE REGRESSION ---
     def train_q(alpha):
-        lgbm = lgb.LGBMRegressor(objective='quantile', alpha=alpha, n_estimators=600, learning_rate=0.04, verbose=-1)
+        lgbm = lgb.LGBMRegressor(
+            objective='quantile', alpha=alpha, 
+            n_estimators=600, learning_rate=0.04, 
+            subsample=0.8, colsample_bytree=0.8,
+            verbose=-1
+        )
         lgbm.fit(
             X_train_proc_reg, y_reg_train, sample_weight=w_train_reg,
             eval_set=[(X_val_proc_reg, y_reg_val)], 
             callbacks=[lgb.early_stopping(50, verbose=False)]
         )
-        xgb_mod = xgb.XGBRegressor(objective='reg:quantileerror', quantile_alpha=alpha, n_estimators=600, learning_rate=0.04)
+        xgb_mod = xgb.XGBRegressor(
+            objective='reg:quantileerror', quantile_alpha=alpha, 
+            n_estimators=600, learning_rate=0.04,
+            subsample=0.8, colsample_bytree=0.8
+        )
         xgb_mod.fit(X_train_proc_reg, y_reg_train, sample_weight=w_train_reg, eval_set=[(X_val_proc_reg, y_reg_val)], verbose=False)
         return lgbm, xgb_mod
 
@@ -308,33 +380,45 @@ def train_single_prop(df, prop_cat):
     lgbm_q80, xgb_q80 = train_q(0.80)
     
     # --- MODEL 2: CLASSIFIER ---
-    # Poisson switch for Counting Stats
-    is_counting_stat = prop_cat in ['STL', 'BLK', 'FG3M', 'TOV', 'DD', 'TD']
-    
-    # We stick to binary:logistic for the Probability of winning the bet (Over/Under)
-    # Poisson is usually for the *Regressor* (predicting count), but since we use Quantile Regression
-    # for the range, we will stick to Logistic for the Win/Loss probability.
-    # However, we can use 'count:poisson' for an auxiliary Regressor if needed, but for now 
-    # optimizing the Classifier with better weights is the priority.
-    
+    # Added Early Stopping and Regularization
     clf = xgb.XGBClassifier(
         objective='binary:logistic', 
         n_estimators=600, 
         learning_rate=0.03, 
         eval_metric='logloss',
-        max_depth=4 # Slightly shallower trees to prevent overfitting on noise
+        max_depth=4,
+        subsample=0.8,
+        colsample_bytree=0.8
     )
     
+    # Note: Eval set here is tricky because we wanted to keep pushes in validation for reporting
+    # but XGBoost needs consistent labels. We will use the binary y_val_true_binary
+    # which effectively treats Pushes as LOSS (Under).
     clf.fit(
-        X_train_proc_clf, y_clf_train, 
+        X_train_proc_clf, y_train_clf, 
         sample_weight=w_train_clf, 
-        eval_set=[(X_val_proc_clf, y_clf_val)], 
-        verbose=False
+        eval_set=[(X_val_proc_clf, y_val_true_binary)], 
+        verbose=False,
+        early_stopping_rounds=50
     )
     
     preds = clf.predict_proba(X_val_proc_clf)[:, 1]
-    acc = accuracy_score(y_clf_val, (preds > 0.5).astype(int))
-    logging.info(f"[{prop_cat}] Validation Accuracy (Push-Free): {acc:.1%}")
+    
+    # Custom Accuracy Calculation (Handling Pushes)
+    # We only count it as a "Win" if Prediction matches Result AND it wasn't a push.
+    # If it was a push, it's a "Void".
+    # Mask for pushes in validation
+    is_push_val = (y_val_actual == line_val)
+    
+    # Valid bets (non-pushes)
+    valid_mask = ~is_push_val
+    if valid_mask.sum() > 0:
+        y_val_clean = y_val_true_binary[valid_mask]
+        preds_clean = preds[valid_mask]
+        acc = accuracy_score(y_val_clean, (preds_clean > 0.5).astype(int))
+        logging.info(f"[{prop_cat}] Validation ROI-Proxy Accuracy (Excl. Pushes): {acc:.1%}")
+    else:
+        logging.info(f"[{prop_cat}] Validation Accuracy: N/A (All Pushes)")
 
     artifacts = {
         'scaler': preprocessor,

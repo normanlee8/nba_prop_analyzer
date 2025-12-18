@@ -96,10 +96,8 @@ def load_clean_data(filepath_stem, required_cols=[]):
             return None
             
         if df is not None and not df.empty and required_cols:
-            # Check for missing columns but don't fail immediately
             missing = [col for col in required_cols if col not in df.columns]
             if missing:
-                # Optional: log warning if critical
                 pass 
         
         return df
@@ -304,7 +302,6 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
         season_id = folder.name
         try:
             file_stem = folder / "NBA Player Box Scores"
-            # Attempt to load with potential GAME_ID
             bs_df = load_clean_data(file_stem)
             
             if bs_df is None or bs_df.empty: 
@@ -320,11 +317,9 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
             if rename_map:
                 bs_df.rename(columns=rename_map, inplace=True)
 
-            # === FIX START: Drop redundant columns to prevent '_x' / '_y' suffixes ===
-            # We trust the id_map for these values, so we drop them from the raw box scores
+            # Drop redundant columns to prevent '_x' / '_y' suffixes from merges
             cols_to_drop = ['PLAYER_NAME', 'TEAM_ABBREVIATION', 'Player_Clean']
             bs_df.drop(columns=[c for c in cols_to_drop if c in bs_df.columns], inplace=True)
-            # === FIX END ===
 
             bs_df.dropna(subset=[Cols.PLAYER_ID], inplace=True)
             bs_df[Cols.PLAYER_ID] = bs_df[Cols.PLAYER_ID].astype(int)
@@ -398,13 +393,11 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
                 if not isinstance(matchup, str): return "UNKNOWN"
                 return matchup.split(" vs. ")[-1] if " vs. " in matchup else matchup.split(" @ ")[-1] if " @ " in matchup else "UNKNOWN"
             
-            # Safeguard if MATCHUP column is missing (though PlayerGameLogs usually has it)
             if 'MATCHUP' in bs_df.columns:
                 bs_df['OPPONENT_ABBREV'] = bs_df['MATCHUP'].apply(get_opponent)
             else:
                 bs_df['OPPONENT_ABBREV'] = "UNK"
 
-            # Deduplication: Prefer GAME_ID + PLAYER_ID if available
             subset_cols = [Cols.PLAYER_ID, Cols.DATE]
             if Cols.GAME_ID in bs_df.columns:
                 subset_cols.insert(1, Cols.GAME_ID)
@@ -434,7 +427,6 @@ def process_vs_opponent_stats(data_dir, output_dir):
     
     agg_cols = {k: 'mean' for k in ['PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 'PRA', 'PR', 'PA', 'RA', 'FANTASY_PTS', 'MIN', 'DD', 'TD'] if k in df.columns}
     
-    # Use GAME_ID for count if available, else Game_ID or something else
     count_col = Cols.GAME_ID if Cols.GAME_ID in df.columns else 'Game_ID'
     if count_col in df.columns: 
         agg_cols[count_col] = 'count'
@@ -447,51 +439,101 @@ def process_vs_opponent_stats(data_dir, output_dir):
     logging.info("Saved master_vs_opponent.parquet")
 
 def process_dvp_stats(output_dir):
-    logging.info("--- Starting: process_dvp_stats ---")
+    """
+    Calculates Defense vs Position (DvP) stats PER SEASON to avoid historical leakage.
+    Improved: Iterates through ALL master_box_scores_{season}.parquet files, calculates 
+    DVP for that specific season, and aggregates them.
+    """
+    logging.info("--- Starting: process_dvp_stats (Season-Aware) ---")
     files = sorted(output_dir.glob("master_box_scores_*.parquet"))
     if not files: return
     
-    latest_file = files[-1]
-    logging.info(f"Calculating DvP using: {latest_file.name}")
-    
-    try:
-        df = pd.read_parquet(latest_file)
-        
-        if 'Pos' not in df.columns or 'OPPONENT_ABBREV' not in df.columns: return
+    all_dvp_dfs = []
 
-        def normalize_pos(pos):
-            if not isinstance(pos, str): return 'UNKNOWN'
-            p = pos.split('-')[0].upper().strip()
-            if p == 'G': return 'SG'
-            if p == 'F': return 'PF'
-            return p
-        
-        df['Primary_Pos'] = df['Pos'].apply(normalize_pos)
-        valid_positions = ['PG', 'SG', 'SF', 'PF', 'C']
-        df = df[df['Primary_Pos'].isin(valid_positions)]
-
-        stat_cols = ['PTS', 'REB', 'AST', 'FG3M', 'PRA', 'PR', 'PA', 'RA', 'STL', 'BLK', 'TOV']
-        agg_dict = {}
-        for col in stat_cols:
-            if f'{col}_PER36' in df.columns:
-                agg_dict[f'{col}_PER36'] = 'mean'
-            elif col in df.columns:
-                agg_dict[col] = 'mean'
-        
-        if not agg_dict: return
-
-        dvp_df = df.groupby(['OPPONENT_ABBREV', 'Primary_Pos']).agg(agg_dict).reset_index()
-        
-        rename_map = {}
-        for col in agg_dict.keys():
-            base_stat = col.replace('_PER36', '')
-            rename_map[col] = f"DVP_{base_stat}"
+    for file_path in files:
+        try:
+            # Extract season_id from filename: master_box_scores_2024-25.parquet
+            match = re.search(r'\d{4}-\d{2}', file_path.name)
+            season_id = match.group(0) if match else "UNKNOWN"
+            logging.info(f"Calculating DvP for Season: {season_id}")
             
-        dvp_df.rename(columns=rename_map, inplace=True)
-        dvp_df.round(2).to_parquet(output_dir / "master_dvp_stats.parquet", index=False)
-        logging.info("Saved master_dvp_stats.parquet")
-    except Exception as e:
-        logging.error(f"Error in process_dvp_stats: {e}")
+            df = pd.read_parquet(file_path)
+            
+            required = ['Pos', 'OPPONENT_ABBREV']
+            if Cols.DATE in df.columns: required.append(Cols.DATE)
+            
+            if not all(c in df.columns for c in required):
+                logging.warning(f"Skipping {season_id}: Missing required columns.")
+                continue
+
+            def normalize_pos(pos):
+                if not isinstance(pos, str): return 'UNKNOWN'
+                p = pos.split('-')[0].upper().strip()
+                if p == 'G': return 'SG' # Default Guard bucket
+                if p == 'F': return 'PF' # Default Forward bucket
+                return p
+            
+            df['Primary_Pos'] = df['Pos'].apply(normalize_pos)
+            valid_positions = ['PG', 'SG', 'SF', 'PF', 'C']
+            df = df[df['Primary_Pos'].isin(valid_positions)].copy()
+
+            # Sort for expanding window calculation
+            if Cols.DATE in df.columns:
+                df.sort_values(by=[Cols.PLAYER_ID, Cols.DATE], inplace=True)
+
+            stat_cols = ['PTS', 'REB', 'AST', 'FG3M', 'PRA', 'PR', 'PA', 'RA', 'STL', 'BLK', 'TOV']
+            
+            # 1. Calculate Player's Avg Entering the Game (To baseline performance)
+            # GroupBy Player within this season
+            for col in stat_cols:
+                if col in df.columns:
+                    # Expanding mean excluding current game (shift 1)
+                    exp_series = df.groupby(Cols.PLAYER_ID)[col].expanding().mean()
+                    df[f'{col}_AVG'] = exp_series.groupby(level=0).shift(1).reset_index(level=0, drop=True)
+                    
+            # Drop rows where history is NaN (first game of season for player)
+            # DVP needs at least one game of history to establish baseline performance
+            df.dropna(subset=[f'{c}_AVG' for c in stat_cols if c in df.columns], inplace=True)
+
+            # 2. Calculate Differential (Actual - Expected)
+            for col in stat_cols:
+                if col in df.columns:
+                    df[f'{col}_DIFF'] = df[col] - df[f'{col}_AVG']
+
+            # 3. Aggregate Differences by Opponent & Position for this season
+            diff_cols = {f'{col}_DIFF': 'mean' for col in stat_cols if col in df.columns}
+            if not diff_cols: continue
+            
+            dvp_diffs = df.groupby(['OPPONENT_ABBREV', 'Primary_Pos']).agg(diff_cols).reset_index()
+
+            # 4. Calculate League Average Baseline for Position for this season
+            league_pos_baselines = df.groupby('Primary_Pos')[stat_cols].mean().reset_index()
+            
+            rename_map = {c: f"{c}_BASE" for c in stat_cols}
+            league_pos_baselines.rename(columns=rename_map, inplace=True)
+            
+            # 5. Combine
+            merged_dvp = pd.merge(dvp_diffs, league_pos_baselines, on='Primary_Pos', how='inner')
+            
+            season_dvp = pd.DataFrame()
+            season_dvp['SEASON_ID'] = season_id
+            season_dvp['OPPONENT_ABBREV'] = merged_dvp['OPPONENT_ABBREV']
+            season_dvp['Primary_Pos'] = merged_dvp['Primary_Pos']
+            
+            for col in stat_cols:
+                if f'{col}_DIFF' in merged_dvp.columns and f'{col}_BASE' in merged_dvp.columns:
+                    # DVP_{STAT} = Baseline + Diff
+                    season_dvp[f'DVP_{col}'] = merged_dvp[f'{col}_BASE'] + merged_dvp[f'{col}_DIFF']
+            
+            all_dvp_dfs.append(season_dvp)
+            
+        except Exception as e:
+            logging.error(f"Error processing DVP for {file_path.name}: {e}", exc_info=True)
+
+    if all_dvp_dfs:
+        final_dvp_all = pd.concat(all_dvp_dfs, ignore_index=True)
+        final_dvp_all.round(2).to_parquet(output_dir / "master_dvp_stats.parquet", index=False)
+        logging.info(f"Saved master_dvp_stats.parquet (Multi-Season: {len(final_dvp_all)} rows)")
 
 def process_q1_history(output_dir):
     """

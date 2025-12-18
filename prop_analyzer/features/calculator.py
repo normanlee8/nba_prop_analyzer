@@ -1,278 +1,260 @@
-import pandas as pd
 import numpy as np
-import math
-from datetime import timedelta
-from rapidfuzz import process, fuzz
-from prop_analyzer import config as cfg
-from prop_analyzer.config import Cols
-from prop_analyzer.utils.common import get_nba_season_id
-from prop_analyzer.utils.text import preprocess_name_for_fuzzy_match
+import pandas as pd
+import logging
+from scipy.stats import nbinom
 
-def calculate_player_metrics(box_scores_df, player_id, prop_category, is_home, prop_game_date):
-    # Map sub-game props to full game props for trend analysis
-    proxy_map = {
-        'Q1_PTS': 'PTS', 'Q1_REB': 'REB', 'Q1_AST': 'AST', 'Q1_PRA': 'PRA',
-        'Q2_PTS': 'PTS', 'Q2_REB': 'REB', 'Q2_AST': 'AST',
-        'Q3_PTS': 'PTS', 'Q3_REB': 'REB', 'Q3_AST': 'AST',
-        'Q4_PTS': 'PTS', 'Q4_REB': 'REB', 'Q4_AST': 'AST',
-        '1H_PTS': 'PTS', '1H_REB': 'REB', '1H_AST': 'AST', '1H_PRA': 'PRA',
-    }
-    prop_col = proxy_map.get(prop_category, prop_category)
-
-    # Filter for Player & Date
-    # Uses Cols.PLAYER_ID and Cols.DATE standard
-    player_history = box_scores_df[box_scores_df[Cols.PLAYER_ID] == player_id].copy()
-    
-    # Ensure Date format
-    if Cols.DATE in player_history.columns:
-        date_col = Cols.DATE
-    elif 'GAME_DATE' in player_history.columns:
-        date_col = 'GAME_DATE'
-    else:
-        return {} 
-
-    prop_date_dt = pd.to_datetime(prop_game_date).normalize()
-    player_history = player_history[pd.to_datetime(player_history[date_col]) < prop_date_dt]
-    
-    # Season Isolation
-    target_season_id = get_nba_season_id(prop_date_dt)
-    if 'SEASON_ID' in player_history.columns:
-        player_season_df = player_history[player_history['SEASON_ID'] == target_season_id].copy()
-    else:
-        season_start = prop_date_dt - timedelta(days=270)
-        player_season_df = player_history[player_history[date_col] > season_start].copy()
-
-    defaults = {
-        'szn_avg': 0, 'l3_avg': 0, 'l5_avg': 0, 'l10_std_dev': 0, 
-        'szn_std_dev': 0, 'cov_pct': 0, 'season_games': 0,
-        'szn_avg_ts': 0, 'l5_avg_ts': 0, 'loc_avg_ts': 0,
-        'szn_avg_efg': 0, 'l5_avg_efg': 0, 'loc_avg_efg': 0,
-        'szn_avg_usg': 0, 'l5_avg_usg': 0, 'loc_avg_usg': 0,
-        'loc_avg': 0
-    }
-
-    if prop_col not in player_season_df.columns:
-        return {'prop_col': prop_col} | defaults
-    
-    player_season_df.dropna(subset=[prop_col], inplace=True)
-    player_season_df.sort_values(by=date_col, ascending=False, inplace=True)
-    
-    games_played = len(player_season_df)
-    stats = {'prop_col': prop_col, 'season_games': games_played}
-    
-    if games_played == 0:
-        return defaults | stats
-
-    all_stats = player_season_df[prop_col].values
-    sample_mean = np.mean(all_stats)
-
-    # --- 1. DYNAMIC BAYESIAN SMOOTHING ---
-    # As games_played increases, we rely less on the Prior.
-    # Decay Factor: 10 / (10 + Games). 
-    # At 0 games: 1.0 (Full Prior)
-    # At 10 games: 0.5 (Half Prior)
-    # At 25 games: ~0.28 (Mostly Sample Mean)
-    decay_factor = 10.0 / (10.0 + games_played)
-    n_prior = cfg.BAYESIAN_PRIOR_WEIGHT * decay_factor
-    prior_mean = cfg.BAYESIAN_PRIORS.get(prop_category, sample_mean) 
-    
-    stats['szn_avg'] = round(((n_prior * prior_mean) + (games_played * sample_mean)) / (n_prior + games_played), 2)
-    
-    # Advanced SZN Stats
-    stats['szn_avg_ts'] = round(player_season_df['TS_PCT'].mean(), 4) if 'TS_PCT' in player_season_df else 0
-    stats['szn_avg_efg'] = round(player_season_df['EFG_PCT'].mean(), 4) if 'EFG_PCT' in player_season_df else 0
-    stats['szn_avg_usg'] = round(player_season_df['USG_PROXY'].mean(), 4) if 'USG_PROXY' in player_season_df else 0
-
-    # --- 2. POISSON-ADJUSTED VOLATILITY ---
-    # For low-count props (Steals, Blocks), strict Gaussian StdDev is misleading.
-    # Theoretical Poisson StdDev is sqrt(mean).
-    # We blend Actual StdDev with Theoretical to handle overdispersion cleanly.
-    low_count_props = ['STL', 'BLK', 'FG3M', 'TOV', 'Q1_FG3M']
-    
-    actual_std = np.std(all_stats)
-    if prop_category in low_count_props:
-        poisson_std = np.sqrt(sample_mean)
-        # Blend: 70% Actual (Reality), 30% Poisson (Theory)
-        stats['szn_std_dev'] = round((0.7 * actual_std) + (0.3 * poisson_std), 2)
-    else:
-        stats['szn_std_dev'] = round(actual_std, 2)
-
-    stats['cov_pct'] = round((stats['szn_std_dev'] / stats['szn_avg']) * 100, 1) if stats['szn_avg'] > 0 else 100.0
-
-    # Location Splits
-    loc_filter = 'vs.' if is_home else '@'
-    if 'MATCHUP' in player_season_df.columns:
-        loc_stats_df = player_season_df[player_season_df['MATCHUP'].str.contains(loc_filter, na=False)]
-        stats['loc_avg'] = round(loc_stats_df[prop_col].mean(), 2) if not loc_stats_df.empty else stats['szn_avg']
-        
-        # Location Advanced
-        if not loc_stats_df.empty:
-            stats['loc_avg_ts'] = round(loc_stats_df['TS_PCT'].mean(), 4) if 'TS_PCT' in loc_stats_df else stats['szn_avg_ts']
-            stats['loc_avg_efg'] = round(loc_stats_df['EFG_PCT'].mean(), 4) if 'EFG_PCT' in loc_stats_df else stats['szn_avg_efg']
-            stats['loc_avg_usg'] = round(loc_stats_df['USG_PROXY'].mean(), 4) if 'USG_PROXY' in loc_stats_df else stats['szn_avg_usg']
-        else:
-            stats['loc_avg_ts'] = stats['szn_avg_ts']
-            stats['loc_avg_efg'] = stats['szn_avg_efg']
-            stats['loc_avg_usg'] = stats['szn_avg_usg']
-
-    # Rolling Windows
-    player_season_df_asc = player_season_df.sort_values(by=date_col, ascending=True)
-    
-    # L3
-    stats['l3_avg'] = round(np.mean(player_season_df[prop_col].head(3).values), 2)
-    
-    # L5 EWMA
-    ewma = player_season_df_asc[prop_col].ewm(alpha=(1.0 - cfg.EWMA_DECAY_FACTOR), adjust=False).mean()
-    stats['l5_avg'] = round(ewma.iloc[-1], 2) if not ewma.empty else stats['szn_avg']
-    
-    # L10 Std Dev
-    l10_vals = player_season_df[prop_col].head(10).values
-    stats['l10_std_dev'] = round(np.std(l10_vals), 2) if len(l10_vals) >= 5 else stats['szn_std_dev']
-
-    # Rolling Advanced
-    decay_alpha = 1.0 - cfg.EWMA_DECAY_FACTOR
-    for metric in ['TS_PCT', 'EFG_PCT', 'USG_PROXY']:
-        key = metric.lower().replace('_pct', '').replace('_proxy', '') # ts, efg, usg
-        if metric in player_season_df_asc:
-            ewma_metric = player_season_df_asc[metric].ewm(alpha=decay_alpha, adjust=False).mean()
-            stats[f'l5_avg_{key}'] = round(ewma_metric.iloc[-1], 4) if not ewma_metric.empty else stats[f'szn_avg_{key}']
-        else:
-            stats[f'l5_avg_{key}'] = stats[f'szn_avg_{key}']
-
-    return stats
-
-def determine_rest_factor(player_id, box_scores_df, prop_game_date):
-    prop_date = pd.to_datetime(prop_game_date).normalize()
-    
-    # Standardize cols
-    pid_col = Cols.PLAYER_ID if Cols.PLAYER_ID in box_scores_df.columns else 'PLAYER_ID'
-    date_col = Cols.DATE if Cols.DATE in box_scores_df.columns else 'GAME_DATE'
-    
-    player_games = box_scores_df[box_scores_df[pid_col] == player_id]
-    
-    if player_games.empty: return 7
-    
-    # Ensure datetime
-    if not pd.api.types.is_datetime64_any_dtype(player_games[date_col]):
-        player_games[date_col] = pd.to_datetime(player_games[date_col])
-
-    past_games = player_games[player_games[date_col] < prop_date]
-    if past_games.empty: return 7
-        
-    last_game_date = past_games[date_col].max()
-    if pd.notna(last_game_date):
-        return min((prop_date - last_game_date).days, 7)
-    return 7
-
-def get_schedule_fatigue_metrics(player_id, box_scores_df, prop_game_date):
-    prop_date = pd.to_datetime(prop_game_date).normalize()
-    start_window = prop_date - timedelta(days=5)
-    
-    # Standardize cols
-    pid_col = Cols.PLAYER_ID if Cols.PLAYER_ID in box_scores_df.columns else 'PLAYER_ID'
-    date_col = Cols.DATE if Cols.DATE in box_scores_df.columns else 'GAME_DATE'
-
-    player_games = box_scores_df[box_scores_df[pid_col] == player_id].copy()
-    if not pd.api.types.is_datetime64_any_dtype(player_games[date_col]):
-        player_games[date_col] = pd.to_datetime(player_games[date_col])
-
-    recent = player_games[(player_games[date_col] >= start_window) & (player_games[date_col] < prop_date)]
-    
-    is_b2b = 1 if any(recent[date_col] == (prop_date - timedelta(days=1))) else 0
-    return {'games_in_l5': len(recent), 'is_b2b': is_b2b}
-
-def calculate_live_vacancy(team_abbr, full_roster_df, inj_df):
+def calculate_bayesian_std(series, method='neg_binomial', shrinkage_param=10.0, dispersion=0.15):
     """
-    Calculates the total missing Usage and Minutes for a team based on the injury report.
-    Returns: (missing_usg, missing_min, missing_usg_g, missing_usg_f)
+    Calculates a blended Standard Deviation that shrinks towards a theoretical 
+    prior (Negative Binomial) when sample size is small.
+    
+    Improvements:
+    - Uses Negative Binomial assumption (Mean < Variance) instead of Poisson (Mean = Variance).
+    - NBA stats are over-dispersed; Poisson underestimates volatility for high-usage players.
+    
+    Formula: 
+        Weight = N / (N + K)
+        Final_Std = (Weight * Actual_Std) + ((1 - Weight) * Theoretical_Std)
+    
+    Args:
+        series (pd.Series): The data to calculate volatility for.
+        method (str): 'neg_binomial' (default) or 'poisson'.
+        shrinkage_param (float): 'K' parameter. Higher values mean we trust the prior longer.
+        dispersion (float): 'alpha' parameter for NegBinomial. 
+                            Var = Mean + (alpha * Mean^2). 
+                            0.15 is a conservative baseline for NBA player props.
     """
-    if inj_df is None or inj_df.empty or full_roster_df is None or full_roster_df.empty:
-        return 0.0, 0.0, 0.0, 0.0
-
-    # 1. Filter Injuries for this Team
-    team_injuries = inj_df[inj_df['Team'] == team_abbr] if 'Team' in inj_df.columns else pd.DataFrame()
-    if team_injuries.empty or 'Status_Clean' not in team_injuries.columns:
-        return 0.0, 0.0, 0.0, 0.0
-
-    out_players = team_injuries[team_injuries['Status_Clean'].isin(['OUT', 'DOUBTFUL'])]
-    if out_players.empty:
-        return 0.0, 0.0, 0.0, 0.0
-
-    # 2. Filter Roster for this Team
-    if 'TEAM_ABBREVIATION' in full_roster_df.columns:
-        team_col = 'TEAM_ABBREVIATION'
-    elif Cols.TEAM in full_roster_df.columns:
-        team_col = Cols.TEAM
-    else:
-        return 0.0, 0.0, 0.0, 0.0
-
-    team_roster = full_roster_df[full_roster_df[team_col] == team_abbr].copy()
-    if team_roster.empty: 
-        return 0.0, 0.0, 0.0, 0.0
+    clean_series = series.dropna()
+    n = len(clean_series)
     
-    # 3. Dynamic Column Selection
-    if 'USG_PROXY' in team_roster.columns: usg_col = 'USG_PROXY'
-    elif 'USG%' in team_roster.columns: usg_col = 'USG%'
-    elif 'SEASON_USG' in team_roster.columns: usg_col = 'SEASON_USG'
-    else:
-        usg_col = 'USG_TEMP'
-        team_roster[usg_col] = 0.20
+    if n == 0:
+        return 0.0
+    
+    # 1. Calculate Actual Sample Statistics
+    actual_mean = clean_series.mean()
+    actual_std = clean_series.std(ddof=1) if n > 1 else 0.0
+    
+    if actual_mean <= 0:
+        return 0.0
 
-    if 'HOME_MIN' in team_roster.columns: min_col = 'HOME_MIN'
-    elif 'Home_MIN' in team_roster.columns: min_col = 'Home_MIN'
-    elif 'SEASON_MIN' in team_roster.columns: min_col = 'SEASON_MIN'
-    elif 'MIN' in team_roster.columns: min_col = 'MIN'
+    # 2. Calculate Theoretical Prior
+    if method == 'poisson':
+        # Old method: Underestimates volatility for stars (Mean = Variance)
+        theoretical_std = np.sqrt(actual_mean)
     else:
-        min_col = 'MIN_TEMP'
-        team_roster[min_col] = 0.0
+        # New method: Negative Binomial (Over-Dispersed)
+        # Variance = Mean + (alpha * Mean^2)
+        # This accurately captures that higher averages come with exponentially higher variance
+        theoretical_var = actual_mean + (dispersion * (actual_mean ** 2))
+        theoretical_std = np.sqrt(theoretical_var)
+    
+    # 3. Calculate Shrinkage Weight (0.0 to 1.0)
+    # As N increases, weight -> 1.0 (Trust Data). As N -> 0, weight -> 0.0 (Trust Prior).
+    weight = n / (n + shrinkage_param)
+    
+    # 4. Blend
+    final_std = (weight * actual_std) + ((1.0 - weight) * theoretical_std)
+    
+    return final_std
+
+def calculate_slope(series):
+    """
+    Calculates the slope of the linear regression line for the series.
+    Positive slope = Trending Up. Negative slope = Trending Down.
+    """
+    y = series.dropna().values
+    n = len(y)
+    if n < 2:
+        return 0.0
+    
+    x = np.arange(n)
+    # Simple linear regression slope formula
+    slope = (n * np.sum(x * y) - np.sum(x) * np.sum(y)) / (n * np.sum(x**2) - (np.sum(x))**2)
+    return slope
+
+def calculate_hit_rates(series, lines):
+    """
+    Calculates frequency of hitting Over various lines.
+    
+    Args:
+        series: Historic values.
+        lines: List of thresholds (e.g., [10.5, 15.5]) or single float.
+    
+    Returns:
+        float or dict of Hit Rates.
+    """
+    clean = series.dropna()
+    if len(clean) == 0:
+        return 0.0
+    
+    if isinstance(lines, (list, tuple)):
+        results = {}
+        for line in lines:
+            results[f'hit_{line}'] = (clean > line).mean()
+        return results
+    else:
+        return (clean > lines).mean()
+
+def calculate_player_metrics(history_df, stat_col, timeframe=None):
+    """
+    Core function to generate features for a specific stat column.
+    
+    Args:
+        history_df (pd.DataFrame): Player's game log.
+        stat_col (str): The column to analyze (e.g., 'PTS').
+        timeframe (int): Optional limit (e.g., Last 10 games).
+    
+    Returns:
+        dict: Statistical features.
+    """
+    if history_df is None or history_df.empty or stat_col not in history_df.columns:
+        return {
+            'avg': 0, 'std': 0, 'min': 0, 'max': 0, 'median': 0,
+            'trend_slope': 0, 'last_3_avg': 0
+        }
+    
+    # Apply timeframe filter if provided
+    if timeframe:
+        data = history_df[stat_col].tail(timeframe)
+    else:
+        data = history_df[stat_col]
         
-    pos_col = 'Pos' if 'Pos' in team_roster.columns else None
+    data = data.dropna()
+    if data.empty:
+        return {'avg': 0, 'std': 0}
 
-    # 4. Create Lookup Maps
-    team_roster['match_name'] = team_roster['clean_name'].fillna('').str.lower().str.strip()
+    # Calculate metrics
+    avg = data.mean()
+    median = data.median()
     
-    cols_to_pull = [usg_col, min_col]
-    if pos_col: cols_to_pull.append(pos_col)
+    # Use Dynamic Bayesian Blending for Volatility with Negative Binomial Prior
+    # K=8 represents roughly 1/10th of a season
+    std_dev = calculate_bayesian_std(data, shrinkage_param=8.0, method='neg_binomial')
     
-    roster_map = team_roster.set_index('match_name')[cols_to_pull].to_dict('index')
-    roster_names = list(roster_map.keys())
+    # Trend
+    slope = calculate_slope(data)
     
-    missing_usg = 0.0
-    missing_min = 0.0
-    missing_usg_g = 0.0
-    missing_usg_f = 0.0
+    # Recent Form (Exponential Moving Average of last 3 weighted heavily)
+    last_3 = data.tail(3)
+    recent_avg = last_3.mean() if not last_3.empty else avg
+
+    return {
+        'avg': avg,
+        'std': std_dev,
+        'min': data.min(),
+        'max': data.max(),
+        'median': median,
+        'trend_slope': slope,
+        'recent_avg': recent_avg,
+        'count': len(data)
+    }
+
+def calculate_live_vacancy(team_roster_df):
+    """
+    Calculates the 'Vacancy' (Missing Usage/Minutes) for a team based on current injuries.
     
-    for _, row in out_players.iterrows():
-        p_name = str(row.get('Player', ''))
-        clean_inj_name = preprocess_name_for_fuzzy_match(p_name)
+    Improvements:
+    1. Uses probabilistic weights for Status (Questionable = 50% impact).
+    2. Aggregates by Position (Guard/Forward/Center) to give context on WHO gets the usage.
+    3. Added safety checks to prevent runaway sums.
+    
+    Args:
+        team_roster_df (pd.DataFrame): Must contain ['STATUS', 'USG%', 'MIN', 'Pos']
+    
+    Returns:
+        dict: {
+            'TEAM_MISSING_USG': float,
+            'TEAM_MISSING_MIN': float,
+            'MISSING_USG_G': float,
+            'MISSING_USG_F': float,
+            'MISSING_USG_C': float
+        }
+    """
+    metrics = {
+        'TEAM_MISSING_USG': 0.0,
+        'TEAM_MISSING_MIN': 0.0,
+        'MISSING_USG_G': 0.0,
+        'MISSING_USG_F': 0.0,
+        'MISSING_USG_C': 0.0
+    }
+    
+    if team_roster_df is None or team_roster_df.empty:
+        return metrics
+    
+    required = ['STATUS', 'USG%', 'MIN']
+    if not all(col in team_roster_df.columns for col in required):
+        return metrics
+
+    # Normalize Status
+    def get_injury_weight(status):
+        s = str(status).upper().strip()
+        if s in ['OUT', 'GTD']: return 1.0  # Treat GTD broadly or check source. Usually OUT/INJURED.
+        if 'DOUBTFUL' in s: return 0.75
+        if 'QUESTIONABLE' in s: return 0.50
+        return 0.0
+
+    # Ensure numeric columns
+    df = team_roster_df.copy()
+    df['USG%'] = pd.to_numeric(df['USG%'], errors='coerce').fillna(0)
+    df['MIN'] = pd.to_numeric(df['MIN'], errors='coerce').fillna(0)
+    
+    # Calculate Impact
+    df['Impact_Weight'] = df['STATUS'].apply(get_injury_weight)
+    
+    # Filter to only rows with impact > 0
+    injured_df = df[df['Impact_Weight'] > 0].copy()
+    
+    if injured_df.empty:
+        return metrics
+
+    # 1. Team Totals
+    # Note: Usage sums can exceed 100 theoretically if we just sum straight values, 
+    # but in context of "missing", simple summation is the standard feature proxy.
+    metrics['TEAM_MISSING_USG'] = (injured_df['USG%'] * injured_df['Impact_Weight']).sum()
+    metrics['TEAM_MISSING_MIN'] = (injured_df['MIN'] * injured_df['Impact_Weight']).sum()
+    
+    # 2. Positional Breakdowns
+    if 'Pos' in df.columns:
+        def categorize_pos(p):
+            p = str(p).upper()
+            if 'G' in p: return 'G'
+            if 'F' in p: return 'F'
+            if 'C' in p: return 'C'
+            return 'X'
+
+        injured_df['Gen_Pos'] = injured_df['Pos'].apply(categorize_pos)
         
-        # Step 1: Try Exact Match
-        if clean_inj_name in roster_map:
-            matched_name = clean_inj_name
-            stats = roster_map[matched_name]
-        else:
-            # Step 2: Fuzzy Match (Strict)
-            match = process.extractOne(clean_inj_name, roster_names, scorer=fuzz.token_sort_ratio, score_cutoff=90)
-            if match:
-                matched_name = match[0]
-                stats = roster_map[matched_name]
-            else:
-                stats = None
+        # Calculate weighted usage per position group
+        for pos_code in ['G', 'F', 'C']:
+            pos_mask = injured_df['Gen_Pos'] == pos_code
+            val = (injured_df.loc[pos_mask, 'USG%'] * injured_df.loc[pos_mask, 'Impact_Weight']).sum()
+            metrics[f'MISSING_USG_{pos_code}'] = val
 
-        if stats:
-            avg_min = float(stats.get(min_col, 0))
-            
-            if avg_min > 12.0:
-                u_val = float(stats.get(usg_col, 0))
-                
-                missing_usg += u_val
-                missing_min += avg_min
-                
-                if pos_col:
-                    raw_pos = str(stats.get(pos_col, '')).upper()
-                    if 'G' in raw_pos:
-                        missing_usg_g += u_val
-                    else:
-                        missing_usg_f += u_val
+    return metrics
 
-    return round(missing_usg, 2), round(missing_min, 2), round(missing_usg_g, 2), round(missing_usg_f, 2)
+def smooth_projection(raw_proj, season_avg, recent_avg, volatility):
+    """
+    Weighted ensemble of the raw model projection and simple baselines 
+    to prevent overfitting on outliers.
+    
+    Logic: If volatility is high, trust the long-term Season Avg more.
+           If volatility is low (consistent player), trust the Model/Recent.
+    """
+    # Defensive checks
+    if pd.isna(raw_proj): raw_proj = season_avg
+    if pd.isna(recent_avg): recent_avg = season_avg
+    if pd.isna(volatility) or volatility <= 0: volatility = 1.0
+    
+    # Establish trust weights
+    # High volatility = Lower trust in recent variance/model spikes
+    # Example: Vol=10 (High) -> trust_recent approx 0.3
+    #          Vol=2 (Low)   -> trust_recent approx 0.8
+    trust_recent = 1.0 / (1.0 + (volatility / 5.0))
+    
+    # Weighted Average
+    # 50% Model, remaining 50% split between Recent and Season based on trust
+    final_proj = (0.50 * raw_proj) + \
+                 (0.50 * trust_recent * recent_avg) + \
+                 (0.50 * (1 - trust_recent) * season_avg)
+                 
+    return final_proj

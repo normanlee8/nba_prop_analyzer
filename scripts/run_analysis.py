@@ -1,5 +1,6 @@
 import sys
 import pandas as pd
+import numpy as np
 import logging
 from pathlib import Path
 from datetime import datetime
@@ -15,173 +16,214 @@ from prop_analyzer.utils import common
 
 def save_pretty_excel(df, output_path):
     """
-    Saves the dataframe to Excel.
+    Saves the dataframe to Excel with Autosizing and Conditional Formatting.
     """
     try:
         if df.empty: return
 
-        # Create a Pandas Excel writer using XlsxWriter as the engine.
-        writer = pd.ExcelWriter(output_path, engine='xlsxwriter')
-        
-        # Write data
-        df.to_excel(writer, sheet_name='Picks', index=False)
-        
-        # Get workbook/worksheet objects
-        workbook = writer.book
-        worksheet = writer.sheets['Picks']
-        
-        # --- Formats ---
-        pct_fmt = workbook.add_format({'num_format': '0.0%'})
-        header_fmt = workbook.add_format({'bold': True, 'bottom': 1, 'bg_color': '#F0F0F0'})
+        has_xlsxwriter = False
+        try:
+            import xlsxwriter
+            has_xlsxwriter = True
+        except ImportError:
+            logging.warning("XlsxWriter not installed. Saving standard CSV-style Excel.")
 
-        # Apply Header Format
-        for col_num, value in enumerate(df.columns.values):
-            worksheet.write(0, col_num, value, header_fmt)
-
-        # Apply Column Widths & Num Formats
-        for i, col in enumerate(df.columns):
-            max_len = max(df[col].astype(str).map(len).max(), len(str(col)))
-            width = min(max_len + 2, 50)
+        if has_xlsxwriter:
+            writer = pd.ExcelWriter(output_path, engine='xlsxwriter')
+            df.to_excel(writer, sheet_name='Picks', index=False)
+            workbook = writer.book
+            worksheet = writer.sheets['Picks']
             
-            if col == 'Prob':
-                worksheet.set_column(i, i, width, pct_fmt)
-            else:
-                worksheet.set_column(i, i, width)
+            # Formats
+            pct_fmt = workbook.add_format({'num_format': '0.0%'})
+            header_fmt = workbook.add_format({'bold': True, 'bottom': 1, 'bg_color': '#F0F0F0'})
+            
+            # Tier Colors
+            s_tier_fmt = workbook.add_format({'bg_color': '#C6EFCE', 'font_color': '#006100'}) # Green
+            a_tier_fmt = workbook.add_format({'bg_color': '#FFEB9C', 'font_color': '#9C6500'}) # Yellow
+            b_tier_fmt = workbook.add_format({'bg_color': '#E0E0E0', 'font_color': '#333333'}) # Grey
+            c_tier_fmt = workbook.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006'}) # Red
 
-        writer.close()
+            # Write Headers
+            for col_num, value in enumerate(df.columns.values):
+                worksheet.write(0, col_num, value, header_fmt)
+
+            # Auto-fit Columns
+            for i, col in enumerate(df.columns):
+                # Calculate width based on max length of data + header
+                # Limit sample to 50 rows for speed optimization
+                sample_values = df[col].astype(str).head(50)
+                max_len = max(sample_values.map(len).max(), len(str(col)))
+                width = min(max_len + 4, 40)
+                
+                if col == 'Prob':
+                    worksheet.set_column(i, i, width, pct_fmt)
+                else:
+                    worksheet.set_column(i, i, width)
+
+            # Conditional Formatting for Tiers
+            tier_col_idx = df.columns.get_loc('Tier') if 'Tier' in df.columns else -1
+            if tier_col_idx != -1:
+                # Apply format to the whole column (rows 1 to N)
+                rng = f"{xlsxwriter.utility.xl_col_to_name(tier_col_idx)}2:{xlsxwriter.utility.xl_col_to_name(tier_col_idx)}{len(df)+1}"
+                
+                worksheet.conditional_format(rng, {'type': 'text', 'criteria': 'containing', 'value': 'S Tier', 'format': s_tier_fmt})
+                worksheet.conditional_format(rng, {'type': 'text', 'criteria': 'containing', 'value': 'A Tier', 'format': a_tier_fmt})
+                worksheet.conditional_format(rng, {'type': 'text', 'criteria': 'containing', 'value': 'B Tier', 'format': b_tier_fmt})
+                worksheet.conditional_format(rng, {'type': 'text', 'criteria': 'containing', 'value': 'C Tier', 'format': c_tier_fmt})
+
+            writer.close()
+        else:
+            df.to_excel(output_path, index=False)
+
         logging.info(f"Saved Excel analysis to: {output_path}")
         
     except Exception as e:
         logging.error(f"Failed to save Excel file: {e}")
 
-def print_pretty_table(df, title="TOP 20 DISCOVERED EDGES"):
+def print_tier_summary(df):
+    """Logs a summary of findings."""
+    if 'Tier' not in df.columns: return
+    
+    counts = df['Tier'].value_counts()
+    logging.info("--- ANALYSIS SUMMARY ---")
+    for tier in ['S Tier', 'A Tier', 'B Tier', 'C Tier']:
+        count = counts.get(tier, 0)
+        logging.info(f"  {tier}: {count} props")
+    logging.info("------------------------")
+
+def print_pretty_table(df, title="TOP 15 DISCOVERED EDGES"):
     if df.empty:
         print("No results to display.")
         return
 
+    # Convert to string for display
     df_str = df.astype(str)
-    widths = [max(df_str[col].apply(len).max(), len(col)) + 2 for col in df.columns]
+    
+    widths = []
+    for col in df.columns:
+        max_len = max(df_str[col].map(len).max(), len(col))
+        widths.append(max_len + 2)
+
     fmt = "| " + " | ".join([f"{{:<{w}}}" for w in widths]) + " |"
+    total_width = sum(widths) + (3 * len(widths)) + 1
+    sep_line = "=" * total_width
 
     try:
-        header_str = fmt.format(*df.columns)
-        sep_line = "=" * len(header_str)
-
         print(f"\n{title}")
         print(sep_line)
-        print(header_str)
-        print(sep_line)
+        print(fmt.format(*df.columns))
+        print("-" * total_width)
 
         for _, row in df.iterrows():
             print(fmt.format(*row.values))
 
         print(sep_line + "\n")
     except Exception:
-        print(df.head(20))
+        print(df.head(15))
 
 def main():
     common.setup_logging(name="analysis_pregame")
     logging.info(">>> STARTING PRE-GAME PROP ANALYSIS <<<")
     
     try:
-        # 1. Load Today's Props
+        # 1. Load Props
         props_path = cfg.PROPS_FILE
         if not props_path.exists():
             logging.critical(f"Props file not found: {props_path}")
+            logging.critical("Please put 'props_today.csv' in the input folder.")
             return
 
         try:
             props_df = pd.read_csv(props_path)
-            if props_df.empty:
-                logging.warning("props_today.csv is empty.")
-                return
-                
             props_df.columns = props_df.columns.str.strip()
             
-            required = Cols.get_required_input_cols()
-            missing = [c for c in required if c not in props_df.columns]
-            
-            if missing:
-                logging.critical(f"CRITICAL ERROR: Input file missing required columns: {missing}")
-                return
-
+            # --- Robust Date Parsing ---
+            # Ensure we have valid dates for the time-travel feature generation
+            if Cols.DATE in props_df.columns:
+                props_df[Cols.DATE] = pd.to_datetime(props_df[Cols.DATE], errors='coerce')
+                # Fill missing dates with today (assuming input is for today's games)
+                if props_df[Cols.DATE].isna().any():
+                    today = pd.Timestamp.now().normalize()
+                    props_df[Cols.DATE] = props_df[Cols.DATE].fillna(today)
+            else:
+                logging.warning(f"'{Cols.DATE}' column missing. Assuming today's date.")
+                props_df[Cols.DATE] = pd.Timestamp.now().normalize()
+                
             logging.info(f"Loaded {len(props_df)} props.")
             
         except Exception as e:
             logging.critical(f"Failed to read props file: {e}")
             return
 
-        # 2. Build Feature Vectors
-        try:
-            features_df = generator.build_feature_set(props_df)
-            if features_df.empty:
-                logging.critical("Feature generation returned empty dataset.")
-                return
-        except Exception as e:
-            logging.critical(f"Feature generation failed: {e}", exc_info=True)
+        # 2. Build Features
+        features_df = generator.build_feature_set(props_df)
+        if features_df.empty: 
+            logging.error("Feature generation returned empty dataframe.")
             return
 
         # 3. Run Inference
         logging.info("Running Machine Learning Inference...")
-        try:
-            results_df = inference.predict_props(features_df)
-        except Exception as e:
-            logging.critical(f"Inference process crashed: {e}", exc_info=True)
-            return
+        results_df = inference.predict_props(features_df)
         
         if results_df is None or results_df.empty:
-            logging.warning("No predictions were generated.")
+            logging.warning("No predictions were generated. Check model artifacts or input data.")
             return
 
-        # 4. Filter & Format Output
-        if Cols.CONFIDENCE not in results_df.columns:
-            results_df[Cols.CONFIDENCE] = 0.0
+        # 4. Sorting & Ranking
+        if '_Sort_Diff' not in results_df.columns: results_df['_Sort_Diff'] = 0.0
+        if 'Tier' not in results_df.columns: results_df['Tier'] = 'C Tier'
         
+        # S Tier = 0, A Tier = 1, etc.
         tier_map = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
-        results_df['Tier_Rank'] = results_df[Cols.TIER].map(tier_map).fillna(99)
-        results_df.sort_values(by=['Tier_Rank', Cols.CONFIDENCE], ascending=[True, False], inplace=True)
+        results_df['Tier_Rank'] = results_df['Tier'].map(tier_map).fillna(99)
         
-        if Cols.DATE in results_df.columns:
-            results_df[Cols.DATE] = pd.to_datetime(results_df[Cols.DATE], errors='coerce').dt.strftime('%Y-%m-%d')
-            results_df[Cols.DATE] = results_df[Cols.DATE].fillna("N/A")
+        # Sort by Tier (asc) then by Edge Size (desc)
+        results_df.sort_values(by=['Tier_Rank', '_Sort_Diff'], ascending=[True, False], inplace=True)
+        
+        # Log Summary before formatting destroys numeric types
+        print_tier_summary(results_df)
 
+        # 5. Format Output
+        # Clean Date String for display
+        if Cols.DATE in results_df.columns:
+            results_df[Cols.DATE] = pd.to_datetime(results_df[Cols.DATE]).dt.strftime('%Y-%m-%d')
+
+        # Rename to Final Output Columns
+        rename_map = {
+            Cols.PLAYER_NAME: 'Player',
+            Cols.PROP_TYPE: 'Prop',
+            Cols.PROP_LINE: 'Line',
+            Cols.DATE: 'Date',
+        }
+        results_df.rename(columns=rename_map, inplace=True)
+
+        # Select Columns (Strictly keeping user preferred format)
         keep_cols = [
-            Cols.PLAYER_NAME, Cols.TEAM, Cols.OPPONENT, Cols.PROP_TYPE, Cols.PROP_LINE, 
-            Cols.DATE,
-            Cols.PREDICTION, Cols.CONFIDENCE, Cols.EDGE_TYPE, Cols.TIER,
-            f'Diff%', f'{Cols.L5_AVG}', f'{Cols.SZN_AVG}'
+            'Player', 'Team', 'Opponent', 'Prop', 'Line', 
+            'Proj', 'Prob', 'Pick', 'Tier', 
+            'Date'
         ]
         
         final_cols = [c for c in keep_cols if c in results_df.columns]
         final_output = results_df[final_cols].copy()
 
-        display_map = {
-            Cols.PLAYER_NAME: 'Player',
-            Cols.PROP_TYPE: 'Prop',
-            Cols.PROP_LINE: 'Line',
-            Cols.PREDICTION: 'Proj',
-            Cols.CONFIDENCE: 'Prob',
-            Cols.EDGE_TYPE: 'Pick',
-            Cols.DATE: 'Date',
-            f'{Cols.L5_AVG}': 'L5',
-            f'{Cols.SZN_AVG}': 'SZN'
-        }
-        final_output.rename(columns=display_map, inplace=True)
-
-        # 5. Save Results (FIXED)
-        # A. Save System Parquet (Replaces CSV)
-        results_df.to_parquet(cfg.PROCESSED_OUTPUT_SYSTEM, index=False)
+        # 6. Save Files
+        # Save Parquet (System)
+        final_output.to_parquet(cfg.PROCESSED_OUTPUT_SYSTEM, index=False)
         logging.info(f"Saved system results to {cfg.PROCESSED_OUTPUT_SYSTEM}")
         
-        # B. Save Human Excel
+        # Save Excel (User - Pretty)
         save_pretty_excel(final_output, cfg.PROCESSED_OUTPUT_XLSX)
         
-        # C. Console
+        # 7. Console Display
         console_output = final_output.copy()
         if 'Prob' in console_output.columns:
-            console_output['Prob'] = console_output['Prob'].apply(lambda x: f"{x*100:.1f}%")
+            # Format Prob as % string for console only
+            if pd.api.types.is_numeric_dtype(console_output['Prob']):
+                console_output['Prob'] = console_output['Prob'].apply(lambda x: f"{x*100:.1f}%")
             
-        print_pretty_table(console_output.head(20))
+        print_pretty_table(console_output.head(15))
 
         logging.info("<<< ANALYSIS COMPLETE >>>")
         

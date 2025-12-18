@@ -41,85 +41,141 @@ Claim Your 50% Deposit Match • Deposit
 
 
 
-
-
-
-
 All NBA
 Collapse all
 
-CLE @ CHI
-5:00PM PST
-Donovan Mitchell
+ATL @ CHA
+Thu 4:00PM PST
+LaMelo Ball
 
-CLE @ CHI - 5:00PM PST
+CHA vs ATL - Thu 4:00PM PST
 
 
-30.5
+18.5
 Points
 
 Higher
 
 Lower
 
-40.5
+31.5
 Pts + Rebs + Asts
 
 Higher
 
 Lower
-35.5
-Points + Rebounds
-
-Higher
-
-Lower
-36.5
-Points + Assists
-
-Higher
-
-Lower
-46.05
-
-Fantasy Points
+4.5
+Rebounds
 
 Higher
 
 Lower
 
-5.5
-FT Made
+12.5
+Rebounds + Assists
 
 Higher
 
 Lower
-15.5
-1H Points
+Brandon Miller
+
+CHA vs ATL - Thu 4:00PM PST
+
+
+19.5
+Points
 
 Higher
 
 Lower
-18.5
-1H Pts + Rebs + Asts
+
+27.5
+Pts + Rebs + Asts
 
 Higher
 
 Lower
+Jalen Johnson
+
+ATL @ CHA - Thu 4:00PM PST
+
+
+23.5
+Points
+
+Higher
+
+Lower
+
+41.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Onyeka Okongwu
+
+ATL @ CHA - Thu 4:00PM PST
+
+
+16.5
+Points
+
+Higher
+
+Lower
+
+28.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+11.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Dyson Daniels
+
+ATL @ CHA - Thu 4:00PM PST
+
+
+13.5
+Points
+
+Higher
+
+Lower
+
+25.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+0.5
+3-Pointers Made
+
+Higher
+
+Lower
+
 3.5
-Points in First 5 Min.
+1Q Points
 
 Higher
 
 Lower
+Trae Young
 
-Fewer picks
-Coby White
-
-CHI vs CLE - 5:00PM PST
+ATL @ CHA - Thu 4:00PM PST
 
 
-21.5
+19.5
 Points
 
 Higher
@@ -132,43 +188,158 @@ Pts + Rebs + Asts
 Higher
 
 Lower
-25.5
-Points + Rebounds
+7.5
+Assists
 
 Higher
 
 Lower
-25.5
-Points + Assists
+Miles Bridges
+
+CHA vs ATL - Thu 4:00PM PST
+
+
+20.5
+Points
 
 Higher
 
 Lower
-32.25
 
-Fantasy Points
-
-Higher
-
-Lower
-2.5
-Turnovers
+32.5
+Pts + Rebs + Asts
 
 Higher
 
 Lower
+
 10.5
-1H Points
+Rebounds + Assists
 
 Higher
 
 Lower
 
-Fewer picks
-Josh Giddey
+1.5
+1Q Rebounds
 
-CHI vs CLE - 5:00PM PST
+Higher
 
+Lower
+Zaccharie Risacher
+
+ATL @ CHA - Thu 4:00PM PST
+
+
+10.5
+Points
+
+Higher
+
+Lower
+
+14.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Kon Knueppel
+
+CHA vs ATL - Thu 4:00PM PST
+
+
+18.5
+Points
+
+Higher
+
+Lower
+
+27.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+4.5
+1Q Points
+
+Higher
+
+Lower
+Ryan Kalkbrenner
+
+CHA vs ATL - Thu 4:00PM PST
+
+
+14.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+1.5
+1Q Rebounds
+
+Higher
+
+Lower
+
+NYK @ IND
+Thu 4:00PM PST
+Jalen Brunson
+
+NYK @ IND - Thu 4:00PM PST
+
+
+29.5
+Points
+
+Higher
+
+Lower
+
+40.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+6.5
+Assists
+
+Higher
+
+Lower
+
+2.5
+3-Pointers Made
+
+Higher
+
+Lower
+
+9.5
+1Q Points
+
+Higher
+
+Lower
+Pascal Siakam
+
+IND vs NYK - Thu 4:00PM PST
+
+
+24.5
+Points
+
+Higher
+
+Lower
 
 35.5
 Pts + Rebs + Asts
@@ -177,20 +348,763 @@ Higher
 
 Lower
 
-16.5
+1.5
+3-Pointers Made
+
+Higher
+
+Lower
+
+10.5
 Rebounds + Assists
 
 Higher
 
 Lower
-27.5
-Points + Rebounds
+
+1.5
+1Q Rebounds
 
 Higher
 
 Lower
+Josh Hart
+
+NYK @ IND - Thu 4:00PM PST
+
+
+13.5
+Points
+
+Higher
+
+Lower
+
 27.5
-Points + Assists
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Andrew Nembhard
+
+IND vs NYK - Thu 4:00PM PST
+
+
+15.5
+Points
+
+Higher
+
+Lower
+
+26.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+3.5
+1Q Points
+
+Higher
+
+Lower
+Jay Huff
+
+IND vs NYK - Thu 4:00PM PST
+
+
+10.5
+Points
+
+Higher
+
+Lower
+
+17.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Jarace Walker
+
+IND vs NYK - Thu 4:00PM PST
+
+
+11.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+3.5
+Rebounds
+
+Higher
+
+Lower
+Karl-Anthony Towns
+
+NYK @ IND - Thu 4:00PM PST
+
+
+21.5
+Points
+
+Higher
+
+Lower
+
+36.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+11.5
+Rebounds
+
+Higher
+
+Lower
+OG Anunoby
+
+NYK @ IND - Thu 4:00PM PST
+
+
+16.5
+Points
+
+Higher
+
+Lower
+24.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Mikal Bridges
+
+NYK @ IND - Thu 4:00PM PST
+
+
+16.5
+Points
+
+Higher
+
+Lower
+
+24.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+4.5
+Rebounds
+
+Higher
+
+Lower
+Bennedict Mathurin
+
+IND vs NYK - Thu 4:00PM PST
+
+
+18.5
+Points
+
+Higher
+
+Lower
+
+27.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+1.5
+1Q Rebounds
+
+Higher
+
+Lower
+Isaiah Jackson
+
+IND vs NYK - Thu 4:00PM PST
+
+
+7.5
+Points
+
+Higher
+
+Lower
+
+14.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+6.5
+Rebounds
+
+Higher
+
+Lower
+
+MIA @ BKN
+Thu 4:30PM PST
+Bam Adebayo
+
+MIA @ BKN - Thu 4:30PM PST
+
+
+32.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+4.5
+1Q Points
+
+Higher
+
+Lower
+
+2.5
+1Q Rebounds
+
+Higher
+
+Lower
+Tyler Herro
+
+MIA @ BKN - Thu 4:30PM PST
+
+21.5
+Points
+
+Higher
+
+Lower
+30.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+3.5
+Assists
+
+Higher
+
+Lower
+8.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Michael Porter Jr.
+
+BKN vs MIA - Thu 4:30PM PST
+
+
+25.5
+Points
+
+Higher
+
+Lower
+
+36.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+3.5
+3-Pointers Made
+
+Higher
+
+Lower
+
+6.5
+1Q Points
+
+Higher
+
+Lower
+Norman Powell
+
+MIA @ BKN - Thu 4:30PM PST
+
+
+24.5
+Points
+
+Higher
+
+Lower
+
+30.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Egor Demin
+
+BKN vs MIA - Thu 4:30PM PST
+
+
+8.5
+Points
+
+Higher
+
+Lower
+
+15.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+1.5
+3-Pointers Made
+
+Higher
+
+Lower
+Ziaire Williams
+
+BKN vs MIA - Thu 4:30PM PST
+
+
+8.5
+Points
+
+Higher
+
+Lower
+
+12.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+1.5
+3-Pointers Made
+
+Higher
+
+Lower
+Nic Claxton
+
+BKN vs MIA - Thu 4:30PM PST
+
+
+13.5
+Points
+
+Higher
+
+Lower
+
+26.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+3.5
+1Q Points
+
+Higher
+
+Lower
+Andrew Wiggins
+
+MIA @ BKN - Thu 4:30PM PST
+
+
+17.5
+Points
+
+Higher
+
+Lower
+
+25.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Terance Mann
+
+BKN vs MIA - Thu 4:30PM PST
+
+
+15.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+3.5
+Assists
+
+Higher
+
+Lower
+7.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Davion Mitchell
+
+MIA @ BKN - Thu 4:30PM PST
+
+
+22.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Noah Clowney
+
+BKN vs MIA - Thu 4:30PM PST
+
+
+15.5
+Points
+
+Higher
+
+Lower
+
+21.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+2.5
+3-Pointers Made
+
+Higher
+
+Lower
+
+3.5
+1Q Points
+
+Higher
+
+Lower
+
+LAC @ OKC
+Thu 5:00PM PST
+Kawhi Leonard
+
+LAC @ OKC - Thu 5:00PM PST
+
+
+24.5
+Points
+
+Higher
+
+Lower
+
+33.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+5.5
+1Q Points
+
+Higher
+
+Lower
+Chet Holmgren
+
+OKC vs LAC - Thu 5:00PM PST
+
+
+16.5
+Points
+
+Higher
+
+Lower
+
+26.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+10.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Ivica Zubac
+
+LAC @ OKC - Thu 5:00PM PST
+
+
+12.5
+Points
+
+Higher
+
+Lower
+
+26.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+13.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Alex Caruso
+
+OKC vs LAC - Thu 5:00PM PST
+
+
+5.5
+Points
+
+Higher
+
+Lower
+John Collins
+
+LAC @ OKC - Thu 5:00PM PST
+
+
+10.5
+Points
+
+Higher
+
+Lower
+
+15.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+3.5
+1Q Points
+
+Higher
+
+Lower
+Nicolas Batum
+
+LAC @ OKC - Thu 5:00PM PST
+
+
+11.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Shai Gilgeous-Alexander
+
+OKC vs LAC - Thu 5:00PM PST
+
+
+30.5
+Points
+
+Higher
+
+Lower
+
+41.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+10.5
+Rebounds + Assists
+
+Higher
+
+Lower
+
+1.5
+1Q Rebounds
+
+Higher
+
+Lower
+Jalen Williams
+
+OKC vs LAC - Thu 5:00PM PST
+
+
+1.5
+1Q Rebounds
+
+Higher
+
+Lower
+Bogdan Bogdanovic
+
+LAC @ OKC - Thu 5:00PM PST
+
+
+10.5
+Points
+
+Higher
+
+Lower
+
+16.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Lu Dort
+
+OKC vs LAC - Thu 5:00PM PST
+
+
+7.5
+Points
+
+Higher
+
+Lower
+Cason Wallace
+
+OKC vs LAC - Thu 5:00PM PST
+
+
+7.5
+Points
+
+Higher
+
+Lower
+
+12.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Ajay Mitchell
+
+OKC vs LAC - Thu 5:00PM PST
+
+
+16.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+HOU @ NOP
+Thu 5:00PM PST
+Kevin Durant
+
+HOU @ NOP - Thu 5:00PM PST
+
+
+24.5
+Points
+
+Higher
+
+Lower
+
+32.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+6.5
+1Q Points
+
+Higher
+
+Lower
+Alperen Sengun
+
+HOU @ NOP - Thu 5:00PM PST
+
+
+21.5
+Points
+
+Higher
+
+Lower
+
+38.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+0.5
+3-Pointers Made
 
 Higher
 
@@ -201,74 +1115,106 @@ Double Doubles
 Higher
 
 Lower
-40.15
+Jabari Smith Jr.
 
-Fantasy Points
+HOU @ NOP - Thu 5:00PM PST
+
+
+15.5
+Points
+
+Higher
+
+Lower
+
+23.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+6.5
+Rebounds
+
+Higher
+
+Lower
+8.5
+Rebounds + Assists
 
 Higher
 
 Lower
 
 3.5
-FT Made
+1Q Points
 
 Higher
 
 Lower
-17.5
-1H Pts + Rebs + Asts
 
-Higher
-
-Lower
-4.5
-Pts+Reb+Ast in First 5 Min.
+1.5
+1Q Rebounds
 
 Higher
 
 Lower
 
 Fewer picks
-De'Andre Hunter
+Jose Alvarado
 
-CLE @ CHI - 5:00PM PST
+NOP vs HOU - Thu 5:00PM PST
 
 
-21.5
+5.5
+Points
+
+Higher
+
+Lower
+10.5
 Pts + Rebs + Asts
 
 Higher
 
 Lower
-Ayo Dosunmu
+Amen Thompson
 
-CHI vs CLE - 5:00PM PST
+HOU @ NOP - Thu 5:00PM PST
 
 
-15.5
+29.5
 Pts + Rebs + Asts
 
 Higher
 
 Lower
-Thomas Bryant
+Saddiq Bey
 
-CLE @ CHI - 5:00PM PST
+NOP vs HOU - Thu 5:00PM PST
 
 
-9.5
+10.5
+Points
+
+Higher
+
+Lower
+
+16.5
 Pts + Rebs + Asts
 
 Higher
 
 Lower
-Jaylon Tyson
+Aaron Holiday
 
-CLE @ CHI - 5:00PM PST
+HOU @ NOP - Thu 5:00PM PST
 
 
-21.5
-Pts + Rebs + Asts
+7.5
+Points
 
 Higher
 
@@ -280,9 +1226,292 @@ Lower
 Higher
 
 Lower
-Darius Garland
+Josh Okogie
 
-CLE @ CHI - 5:00PM PST
+HOU @ NOP - Thu 5:00PM PST
+
+
+7.5
+Points
+
+Higher
+
+Lower
+Zion Williamson
+
+NOP vs HOU - Thu 5:00PM PST
+
+
+26.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+4.5
+Rebounds
+
+Higher
+
+Lower
+Jordan Poole
+
+NOP vs HOU - Thu 5:00PM PST
+
+
+15.5
+Points
+
+Higher
+
+Lower
+
+20.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+2.5
+3-Pointers Made
+
+Higher
+
+Lower
+
+3.5
+1Q Points
+
+Higher
+
+Lower
+Reed Sheppard
+
+HOU @ NOP - Thu 5:00PM PST
+
+
+11.5
+Points
+
+Higher
+
+Lower
+
+17.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+2.5
+Rebounds
+
+Higher
+
+Lower
+Trey Murphy III
+
+NOP vs HOU - Thu 5:00PM PST
+
+
+18.5
+Points
+
+Higher
+
+Lower
+
+26.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+2.5
+Assists
+
+Higher
+
+Lower
+Herb Jones
+
+NOP vs HOU - Thu 5:00PM PST
+
+
+6.5
+Points
+
+Higher
+
+Lower
+Steven Adams
+
+HOU @ NOP - Thu 5:00PM PST
+
+
+5.5
+Points
+
+Higher
+
+Lower
+Jeremiah Fears
+
+NOP vs HOU - Thu 5:00PM PST
+
+
+12.5
+Points
+
+Higher
+
+Lower
+
+18.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Derik Queen
+
+NOP vs HOU - Thu 5:00PM PST
+
+
+23.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+TOR @ MIL
+Thu 5:00PM PST
+Scottie Barnes
+
+TOR @ MIL - Thu 5:00PM PST
+
+
+19.5
+Points
+
+Higher
+
+Lower
+
+33.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+13.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Kyle Kuzma
+
+MIL vs TOR - Thu 5:00PM PST
+
+
+22.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Immanuel Quickley
+
+TOR @ MIL - Thu 5:00PM PST
+
+
+16.5
+Points
+
+Higher
+
+Lower
+
+26.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+3.5
+Rebounds
+
+Higher
+
+Lower
+
+9.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Bobby Portis
+
+MIL vs TOR - Thu 5:00PM PST
+
+
+14.5
+Points
+
+Higher
+
+Lower
+
+23.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+8.5
+Rebounds + Assists
+
+Higher
+
+Lower
+
+1.5
+1Q Rebounds
+
+Higher
+
+Lower
+Sandro Mamukelashvili
+
+TOR @ MIL - Thu 5:00PM PST
+
+
+14.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+4.5
+Rebounds
+
+Higher
+
+Lower
+Kevin Porter Jr.
+
+MIL vs TOR - Thu 5:00PM PST
 
 
 20.5
@@ -291,46 +1520,173 @@ Points
 Higher
 
 Lower
-27.5
-Points + Assists
+
+33.5
+Pts + Rebs + Asts
 
 Higher
 
 Lower
-34.85
+Brandon Ingram
 
-Fantasy Points
+TOR @ MIL - Thu 5:00PM PST
 
-Higher
 
-Lower
-10.5
-1H Points
-
-Higher
-
-Lower
-15.5
-1H Pts + Rebs + Asts
+24.5
+Points
 
 Higher
 
 Lower
 
-16.5
-FG Attempted
+34.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Myles Turner
+
+MIL vs TOR - Thu 5:00PM PST
+
+
+12.5
+Points
 
 Higher
 
 Lower
 
-Fewer picks
-Nikola Vucevic
+19.5
+Pts + Rebs + Asts
 
-CHI vs CLE - 5:00PM PST
+Higher
+
+Lower
+Jakob Poeltl
+
+TOR @ MIL - Thu 5:00PM PST
+
+
+9.5
+Points
+
+Higher
+
+Lower
+
+20.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+8.5
+Rebounds
+
+Higher
+
+Lower
+Jamal Shead
+
+TOR @ MIL - Thu 5:00PM PST
 
 
 14.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Ryan Rollins
+
+MIL vs TOR - Thu 5:00PM PST
+
+
+17.5
+Points
+
+Higher
+
+Lower
+
+27.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+AJ Green
+
+MIL vs TOR - Thu 5:00PM PST
+
+
+16.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+WAS @ SAS
+Thu 5:00PM PST
+Victor Wembanyama
+
+SAS vs WAS - Thu 5:00PM PST
+
+
+19.5
+Points
+
+Higher
+
+Lower
+
+34.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+13.5
+Rebounds + Assists
+
+Higher
+
+Lower
+
+2.5
+1Q Rebounds
+
+Higher
+
+Lower
+Devin Vassell
+
+SAS vs WAS - Thu 5:00PM PST
+
+
+15.5
+Points
+
+Higher
+
+Lower
+
+21.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Alex Sarr
+
+WAS @ SAS - Thu 5:00PM PST
+
+
+15.5
 Points
 
 Higher
@@ -343,129 +1699,99 @@ Pts + Rebs + Asts
 Higher
 
 Lower
-22.5
-Points + Rebounds
+Dylan Harper
 
-Higher
-
-Lower
-29.95
-
-Fantasy Points
-
-Higher
-
-Lower
-Jarrett Allen
-
-CLE @ CHI - 5:00PM PST
-
-23.5
-Points + Rebounds
-
-Higher
-
-Lower
-7.5
-1Q Pts + Rebs + Asts
-
-Higher
-
-Lower
-31.05
-
-Fantasy Points
-
-Higher
-
-Lower
-Lonzo Ball
-
-CLE @ CHI - 5:00PM PST
-
-4.5
-3s Attempted
-
-Higher
-
-Lower
-Dean Wade
-
-CLE @ CHI - 5:00PM PST
+SAS vs WAS - Thu 5:00PM PST
 
 
-12.5
-Pts + Rebs + Asts
-
-Higher
-
-Lower
-Kevin Huerter
-
-CHI vs CLE - 5:00PM PST
-
-
-1.5
-Assists
-
-Higher
-
-Lower
-
-MEM @ MIN
-5:00PM PST
-Anthony Edwards
-
-MIN vs MEM - 5:00PM PST
-
-
-27.5
+14.5
 Points
 
 Higher
 
 Lower
 
-37.5
+21.5
 Pts + Rebs + Asts
 
 Higher
 
 Lower
-32.5
-Points + Rebounds
+Julian Champagnie
+
+SAS vs WAS - Thu 5:00PM PST
+
+
+4.5
+Rebounds
 
 Higher
 
 Lower
-32.5
-Points + Assists
+Kyshawn George
 
-Higher
-
-Lower
-
-More picks (8)
-Rudy Gobert
-
-MIN vs MEM - 5:00PM PST
+WAS @ SAS - Thu 5:00PM PST
 
 
-23.5
+25.5
 Pts + Rebs + Asts
 
 Higher
 
 Lower
+
 3.5
-Offensive Rebounds
+1Q Points
 
 Higher
 
 Lower
-Jaren Jackson Jr.
+De'Aaron Fox
 
-MEM @ MIN - 5:00PM PST
+SAS vs WAS - Thu 5:00PM PST
+
+
+22.5
+Points
+
+Higher
+
+Lower
+
+3.5
+Rebounds
+
+Higher
+
+Lower
+
+5.5
+1Q Points
+
+Higher
+
+Lower
+Harrison Barnes
+
+SAS vs WAS - Thu 5:00PM PST
+
+
+11.5
+Points
+
+Higher
+
+Lower
+
+17.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+CJ McCollum
+
+WAS @ SAS - Thu 5:00PM PST
 
 
 19.5
@@ -482,23 +1808,496 @@ Higher
 
 Lower
 
+4.5
+1Q Points
+
+Higher
+
+Lower
+Stephon Castle
+
+SAS vs WAS - Thu 5:00PM PST
+
+
+30.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Bilal Coulibaly
+
+WAS @ SAS - Thu 5:00PM PST
+
+
+14.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+DET @ DAL
+Thu 5:30PM PST
+Cooper Flagg
+
+DAL vs DET - Thu 5:30PM PST
+
+
+19.5
+Points
+
+Higher
+
+Lower
+
+28.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+5.5
+Rebounds
+
+Higher
+
+Lower
+
+4.5
+1Q Points
+
+Higher
+
+Lower
+Cade Cunningham
+
+DET @ DAL - Thu 5:30PM PST
+
+
+26.5
+Points
+
+Higher
+
+Lower
+
+9.5
+Assists
+
+Higher
+
+Lower
+0.5
+Double Doubles
+
+Higher
+
+Lower
+Tobias Harris
+
+DET @ DAL - Thu 5:30PM PST
+
+
+13.5
+Points
+
+Higher
+
+Lower
+
+20.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+4.5
+Rebounds
+
+Higher
+
+Lower
+Ausar Thompson
+
+DET @ DAL - Thu 5:30PM PST
+
+
+17.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+5.5
+Rebounds
+
+Higher
+
+Lower
+7.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Caris LeVert
+
+DET @ DAL - Thu 5:30PM PST
+
+
+8.5
+Points
+
+Higher
+
+Lower
+
+13.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+2.5
+Assists
+
+Higher
+
+Lower
+Naji Marshall
+
+DAL vs DET - Thu 5:30PM PST
+
+
+19.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+2.5
+Assists
+
+Higher
+
+Lower
+Ryan Nembhard
+
+DAL vs DET - Thu 5:30PM PST
+
+
+8.5
+Points
+
+Higher
+
+Lower
+
+8.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Anthony Davis
+
+DAL vs DET - Thu 5:30PM PST
+
+
+22.5
+Points
+
+Higher
+
+Lower
+
+36.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+0.5
+3-Pointers Made
+
+Higher
+
+Lower
+13.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Jaden Ivey
+
+DET @ DAL - Thu 5:30PM PST
+
+
+8.5
+Points
+
+Higher
+
+Lower
+
+12.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+1.5
+Assists
+
+Higher
+
+Lower
+PJ Washington
+
+DAL vs DET - Thu 5:30PM PST
+
+
+14.5
+Points
+
+Higher
+
+Lower
+
+23.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
 1.5
 3-Pointers Made
 
 Higher
 
 Lower
-24.5
-Points + Rebounds
+8.5
+Rebounds + Assists
 
 Higher
 
 Lower
 
-More picks (2)
-Vince Williams Jr.
+3.5
+1Q Points
 
-MEM @ MIN - 5:00PM PST
+Higher
+
+Lower
+
+1.5
+1Q Rebounds
+
+Higher
+
+Lower
+
+Fewer picks
+Jalen Duren
+
+DET @ DAL - Thu 5:30PM PST
+
+
+30.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+12.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Isaiah Stewart
+
+DET @ DAL - Thu 5:30PM PST
+
+
+7.5
+Points
+
+Higher
+
+Lower
+
+14.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+5.5
+Rebounds
+
+Higher
+
+Lower
+Duncan Robinson
+
+DET @ DAL - Thu 5:30PM PST
+
+
+9.5
+Points
+
+Higher
+
+Lower
+
+LAL @ UTA
+Thu 6:00PM PST
+LeBron James
+
+LAL @ UTA - Thu 6:00PM PST
+
+
+21.5
+Points
+
+Higher
+
+Lower
+
+13.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Lauri Markkanen
+
+UTA vs LAL - Thu 6:00PM PST
+
+
+26.5
+Points
+
+Higher
+
+Lower
+
+34.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+6.5
+Rebounds
+
+Higher
+
+Lower
+Rui Hachimura
+
+LAL @ UTA - Thu 6:00PM PST
+
+
+12.5
+Points
+
+Higher
+
+Lower
+
+17.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Ace Bailey
+
+UTA vs LAL - Thu 6:00PM PST
+
+
+20.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Jaxson Hayes
+
+LAL @ UTA - Thu 6:00PM PST
+
+
+8.5
+Points
+
+Higher
+
+Lower
+8.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Luka Doncic
+
+LAL @ UTA - Thu 6:00PM PST
+
+
+35.5
+Points
+
+Higher
+
+Lower
+
+54.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+18.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Keyonte George
+
+UTA vs LAL - Thu 6:00PM PST
+
+
+25.5
+Points
+
+Higher
+
+Lower
+
+35.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Marcus Smart
+
+LAL @ UTA - Thu 6:00PM PST
 
 
 10.5
@@ -508,26 +2307,122 @@ Higher
 
 Lower
 
-1.5
-3-Pointers Made
+16.5
+Pts + Rebs + Asts
 
 Higher
 
 Lower
-Santi Aldama
+Jusuf Nurkic
 
-MEM @ MIN - 5:00PM PST
+UTA vs LAL - Thu 6:00PM PST
 
 
-26.5
+9.5
+Points
+
+Higher
+
+Lower
+
+8.5
+Rebounds
+
+Higher
+
+Lower
+Svi Mykhailiuk
+
+UTA vs LAL - Thu 6:00PM PST
+
+
+7.5
+Points
+
+Higher
+
+Lower
+
+11.5
 Pts + Rebs + Asts
 
 Higher
 
 Lower
 
+1.5
+3-Pointers Made
+
+Higher
+
+Lower
+
+ORL @ DEN
+Thu 6:00PM PST
+Nikola Jokic
+
+DEN vs ORL - Thu 6:00PM PST
+
+
+29.5
+Points
+
+Higher
+
+Lower
+
+51.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+11.5
+Rebounds
+
+Higher
+
+Lower
+
+21.5
+Rebounds + Assists
+
+Higher
+
+Lower
+
 3.5
-Assists
+1Q Assists
+
+Higher
+
+Lower
+Desmond Bane
+
+ORL @ DEN - Thu 6:00PM PST
+
+
+33.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Wendell Carter Jr.
+
+ORL @ DEN - Thu 6:00PM PST
+
+
+11.5
+Points
+
+Higher
+
+Lower
+
+22.5
+Pts + Rebs + Asts
 
 Higher
 
@@ -539,24 +2434,41 @@ Rebounds + Assists
 Higher
 
 Lower
-22.5
-Points + Rebounds
+Bruce Brown
+
+DEN vs ORL - Thu 6:00PM PST
+
+
+7.5
+Points
 
 Higher
 
 Lower
-19.5
-Points + Assists
+Tim Hardaway Jr.
+
+DEN vs ORL - Thu 6:00PM PST
+
+
+12.5
+Points
 
 Higher
 
 Lower
-Cedric Coward
 
-MEM @ MIN - 5:00PM PST
+16.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Anthony Black
+
+ORL @ DEN - Thu 6:00PM PST
 
 
-14.5
+16.5
 Points
 
 Higher
@@ -569,15 +2481,20 @@ Pts + Rebs + Asts
 Higher
 
 Lower
-21.5
-Points + Rebounds
+Spencer Jones
+
+DEN vs ORL - Thu 6:00PM PST
+
+
+6.5
+Points
 
 Higher
 
 Lower
-Julius Randle
+Paolo Banchero
 
-MIN vs MEM - 5:00PM PST
+ORL @ DEN - Thu 6:00PM PST
 
 
 22.5
@@ -587,77 +2504,72 @@ Higher
 
 Lower
 
+11.5
+Rebounds + Assists
+
+Higher
+
+Lower
+
 5.5
-Assists
+1Q Points
 
 Higher
 
 Lower
-28.5
-Points + Assists
+Jamal Murray
+
+DEN vs ORL - Thu 6:00PM PST
+
+
+24.5
+Points
 
 Higher
 
 Lower
-40.75
 
-Fantasy Points
-
-Higher
-
-Lower
-
-More picks (3)
-Donte DiVincenzo
-
-MIN vs MEM - 5:00PM PST
-
-1.5
-1H 3-Pointers Made
-
-Higher
-
-Lower
-Jaden McDaniels
-
-MIN vs MEM - 5:00PM PST
-
-
-23.5
+35.5
 Pts + Rebs + Asts
 
 Higher
 
 Lower
-Naz Reid
 
-MIN vs MEM - 5:00PM PST
-
-
-23.5
-Pts + Rebs + Asts
+10.5
+Rebounds + Assists
 
 Higher
 
 Lower
+Cam Johnson
+
+DEN vs ORL - Thu 6:00PM PST
+
+
 20.5
-Points + Rebounds
+Pts + Rebs + Asts
 
 Higher
 
 Lower
-0.5
-1Q 3-Pointers Made
+Tyus Jones
+
+ORL @ DEN - Thu 6:00PM PST
+
+
+11.5
+Pts + Rebs + Asts
 
 Higher
 
 Lower
-Jaylen Wells
+Peyton Watson
 
-MEM @ MIN - 5:00PM PST
+DEN vs ORL - Thu 6:00PM PST
 
 
-13.5
+12.5
 Points
 
 Higher
@@ -670,36 +2582,664 @@ Pts + Rebs + Asts
 Higher
 
 Lower
+3.5
+1Q Points
 
-ATL @ CHA
-Thu 4:00PM PST
+Higher
 
-MIA @ BKN
-Thu 4:30PM PST
+Lower
+1.5
+1Q Rebounds
 
-LAC @ OKC
-Thu 5:00PM PST
+Higher
 
-HOU @ NOP
-Thu 5:00PM PST
+Lower
+Tristan da Silva
 
-TOR @ MIL
-Thu 5:00PM PST
+ORL @ DEN - Thu 6:00PM PST
 
-DET @ DAL
-Thu 5:30PM PST
+10.5
+Points
 
-LAL @ UTA
-Thu 6:00PM PST
+Higher
 
-ORL @ DEN
-Thu 6:00PM PST
+Lower
+
+16.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+1.5
+3-Pointers Made
+
+Higher
+
+Lower
 
 GSW @ PHX
 Thu 6:00PM PST
+Stephen Curry
+
+GSW @ PHX - Thu 6:00PM PST
+
+
+28.5
+Points
+
+Higher
+
+Lower
+
+36.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Jimmy Butler
+
+GSW @ PHX - Thu 6:00PM PST
+
+
+18.5
+Points
+
+Higher
+
+Lower
+
+30.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+1.5
+1Q Rebounds
+
+Higher
+
+Lower
+Brandin Podziemski
+
+GSW @ PHX - Thu 6:00PM PST
+
+
+10.5
+Points
+
+Higher
+
+Lower
+
+18.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+4.5
+Rebounds
+
+Higher
+
+Lower
+
+1.5
+3-Pointers Made
+
+Higher
+
+Lower
+Grayson Allen
+
+PHX vs GSW - Thu 6:00PM PST
+
+
+14.5
+Points
+
+Higher
+
+Lower
+
+20.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+2.5
+3-Pointers Made
+
+Higher
+
+Lower
+Buddy Hield
+
+GSW @ PHX - Thu 6:00PM PST
+
+
+11.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+2.5
+Rebounds
+
+Higher
+
+Lower
+
+1.5
+3-Pointers Made
+
+Higher
+
+Lower
+De'Anthony Melton
+
+GSW @ PHX - Thu 6:00PM PST
+
+
+7.5
+Points
+
+Higher
+
+Lower
+
+11.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+1.5
+Assists
+
+Higher
+
+Lower
+Moses Moody
+
+GSW @ PHX - Thu 6:00PM PST
+
+
+10.5
+Points
+
+Higher
+
+Lower
+
+15.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Oso Ighodaro
+
+PHX vs GSW - Thu 6:00PM PST
+
+
+5.5
+Points
+
+Higher
+
+Lower
+
+11.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Devin Booker
+
+PHX vs GSW - Thu 6:00PM PST
+
+
+24.5
+Points
+
+Higher
+
+Lower
+
+34.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+6.5
+1Q Points
+
+Higher
+
+Lower
+Draymond Green
+
+GSW @ PHX - Thu 6:00PM PST
+
+
+8.5
+Points
+
+Higher
+
+Lower
+
+20.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+1.5
+1Q Rebounds
+
+Higher
+
+Lower
+Dillon Brooks
+
+PHX vs GSW - Thu 6:00PM PST
+
+
+22.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+1.5
+Assists
+
+Higher
+
+Lower
+Mark Williams
+
+PHX vs GSW - Thu 6:00PM PST
+
+
+11.5
+Points
+
+Higher
+
+Lower
+
+22.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+3.5
+1Q Points
+
+Higher
+
+Lower
+
+2.5
+1Q Rebounds
+
+Higher
+
+Lower
+Royce O'Neale
+
+PHX vs GSW - Thu 6:00PM PST
+
+
+8.5
+Points
+
+Higher
+
+Lower
+
+16.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+7.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Collin Gillespie
+
+PHX vs GSW - Thu 6:00PM PST
+
+
+13.5
+Points
+
+Higher
+
+Lower
+
+22.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Quinten Post
+
+GSW @ PHX - Thu 6:00PM PST
+
+
+9.5
+Points
+
+Higher
+
+Lower
 
 SAC @ POR
 Thu 7:00PM PST
+DeMar DeRozan
+
+SAC @ POR - Thu 7:00PM PST
+
+
+26.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+7.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Jerami Grant
+
+POR vs SAC - Thu 7:00PM PST
+
+
+20.5
+Points
+
+Higher
+
+Lower
+
+27.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Dennis Schroder
+
+SAC @ POR - Thu 7:00PM PST
+
+
+12.5
+Points
+
+Higher
+
+Lower
+
+20.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Shaedon Sharpe
+
+POR vs SAC - Thu 7:00PM PST
+
+
+23.5
+Points
+
+Higher
+
+Lower
+
+30.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Robert Williams
+
+POR vs SAC - Thu 7:00PM PST
+
+
+15.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+8.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Sidy Cissoko
+
+POR vs SAC - Thu 7:00PM PST
+
+
+6.5
+Points
+
+Higher
+
+Lower
+
+11.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Precious Achiuwa
+
+SAC @ POR - Thu 7:00PM PST
+
+
+16.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Keegan Murray
+
+SAC @ POR - Thu 7:00PM PST
+
+
+16.5
+Points
+
+Higher
+
+Lower
+
+24.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+4.5
+1Q Points
+
+Higher
+
+Lower
+Russell Westbrook
+
+SAC @ POR - Thu 7:00PM PST
+
+
+15.5
+Points
+
+Higher
+
+Lower
+
+31.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+1.5
+3-Pointers Made
+
+Higher
+
+Lower
+
+15.5
+Rebounds + Assists
+
+Higher
+
+Lower
+
+1.5
+1Q Rebounds
+
+Higher
+
+Lower
+Deni Avdija
+
+POR vs SAC - Thu 7:00PM PST
+
+
+25.5
+Points
+
+Higher
+
+Lower
+
+41.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+7.5
+Rebounds
+
+Higher
+
+Lower
+
+16.5
+Rebounds + Assists
+
+Higher
+
+Lower
+Donovan Clingan
+
+POR vs SAC - Thu 7:00PM PST
+
+
+21.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Toumani Camara
+
+POR vs SAC - Thu 7:00PM PST
+
+
+11.5
+Points
+
+Higher
+
+Lower
+
+20.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+Maxime Raynaud
+
+SAC @ POR - Thu 7:00PM PST
+
+
+21.5
+Pts + Rebs + Asts
+
+Higher
+
+Lower
+
+8.5
+Rebounds + Assists
+
+Higher
+
+Lower
+
+3.5
+1Q Points
+
+Higher
+
+Lower
+Kris Murray
+
+POR vs SAC - Thu 7:00PM PST
+
+
+0.5
+3-Pointers Made
+
+Higher
+
+Lower
 
 Add picks
 Pick a minimum of 2 players from at least two different teams.
@@ -708,8 +3248,6 @@ Entry amount
 
 
 Rewards
-
-
 
 
 Enter amount

@@ -1,226 +1,181 @@
+import sys
 import pandas as pd
 import numpy as np
-import re
-import warnings
 import logging
+import re
+from pathlib import Path
+
+# Add project root to path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
 from prop_analyzer import config as cfg
+from prop_analyzer.config import Cols
 from prop_analyzer.models import registry
+from prop_analyzer.features.calculator import smooth_projection
+from prop_analyzer.models.training import (
+    add_interaction_features, 
+    rename_features_for_model, 
+    PROP_KEY_MAP
+)
 
-# --- MAPPING: Prop Text Names -> Internal Model Keys ---
-PROP_MAP = {
-    'Points': 'PTS', 'Player Points': 'PTS',
-    'Rebounds': 'REB', 'Player Rebounds': 'REB',
-    'Assists': 'AST', 'Player Assists': 'AST',
-    'Threes': 'FG3M', '3-Pointers': 'FG3M', 'Player Threes': 'FG3M',
-    'Steals': 'STL',
-    'Blocks': 'BLK',
-    'Turnovers': 'TOV',
-    'PRA': 'PRA', 'Pts+Reb+Ast': 'PRA',
-    'Pts+Reb': 'PR',
-    'Pts+Ast': 'PA',
-    'Reb+Ast': 'RA',
-    'Fantasy Points': 'FANTASY_PTS',
-    
-    # Explicit Quarter/Half Mappings (Pass-through + Combo Props)
-    'Q1_PTS': 'Q1_PTS', 'Q1 Points': 'Q1_PTS',
-    'Q1_REB': 'Q1_REB', 'Q1 Rebounds': 'Q1_REB',
-    'Q1_AST': 'Q1_AST', 'Q1 Assists': 'Q1_AST',
-    'Q1_PRA': 'Q1_PRA', 'Q1 Pts+Reb+Ast': 'Q1_PRA',
-    'Q1_PR':  'Q1_PR',  'Q1 Pts+Reb': 'Q1_PR',
-    'Q1_PA':  'Q1_PA',  'Q1 Pts+Ast': 'Q1_PA',
-    'Q1_RA':  'Q1_RA',  'Q1 Reb+Ast': 'Q1_RA',
-    
-    '1H_PTS': '1H_PTS', '1H Points': '1H_PTS',
-    '1H_REB': '1H_REB', '1H Rebounds': '1H_REB',
-    '1H_AST': '1H_AST', '1H Assists': '1H_AST',
-    '1H_PRA': '1H_PRA', '1H Pts+Reb+Ast': '1H_PRA',
-    '1H_PR':  '1H_PR',  '1H Pts+Reb': '1H_PR',
-    '1H_PA':  '1H_PA',  '1H Pts+Ast': '1H_PA',
-    '1H_RA':  '1H_RA',  '1H Reb+Ast': '1H_RA'
-}
+def load_artifacts(prop_cat):
+    return registry.load_artifacts(prop_cat)
 
-def rename_features_for_inference(feature_dict, prop_cat):
+def determine_tier(prob_over, proj_val, line, prop_type):
     """
-    Renames keys in the feature dictionary to match model expectations.
+    Calculates the confidence Tier (S, A, B, C).
     """
-    prefix = PROP_MAP.get(prop_cat, prop_cat)
+    if pd.isna(prob_over) or pd.isna(proj_val) or pd.isna(line) or line == 0:
+        return {'Tier': 'C Tier', 'Best Pick': 'Pass', 'Win_Prob': 0.0, 'Edge': 0.0}
+
+    # 1. Determine Direction & Edge
+    is_over = prob_over >= 0.50
     
-    mapping = {
-        f'{prefix}_SZN_AVG': 'SZN Avg',
-        f'{prefix}_L5_AVG': 'L5 Avg',
-        f'{prefix}_L5_EWMA': 'L5 EWMA',
-        f'{prefix}_L3_AVG': 'L3 Avg',
-        f'{prefix}_L10_STD': 'L10_STD_DEV',
-        f'{prefix}_L10_STD_DEV': 'L10_STD_DEV'
-    }
-    
-    new_dict = feature_dict.copy()
-    for old_key, new_key in mapping.items():
-        if old_key in new_dict:
-            new_dict[new_key] = new_dict[old_key]
-            
-    return new_dict
-
-def predict_props(features_df):
-    results = []
-    model_cache = {}
-    
-    logging.info(f"Starting batch inference on {len(features_df)} props...")
-
-    for idx, row in features_df.iterrows():
-        raw_type = row.get('Prop Category')
-        
-        if pd.isna(raw_type) or not isinstance(raw_type, str):
-            continue 
-            
-        model_key = PROP_MAP.get(raw_type, raw_type)
-        
-        if model_key not in model_cache:
-            try:
-                loaded_artifact = registry.load_artifacts(model_key)
-                model_cache[model_key] = loaded_artifact
-            except Exception as e:
-                # Silence model loading errors (expected if model not trained for exotic props like Q1_STL)
-                model_cache[model_key] = None
-        
-        # --- SAFETY CHECK ---
-        szn_avg_key = f"{model_key}_SZN_AVG"
-        szn_val = row.get(szn_avg_key)
-        
-        # Warnings un-suppressed as requested
-        if pd.isna(szn_val) or (szn_val == 0.0 and model_key in ['PTS', 'PRA', 'PA', 'PR']):
-            logging.warning(f"Skipping {row.get('Player Name')} ({raw_type}) - Missing History (SZN Avg is 0/NaN)")
-            continue
-            
-        feature_vector = row.to_dict()
-        feature_vector = rename_features_for_inference(feature_vector, raw_type)
-        
-        pred_out = predict_prop(model_cache, model_key, feature_vector)
-        
-        if pred_out:
-            line = row.get('Prop Line', 0.0)
-            injury_status = row.get('Status_Clean', 'ACTIVE')
-            
-            analysis = determine_tier(
-                line, 
-                pred_out['q20'], 
-                pred_out['q80'], 
-                pred_out['prob_over'], 
-                injury_status=injury_status
-            )
-            
-            res = row.to_dict()
-            res.update({
-                'Model_Pred': round(analysis['Median_Proj'], 2),
-                'Model_Conf': round(analysis['Win_Prob'], 3),
-                'Edge_Type': analysis['Best Pick'],
-                'Tier': analysis['Tier'],
-                'Score': analysis['Score'],
-                'Diff%': round((analysis['Edge'] / line) * 100, 1) if line > 0 else 0.0,
-                'Is_Divergent': analysis['Is_Divergent']
-            })
-            results.append(res)
-            
-    if not results:
-        return pd.DataFrame()
-        
-    return pd.DataFrame(results)
-
-def predict_prop(model_cache, prop_category, feature_vector_dict):
-    models = model_cache.get(prop_category)
-    if models is None:
-        return None
-
-    num_df = pd.DataFrame([feature_vector_dict])
-    num_df.columns = [re.sub(r'[^\w\s]', '_', str(col)).replace(' ', '_') for col in num_df.columns]
-    feature_cols = models['features']
-    
-    # Use np.nan for missing columns so Imputer handles them
-    aligned_vector = num_df.reindex(columns=feature_cols, fill_value=np.nan)
-
-    preprocessor = models['scaler']
-    
-    try:
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            warnings.filterwarnings("ignore", category=UserWarning, message=".*X does not have valid feature names.*")
-            
-            X_scaled = preprocessor.transform(aligned_vector)
-
-            q20_lgbm = models['q20']['lgbm'].predict(X_scaled)[0]
-            q20_xgb = models['q20']['xgb'].predict(X_scaled)[0]
-            pred_lower = (q20_lgbm + q20_xgb) / 2
-
-            q80_lgbm = models['q80']['lgbm'].predict(X_scaled)[0]
-            q80_xgb = models['q80']['xgb'].predict(X_scaled)[0]
-            pred_upper = (q80_lgbm + q80_xgb) / 2
-            
-            prob_over = 0.5
-            if models['clf']:
-                prob_over = models['clf'].predict_proba(X_scaled)[0][1]
-
-        return {
-            'q20': pred_lower,
-            'q80': pred_upper,
-            'prob_over': prob_over
-        }
-    except Exception as e:
-        return None
-
-def determine_tier(prop_line, pred_lower, pred_upper, prob_over, injury_status='ACTIVE'):
-    median_pred = (pred_lower + pred_upper) / 2
-    regression_edge = median_pred - prop_line
-    
-    if prob_over >= 0.50:
-        model_pick = 'Over'
+    if is_over:
         win_prob = prob_over
+        edge_val = proj_val - line
+        pick = 'Over'
+        # Logic Check: If Model says Over, but Projection < Line, downgrade confidence or pass
+        # With smoothed projections, this conflict is rarer but possible.
+        if proj_val < line:
+            return {'Tier': 'C Tier', 'Best Pick': 'Over', 'Win_Prob': win_prob, 'Edge': 0.0}
     else:
-        model_pick = 'Under'
         win_prob = 1.0 - prob_over
+        edge_val = line - proj_val
+        pick = 'Under'
+        if proj_val > line:
+            return {'Tier': 'C Tier', 'Best Pick': 'Under', 'Win_Prob': win_prob, 'Edge': 0.0}
 
-    if regression_edge > 0:
-        reg_pick = 'Over'
-    else:
-        reg_pick = 'Under'
-
-    is_divergent = (model_pick != reg_pick)
-    score = abs(regression_edge)
-    tier = 'C Tier' 
+    # 2. Assign Tier based on Strength of Signal
+    tier = 'C Tier'
+    edge_pct = (edge_val / line) if line > 0 else 0.0
     
-    S_TIER_PROB = getattr(cfg, 'MIN_PROB_FOR_S_TIER', 0.58)
-    S_TIER_EDGE = getattr(cfg, 'MIN_EDGE_FOR_S_TIER', 1.5)
-    A_TIER_PROB = 0.555
-    A_TIER_EDGE = 1.0
-    
-    if is_divergent:
-        tier = 'C Tier'
-        best_pick = model_pick
-    else:
-        best_pick = model_pick
-        if win_prob >= S_TIER_PROB and score >= S_TIER_EDGE:
-            tier = 'S Tier'
-        elif win_prob >= S_TIER_PROB and score >= A_TIER_EDGE:
-            tier = 'A Tier'
-        elif win_prob >= A_TIER_PROB and score >= S_TIER_EDGE:
-            tier = 'A Tier'
-        elif win_prob >= A_TIER_PROB:
-            tier = 'B Tier'
-        elif score >= S_TIER_EDGE:
-            tier = 'B Tier'
-        else:
-            tier = 'C Tier'
-
-    if injury_status == 'GTD' and tier in ['S Tier', 'A Tier']:
+    # Tier Thresholds
+    if win_prob > 0.60 and edge_pct > 0.10:
+        tier = 'S Tier'
+    elif win_prob > 0.56 and edge_pct > 0.05:
+        tier = 'A Tier'
+    elif win_prob > 0.53:
         tier = 'B Tier'
-    elif injury_status in ['OUT', 'DOUBTFUL']:
-        tier = 'Void'
+    
+    # Statistical edge cases for low-count props (Steals/Blocks)
+    if prop_type in ['BLK', 'STL', 'FG3M'] and tier == 'S Tier' and edge_pct < 0.15:
+        tier = 'A Tier'
 
     return {
-        'Best Pick': best_pick,
         'Tier': tier,
-        'Score': round(score, 2),
-        'Edge': round(regression_edge, 2),
+        'Best Pick': pick,
         'Win_Prob': win_prob,
-        'Median_Proj': median_pred,
-        'Is_Divergent': is_divergent
+        'Edge': edge_val
     }
+
+def predict_props(todays_props_df):
+    logging.info(f"Starting batch inference for {len(todays_props_df)} props...")
+    results = []
+    
+    if Cols.PROP_TYPE not in todays_props_df.columns:
+        logging.critical(f"Column '{Cols.PROP_TYPE}' not found in input.")
+        return pd.DataFrame()
+
+    grouped = todays_props_df.groupby(Cols.PROP_TYPE)
+    
+    for prop_cat, group in grouped:
+        logging.info(f"Predicting {len(group)} rows for {prop_cat}...")
+        
+        artifacts = load_artifacts(prop_cat)
+        if not artifacts: continue
+            
+        clf = artifacts['clf']
+        xgb_q20 = artifacts['q20']['xgb']
+        xgb_q80 = artifacts['q80']['xgb']
+        scaler = artifacts['scaler']
+        feature_names = artifacts['features']
+        
+        X_raw = group.copy()
+        X_raw = add_interaction_features(X_raw)
+        X_raw = rename_features_for_model(X_raw, prop_cat)
+        
+        X_model = pd.DataFrame(index=X_raw.index)
+        sanitized_map = {c: re.sub(r'[^\w\s]', '_', str(c)).replace(' ', '_') for c in X_raw.columns}
+        inv_map = {v: k for k, v in sanitized_map.items()}
+        
+        for f in feature_names:
+            if f in X_raw.columns:
+                X_model[f] = X_raw[f]
+            elif f in inv_map:
+                X_model[f] = X_raw[inv_map[f]]
+            else:
+                X_model[f] = 0.0 
+
+        try:
+            X_scaled = scaler.transform(X_model)
+            
+            # Raw Predictions
+            probs = clf.predict_proba(X_scaled)[:, 1]
+            q20_preds = xgb_q20.predict(X_scaled)
+            q80_preds = xgb_q80.predict(X_scaled)
+            raw_proj_values = (q20_preds + q80_preds) / 2.0
+            
+            # --- STABILIZATION / SMOOTHING ---
+            # Extract baselines from X_raw. rename_features_for_model ensures 
+            # these standard names exist if the data is present.
+            szn_avgs = X_raw.get('SZN Avg', pd.Series(np.nan, index=X_raw.index))
+            l5_avgs = X_raw.get('L5 Avg', szn_avgs)
+            # Volatility is usually mapped to 'L10_STD_DEV'
+            vols = X_raw.get('L10_STD_DEV', pd.Series(1.0, index=X_raw.index))
+            
+            final_proj_values = []
+            
+            for idx, raw_val in enumerate(raw_proj_values):
+                # Fallback to raw_val if baselines are missing
+                s_avg = float(szn_avgs.iloc[idx]) if not pd.isna(szn_avgs.iloc[idx]) else raw_val
+                r_avg = float(l5_avgs.iloc[idx]) if not pd.isna(l5_avgs.iloc[idx]) else raw_val
+                vol = float(vols.iloc[idx]) if not pd.isna(vols.iloc[idx]) else 1.0
+                
+                # Apply Blending Logic
+                smoothed = smooth_projection(raw_val, s_avg, r_avg, vol)
+                final_proj_values.append(smoothed)
+            
+            # Convert back to array for indexing
+            proj_values = np.array(final_proj_values)
+            
+            for idx, (orig_idx, row) in enumerate(group.iterrows()):
+                line = float(row[Cols.PROP_LINE])
+                prob = float(probs[idx])
+                proj = float(proj_values[idx])
+                
+                analysis = determine_tier(prob, proj, line, prop_cat)
+                
+                # Internal calculations for sorting
+                diff_pct = 0.0
+                if line > 0:
+                    diff_pct = (analysis['Edge'] / line) * 100.0
+
+                res_dict = {
+                    Cols.PLAYER_NAME: row[Cols.PLAYER_NAME],
+                    Cols.TEAM: row.get('TEAM_ABBREVIATION', row.get(Cols.TEAM, 'UNK')),
+                    Cols.OPPONENT: row.get(Cols.OPPONENT, 'UNK'),
+                    Cols.DATE: row[Cols.DATE],
+                    Cols.PROP_TYPE: prop_cat,
+                    Cols.PROP_LINE: line,
+                    
+                    # Rounded Outputs
+                    'Proj': round(proj, 2),
+                    'Prob': round(analysis['Win_Prob'], 3),
+                    'Pick': analysis['Best Pick'],
+                    'Tier': analysis['Tier'],
+                    
+                    # Helper for sorting (will be dropped in run_analysis)
+                    '_Sort_Diff': diff_pct 
+                }
+                results.append(res_dict)
+
+        except Exception as e:
+            logging.error(f"Inference error for {prop_cat}: {e}", exc_info=True)
+            continue
+
+    final_df = pd.DataFrame(results)
+    if final_df.empty:
+        return pd.DataFrame()
+        
+    return final_df

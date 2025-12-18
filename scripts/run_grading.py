@@ -34,26 +34,47 @@ def save_user_scorecard(df, date_str):
     Saves a clean, human-readable Excel file for the user.
     Applies conditional formatting: WIN = Green, LOSS = Red.
     """
-    user_cols = [
-        'Player Name', 'Team', 'Opponent', 'Prop Category', 'Prop Line', 'GAME_DATE', 
-        'Model_Pred', 'Model_Conf', 'Edge_Type', 'Tier', 'Diff%', 'Actual Value', 'Result'
-    ]
+    # Map System Cols -> Scorecard Cols
+    # We use the internal Cols keys to ensure we grab the right data
     
-    rename_map = {
-        'Player Name': 'Player',
-        'Prop Category': 'Prop',
-        'Prop Line': 'Line',
-        'GAME_DATE': 'Date',
-        'Model_Pred': 'Proj',
-        'Model_Conf': 'Prob',
-        'Edge_Type': 'Pick',
-        'Actual Value': 'Actual'
+    col_map = {
+        Cols.PLAYER_NAME: 'Player',
+        'Team': 'Team',
+        'Opponent': 'Opponent',
+        Cols.PROP_TYPE: 'Prop',
+        Cols.PROP_LINE: 'Line',
+        Cols.DATE: 'Date',
+        Cols.PREDICTION: 'Proj',
+        Cols.CONFIDENCE: 'Prob',
+        Cols.EDGE_TYPE: 'Pick',
+        Cols.TIER: 'Tier',
+        Cols.ACTUAL_VAL: 'Actual',
+        Cols.RESULT: 'Result'
     }
     
-    available_cols = [c for c in user_cols if c in df.columns]
+    # Optional columns that might be in the data
+    optional_map = {
+        'Units': 'Units',
+        'Diff%': 'Diff%',
+        'L5': 'L5',
+        'SZN': 'SZN'
+    }
     
-    clean_df = df[available_cols].copy()
-    clean_df = clean_df.rename(columns=rename_map)
+    # Build final rename list based on what exists
+    final_rename = {}
+    for sys_col, user_col in col_map.items():
+        if sys_col in df.columns:
+            final_rename[sys_col] = user_col
+            
+    for sys_col, user_col in optional_map.items():
+        if sys_col in df.columns:
+            final_rename[sys_col] = user_col
+
+    if not final_rename:
+        logging.warning("No matching columns found for scorecard.")
+        return
+
+    clean_df = df[list(final_rename.keys())].rename(columns=final_rename).copy()
     
     # Save to specific subfolder: user_scorecards
     scorecard_dir = cfg.GRADED_DIR / "user_scorecards"
@@ -78,12 +99,10 @@ def save_user_scorecard(df, date_str):
             try:
                 styler = clean_df.style.map(color_result, subset=['Result'])
             except AttributeError:
-                # Fallback for older pandas versions
                 styler = clean_df.style.applymap(color_result, subset=['Result'])
         else:
             styler = clean_df.style
 
-        # Save to Excel
         styler.to_excel(scorecard_path, index=False, engine='openpyxl')
         
     except Exception as e:
@@ -101,6 +120,25 @@ def grade_predictions():
         if preds_df.empty:
             logging.warning("Predictions file is empty.")
             return
+            
+        # --- CRITICAL FIX: Normalize Column Names ---
+        # The analyzer now outputs "clean" names (Player, Prop, Date).
+        # We must map them back to internal names (Cols.PLAYER_NAME) for grading logic.
+        clean_map = {
+            'Player': Cols.PLAYER_NAME,
+            'Prop': Cols.PROP_TYPE,
+            'Line': Cols.PROP_LINE,
+            'Date': Cols.DATE,
+            'Pick': Cols.EDGE_TYPE,
+            'Prob': Cols.CONFIDENCE,
+            'Proj': Cols.PREDICTION,
+            'Tier': Cols.TIER
+        }
+        # Only rename if the "clean" name exists and the "system" name is missing
+        actual_rename = {k: v for k, v in clean_map.items() if k in preds_df.columns and v not in preds_df.columns}
+        if actual_rename:
+            preds_df.rename(columns=actual_rename, inplace=True)
+            
     except Exception as e:
         logging.critical(f"Failed to load predictions: {e}")
         return
@@ -112,13 +150,10 @@ def grade_predictions():
     q1_game_df = loader.load_master_q1_history()
     h1_game_df = loader.load_master_1h_history()
 
-    # --- ADDED: Calculate Combo Stats for Grading ---
-    # Ensure Q1/1H combo stats exist for grading
+    # --- Combo Stats Calculation ---
     if not q1_game_df.empty:
-        # Fill missing base stats with 0 just in case
         for col in ['PTS', 'REB', 'AST']:
             if col not in q1_game_df.columns: q1_game_df[col] = 0
-            
         q1_game_df['PRA'] = q1_game_df['PTS'] + q1_game_df['REB'] + q1_game_df['AST']
         q1_game_df['PR'] = q1_game_df['PTS'] + q1_game_df['REB']
         q1_game_df['PA'] = q1_game_df['PTS'] + q1_game_df['AST']
@@ -127,12 +162,10 @@ def grade_predictions():
     if not h1_game_df.empty:
         for col in ['PTS', 'REB', 'AST']:
             if col not in h1_game_df.columns: h1_game_df[col] = 0
-            
         h1_game_df['PRA'] = h1_game_df['PTS'] + h1_game_df['REB'] + h1_game_df['AST']
         h1_game_df['PR'] = h1_game_df['PTS'] + h1_game_df['REB']
         h1_game_df['PA'] = h1_game_df['PTS'] + h1_game_df['AST']
         h1_game_df['RA'] = h1_game_df['REB'] + h1_game_df['AST']
-    # ------------------------------------------------
 
     if full_game_df is None or full_game_df.empty:
         logging.warning("No master box scores found. Full game props cannot be graded.")
@@ -140,6 +173,7 @@ def grade_predictions():
 
     logging.info(f"Grading {len(preds_df)} predictions...")
 
+    # Normalize Dates
     for df in [full_game_df, q1_game_df, h1_game_df]:
         if not df.empty and Cols.DATE in df.columns:
             df[Cols.DATE] = pd.to_datetime(df[Cols.DATE]).dt.normalize()
@@ -174,11 +208,13 @@ def grade_predictions():
             continue
 
         mask = None
+        # Try finding by ID
         if Cols.PLAYER_ID in row and pd.notna(row[Cols.PLAYER_ID]):
              p_id = int(row[Cols.PLAYER_ID])
              if Cols.PLAYER_ID in truth_df.columns:
                  mask = (truth_df[Cols.PLAYER_ID] == p_id) & (truth_df[Cols.DATE] == p_date)
         
+        # Fallback to Name match
         if mask is None or mask.sum() == 0:
              p_name = str(row.get(Cols.PLAYER_NAME, '')).lower().strip()
              if 'PLAYER_NAME' in truth_df.columns:
@@ -256,14 +292,6 @@ def grade_predictions():
             tier_df = finished[finished[Cols.TIER] == tier]
             print_accuracy_report(tier_df, f"{tier} Props")
 
-    q1_props = finished[finished[Cols.PROP_TYPE].str.contains('1st Quarter|1Q', na=False)]
-    if not q1_props.empty:
-        print_accuracy_report(q1_props, "1st Quarter Props")
-        
-    h1_props = finished[finished[Cols.PROP_TYPE].str.contains('1st Half|1H', na=False)]
-    if not h1_props.empty:
-        print_accuracy_report(h1_props, "1st Half Props")
-
     logging.info("-" * 40)
     
     # 8. Save Outputs
@@ -273,6 +301,7 @@ def grade_predictions():
     csv_path = cfg.GRADED_DIR / f"graded_{today_str}.csv"
     
     try:
+        # Convert objects to string for saving
         for col in graded_df.select_dtypes(include=['object']).columns:
             graded_df[col] = graded_df[col].astype(str)
             
@@ -280,6 +309,7 @@ def grade_predictions():
         graded_df.to_csv(csv_path, index=False)
         
         save_user_scorecard(graded_df, today_str)
+        logging.info(f"Saved graded results for {today_str}")
         
     except Exception as e:
         logging.error(f"Failed to save output: {e}")

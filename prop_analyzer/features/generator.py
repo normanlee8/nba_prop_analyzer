@@ -15,8 +15,13 @@ def add_rolling_stats_history(df, stats_to_roll=None):
         logging.error(f"Missing ID/Date columns. Cols found: {df.columns}")
         return df
 
-    # Ensure strictly sorted by Player then Date for correct shifting
-    df = df.sort_values(by=[Cols.PLAYER_ID, Cols.DATE]).reset_index(drop=True)
+    # CRITICAL FIX: Strict Multi-Level Sort to prevent leakage
+    # We sort by Player -> Date -> GameID (if avail) to ensure deterministic order
+    sort_cols = [Cols.PLAYER_ID, Cols.DATE]
+    if Cols.GAME_ID in df.columns:
+        sort_cols.append(Cols.GAME_ID)
+        
+    df = df.sort_values(by=sort_cols).reset_index(drop=True)
     
     if stats_to_roll is None:
         stats_to_roll = [
@@ -63,18 +68,27 @@ def add_rolling_stats_history(df, stats_to_roll=None):
 def build_feature_set(props_df):
     logging.info("Building feature set with Point-in-Time safety (Leakage Fixed)...")
     
-    # 1. Load Data
+    # 1. Load Data (Optimized: Load once)
+    # Note: loader functions should already implement caching, but we ensure explicit single calls here.
+    player_stats_static, team_stats, _ = loader.load_static_data()
+    vs_opp_df = loader.load_vs_opponent_data()
+    
+    # Only load heavy history files if we actually have props to process
+    if props_df.empty:
+        return pd.DataFrame()
+
     box_scores = loader.load_box_scores()
     q1_history = loader.load_master_q1_history()
     h1_history = loader.load_master_1h_history()
-    
-    player_stats_static, team_stats, _ = loader.load_static_data()
-    vs_opp_df = loader.load_vs_opponent_data()
     
     dvp_df = None
     if cfg.MASTER_DVP_FILE.exists():
         try:
             dvp_df = pd.read_parquet(cfg.MASTER_DVP_FILE)
+            # Ensure Season ID exists for correct merging
+            if 'SEASON_ID' not in dvp_df.columns:
+                # If missing (legacy file), assume current season or drop
+                logging.warning("DVP file missing SEASON_ID. DVP merging might be inaccurate.")
         except Exception as e:
             logging.error(f"Failed to read DVP Parquet: {e}")
             dvp_df = None
@@ -98,7 +112,7 @@ def build_feature_set(props_df):
                 'trey murphy': 'trey murphy iii',
                 'kelly oubre': 'kelly oubre jr.',
                 'michael porter': 'michael porter jr.',
-                'nick richards': 'nick richards', # Example placeholder
+                'nick richards': 'nick richards',
                 'gg jackson': 'gg jackson ii'
             }
             props_df['clean_name'] = props_df['clean_name'].replace(manual_map)
@@ -141,11 +155,15 @@ def build_feature_set(props_df):
             direction='backward', suffixes=('', '_hist')
         )
         
+        # Merge Static Stats (Season Avg, etc from current season file)
+        # Note: This is technically slightly leaky if "Static" file is updated daily, 
+        # but acceptable as "current form" proxy.
         if player_stats_static is not None:
             cols_to_use = [c for c in player_stats_static.columns 
                            if c not in features_df.columns or c == Cols.PLAYER_ID]
             features_df = pd.merge(features_df, player_stats_static[cols_to_use], on=Cols.PLAYER_ID, how='left')
     else:
+        # Fallback if no history (e.g. fresh season start)
         features_df = pd.merge(props_df, player_stats_static, on=Cols.PLAYER_ID, how='left')
 
     # 4. Time-Travel Feature Engineering (Q1)
@@ -158,9 +176,9 @@ def build_feature_set(props_df):
         # Ensure Combo Stats
         for base, combo in [('PTS', 'PRA'), ('PTS', 'PR'), ('PTS', 'PA'), ('REB', 'RA')]:
             if combo not in q1_history.columns and base in q1_history.columns:
-                q1_history[combo] = 0 # Placeholder if components missing, logic handled in ETL ideally
+                q1_history[combo] = 0 
                 
-        # Recalculate combos for safety if components exist
+        # Recalculate combos
         if {'PTS','REB','AST'}.issubset(q1_history.columns):
             q1_history['PRA'] = q1_history['PTS'] + q1_history['REB'] + q1_history['AST']
             q1_history['PR'] = q1_history['PTS'] + q1_history['REB']
@@ -209,7 +227,6 @@ def build_feature_set(props_df):
             stats_to_roll=['PTS', 'REB', 'AST', 'FG3M', 'PRA', 'PR', 'PA', 'RA']
         )
         
-        # Rename 1H columns
         cols_to_rename = {}
         for col in h1_rolled.columns:
             if '_SZN_' in col or '_L5_' in col or '_L10_' in col:
@@ -227,7 +244,11 @@ def build_feature_set(props_df):
             direction='backward'
         )
 
-    # 6. Merge Team/Opponent
+    # 6. Merge Team/Opponent Stats (Season-Aware)
+    # Note: To fully support season-aware team stats, 'team_stats' loaded above 
+    # needs to be broken down by season. Assuming standard single-season run for now 
+    # unless 'SEASON_ID' is in props_df.
+    
     if 'TEAM_ABBREVIATION' not in features_df.columns and Cols.TEAM in features_df.columns:
         features_df['TEAM_ABBREVIATION'] = features_df[Cols.TEAM]
         
@@ -235,12 +256,16 @@ def build_feature_set(props_df):
         team_stats_renamed = team_stats.add_prefix('TEAM_')
         if 'TEAM_TEAM_ABBREVIATION' in team_stats_renamed.columns:
              team_stats_renamed = team_stats_renamed.rename(columns={'TEAM_TEAM_ABBREVIATION': 'TEAM_ABBREVIATION'})
+        
+        # Merge Team Stats
         features_df = pd.merge(features_df, team_stats_renamed, left_on='TEAM_ABBREVIATION', right_index=True, how='left')
         
+        # Merge Opponent Stats
         opp_stats_renamed = team_stats.add_prefix('OPP_')
         features_df = pd.merge(features_df, opp_stats_renamed, left_on=Cols.OPPONENT, right_index=True, how='left')
 
-    # 7. Merge DVP
+    # 7. Merge DVP (Season-Aware)
+    # The 'dvp_df' now contains 'SEASON_ID'. We must match on [Season, Opponent, Position].
     if dvp_df is not None:
         # Standardize Position
         if 'Pos' not in features_df.columns and player_stats_static is not None:
@@ -257,9 +282,30 @@ def build_feature_set(props_df):
         features_df['Primary_Pos'] = features_df.get('Pos', 'PG').apply(normalize_pos)
         features_df['Primary_Pos'] = features_df['Primary_Pos'].astype(str)
         
+        # Normalize columns for merge
         if 'Primary_Pos' in dvp_df.columns:
             dvp_df['Primary_Pos'] = dvp_df['Primary_Pos'].astype(str)
+        
+        # Ensure props_df has SEASON_ID. If not, try to derive or default to current.
+        if 'SEASON_ID' not in features_df.columns:
+             # Heuristic: Season 2024-25 usually starts Oct 2024.
+             # Simple logic: If month > 8, year is start. Else year-1 is start.
+             features_df['yr'] = features_df[Cols.DATE].dt.year
+             features_df['mo'] = features_df[Cols.DATE].dt.month
+             features_df['season_start'] = np.where(features_df['mo'] > 8, features_df['yr'], features_df['yr'] - 1)
+             features_df['SEASON_ID'] = features_df['season_start'].astype(str) + "-" + (features_df['season_start'] + 1).astype(str).str[-2:]
+             features_df.drop(columns=['yr', 'mo', 'season_start'], inplace=True)
 
+        if 'SEASON_ID' in dvp_df.columns:
+            # Merge on Season + Opponent + Position
+            features_df = pd.merge(
+                features_df, dvp_df, 
+                left_on=['SEASON_ID', Cols.OPPONENT, 'Primary_Pos'], 
+                right_on=['SEASON_ID', 'OPPONENT_ABBREV', 'Primary_Pos'], 
+                how='left'
+            )
+        else:
+            # Fallback legacy merge
             features_df = pd.merge(
                 features_df, dvp_df, 
                 left_on=[Cols.OPPONENT, 'Primary_Pos'], 
@@ -276,7 +322,7 @@ def build_feature_set(props_df):
             how='left'
         )
 
-    # 9. Final Polish
+    # 9. Final Polish / Fill Vacancy
     if 'TEAM_Possessions per Game' in features_df.columns:
         features_df['GAME_PACE'] = features_df['TEAM_Possessions per Game']
         
