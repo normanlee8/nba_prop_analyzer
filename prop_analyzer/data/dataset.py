@@ -13,7 +13,8 @@ def create_training_dataset():
     1. Master Box Scores (Full Game)
     2. Master Q1 Stats (Targets for Q1 props)
     3. Master 1H Stats (Targets for 1H props)
-    4. Rolling Features (SZN_AVG, L5, etc.) calculated by generator.py
+    4. Real Vegas Lines (Merged from master_prop_history.parquet)
+    5. Rolling Features (SZN_AVG, L5, etc.) calculated by generator.py
     """
     logging.info("--- Building Final Training Dataset ---")
     
@@ -22,6 +23,10 @@ def create_training_dataset():
     if box_scores is None or box_scores.empty:
         logging.error("No box scores available. Cannot build training set.")
         return
+
+    # Ensure Date Standardization for merging
+    if Cols.DATE in box_scores.columns:
+        box_scores[Cols.DATE] = pd.to_datetime(box_scores[Cols.DATE]).dt.normalize()
 
     # Check for GAME_ID presence to improve merge accuracy
     has_game_id = Cols.GAME_ID in box_scores.columns
@@ -33,6 +38,9 @@ def create_training_dataset():
     # 3. Merge Q1 Data (Target Columns)
     if not q1_df.empty:
         logging.info(f"Merging {len(q1_df)} Q1 records...")
+        
+        if Cols.DATE in q1_df.columns:
+            q1_df[Cols.DATE] = pd.to_datetime(q1_df[Cols.DATE]).dt.normalize()
         
         # Ensure numeric types
         for c in ['PTS', 'REB', 'AST']:
@@ -79,6 +87,9 @@ def create_training_dataset():
     if not h1_df.empty:
         logging.info(f"Merging {len(h1_df)} 1H records...")
         
+        if Cols.DATE in h1_df.columns:
+            h1_df[Cols.DATE] = pd.to_datetime(h1_df[Cols.DATE]).dt.normalize()
+            
         for c in ['PTS', 'REB', 'AST']:
             if c in h1_df.columns:
                 h1_df[c] = pd.to_numeric(h1_df[c], errors='coerce').fillna(0)
@@ -116,7 +127,54 @@ def create_training_dataset():
             how='left'
         )
 
-    # 5. Generate Features (Rolling Averages, etc.)
+    # 5. Merge Real Vegas Lines (History)
+    # This allows training to use actual historical lines instead of synthetic ones
+    prop_hist_path = cfg.MASTER_PROP_HISTORY_FILE
+    if prop_hist_path.exists():
+        logging.info("Merging real historical Vegas lines...")
+        try:
+            prop_hist = pd.read_parquet(prop_hist_path)
+            
+            # Normalize dates to match box_scores
+            if Cols.DATE in prop_hist.columns:
+                prop_hist[Cols.DATE] = pd.to_datetime(prop_hist[Cols.DATE]).dt.normalize()
+            
+            # We pivot the data to get one row per game with columns like 'Line_PTS', 'Line_REB'
+            if Cols.PROP_TYPE in prop_hist.columns and Cols.PROP_LINE in prop_hist.columns:
+                # Deduplicate before pivot
+                prop_hist = prop_hist.drop_duplicates(subset=[Cols.PLAYER_NAME, Cols.DATE, Cols.PROP_TYPE])
+                
+                # Pivot
+                pivoted = prop_hist.pivot(
+                    index=[Cols.PLAYER_NAME, Cols.DATE], 
+                    columns=Cols.PROP_TYPE, 
+                    values=Cols.PROP_LINE
+                ).reset_index()
+                
+                # Rename columns: PTS -> Line_PTS
+                pivoted.columns = [
+                    f"Line_{c}" if c not in [Cols.PLAYER_NAME, Cols.DATE] else c 
+                    for c in pivoted.columns
+                ]
+                
+                # Merge into box scores
+                # Note: We merge on Name + Date because History file might not have IDs
+                if Cols.PLAYER_NAME in box_scores.columns:
+                    start_len = len(box_scores)
+                    box_scores = pd.merge(
+                        box_scores,
+                        pivoted,
+                        on=[Cols.PLAYER_NAME, Cols.DATE],
+                        how='left'
+                    )
+                    logging.info(f"Merged lines. Columns added: {[c for c in pivoted.columns if 'Line_' in c]}")
+                else:
+                    logging.warning("Box scores missing Player Name, cannot merge lines by name.")
+                    
+        except Exception as e:
+            logging.warning(f"Failed to merge prop history: {e}")
+
+    # 6. Generate Features (Rolling Averages, etc.)
     # This adds the PRE-GAME context (e.g., L5_AVG) needed for training
     logging.info("Calculating features for training set...")
     
@@ -139,7 +197,7 @@ def create_training_dataset():
             stats_to_roll=[c for c in stats_to_roll if c in training_df.columns]
         )
 
-    # 6. Save Final Dataset
+    # 7. Save Final Dataset
     logging.info(f"Saving training set with {training_df.shape[1]} columns...")
     training_df.to_parquet(cfg.MASTER_TRAINING_FILE, index=False)
     logging.info(f"Saved to {cfg.MASTER_TRAINING_FILE}")

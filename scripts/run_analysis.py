@@ -151,6 +151,42 @@ def main():
                 props_df[Cols.DATE] = pd.Timestamp.now().normalize()
                 
             logging.info(f"Loaded {len(props_df)} props.")
+
+            # =========================================================================
+            # NEW: AUTO-SAVE TO HISTORY (Learning Loop)
+            # =========================================================================
+            try:
+                history_path = cfg.MASTER_PROP_HISTORY_FILE
+                
+                # Create a clean copy for storage
+                history_entry = props_df.copy()
+                
+                # Ensure consistent string types for key columns to prevent merge errors
+                if Cols.PLAYER_NAME in history_entry.columns:
+                    history_entry[Cols.PLAYER_NAME] = history_entry[Cols.PLAYER_NAME].astype(str)
+                if Cols.PROP_TYPE in history_entry.columns:
+                    history_entry[Cols.PROP_TYPE] = history_entry[Cols.PROP_TYPE].astype(str)
+                
+                if history_path.exists():
+                    existing_hist = pd.read_parquet(history_path)
+                    combined_hist = pd.concat([existing_hist, history_entry], ignore_index=True)
+                    
+                    # Deduplicate: Keep the LATEST entry for a specific player/date/prop
+                    # This allows you to update lines during the day and keep the final closing line
+                    dedup_cols = [c for c in [Cols.PLAYER_NAME, Cols.DATE, Cols.PROP_TYPE] if c in combined_hist.columns]
+                    if dedup_cols:
+                        combined_hist.drop_duplicates(subset=dedup_cols, keep='last', inplace=True)
+                    
+                    combined_hist.to_parquet(history_path, index=False)
+                    logging.info(f"Updated Prop History. Total records: {len(combined_hist)}")
+                else:
+                    history_entry.to_parquet(history_path, index=False)
+                    logging.info(f"Created new Prop History file at {history_path}")
+                    
+            except Exception as e:
+                # Don't crash the analysis if history saving fails, just warn
+                logging.warning(f"Failed to save prop history (Learning loop will be unaffected for this run): {e}")
+            # =========================================================================
             
         except Exception as e:
             logging.critical(f"Failed to read props file: {e}")

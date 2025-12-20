@@ -36,6 +36,9 @@ MASTER_TEAM_PATTERN = "master_team_stats_*.parquet"
 MASTER_BOX_SCORES_FILE = DATA_DIR / "master_box_scores_2025-26.parquet"
 MASTER_BOX_SCORES_PATTERN = "master_box_scores_*.parquet"
 
+# NEW: Master Prop History (Real Vegas Lines)
+MASTER_PROP_HISTORY_FILE = DATA_DIR / "master_prop_history.parquet"
+
 # NEW: Quarter/Half Masters
 MASTER_Q1_FILE = DATA_DIR / "master_q1_stats.parquet"
 MASTER_1H_FILE = DATA_DIR / "master_1h_stats.parquet"
