@@ -1,2 +1,20 @@
-prop_data/master_training_dataset.csv
-prop_data/master_training_dataset.csv
+# --- Custom Project Folders ---
+# Exclude the models you mentioned
+prop_models/
+prop_models/versions/
+prop_models/metadata/
+
+# --- Python Environment ---
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# --- System & IDE ---
+.DS_Store
+.vscode/
+.idea/
+
+# --- Logs ---
+logs/*.log
