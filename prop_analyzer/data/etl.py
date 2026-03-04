@@ -16,67 +16,32 @@ warnings.simplefilter(action='ignore', category=pd.errors.DtypeWarning)
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
 
 TEAM_NAME_MAP = {
-    "Atlanta": "ATL", "Atlanta Hawks": "ATL",
-    "Boston": "BOS", "Boston Celtics": "BOS",
-    "Brooklyn": "BKN", "Brooklyn Nets": "BKN",
-    "Charlotte": "CHA", "Charlotte Hornets": "CHA",
-    "Chicago": "CHI", "Chicago Bulls": "CHI",
-    "Cleveland": "CLE", "Cleveland Cavaliers": "CLE",
-    "Dallas": "DAL", "Dallas Mavericks": "DAL",
-    "Denver": "DEN", "Denver Nuggets": "DEN",
-    "Detroit": "DET", "Detroit Pistons": "DET",
-    "Golden State": "GSW", "Golden State Warriors": "GSW",
-    "Houston": "HOU", "Houston Rockets": "HOU",
-    "Indiana": "IND", "Indiana Pacers": "IND",
-    "LA Clippers": "LAC", "Los Angeles Clippers": "LAC",
-    "LA Lakers": "LAL", "Los Angeles Lakers": "LAL",
-    "Memphis": "MEM", "Memphis Grizzlies": "MEM",
-    "Miami": "MIA", "Miami Heat": "MIA",
-    "Milwaukee": "MIL", "Milwaukee Bucks": "MIL",
-    "Minnesota": "MIN", "Minnesota Timberwolves": "MIN",
-    "New Orleans": "NOP", "New Orleans Pelicans": "NOP",
-    "New York": "NYK", "New York Knicks": "NYK",
-    "Okla City": "OKC", "Oklahoma City Thunder": "OKC",
-    "Orlando": "ORL", "Orlando Magic": "ORL",
-    "Philadelphia": "PHI", "Philadelphia 76ers": "PHI",
-    "Phoenix": "PHX", "Phoenix Suns": "PHX",
-    "Portland": "POR", "Portland Trail Blazers": "POR",
-    "Sacramento": "SAC", "Sacramento Kings": "SAC",
-    "San Antonio": "SAS", "San Antonio Spurs": "SAS",
-    "Toronto": "TOR", "Toronto Raptors": "TOR",
-    "Utah": "UTA", "Utah Jazz": "UTA",
-    "Washington": "WAS", "Washington Wizards": "WAS",
-}
-
-PLAYER_STAT_PREFIX_MAP = {
-    'HOME': 'Home',
-    'AWAY': 'Away:Road',
-    'L5': 'Last 5 Games'
+    "Atlanta": "ATL", "Atlanta Hawks": "ATL", "Boston": "BOS", "Boston Celtics": "BOS",
+    "Brooklyn": "BKN", "Brooklyn Nets": "BKN", "Charlotte": "CHA", "Charlotte Hornets": "CHA",
+    "Chicago": "CHI", "Chicago Bulls": "CHI", "Cleveland": "CLE", "Cleveland Cavaliers": "CLE",
+    "Dallas": "DAL", "Dallas Mavericks": "DAL", "Denver": "DEN", "Denver Nuggets": "DEN",
+    "Detroit": "DET", "Detroit Pistons": "DET", "Golden State": "GSW", "Golden State Warriors": "GSW",
+    "Houston": "HOU", "Houston Rockets": "HOU", "Indiana": "IND", "Indiana Pacers": "IND",
+    "LA Clippers": "LAC", "Los Angeles Clippers": "LAC", "LA Lakers": "LAL", "Los Angeles Lakers": "LAL",
+    "Memphis": "MEM", "Memphis Grizzlies": "MEM", "Miami": "MIA", "Miami Heat": "MIA",
+    "Milwaukee": "MIL", "Milwaukee Bucks": "MIL", "Minnesota": "MIN", "Minnesota Timberwolves": "MIN",
+    "New Orleans": "NOP", "New Orleans Pelicans": "NOP", "New York": "NYK", "New York Knicks": "NYK",
+    "Okla City": "OKC", "Oklahoma City Thunder": "OKC", "Orlando": "ORL", "Orlando Magic": "ORL",
+    "Philadelphia": "PHI", "Philadelphia 76ers": "PHI", "Phoenix": "PHX", "Phoenix Suns": "PHX",
+    "Portland": "POR", "Portland Trail Blazers": "POR", "Sacramento": "SAC", "Sacramento Kings": "SAC",
+    "San Antonio": "SAS", "San Antonio Spurs": "SAS", "Toronto": "TOR", "Toronto Raptors": "TOR",
+    "Utah": "UTA", "Utah Jazz": "UTA", "Washington": "WAS", "Washington Wizards": "WAS",
 }
 
 BBREF_COLUMN_MAP = {
-    'G': 'SEASON_G',
-    'PTS': 'SEASON_PTS',
-    'TRB': 'SEASON_TRB', 
-    'AST': 'SEASON_AST',
-    'STL': 'SEASON_STL',
-    'BLK': 'SEASON_BLK',
-    '3P': 'SEASON_FG3M'  
+    'G': 'SEASON_G', 'PTS': 'SEASON_PTS', 'TRB': 'SEASON_TRB', 'AST': 'SEASON_AST', 'Pos': 'Position'
 }
 
 def get_season_folders(data_dir):
-    """
-    Finds all season subfolders (e.g., '2024-25', '2025-26') in the data directory.
-    Returns sorted list of Path objects.
-    """
     folders = [f for f in data_dir.iterdir() if f.is_dir() and re.match(r'\d{4}-\d{2}', f.name)]
     return sorted(folders)
 
 def load_clean_data(filepath_stem, required_cols=[]):
-    """
-    Smart loader: Prefers Parquet, falls back to CSV.
-    filepath_stem: Path object without extension OR string.
-    """
     if isinstance(filepath_stem, Path):
         path_str = str(filepath_stem)
         base = re.sub(r'\.(csv|parquet)$', '', path_str)
@@ -88,215 +53,146 @@ def load_clean_data(filepath_stem, required_cols=[]):
 
     try:
         df = None
-        if parquet_path.exists():
-            df = pd.read_parquet(parquet_path)
-        elif csv_path.exists():
-            df = pd.read_csv(csv_path, low_memory=False)
-        else:
-            return None
+        if parquet_path.exists(): df = pd.read_parquet(parquet_path)
+        elif csv_path.exists(): df = pd.read_csv(csv_path, low_memory=False)
+        else: return None
             
         if df is not None and not df.empty and required_cols:
             missing = [col for col in required_cols if col not in df.columns]
-            if missing:
-                pass 
-        
+            if missing: return None 
         return df
     except Exception as e:
         logging.error(f"Error loading {base}: {e}")
         return None
 
-def sniff_file_type(filepath):
-    fname = filepath.name
-    if 'NBA Team' in fname:
-        if 'Defense' in fname or 'General' in fname: return 'nba_api'
-        return 'teamrankings'
-    return 'nba_api' 
-
 def get_metric_from_filename(filename, prefix="NBA Team "):
     clean_name = re.sub(r'\.(csv|parquet)$', '', filename)
-    if not clean_name.startswith(prefix):
-        return None
+    if not clean_name.startswith(prefix): return None
     return clean_name[len(prefix):]
 
 def create_player_id_map(data_dir, season_folders):
-    logging.info("Creating Player ID Map across all seasons...")
+    logging.info("Creating Player ID Map from ESPN Box Scores...")
     all_player_dfs = []
-    required_cols = [Cols.PLAYER_ID, 'PLAYER_NAME', 'TEAM_ID', 'TEAM_ABBREVIATION']
 
     for folder in season_folders:
-        for friendly_name in ["Home", "Away:Road", "Last 5 Games"]:
-            file_stem = folder / f"NBA Player Stats {friendly_name}"
-            df = load_clean_data(file_stem, required_cols=required_cols)
-            
-            if df is not None:
-                df[Cols.PLAYER_ID] = pd.to_numeric(df[Cols.PLAYER_ID], errors='coerce').fillna(0).astype(int)
-                existing_cols = [c for c in required_cols if c in df.columns]
-                all_player_dfs.append(df[existing_cols])
+        file_stem = folder / "NBA Player Box Scores"
+        df = load_clean_data(file_stem, required_cols=['ESPN_ID', 'PLAYER_NAME', 'TEAM_ABBREVIATION'])
+        if df is not None:
+            players = df[['ESPN_ID', 'PLAYER_NAME', 'TEAM_ABBREVIATION']].drop_duplicates(subset=['ESPN_ID'], keep='last')
+            all_player_dfs.append(players)
     
     if not all_player_dfs:
-        logging.critical("CRITICAL: No valid player stat files found in any season folder.")
+        logging.critical("CRITICAL: No valid ESPN box scores found to build ID map.")
         return None
         
     player_map_df = pd.concat(all_player_dfs)
-    player_map_df.drop_duplicates(subset=[Cols.PLAYER_ID], inplace=True)
+    player_map_df.drop_duplicates(subset=['ESPN_ID'], keep='last', inplace=True)
+    player_map_df.rename(columns={'ESPN_ID': Cols.PLAYER_ID}, inplace=True)
+    player_map_df[Cols.PLAYER_ID] = pd.to_numeric(player_map_df[Cols.PLAYER_ID], errors='coerce').fillna(0).astype(int)
     player_map_df['Player_Clean'] = player_map_df['PLAYER_NAME'].apply(lambda x: unidecode(str(x)).lower().strip())
+    
     return player_map_df
 
 def process_master_player_stats(player_id_map, season_folders, output_dir):
-    logging.info("--- Starting: process_master_player_stats (Separate Files) ---")
+    logging.info("--- Starting: process_master_player_stats (BBref & ID Sync) ---")
     
+    id_map_clean = player_id_map[[Cols.PLAYER_ID, 'Player_Clean', 'TEAM_ABBREVIATION', 'PLAYER_NAME']].drop_duplicates(subset=['Player_Clean'])
+    name_to_id = id_map_clean.set_index('Player_Clean')[Cols.PLAYER_ID].to_dict()
+
+    def find_match(name):
+        if not name: return None
+        match = process.extractOne(name, name_to_id.keys(), scorer=fuzz.token_sort_ratio, score_cutoff=88)
+        return name_to_id.get(match[0]) if match else None
+
     for folder in season_folders:
         season_id = folder.name
         try:
-            api_player_stats = []
-            for file_prefix, friendly_name in PLAYER_STAT_PREFIX_MAP.items():
-                file_stem = folder / f"NBA Player Stats {friendly_name}"
-                df = load_clean_data(file_stem, required_cols=[Cols.PLAYER_ID, 'PLAYER_NAME'])
-                if df is not None:
-                    df[Cols.PLAYER_ID] = pd.to_numeric(df[Cols.PLAYER_ID], errors='coerce').fillna(0).astype(int)
-                    df = df.add_prefix(f"{file_prefix}_")
-                    df.rename(columns={f"{file_prefix}_{Cols.PLAYER_ID}": Cols.PLAYER_ID, f"{file_prefix}_PLAYER_NAME": "PLAYER_NAME"}, inplace=True)
-                    api_player_stats.append(df)
+            season_player_df = id_map_clean.copy()
+            season_player_df['SEASON_ID'] = season_id
 
-            if not api_player_stats:
-                continue
-                
-            season_player_df = api_player_stats[0]
-            for df in api_player_stats[1:]:
-                season_player_df = pd.merge(season_player_df, df, on=[Cols.PLAYER_ID, "PLAYER_NAME"], how="outer")
-            
-            # Quarter Stats
-            for q in range(1, 5):
-                file_stem = folder / f"NBA Player Q{q}"
-                df_q = load_clean_data(file_stem, required_cols=[Cols.PLAYER_ID, 'PTS', 'MIN'])
-                if df_q is not None:
-                    df_q[Cols.PLAYER_ID] = pd.to_numeric(df_q[Cols.PLAYER_ID], errors='coerce').fillna(0).astype(int)
-                    cols_to_norm = ['MIN', 'FGM', 'FGA', 'FG3M', 'FG3A', 'FTM', 'FTA', 'OREB', 'DREB', 'REB', 'AST', 'TOV', 'STL', 'BLK', 'PF', 'PTS']
-                    cols_to_norm = [c for c in cols_to_norm if c in df_q.columns]
-                    
-                    if 'GP' in df_q.columns:
-                        df_q = df_q[df_q['GP'] > 0].copy()
-                        for col in cols_to_norm:
-                            df_q[col] = (df_q[col] / df_q['GP']).round(2)
-
-                    df_q = df_q.add_prefix(f"Q{q}_")
-                    df_q.rename(columns={f"Q{q}_{Cols.PLAYER_ID}": Cols.PLAYER_ID}, inplace=True)
-                    season_player_df = pd.merge(season_player_df, df_q, on=Cols.PLAYER_ID, how="left")
-
-            # Bball-Ref Stats
             bball_ref_stem = folder / "NBA Player Per Game Averages"
             bball_ref_df = load_clean_data(bball_ref_stem, required_cols=['Player', 'PTS'])
+            
             if bball_ref_df is not None:
                 bball_ref_df['Player_Clean'] = bball_ref_df['Player'].apply(lambda x: unidecode(str(x)).lower().strip())
                 bball_ref_df = bball_ref_df.rename(columns=BBREF_COLUMN_MAP)
                 
-                id_map_clean = player_id_map[[Cols.PLAYER_ID, 'Player_Clean']].drop_duplicates(subset=['Player_Clean'])
-                name_to_id = id_map_clean.set_index('Player_Clean')[Cols.PLAYER_ID].to_dict()
-                
-                def find_match(name):
-                    if not name: return None
-                    match = process.extractOne(name, name_to_id.keys(), scorer=fuzz.token_sort_ratio, score_cutoff=90)
-                    return name_to_id.get(match[0]) if match else None
+                if 'Position' in bball_ref_df.columns:
+                    bball_ref_df['Position'] = bball_ref_df['Position'].astype(str).apply(lambda x: x.split('-')[0] if '-' in x else x)
 
                 bball_ref_df[Cols.PLAYER_ID] = bball_ref_df['Player_Clean'].apply(find_match)
                 bball_ref_df = bball_ref_df[bball_ref_df[Cols.PLAYER_ID].notna()]
                 bball_ref_df[Cols.PLAYER_ID] = bball_ref_df[Cols.PLAYER_ID].astype(int)
-                bball_ref_df.drop_duplicates(subset=[Cols.PLAYER_ID], inplace=True)
+                bball_ref_df.drop_duplicates(subset=[Cols.PLAYER_ID], keep='first', inplace=True)
                 
-                season_cols = [Cols.PLAYER_ID, 'Pos', 'SEASON_G', 'SEASON_PTS', 'SEASON_TRB', 'SEASON_AST', 'SEASON_STL', 'SEASON_BLK', 'SEASON_FG3M']
+                season_cols = [Cols.PLAYER_ID, 'Position', 'SEASON_G', 'SEASON_PTS', 'SEASON_TRB', 'SEASON_AST', 'MIN']
                 cols_exist = [col for col in season_cols if col in bball_ref_df.columns]
                 season_player_df = pd.merge(season_player_df, bball_ref_df[cols_exist], on=Cols.PLAYER_ID, how="left")
                 
-                # Advanced
                 adv_stem = folder / "NBA Player Advanced Stats"
                 adv_df = load_clean_data(adv_stem, required_cols=['Player', 'USG%'])
                 if adv_df is not None:
                     adv_df['Player_Clean'] = adv_df['Player'].apply(lambda x: unidecode(str(x)).lower().strip())
                     adv_df[Cols.PLAYER_ID] = adv_df['Player_Clean'].apply(find_match)
-                    adv_df = adv_df[adv_df[Cols.PLAYER_ID].notna()].drop_duplicates(subset=[Cols.PLAYER_ID])
+                    adv_df = adv_df[adv_df[Cols.PLAYER_ID].notna()]
                     adv_df[Cols.PLAYER_ID] = adv_df[Cols.PLAYER_ID].astype(int)
+                    adv_df.drop_duplicates(subset=[Cols.PLAYER_ID], keep='first', inplace=True)
                     
-                    adv_cols = [c for c in [Cols.PLAYER_ID, 'TS%', 'USG%', 'PER'] if c in adv_df.columns]
+                    adv_cols = [c for c in [Cols.PLAYER_ID, 'TS%', 'USG%', 'PER', 'AST%', 'TRB%'] if c in adv_df.columns]
                     season_player_df = pd.merge(season_player_df, adv_df[adv_cols], on=Cols.PLAYER_ID, how="left", suffixes=('', '_adv'))
 
-            season_player_df['SEASON_ID'] = season_id
-            
-            # Clean names
-            season_player_df = pd.merge(player_id_map[[Cols.PLAYER_ID, 'Player_Clean', 'TEAM_ID', 'TEAM_ABBREVIATION']], season_player_df, on=Cols.PLAYER_ID, how="right")
             season_player_df.rename(columns={'Player_Clean': 'clean_name'}, inplace=True)
-            
             out_name = f"master_player_stats_{season_id}.parquet"
             season_player_df.to_parquet(output_dir / out_name, index=False)
             logging.info(f"Saved {out_name}")
             
         except Exception as e:
-            logging.error(f"Error processing player stats for {folder}: {e}")
+            logging.error(f"Error processing player stats for {folder}: {e}", exc_info=True)
 
 def process_master_team_stats(player_id_map, season_folders, output_dir):
-    logging.info("--- Starting: process_master_team_stats (Separate Files) ---")
-    
-    team_id_to_abbr = player_id_map[['TEAM_ID', 'TEAM_ABBREVIATION']].drop_duplicates().set_index('TEAM_ID')['TEAM_ABBREVIATION'].to_dict()
+    logging.info("--- Starting: process_master_team_stats ---")
+    unique_teams = player_id_map['TEAM_ABBREVIATION'].unique()
 
     for folder in season_folders:
         season_id = folder.name
         season_team_dfs = []
-        
         files = list(folder.glob("NBA Team *.csv")) + list(folder.glob("NBA Team *.parquet"))
         
         for filepath in files:
-            file_type = sniff_file_type(filepath)
             df = load_clean_data(filepath.parent / filepath.stem)
-            if df is None: continue
+            if df is None or 'Team' not in df.columns: continue
+            metric_name = get_metric_from_filename(filepath.name)
+            if not metric_name: continue
+            
+            year_cols = [col for col in df.columns if re.match(r'202\d', str(col))]
+            val_col = max(year_cols, key=lambda x: str(x)) if year_cols else (df.columns[2] if len(df.columns) > 2 else None)
 
-            if file_type == 'teamrankings':
-                metric_name = get_metric_from_filename(filepath.name)
-                if not metric_name: continue
-                
-                year_cols = [col for col in df.columns if re.match(r'202\d', str(col))]
-                val_col = max(year_cols, key=lambda x: str(x)) if year_cols else (df.columns[2] if len(df.columns) > 2 else None)
+            if not val_col: continue
 
-                if not val_col: continue
-
-                df['TEAM_ABBREVIATION'] = df['Team'].map(TEAM_NAME_MAP)
-                df = df[df['TEAM_ABBREVIATION'].notna()]
-                df[metric_name] = pd.to_numeric(df[val_col].astype(str).str.replace(r'[%,]', '', regex=True), errors='coerce')
-                season_team_dfs.append(df[['TEAM_ABBREVIATION', metric_name]])
-
-            elif file_type == 'nba_api':
-                metric_name = get_metric_from_filename(filepath.name)
-                prefix = re.sub(r'[^A-Z_]', '', metric_name.upper()[:4])
-                
-                if 'TEAM_ID' not in df.columns: continue
-                
-                df['TEAM_ABBREVIATION'] = df['TEAM_ID'].map(team_id_to_abbr)
-                df = df[df['TEAM_ABBREVIATION'].notna()]
-                cols = [col for col in df.columns if col not in ['TEAM_ABBREVIATION', 'TEAM_ID', 'TEAM_NAME']]
-                df.rename(columns={col: f"{prefix}_{col}" for col in cols}, inplace=True)
-                season_team_dfs.append(df)
+            df['TEAM_ABBREVIATION'] = df['Team'].map(TEAM_NAME_MAP)
+            df = df[df['TEAM_ABBREVIATION'].notna()]
+            df[metric_name] = pd.to_numeric(df[val_col].astype(str).str.replace(r'[%,]', '', regex=True), errors='coerce')
+            season_team_dfs.append(df[['TEAM_ABBREVIATION', metric_name]])
 
         if season_team_dfs:
-            season_master = pd.DataFrame(player_id_map['TEAM_ABBREVIATION'].unique(), columns=['TEAM_ABBREVIATION']).dropna()
+            season_master = pd.DataFrame(unique_teams, columns=['TEAM_ABBREVIATION']).dropna()
             for df in season_team_dfs:
-                season_master = pd.merge(season_master, df, on='TEAM_ABBREVIATION', how='outer')
+                season_master = pd.merge(season_master, df, on='TEAM_ABBREVIATION', how='left')
             
             season_master['SEASON_ID'] = season_id
-            
             out_name = f"master_team_stats_{season_id}.parquet"
             season_master.to_parquet(output_dir / out_name, index=False)
             logging.info(f"Saved {out_name}")
 
 def calculate_historical_vacancy(bs_df, player_df):
-    logging.info("--- Initializing Historical Vacancy Columns (Placeholder) ---")
-    vacancy_cols = ['TEAM_MISSING_USG', 'TEAM_MISSING_MIN', 'MISSING_USG_G', 'MISSING_USG_F']
+    vacancy_cols = ['TEAM_MISSING_USG', 'TEAM_MISSING_MIN', 'MISSING_USG_G', 'MISSING_USG_F', 'TEAM_MISSING_AST_PCT', 'TEAM_MISSING_REB_PCT']
     for c in vacancy_cols:
-        if c not in bs_df.columns:
-            bs_df[c] = 0.0
-        else:
-            bs_df[c] = bs_df[c].fillna(0.0)
+        if c not in bs_df.columns: bs_df[c] = 0.0
+        else: bs_df[c] = bs_df[c].fillna(0.0)
     return bs_df
 
 def process_master_box_scores(player_id_map, season_folders, output_dir):
-    logging.info("--- Starting: process_master_box_scores (Separate Files) ---")
+    logging.info("--- Starting: process_master_box_scores (Advanced Features) ---")
     
     for folder in season_folders:
         season_id = folder.name
@@ -304,106 +200,102 @@ def process_master_box_scores(player_id_map, season_folders, output_dir):
             file_stem = folder / "NBA Player Box Scores"
             bs_df = load_clean_data(file_stem)
             
-            if bs_df is None or bs_df.empty: 
-                continue
+            if bs_df is None or bs_df.empty: continue
 
-            # Standardize Column Names
-            rename_map = {}
-            if 'Player_ID' in bs_df.columns and Cols.PLAYER_ID not in bs_df.columns:
-                rename_map['Player_ID'] = Cols.PLAYER_ID
-            if 'Game_ID' in bs_df.columns and Cols.GAME_ID not in bs_df.columns:
-                rename_map['Game_ID'] = Cols.GAME_ID
+            if 'ESPN_ID' in bs_df.columns:
+                bs_df.rename(columns={'ESPN_ID': Cols.PLAYER_ID}, inplace=True)
             
-            if rename_map:
-                bs_df.rename(columns=rename_map, inplace=True)
-
-            # Drop redundant columns to prevent '_x' / '_y' suffixes from merges
-            cols_to_drop = ['PLAYER_NAME', 'TEAM_ABBREVIATION', 'Player_Clean']
-            bs_df.drop(columns=[c for c in cols_to_drop if c in bs_df.columns], inplace=True)
-
+            if 'PLAYER_NAME' in bs_df.columns:
+                bs_df.rename(columns={'PLAYER_NAME': Cols.PLAYER_NAME}, inplace=True)
+            
             bs_df.dropna(subset=[Cols.PLAYER_ID], inplace=True)
             bs_df[Cols.PLAYER_ID] = bs_df[Cols.PLAYER_ID].astype(int)
             
-            # Ensure GAME_ID is numeric if present
             if Cols.GAME_ID in bs_df.columns:
                 bs_df[Cols.GAME_ID] = pd.to_numeric(bs_df[Cols.GAME_ID], errors='coerce').fillna(0).astype(int)
+            if Cols.DATE in bs_df.columns: 
+                bs_df[Cols.DATE] = pd.to_datetime(bs_df[Cols.DATE], errors='coerce')
+
+            if 'MATCHUP' in bs_df.columns:
+                bs_df['IS_HOME'] = np.where(bs_df['MATCHUP'].str.contains('@'), 0, 1)
+            else:
+                bs_df['IS_HOME'] = 1 
             
-            # Handle Date
-            if 'GAME_DATE' in bs_df.columns: 
-                bs_df[Cols.DATE] = pd.to_datetime(bs_df['GAME_DATE'], errors='coerce')
+            bs_df.sort_values(by=[Cols.PLAYER_ID, Cols.DATE], inplace=True)
+            bs_df['Days_Between_Games'] = bs_df.groupby(Cols.PLAYER_ID)[Cols.DATE].diff().dt.days
+            bs_df['Days_Rest'] = (bs_df['Days_Between_Games'] - 1).fillna(3)
+            bs_df['Days_Rest'] = bs_df['Days_Rest'].clip(lower=0, upper=5)
             
-            # Merge Player Info
-            id_map = player_id_map[[Cols.PLAYER_ID, 'PLAYER_NAME', 'TEAM_ABBREVIATION', 'Player_Clean']].drop_duplicates(subset=[Cols.PLAYER_ID])
-            bs_df = pd.merge(bs_df, id_map, on=Cols.PLAYER_ID, how='left')
+            conditions = [bs_df['Days_Rest'] == 0, bs_df['Days_Rest'] == 1, bs_df['Days_Rest'] >= 2]
+            choices = ['B2B', '1_Day', '2_Plus_Days']
+            bs_df['Rest_Category'] = np.select(conditions, choices, default='Unknown')
             
-            # Merge Position Info
+            if 'TEAM_ABBREVIATION' in bs_df.columns and 'OPPONENT_ABBREV' in bs_df.columns and Cols.DATE in bs_df.columns:
+                team_games = bs_df[['TEAM_ABBREVIATION', Cols.DATE]].drop_duplicates().sort_values(['TEAM_ABBREVIATION', Cols.DATE])
+                team_games['OPP_DAYS_REST'] = team_games.groupby('TEAM_ABBREVIATION')[Cols.DATE].diff().dt.days.fillna(3.0)
+                team_games['OPP_DAYS_REST'] = team_games['OPP_DAYS_REST'].clip(upper=7.0) 
+                team_games['OPP_IS_B2B'] = np.where(team_games['OPP_DAYS_REST'] <= 1, 1.0, 0.0)
+                
+                bs_df = pd.merge(bs_df, team_games, left_on=['OPPONENT_ABBREV', Cols.DATE], right_on=['TEAM_ABBREVIATION', Cols.DATE], how='left', suffixes=('', '_opp_drop'))
+                if 'TEAM_ABBREVIATION_opp_drop' in bs_df.columns:
+                    bs_df.drop(columns=['TEAM_ABBREVIATION_opp_drop'], inplace=True)
+                
+                bs_df['OPP_DAYS_REST'] = bs_df['OPP_DAYS_REST'].fillna(3.0)
+                bs_df['OPP_IS_B2B'] = bs_df['OPP_IS_B2B'].fillna(0.0)
+
             p_stats_path = output_dir / f"master_player_stats_{season_id}.parquet"
             if p_stats_path.exists():
                 p_stats = pd.read_parquet(p_stats_path)
                 if Cols.PLAYER_ID in p_stats.columns:
                     p_stats[Cols.PLAYER_ID] = pd.to_numeric(p_stats[Cols.PLAYER_ID], errors='coerce').fillna(0).astype(int)
-                    p_stats_szn = p_stats[[Cols.PLAYER_ID, 'Pos']].drop_duplicates(subset=[Cols.PLAYER_ID])
-                    bs_df = pd.merge(bs_df, p_stats_szn, on=Cols.PLAYER_ID, how='left')
+                    pos_col = 'Position' if 'Position' in p_stats.columns else ('Pos' if 'Pos' in p_stats.columns else None)
+                    if pos_col:
+                        p_stats_szn = p_stats[[Cols.PLAYER_ID, pos_col]].drop_duplicates(subset=[Cols.PLAYER_ID])
+                        if pos_col != 'Position':
+                            p_stats_szn.rename(columns={pos_col: 'Position'}, inplace=True)
+                        
+                        if 'Position' not in bs_df.columns:
+                            bs_df = pd.merge(bs_df, p_stats_szn, on=Cols.PLAYER_ID, how='left')
 
-            # Numeric Conversions
-            numeric_cols = [
-                'PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 
-                'FGM', 'FGA', 'FTA', 'FTM', 'OREB', 'DREB', 'MIN'
-            ]
+            numeric_cols = ['PTS', 'REB', 'AST', 'FGA', 'FTA', 'TOV', 'MIN', 'STL', 'BLK']
             for col in numeric_cols:
-                if col in bs_df.columns: 
-                    bs_df[col] = pd.to_numeric(bs_df[col], errors='coerce').fillna(0)
+                if col in bs_df.columns: bs_df[col] = pd.to_numeric(bs_df[col], errors='coerce').fillna(0)
             
-            # Derived Stats
             bs_df['PRA'] = bs_df['PTS'] + bs_df['REB'] + bs_df['AST']
             bs_df['PR'] = bs_df['PTS'] + bs_df['REB']
             bs_df['PA'] = bs_df['PTS'] + bs_df['AST']
             bs_df['RA'] = bs_df['REB'] + bs_df['AST']
-            bs_df['STK'] = bs_df['STL'] + bs_df['BLK']
-            bs_df['FANTASY_PTS'] = bs_df['PTS'] + (bs_df['REB']*1.2) + (bs_df['AST']*1.5) + (bs_df['STL']*3) + (bs_df['BLK']*3) - bs_df['TOV']
-            
-            # Double/Triple Doubles
-            dd_cols = ['PTS', 'REB', 'AST', 'STL', 'BLK']
-            if all(c in bs_df.columns for c in dd_cols):
-                counts = bs_df[dd_cols].ge(10).sum(axis=1)
-                bs_df['DD'] = counts.ge(2).astype(int)
-                bs_df['TD'] = counts.ge(3).astype(int)
-            else:
-                bs_df['DD'] = 0
-                bs_df['TD'] = 0
+            bs_df['STOCKS'] = bs_df.get('STL', 0) + bs_df.get('BLK', 0)
 
-            # Advanced Metrics
             ts_denom = 2 * (bs_df['FGA'] + 0.44 * bs_df['FTA'])
             bs_df['TS_PCT'] = np.where(ts_denom > 0, bs_df['PTS'] / ts_denom, 0.0)
             
             usg_num = (bs_df['FGA'] + 0.44 * bs_df['FTA'] + bs_df['TOV'])
-            bs_df['USG_PROXY'] = np.where(bs_df['MIN'] > 0, usg_num / bs_df['MIN'], 0.0)
+            bs_df['USG_PROXY'] = np.where(bs_df['MIN'] > 0, (usg_num / bs_df['MIN']) * 100, 0.0)
 
-            per_36_cols = ['PTS', 'REB', 'AST', 'PRA', 'FG3M', 'STL', 'BLK', 'TOV']
+            per_36_cols = ['PTS', 'REB', 'AST', 'PRA', 'USG_PROXY']
             for col in per_36_cols:
                 if col in bs_df.columns:
-                    bs_df[f'{col}_PER36'] = np.where(bs_df['MIN'] > 0, (bs_df[col] / bs_df['MIN']) * 36, 0.0).round(2)
+                    bs_df[f'{col}_PER36'] = np.where(bs_df['MIN'] >= 5, (bs_df[col] / bs_df['MIN']) * 36, 0.0).round(2)
 
             bs_df['SEASON_ID'] = season_id
-            
             if p_stats_path.exists():
                 bs_df = calculate_historical_vacancy(bs_df, pd.read_parquet(p_stats_path))
-            
-            def get_opponent(matchup):
-                if not isinstance(matchup, str): return "UNKNOWN"
-                return matchup.split(" vs. ")[-1] if " vs. " in matchup else matchup.split(" @ ")[-1] if " @ " in matchup else "UNKNOWN"
-            
-            if 'MATCHUP' in bs_df.columns:
-                bs_df['OPPONENT_ABBREV'] = bs_df['MATCHUP'].apply(get_opponent)
-            else:
-                bs_df['OPPONENT_ABBREV'] = "UNK"
+
+            split_stat_cols = ['PTS', 'REB', 'AST', 'PRA', 'MIN']
+            for col in split_stat_cols:
+                if col in bs_df.columns:
+                    bs_df[f'{col}_SPLIT_AVG'] = bs_df.groupby([Cols.PLAYER_ID, 'IS_HOME'])[col].transform(
+                        lambda x: x.expanding().mean().shift(1)
+                    ).fillna(0.0).round(2)
+
+            if 'OPPONENT_ABBREV' not in bs_df.columns:
+                 bs_df['OPPONENT_ABBREV'] = "UNK"
 
             subset_cols = [Cols.PLAYER_ID, Cols.DATE]
-            if Cols.GAME_ID in bs_df.columns:
-                subset_cols.insert(1, Cols.GAME_ID)
+            if Cols.GAME_ID in bs_df.columns: subset_cols.insert(1, Cols.GAME_ID)
             
             bs_df.drop_duplicates(subset=subset_cols, keep='last', inplace=True)
-            
             out_name = f"master_box_scores_{season_id}.parquet"
             bs_df.to_parquet(output_dir / out_name, index=False)
             logging.info(f"Saved {out_name} ({len(bs_df)} rows)")
@@ -418,113 +310,106 @@ def process_vs_opponent_stats(data_dir, output_dir):
 
     dfs = []
     for f in all_files:
-        try:
-            dfs.append(pd.read_parquet(f))
+        try: dfs.append(pd.read_parquet(f))
         except: pass
     
     if not dfs: return
     df = pd.concat(dfs, ignore_index=True)
     
-    agg_cols = {k: 'mean' for k in ['PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'TOV', 'PRA', 'PR', 'PA', 'RA', 'FANTASY_PTS', 'MIN', 'DD', 'TD'] if k in df.columns}
+    agg_cols = {k: 'mean' for k in ['PTS', 'REB', 'AST', 'PRA', 'PR', 'PA', 'RA', 'MIN'] if k in df.columns}
+    if Cols.GAME_ID in df.columns: agg_cols[Cols.GAME_ID] = 'count'
     
-    count_col = Cols.GAME_ID if Cols.GAME_ID in df.columns else 'Game_ID'
-    if count_col in df.columns: 
-        agg_cols[count_col] = 'count'
+    name_col = Cols.PLAYER_NAME if Cols.PLAYER_NAME in df.columns else 'PLAYER_NAME'
     
-    vs_opp_df = df.groupby([Cols.PLAYER_ID, 'PLAYER_NAME', 'OPPONENT_ABBREV']).agg(agg_cols).reset_index()
-    if count_col in vs_opp_df.columns: 
-        vs_opp_df.rename(columns={count_col: 'GAMES_PLAYED'}, inplace=True)
+    vs_opp_df = df.groupby([Cols.PLAYER_ID, name_col, 'OPPONENT_ABBREV']).agg(agg_cols).reset_index()
+    if Cols.GAME_ID in vs_opp_df.columns: vs_opp_df.rename(columns={Cols.GAME_ID: 'GAMES_PLAYED'}, inplace=True)
     
     vs_opp_df.round(2).to_parquet(output_dir / "master_vs_opponent.parquet", index=False)
     logging.info("Saved master_vs_opponent.parquet")
 
 def process_dvp_stats(output_dir):
-    """
-    Calculates Defense vs Position (DvP) stats PER SEASON to avoid historical leakage.
-    Improved: Iterates through ALL master_box_scores_{season}.parquet files, calculates 
-    DVP for that specific season, and aggregates them.
-    """
-    logging.info("--- Starting: process_dvp_stats (Season-Aware) ---")
+    logging.info("--- Starting: process_dvp_stats (Advanced Composite - Fixed Target Leakage) ---")
     files = sorted(output_dir.glob("master_box_scores_*.parquet"))
     if not files: return
     
     all_dvp_dfs = []
-
     for file_path in files:
         try:
-            # Extract season_id from filename: master_box_scores_2024-25.parquet
             match = re.search(r'\d{4}-\d{2}', file_path.name)
             season_id = match.group(0) if match else "UNKNOWN"
-            logging.info(f"Calculating DvP for Season: {season_id}")
             
             df = pd.read_parquet(file_path)
             
-            required = ['Pos', 'OPPONENT_ABBREV']
-            if Cols.DATE in df.columns: required.append(Cols.DATE)
+            team_stats_file = output_dir / f"master_team_stats_{season_id}.parquet"
+            team_def_rtg = None
+            if team_stats_file.exists():
+                ts_df = pd.read_parquet(team_stats_file)
+                if 'Defensive Efficiency' in ts_df.columns:
+                    team_def_rtg = ts_df[['TEAM_ABBREVIATION', 'Defensive Efficiency']].set_index('TEAM_ABBREVIATION').to_dict()['Defensive Efficiency']
+
+            pos_col = 'Position' if 'Position' in df.columns else ('Pos' if 'Pos' in df.columns else None)
             
-            if not all(c in df.columns for c in required):
-                logging.warning(f"Skipping {season_id}: Missing required columns.")
-                continue
+            required = [pos_col, 'OPPONENT_ABBREV', Cols.DATE] if pos_col else ['OPPONENT_ABBREV', Cols.DATE]
+            if not all(c in df.columns for c in required): continue
 
             def normalize_pos(pos):
                 if not isinstance(pos, str): return 'UNKNOWN'
                 p = pos.split('-')[0].upper().strip()
-                if p == 'G': return 'SG' # Default Guard bucket
-                if p == 'F': return 'PF' # Default Forward bucket
+                if p == 'G': return 'SG' 
+                if p == 'F': return 'PF' 
                 return p
             
-            df['Primary_Pos'] = df['Pos'].apply(normalize_pos)
+            if pos_col:
+                df['Primary_Pos'] = df[pos_col].apply(normalize_pos)
+            else:
+                df['Primary_Pos'] = 'UNKNOWN'
+                
             valid_positions = ['PG', 'SG', 'SF', 'PF', 'C']
             df = df[df['Primary_Pos'].isin(valid_positions)].copy()
 
-            # Sort for expanding window calculation
-            if Cols.DATE in df.columns:
-                df.sort_values(by=[Cols.PLAYER_ID, Cols.DATE], inplace=True)
+            df.sort_values(by=[Cols.PLAYER_ID, Cols.DATE], inplace=True)
 
-            stat_cols = ['PTS', 'REB', 'AST', 'FG3M', 'PRA', 'PR', 'PA', 'RA', 'STL', 'BLK', 'TOV']
+            stat_cols = ['PTS', 'REB', 'AST', 'PRA', 'PR', 'PA', 'RA']
             
-            # 1. Calculate Player's Avg Entering the Game (To baseline performance)
-            # GroupBy Player within this season
             for col in stat_cols:
                 if col in df.columns:
-                    # Expanding mean excluding current game (shift 1)
                     exp_series = df.groupby(Cols.PLAYER_ID)[col].expanding().mean()
                     df[f'{col}_AVG'] = exp_series.groupby(level=0).shift(1).reset_index(level=0, drop=True)
                     
-            # Drop rows where history is NaN (first game of season for player)
-            # DVP needs at least one game of history to establish baseline performance
             df.dropna(subset=[f'{c}_AVG' for c in stat_cols if c in df.columns], inplace=True)
 
-            # 2. Calculate Differential (Actual - Expected)
             for col in stat_cols:
                 if col in df.columns:
-                    df[f'{col}_DIFF'] = df[col] - df[f'{col}_AVG']
+                    df[f'{col}_PCT_DIFF'] = np.where(df[f'{col}_AVG'] > 0, 
+                                                     (df[col] - df[f'{col}_AVG']) / df[f'{col}_AVG'], 0.0)
 
-            # 3. Aggregate Differences by Opponent & Position for this season
-            diff_cols = {f'{col}_DIFF': 'mean' for col in stat_cols if col in df.columns}
-            if not diff_cols: continue
+            df.sort_values(by=Cols.DATE, inplace=True)
+            dvp_group = df.groupby(['OPPONENT_ABBREV', 'Primary_Pos'])
             
-            dvp_diffs = df.groupby(['OPPONENT_ABBREV', 'Primary_Pos']).agg(diff_cols).reset_index()
-
-            # 4. Calculate League Average Baseline for Position for this season
+            for col in stat_cols:
+                if f'{col}_PCT_DIFF' in df.columns:
+                    df[f'EXP_MEAN_{col}_DIFF'] = dvp_group[f'{col}_PCT_DIFF'].transform(lambda x: x.expanding().mean().shift(1)).fillna(0.0)
+            
             league_pos_baselines = df.groupby('Primary_Pos')[stat_cols].mean().reset_index()
-            
             rename_map = {c: f"{c}_BASE" for c in stat_cols}
             league_pos_baselines.rename(columns=rename_map, inplace=True)
             
-            # 5. Combine
-            merged_dvp = pd.merge(dvp_diffs, league_pos_baselines, on='Primary_Pos', how='inner')
+            season_dvp = df[[Cols.DATE, 'OPPONENT_ABBREV', 'Primary_Pos']].copy().drop_duplicates(subset=['OPPONENT_ABBREV', 'Primary_Pos', Cols.DATE])
             
-            season_dvp = pd.DataFrame()
-            season_dvp['SEASON_ID'] = season_id
-            season_dvp['OPPONENT_ABBREV'] = merged_dvp['OPPONENT_ABBREV']
-            season_dvp['Primary_Pos'] = merged_dvp['Primary_Pos']
+            season_dvp = pd.merge(season_dvp, league_pos_baselines, on='Primary_Pos', how='left')
             
             for col in stat_cols:
-                if f'{col}_DIFF' in merged_dvp.columns and f'{col}_BASE' in merged_dvp.columns:
-                    # DVP_{STAT} = Baseline + Diff
-                    season_dvp[f'DVP_{col}'] = merged_dvp[f'{col}_BASE'] + merged_dvp[f'{col}_DIFF']
+                if f'EXP_MEAN_{col}_DIFF' in df.columns:
+                    diff_map = df.drop_duplicates(subset=['OPPONENT_ABBREV', 'Primary_Pos', Cols.DATE]).set_index(['OPPONENT_ABBREV', 'Primary_Pos', Cols.DATE])[f'EXP_MEAN_{col}_DIFF']
+                    season_dvp[f'{col}_PCT_DIFF'] = season_dvp.set_index(['OPPONENT_ABBREV', 'Primary_Pos', Cols.DATE]).index.map(diff_map)
+                    
+                    season_dvp[f'DVP_{col}_MULTIPLIER'] = 1.0 + season_dvp[f'{col}_PCT_DIFF'].fillna(0.0)
+                    season_dvp[f'DVP_{col}'] = season_dvp[f'{col}_BASE'] * season_dvp[f'DVP_{col}_MULTIPLIER']
             
+            if team_def_rtg:
+                season_dvp['OPP_DEF_EFF'] = season_dvp['OPPONENT_ABBREV'].map(team_def_rtg).fillna(110.0)
+
+            season_dvp['SEASON_ID'] = season_id
             all_dvp_dfs.append(season_dvp)
             
         except Exception as e:
@@ -532,102 +417,168 @@ def process_dvp_stats(output_dir):
 
     if all_dvp_dfs:
         final_dvp_all = pd.concat(all_dvp_dfs, ignore_index=True)
-        final_dvp_all.round(2).to_parquet(output_dir / "master_dvp_stats.parquet", index=False)
-        logging.info(f"Saved master_dvp_stats.parquet (Multi-Season: {len(final_dvp_all)} rows)")
+        final_dvp_all.sort_values(by=['OPPONENT_ABBREV', 'Primary_Pos', Cols.DATE], inplace=True)
+        final_dvp_all.round(3).to_parquet(output_dir / "master_dvp_stats.parquet", index=False)
+        logging.info(f"Saved master_dvp_stats.parquet (Multi-Season Time-Series: {len(final_dvp_all)} rows)")
 
-def process_q1_history(output_dir):
-    """
-    1. Aggregates daily Q1 logs -> master_q1_stats.parquet
-    2. Aggregates daily Q2 logs + Q1 logs -> master_1h_stats.parquet
-    """
-    logging.info("--- Processing Quarter/Half History ---")
-    
-    # --- PROCESS Q1 ---
-    q1_files = sorted(output_dir.rglob("daily_q1_stats_*.parquet"))
-    full_q1 = pd.DataFrame()
-    
-    if q1_files:
-        dfs = []
-        for f in q1_files:
-            try: dfs.append(pd.read_parquet(f))
-            except: pass
-        if dfs:
-            full_q1 = pd.concat(dfs, ignore_index=True)
-            # Cleanup Q1
-            if 'GAME_DATE' in full_q1.columns:
-                full_q1['GAME_DATE'] = pd.to_datetime(full_q1['GAME_DATE']).dt.normalize()
-            
-            # Robust drop duplicates
-            dedup_subset = [Cols.PLAYER_ID, 'GAME_DATE']
-            if Cols.GAME_ID in full_q1.columns:
-                dedup_subset.append(Cols.GAME_ID)
-                
-            full_q1 = full_q1.drop_duplicates(subset=dedup_subset, keep='last')
-            
-            # Numeric conversion
-            cols_num = ['PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV', 'FGM', 'FGA', 'MIN']
-            for c in cols_num:
-                if c in full_q1.columns: full_q1[c] = pd.to_numeric(full_q1[c], errors='coerce').fillna(0)
-            
-            full_q1.to_parquet(cfg.MASTER_Q1_FILE, index=False)
-            logging.info(f"Saved Master Q1: {len(full_q1)} rows")
+def process_home_away_splits(output_dir):
+    logging.info("--- Starting: process_home_away_splits ---")
+    all_files = sorted(output_dir.glob("master_box_scores_*.parquet"))
+    if not all_files: return
 
-    # --- PROCESS 1H (Q1 + Q2) ---
-    q2_files = sorted(output_dir.rglob("daily_q2_stats_*.parquet"))
+    dfs = []
+    for f in all_files:
+        try: 
+            df = pd.read_parquet(f)
+            match = re.search(r'\d{4}-\d{2}', f.name)
+            if match and 'SEASON_ID' not in df.columns:
+                df['SEASON_ID'] = match.group(0)
+            dfs.append(df)
+        except Exception as e:
+            logging.error(f"Error loading {f.name} for home/away splits: {e}")
+            
+    if not dfs: return
+    combined_df = pd.concat(dfs, ignore_index=True)
     
-    if q1_files and q2_files:
-        logging.info("Building 1st Half (1H) stats from Q1 + Q2...")
+    stat_cols = ['PTS', 'REB', 'AST', 'PRA', 'MIN']
+    valid_cols = [c for c in stat_cols if c in combined_df.columns]
+    
+    if not valid_cols: return
+    
+    name_col = Cols.PLAYER_NAME if Cols.PLAYER_NAME in combined_df.columns else 'PLAYER_NAME'
+    
+    splits_df = combined_df.groupby(['SEASON_ID', Cols.PLAYER_ID, name_col, 'IS_HOME'])[valid_cols].mean().reset_index()
+    
+    counts_df = combined_df.groupby(['SEASON_ID', Cols.PLAYER_ID, 'IS_HOME']).size().reset_index(name='GP_SPLIT')
+    splits_df = pd.merge(splits_df, counts_df, on=['SEASON_ID', Cols.PLAYER_ID, 'IS_HOME'], how='left')
+    
+    pivot_cols = valid_cols + ['GP_SPLIT']
+    splits_pivot = splits_df.pivot(index=['SEASON_ID', Cols.PLAYER_ID, name_col], columns='IS_HOME', values=pivot_cols)
+    
+    splits_pivot.columns = [f"{col}_{'HOME' if is_home == 1 else 'AWAY'}" for col, is_home in splits_pivot.columns]
+    splits_pivot = splits_pivot.reset_index()
+    
+    for col in valid_cols:
+        home_col = f"{col}_HOME"
+        away_col = f"{col}_AWAY"
+        if home_col in splits_pivot.columns and away_col in splits_pivot.columns:
+            splits_pivot[f"{col}_DIFF"] = splits_pivot[home_col] - splits_pivot[away_col]
+            
+    splits_pivot.round(2).to_parquet(output_dir / "master_home_away_splits.parquet", index=False)
+    logging.info(f"Saved master_home_away_splits.parquet ({len(splits_pivot)} rows)")
+
+def process_pbpstats_data(player_id_map, season_folders, output_dir):
+    logging.info("--- Starting: process_pbpstats_data (Mapping Assist Networks, Foul Risk & WOWY Data) ---")
+    id_map_clean = player_id_map[[Cols.PLAYER_ID, 'PLAYER_NAME']].drop_duplicates()
+    id_map_clean['Name_Clean'] = id_map_clean['PLAYER_NAME'].apply(lambda x: unidecode(str(x)).lower().replace(" ", ""))
+
+    for folder in season_folders:
+        season_id = folder.name
         
-        # Load Q2
-        dfs_q2 = []
-        for f in q2_files:
-            try: dfs_q2.append(pd.read_parquet(f))
-            except: pass
-            
-        if dfs_q2:
-            full_q2 = pd.concat(dfs_q2, ignore_index=True)
-            if 'GAME_DATE' in full_q2.columns:
-                full_q2['GAME_DATE'] = pd.to_datetime(full_q2['GAME_DATE']).dt.normalize()
-            
-            dedup_subset = [Cols.PLAYER_ID, 'GAME_DATE']
-            if Cols.GAME_ID in full_q2.columns:
-                dedup_subset.append(Cols.GAME_ID)
-            
-            full_q2 = full_q2.drop_duplicates(subset=dedup_subset, keep='last')
-            
-            cols_num = ['PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV', 'FGM', 'FGA', 'MIN']
-            for c in cols_num:
-                if c in full_q2.columns: full_q2[c] = pd.to_numeric(full_q2[c], errors='coerce').fillna(0)
+        # 1. Map Assist Networks to exact Player IDs
+        ast_file = folder / "PBPStats Assist Networks.parquet"
+        if ast_file.exists():
+            ast_df = pd.read_parquet(ast_file)
+            if 'Passer' in ast_df.columns and 'Shooter' in ast_df.columns:
+                ast_df['Passer_Clean'] = ast_df['Passer'].apply(lambda x: unidecode(str(x)).lower().replace(" ", ""))
+                ast_df['Shooter_Clean'] = ast_df['Shooter'].apply(lambda x: unidecode(str(x)).lower().replace(" ", ""))
+                
+                ast_df = pd.merge(ast_df, id_map_clean.rename(columns={'Name_Clean': 'Passer_Clean', Cols.PLAYER_ID: 'PASSER_ID'}), on='Passer_Clean', how='left')
+                ast_df = pd.merge(ast_df, id_map_clean.rename(columns={'Name_Clean': 'Shooter_Clean', Cols.PLAYER_ID: 'SHOOTER_ID'}), on='Shooter_Clean', how='left')
+                
+                if 'PASSER_ID' in ast_df.columns:
+                    ast_df[Cols.PLAYER_ID] = ast_df['PASSER_ID']
+                    
+                ast_df.to_parquet(output_dir / f"master_assist_networks_{season_id}.parquet", index=False)
+                
+        # 2. Map Player Totals for Rotation Trust and Foul Troubleshooting
+        pt_file = folder / "PBPStats Player Totals.parquet"
+        if pt_file.exists():
+            pt_df = pd.read_parquet(pt_file)
+            if 'Name' in pt_df.columns:
+                pt_df['Name_Clean'] = pt_df['Name'].apply(lambda x: unidecode(str(x)).lower().replace(" ", ""))
+                pt_df = pd.merge(pt_df, id_map_clean, on='Name_Clean', how='left')
+                pt_df.to_parquet(output_dir / f"master_pbp_player_totals_{season_id}.parquet", index=False)
+                
+        # 3. Expose Lineup data for WOWY parsing in generator
+        lu_file = folder / "PBPStats Lineup Totals.parquet"
+        if lu_file.exists():
+            pd.read_parquet(lu_file).to_parquet(output_dir / f"master_pbp_lineups_{season_id}.parquet", index=False)
 
-            # Merge Q1 + Q2 on Player/Date
-            # Use GAME_ID if available for tighter merge
-            merge_on = [Cols.PLAYER_ID, 'GAME_DATE', 'PLAYER_NAME', 'TEAM_ABBREVIATION']
-            if Cols.GAME_ID in full_q1.columns and Cols.GAME_ID in full_q2.columns:
-                merge_on.append(Cols.GAME_ID)
+def process_daily_vacancy(player_id_map, season_folders, output_dir):
+    logging.info("--- Starting: process_daily_vacancy (Time-Series) ---")
+    if not season_folders: return
+    latest_folder = season_folders[-1]
+    season_id = latest_folder.name
+    
+    injuries_path = latest_folder / "daily_injuries.parquet"
+    if not injuries_path.exists(): 
+        logging.info("No daily injuries report found for current season.")
+        return
+        
+    inj_df = pd.read_parquet(injuries_path)
+    if inj_df is None or inj_df.empty: return
+    
+    if 'Status_Clean' not in inj_df.columns: return
+    out_df = inj_df[inj_df['Status_Clean'] == 'OUT'].copy()
+    if out_df.empty: return
+    
+    # TIME SERIES FIX: Ensure Date exists and calculate grouped by Date
+    if 'Date' not in out_df.columns:
+        out_df['Date'] = pd.Timestamp.today().normalize()
+    out_df['Date'] = pd.to_datetime(out_df['Date'])
+    
+    out_df['clean_name'] = out_df['Player'].apply(lambda x: unidecode(str(x)).lower().strip())
+    id_map_clean = player_id_map[['Player_Clean', Cols.PLAYER_ID]].drop_duplicates()
+    out_df = pd.merge(out_df, id_map_clean, left_on='clean_name', right_on='Player_Clean', how='left')
+    
+    p_stats_path = output_dir / f"master_player_stats_{season_id}.parquet"
+    if p_stats_path.exists():
+        p_stats = pd.read_parquet(p_stats_path)
+        
+        stats_to_get = [c for c in ['USG%', 'AST%', 'TRB%', 'MIN', 'Position'] if c in p_stats.columns]
+        
+        if stats_to_get:
+            # FIX: Drop overlapping columns BEFORE merge to prevent _x and _y suffixes
+            cols_to_drop = [c for c in stats_to_get if c in out_df.columns]
+            if cols_to_drop:
+                out_df.drop(columns=cols_to_drop, inplace=True)
+                
+            out_df = pd.merge(out_df, p_stats[[Cols.PLAYER_ID] + stats_to_get], on=Cols.PLAYER_ID, how='left')
+            
+            for c in ['USG%', 'AST%', 'TRB%', 'MIN']:
+                if c in out_df.columns:
+                    out_df[c] = pd.to_numeric(out_df[c], errors='coerce').fillna(0.0)
+                    
+            min_ratio = out_df.get('MIN', 0.0) / 48.0
+            out_df['TEAM_MISSING_USG'] = out_df.get('USG%', 0.0) * min_ratio
+            out_df['TEAM_MISSING_AST_PCT'] = out_df.get('AST%', 0.0) * min_ratio
+            out_df['TEAM_MISSING_REB_PCT'] = out_df.get('TRB%', 0.0) * min_ratio
+            out_df['TEAM_MISSING_MIN'] = out_df.get('MIN', 0.0)
+            
+            # FIX: Ensure column exists as a Series before astype
+            if 'Position' not in out_df.columns:
+                out_df['Position'] = 'UNK'
+            out_df['Position'] = out_df['Position'].astype(str).str.upper()
+            
+            out_df['MISSING_USG_G'] = np.where(out_df['Position'].str.contains('G'), out_df['TEAM_MISSING_USG'], 0.0)
+            out_df['MISSING_USG_F'] = np.where(out_df['Position'].str.contains('F|C'), out_df['TEAM_MISSING_USG'], 0.0)
+                
+            agg_dict = {
+                'TEAM_MISSING_USG': 'sum',
+                'TEAM_MISSING_AST_PCT': 'sum',
+                'TEAM_MISSING_REB_PCT': 'sum',
+                'TEAM_MISSING_MIN': 'sum',
+                'MISSING_USG_G': 'sum',
+                'MISSING_USG_F': 'sum'
+            }
+            
+            # Grouping by both Date and Team prevents target leakage across games
+            team_vacancy = out_df.groupby(['Date', 'Team']).agg(agg_dict).reset_index()
+            team_vacancy.rename(columns={'Team': 'TEAM_ABBREVIATION'}, inplace=True)
+            
+            team_vacancy.to_parquet(output_dir / "master_daily_vacancy.parquet", index=False)
+            logging.info(f"Saved time-series master_daily_vacancy.parquet with {len(team_vacancy)} records.")
 
-            merged = pd.merge(
-                full_q1, full_q2, 
-                on=merge_on, 
-                how='inner', 
-                suffixes=('_q1', '_q2')
-            )
-            
-            # Calculate 1H Stats
-            stats_to_sum = ['PTS', 'REB', 'AST', 'FG3M', 'STL', 'BLK', 'TOV', 'FGM', 'FGA', 'MIN']
-            for col in stats_to_sum:
-                if f'{col}_q1' in merged.columns and f'{col}_q2' in merged.columns:
-                    merged[col] = merged[f'{col}_q1'] + merged[f'{col}_q2']
-            
-            # Save 1H Master
-            # Keep only standard cols + ID
-            keep_cols = [Cols.PLAYER_ID, 'GAME_DATE', 'PLAYER_NAME', 'TEAM_ABBREVIATION']
-            if Cols.GAME_ID in merged.columns:
-                keep_cols.append(Cols.GAME_ID)
-            keep_cols += stats_to_sum
-            
-            final_1h = merged[keep_cols].copy()
-            
-            final_1h.to_parquet(cfg.MASTER_1H_FILE, index=False)
-            logging.info(f"Saved Master 1H: {len(final_1h)} rows")
-    else:
-        logging.warning("Missing Q2 files. Cannot build 1H history.")
+    # Hook the Play-By-Play parsing pipeline immediately following the vacancy builder
+    process_pbpstats_data(player_id_map, season_folders, output_dir)

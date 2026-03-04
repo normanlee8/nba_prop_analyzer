@@ -1,0 +1,92 @@
+{
+    "training_date": "2026-03-04T12:57:57.660954",
+    "target_col": "PR",
+    "metrics": {
+        "MAE": 1.4068101154992434,
+        "RMSE": 1.8937998352187464,
+        "R2": 0.9648494785565959
+    },
+    "top_features": [
+        {
+            "Feature": "TS_PCT",
+            "Importance": 0.3760969340801239
+        },
+        {
+            "Feature": "USG_PROXY",
+            "Importance": 0.2946469187736511
+        },
+        {
+            "Feature": "USG_PROXY_PER36",
+            "Importance": 0.24131684005260468
+        },
+        {
+            "Feature": "PR_L5_AVG",
+            "Importance": 0.1741730123758316
+        },
+        {
+            "Feature": "PR_L10_AVG",
+            "Importance": 0.06515482813119888
+        },
+        {
+            "Feature": "REB_L5_AVG",
+            "Importance": 0.049562666565179825
+        },
+        {
+            "Feature": "REB_REST_SPLIT_AVG",
+            "Importance": 0.03807436674833298
+        },
+        {
+            "Feature": "PR_L5_STD_DEV",
+            "Importance": 0.02050606720149517
+        },
+        {
+            "Feature": "REB_FORM_RATIO",
+            "Importance": 0.019580233842134476
+        },
+        {
+            "Feature": "PTS_L5_AVG",
+            "Importance": 0.01875518076121807
+        },
+        {
+            "Feature": "REB_L5_STD_DEV",
+            "Importance": 0.012490269728004932
+        },
+        {
+            "Feature": "PTS_L10_AVG",
+            "Importance": 0.009419172070920467
+        },
+        {
+            "Feature": "REB_L10_AVG",
+            "Importance": 0.009068218991160393
+        },
+        {
+            "Feature": "PR_L5_CV",
+            "Importance": 0.00895708054304123
+        },
+        {
+            "Feature": "PRA_L5_AVG",
+            "Importance": 0.007457585074007511
+        },
+        {
+            "Feature": "MIN_L5_STD_DEV",
+            "Importance": 0.007090042345225811
+        },
+        {
+            "Feature": "PRA_L5_STD_DEV",
+            "Importance": 0.006572709884494543
+        },
+        {
+            "Feature": "MIN_L5_CV",
+            "Importance": 0.005955320782959461
+        },
+        {
+            "Feature": "PTS_L5_STD_DEV",
+            "Importance": 0.005644521210342646
+        },
+        {
+            "Feature": "AST_L20_STD_DEV",
+            "Importance": 0.0053791808895766735
+        }
+    ],
+    "tweedie_variance_power": 1.270747136277713
+}

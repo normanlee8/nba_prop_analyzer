@@ -10,7 +10,6 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from prop_analyzer import config as cfg
 from prop_analyzer.config import Cols
 from prop_analyzer.utils import common
-from prop_analyzer.data import loader
 
 def print_accuracy_report(df, label="Total"):
     """Helper to print formatted percentage stats"""
@@ -34,9 +33,6 @@ def save_user_scorecard(df, date_str):
     Saves a clean, human-readable Excel file for the user.
     Applies conditional formatting: WIN = Green, LOSS = Red.
     """
-    # Map System Cols -> Scorecard Cols
-    # We use the internal Cols keys to ensure we grab the right data
-    
     col_map = {
         Cols.PLAYER_NAME: 'Player',
         'Team': 'Team',
@@ -52,7 +48,6 @@ def save_user_scorecard(df, date_str):
         Cols.RESULT: 'Result'
     }
     
-    # Optional columns that might be in the data
     optional_map = {
         'Units': 'Units',
         'Diff%': 'Diff%',
@@ -60,7 +55,6 @@ def save_user_scorecard(df, date_str):
         'SZN': 'SZN'
     }
     
-    # Build final rename list based on what exists
     final_rename = {}
     for sys_col, user_col in col_map.items():
         if sys_col in df.columns:
@@ -76,16 +70,13 @@ def save_user_scorecard(df, date_str):
 
     clean_df = df[list(final_rename.keys())].rename(columns=final_rename).copy()
     
-    # Save to specific subfolder: user_scorecards
     scorecard_dir = cfg.GRADED_DIR / "user_scorecards"
     scorecard_dir.mkdir(parents=True, exist_ok=True)
     
     scorecard_path = scorecard_dir / f"{date_str}.xlsx"
     
     try:
-        # --- STYLING LOGIC ---
         def color_result(val):
-            """Colors the text based on Win/Loss"""
             if val == 'WIN':
                 return 'color: #008000; font-weight: bold' # Green
             elif val == 'LOSS':
@@ -94,7 +85,6 @@ def save_user_scorecard(df, date_str):
                 return 'color: #808080; font-weight: bold' # Gray
             return ''
 
-        # Fix for FutureWarning: Use .map instead of .applymap for newer pandas versions
         if 'Result' in clean_df.columns:
             try:
                 styler = clean_df.style.map(color_result, subset=['Result'])
@@ -113,17 +103,14 @@ def grade_predictions():
     preds_path = cfg.PROCESSED_OUTPUT_SYSTEM
     if not preds_path.exists():
         logging.critical(f"No predictions file found at {preds_path}")
-        return
+        return pd.DataFrame(), None 
 
     try:
         preds_df = pd.read_parquet(preds_path)
         if preds_df.empty:
             logging.warning("Predictions file is empty.")
-            return
+            return pd.DataFrame(), None
             
-        # --- CRITICAL FIX: Normalize Column Names ---
-        # The analyzer now outputs "clean" names (Player, Prop, Date).
-        # We must map them back to internal names (Cols.PLAYER_NAME) for grading logic.
         clean_map = {
             'Player': Cols.PLAYER_NAME,
             'Prop': Cols.PROP_TYPE,
@@ -134,49 +121,44 @@ def grade_predictions():
             'Proj': Cols.PREDICTION,
             'Tier': Cols.TIER
         }
-        # Only rename if the "clean" name exists and the "system" name is missing
         actual_rename = {k: v for k, v in clean_map.items() if k in preds_df.columns and v not in preds_df.columns}
         if actual_rename:
             preds_df.rename(columns=actual_rename, inplace=True)
             
     except Exception as e:
         logging.critical(f"Failed to load predictions: {e}")
-        return
+        return pd.DataFrame(), None
 
     # 2. Load Truth Data
     logging.info("Loading historical data for grading...")
     
-    full_game_df = loader.load_box_scores()
-    q1_game_df = loader.load_master_q1_history()
-    h1_game_df = loader.load_master_1h_history()
+    # Load raw box scores instead of master DB to ensure PLAYER_NAME is present
+    raw_files = list(cfg.DATA_DIR.glob("*/NBA Player Box Scores.parquet"))
+    if not raw_files:
+        logging.warning("No raw box scores found. Props cannot be graded.")
+        return pd.DataFrame(), None
+        
+    full_game_df = pd.concat([pd.read_parquet(f) for f in raw_files], ignore_index=True)
+    if 'GAME_DATE' in full_game_df.columns and Cols.DATE not in full_game_df.columns:
+        full_game_df.rename(columns={'GAME_DATE': Cols.DATE}, inplace=True)
 
-    # --- Combo Stats Calculation ---
-    if not q1_game_df.empty:
-        for col in ['PTS', 'REB', 'AST']:
-            if col not in q1_game_df.columns: q1_game_df[col] = 0
-        q1_game_df['PRA'] = q1_game_df['PTS'] + q1_game_df['REB'] + q1_game_df['AST']
-        q1_game_df['PR'] = q1_game_df['PTS'] + q1_game_df['REB']
-        q1_game_df['PA'] = q1_game_df['PTS'] + q1_game_df['AST']
-        q1_game_df['RA'] = q1_game_df['REB'] + q1_game_df['AST']
+    # --- Combo Stats Calculation (Numeric forced for ESPN API) ---
+    for col in ['PTS', 'REB', 'AST']:
+        if col not in full_game_df.columns: 
+            full_game_df[col] = 0
+        else:
+            full_game_df[col] = pd.to_numeric(full_game_df[col], errors='coerce').fillna(0)
 
-    if not h1_game_df.empty:
-        for col in ['PTS', 'REB', 'AST']:
-            if col not in h1_game_df.columns: h1_game_df[col] = 0
-        h1_game_df['PRA'] = h1_game_df['PTS'] + h1_game_df['REB'] + h1_game_df['AST']
-        h1_game_df['PR'] = h1_game_df['PTS'] + h1_game_df['REB']
-        h1_game_df['PA'] = h1_game_df['PTS'] + h1_game_df['AST']
-        h1_game_df['RA'] = h1_game_df['REB'] + h1_game_df['AST']
-
-    if full_game_df is None or full_game_df.empty:
-        logging.warning("No master box scores found. Full game props cannot be graded.")
-        full_game_df = pd.DataFrame()
+    full_game_df['PRA'] = full_game_df['PTS'] + full_game_df['REB'] + full_game_df['AST']
+    full_game_df['PR'] = full_game_df['PTS'] + full_game_df['REB']
+    full_game_df['PA'] = full_game_df['PTS'] + full_game_df['AST']
+    full_game_df['RA'] = full_game_df['REB'] + full_game_df['AST']
 
     logging.info(f"Grading {len(preds_df)} predictions...")
 
     # Normalize Dates
-    for df in [full_game_df, q1_game_df, h1_game_df]:
-        if not df.empty and Cols.DATE in df.columns:
-            df[Cols.DATE] = pd.to_datetime(df[Cols.DATE]).dt.normalize()
+    if Cols.DATE in full_game_df.columns:
+        full_game_df[Cols.DATE] = pd.to_datetime(full_game_df[Cols.DATE]).dt.normalize()
 
     preds_df['Match_Date'] = pd.to_datetime(preds_df[Cols.DATE]).dt.normalize()
     prop_map = cfg.MASTER_PROP_MAP
@@ -188,24 +170,8 @@ def grade_predictions():
         p_date = row['Match_Date']
         
         prop_key = str(prop_map.get(prop_type, prop_type))
-        
-        is_q1 = '1st Quarter' in prop_type or '1Q' in prop_type or prop_key.startswith('Q1_')
-        is_1h = '1st Half' in prop_type or '1H' in prop_type or prop_key.startswith('1H_')
-        
-        if is_q1:
-            truth_df = q1_game_df
-            data_col = prop_key.replace('Q1_', '')
-        elif is_1h:
-            truth_df = h1_game_df
-            data_col = prop_key.replace('1H_', '')
-        else:
-            truth_df = full_game_df
-            data_col = prop_key
-
-        if truth_df.empty:
-            row[Cols.RESULT] = 'Missing Data Source'
-            results.append(row)
-            continue
+        truth_df = full_game_df
+        data_col = prop_key
 
         mask = None
         # Try finding by ID
@@ -214,11 +180,22 @@ def grade_predictions():
              if Cols.PLAYER_ID in truth_df.columns:
                  mask = (truth_df[Cols.PLAYER_ID] == p_id) & (truth_df[Cols.DATE] == p_date)
         
-        # Fallback to Name match
+        # Fallback to Name match (Robust)
         if mask is None or mask.sum() == 0:
-             p_name = str(row.get(Cols.PLAYER_NAME, '')).lower().strip()
-             if 'PLAYER_NAME' in truth_df.columns:
-                 mask = (truth_df['PLAYER_NAME'].str.lower().str.strip() == p_name) & (truth_df[Cols.DATE] == p_date)
+            p_name = str(row.get(Cols.PLAYER_NAME, '')).lower().strip()
+             
+             # Try common name columns to guarantee a match
+            name_col = None
+            for col in ['PLAYER_NAME', Cols.PLAYER_NAME, 'Player', 'Player_Name']:
+                 if col in truth_df.columns:
+                     name_col = col
+                     break
+                     
+            if name_col:
+                # Allow a 1-day window FORWARD in case props were fetched the night before,
+                # but strictly prevent looking backwards at yesterday's games.
+                date_diff = (truth_df[Cols.DATE] - p_date).dt.days
+                mask = (truth_df[name_col].astype(str).str.lower().str.strip() == p_name) & (date_diff >= 0) & (date_diff <= 1)
              
         if mask is not None:
             match = truth_df[mask]
@@ -271,9 +248,27 @@ def grade_predictions():
             
         row[Cols.RESULT] = res
         row[Cols.CORRECTNESS] = 1 if res == 'WIN' else 0
+        
+        # Capture error difference for analytics
+        if pd.notna(row.get(Cols.PREDICTION)):
+            row['Proj_Error'] = float(actual) - float(row[Cols.PREDICTION])
+        else:
+            row['Proj_Error'] = None
+
         results.append(row)
 
     graded_df = pd.DataFrame(results)
+    
+    # Determine the actual game date based on the data
+    if not graded_df.empty and 'Match_Date' in graded_df.columns:
+        try:
+            # Get the most common date in the dataset
+            game_date = pd.to_datetime(graded_df['Match_Date']).dt.date.mode()[0]
+            game_date_str = game_date.strftime("%Y-%m-%d")
+        except Exception:
+            game_date_str = datetime.now().strftime("%Y-%m-%d")
+    else:
+        game_date_str = datetime.now().strftime("%Y-%m-%d")
     
     # 7. Reporting
     logging.info("-" * 40)
@@ -281,24 +276,36 @@ def grade_predictions():
     
     if graded_df.empty:
         logging.warning("No results to grade.")
-        return
+        return pd.DataFrame(), game_date_str
 
+    # Add mapping to graded_df BEFORE creating the finished subset
+    graded_df['Mapped_Prop'] = graded_df[Cols.PROP_TYPE].map(lambda x: cfg.MASTER_PROP_MAP.get(x, x))
+    
     finished = graded_df[graded_df[Cols.RESULT].isin(['WIN', 'LOSS', 'PUSH'])]
     
     print_accuracy_report(finished, "Total Props")
     
     if Cols.TIER in finished.columns:
-        for tier in ['S Tier', 'A Tier', 'B Tier']:
+        # Include our newly established tier 'Trap / High Variance' if any fell into it
+        for tier in ['S Tier', 'A Tier', 'B Tier', 'Trap / High Variance']:
             tier_df = finished[finished[Cols.TIER] == tier]
-            print_accuracy_report(tier_df, f"{tier} Props")
+            if not tier_df.empty:
+                print_accuracy_report(tier_df, f"{tier} Props")
+
+    # --- CATEGORY REPORTING ---
+    logging.info(">>> CATEGORY HIT RATES <<<")
+    categories = ['PTS', 'REB', 'AST', 'PRA', 'PR', 'PA', 'RA']
+    
+    for cat in categories:
+        cat_df = finished[finished['Mapped_Prop'] == cat]
+        if not cat_df.empty:
+            print_accuracy_report(cat_df, f"{cat} Props")
 
     logging.info("-" * 40)
     
     # 8. Save Outputs
-    today_str = datetime.now().strftime("%Y-%m-%d")
-    
-    parquet_path = cfg.GRADED_DIR / f"graded_props_{today_str}.parquet"
-    csv_path = cfg.GRADED_DIR / f"graded_{today_str}.csv"
+    parquet_path = cfg.GRADED_DIR / f"graded_props_{game_date_str}.parquet"
+    csv_path = cfg.GRADED_DIR / f"graded_{game_date_str}.csv"
     
     try:
         # Convert objects to string for saving
@@ -308,15 +315,142 @@ def grade_predictions():
         graded_df.to_parquet(parquet_path, index=False)
         graded_df.to_csv(csv_path, index=False)
         
-        save_user_scorecard(graded_df, today_str)
-        logging.info(f"Saved graded results for {today_str}")
+        save_user_scorecard(graded_df, game_date_str)
+        logging.info(f"Saved graded results for game date: {game_date_str}")
         
     except Exception as e:
         logging.error(f"Failed to save output: {e}")
+        
+    return graded_df, game_date_str
+
+def analyze_strengths_and_weaknesses(graded_df):
+    """Provides a deep dive into where the model leaks value."""
+    logging.info(">>> POST-MORTEM SYSTEM ANALYSIS <<<")
+    
+    if 'Proj_Error' not in graded_df.columns:
+        return
+        
+    graded_df['Proj_Error'] = pd.to_numeric(graded_df['Proj_Error'], errors='coerce')
+    graded_df['Abs_Error'] = graded_df['Proj_Error'].abs()
+    
+    # Where is the model missing by the widest margin?
+    worst_props = graded_df.groupby(Cols.PROP_TYPE)['Abs_Error'].mean().sort_values(ascending=False)
+    logging.info(f"\nHighest Average Error by Stat Type:\n{worst_props.head(3).to_string()}")
+    
+    # Are we systematically over-projecting or under-projecting?
+    bias_props = graded_df.groupby(Cols.PROP_TYPE)['Proj_Error'].mean()
+    logging.info(f"\nSystematic Bias (Positive = Under-projecting, Negative = Over-projecting):\n{bias_props.to_string()}")
+
+def grade_parlays(graded_props_df, game_date_str):
+    """Grades historical parlays by parsing the 'Picks' column string."""
+    parlay_path = cfg.OUTPUT_DIR / "processed_parlays.csv"
+    if not parlay_path.exists():
+        logging.warning("No processed_parlays.csv found to grade.")
+        return
+        
+    logging.info(">>> GRADING PARLAYS <<<")
+    parlays_df = pd.read_csv(parlay_path)
+    
+    # Ensure Mapped_Prop exists
+    if 'Mapped_Prop' not in graded_props_df.columns:
+        graded_props_df['Mapped_Prop'] = graded_props_df[Cols.PROP_TYPE].map(lambda x: cfg.MASTER_PROP_MAP.get(x, x))
+        
+    graded_props_df['Lookup_Key'] = graded_props_df[Cols.PLAYER_NAME].str.lower() + "_" + graded_props_df['Mapped_Prop']
+    result_map = dict(zip(graded_props_df['Lookup_Key'], graded_props_df[Cols.RESULT]))
+    
+    parlay_results = []
+    total_wagered = 0
+    total_won = 0
+    
+    for idx, row in parlays_df.iterrows():
+        try:
+            ticket_str = str(row.get('Picks', ''))
+            payout_str = str(row.get('Payout', '0')).replace('x', '')
+            payout = float(payout_str)
+            
+            # The CSV outputs legs separated by " | "
+            legs = ticket_str.split(' | ')
+            leg_results = []
+            
+            for leg in legs:
+                parts = leg.strip().split()
+                # Expected string format: "Aaron Wiggins Under 14.5 PTS"
+                # So we need at least 4 parts: [First, Last, Pick, Line, Prop]
+                if len(parts) >= 4:
+                    prop = parts[-1] 
+                    # Everything before the last 3 items (Pick, Line, Prop) is the name
+                    player_name = " ".join(parts[:-3]).strip().lower()
+                    key = f"{player_name}_{prop}"
+                    
+                    leg_results.append(result_map.get(key, 'PENDING'))
+                else:
+                    leg_results.append('PARSE_ERROR')
+                    
+            if 'PENDING' in leg_results or 'PARSE_ERROR' in leg_results or 'ERROR' in leg_results:
+                status = 'PENDING/ERROR'
+            elif 'LOSS' in leg_results:
+                status = 'LOSS'
+            elif all(res == 'WIN' for res in leg_results):
+                status = 'WIN'
+            else:
+                # E.g., Wins and a Push = Downgraded Parlay
+                status = 'PUSH/DOWNGRADE'
+                
+            parlay_results.append(status)
+            
+            # ROI Calculations (Assuming 1 Unit flat bet per ticket)
+            if status in ['WIN', 'LOSS', 'PUSH/DOWNGRADE']:
+                total_wagered += 1 
+            if status == 'WIN':
+                total_won += payout
+                
+        except Exception as e:
+            parlay_results.append('PARSE_ERROR')
+            
+    parlays_df['Result'] = parlay_results
+    
+    wins = len(parlays_df[parlays_df['Result'] == 'WIN'])
+    losses = len(parlays_df[parlays_df['Result'] == 'LOSS'])
+    total_decided = wins + losses
+    
+    if total_decided > 0:
+        roi = ((total_won - total_wagered) / total_wagered) * 100
+        logging.info(f"Parlay Win Rate: {(wins/total_decided)*100:.1f}% ({wins}/{total_decided})")
+        logging.info(f"Parlay ROI: {roi:.2f}% (Units Wagered: {total_wagered}, Units Won: {total_won:.2f})")
+    else:
+        logging.info("No parlays fully completed yet.")
+    
+    # Save graded parlays using the game date instead of system date
+    parlays_df.to_csv(cfg.GRADED_DIR / f"graded_parlays_{game_date_str}.csv", index=False)
 
 def main():
     common.setup_logging(name="grading")
-    grade_predictions()
+    
+    # 1. Grade individual props
+    graded_df, game_date_str = grade_predictions() 
+    
+    # 2. Grade Parlays & Generate Insights
+    if not graded_df.empty:
+        grade_parlays(graded_df, game_date_str)
+        analyze_strengths_and_weaknesses(graded_df)
+    else:
+        # Fallback: Peek at PROCESSED_OUTPUT_SYSTEM to find the target date
+        try:
+            if cfg.PROCESSED_OUTPUT_SYSTEM.exists():
+                preds = pd.read_parquet(cfg.PROCESSED_OUTPUT_SYSTEM)
+                date_col = 'Date' if 'Date' in preds.columns else Cols.DATE
+                fallback_date_str = pd.to_datetime(preds[date_col]).dt.date.mode()[0].strftime("%Y-%m-%d")
+            else:
+                fallback_date_str = datetime.now().strftime("%Y-%m-%d")
+        except Exception:
+            fallback_date_str = datetime.now().strftime("%Y-%m-%d")
+
+        parquet_path = cfg.GRADED_DIR / f"graded_props_{fallback_date_str}.parquet"
+        
+        if parquet_path.exists():
+            graded_df = pd.read_parquet(parquet_path)
+            grade_parlays(graded_df, fallback_date_str)
+            analyze_strengths_and_weaknesses(graded_df)
 
 if __name__ == "__main__":
     main()

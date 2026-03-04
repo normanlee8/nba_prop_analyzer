@@ -12,241 +12,321 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from prop_analyzer import config as cfg
 from prop_analyzer.config import Cols
 from prop_analyzer.models import registry
-from prop_analyzer.features.calculator import smooth_projection
-from prop_analyzer.models.training import (
-    add_interaction_features, 
-    rename_features_for_model, 
-    PROP_KEY_MAP
-)
+from prop_analyzer.features.calculator import (smooth_projection, 
+                                               get_discrete_probabilities, 
+                                               estimate_combo_variance)
 
 def load_artifacts(prop_cat):
     return registry.load_artifacts(prop_cat)
 
-def get_recent_bias_map(days_back=21):
+def get_system_learning_maps(days_back=21):
     """
-    Loads graded history and calculates the average model error per player+prop.
-    Returns a dictionary: {(PlayerID, PropType): Bias_Value}
-    Positive Bias = Model Undershoots (Actual > Pred) -> We should Add to pred.
-    Negative Bias = Model Overshoots (Actual < Pred) -> We should Subtract.
+    Returns global system biases for retrospective analysis.
     """
-    bias_map = {}
-    
-    # Find recent graded files
     graded_files = sorted(cfg.GRADED_DIR.glob("graded_*.parquet"), reverse=True)
-    if not graded_files:
-        return {}
+    if not graded_files: return {}, {}
 
     recent_dfs = []
     cutoff_date = pd.Timestamp.now() - timedelta(days=days_back)
     
     for f in graded_files:
         try:
-            # Parse date from filename
             file_date_str = f.stem.replace('graded_props_', '').replace('graded_', '')
-            try:
-                file_date = pd.to_datetime(file_date_str)
-            except:
-                continue
-
-            if file_date < cutoff_date:
-                continue
-                
+            file_date = pd.to_datetime(file_date_str)
+            if file_date < cutoff_date: continue
             df = pd.read_parquet(f)
-            # Ensure we have necessary columns
             if Cols.ACTUAL_VAL in df.columns and Cols.PREDICTION in df.columns:
                 recent_dfs.append(df)
-        except Exception:
-            continue
+        except Exception: continue
             
-    if not recent_dfs:
-        return {}
+    if not recent_dfs: return {}, {}
         
     full_history = pd.concat(recent_dfs, ignore_index=True)
-    
-    # === OPTIMIZATION & CLEANING ===
-    # 1. Reduce width to avoid Fragmentation Warning
-    # We only need ID, Prop, Actual, and Prediction. Dropping the 1000+ feature columns.
     keep_cols = [c for c in [Cols.PLAYER_ID, Cols.PLAYER_NAME, Cols.PROP_TYPE, Cols.ACTUAL_VAL, Cols.PREDICTION] if c in full_history.columns]
     full_history = full_history[keep_cols].copy()
 
-    # 2. Convert to numeric, coercing errors to NaN
     full_history[Cols.ACTUAL_VAL] = pd.to_numeric(full_history[Cols.ACTUAL_VAL], errors='coerce')
     full_history[Cols.PREDICTION] = pd.to_numeric(full_history[Cols.PREDICTION], errors='coerce')
-    
-    # 3. Drop rows where we couldn't convert (e.g., 'Actual' was 'INJ' or empty)
     full_history.dropna(subset=[Cols.ACTUAL_VAL, Cols.PREDICTION], inplace=True)
     
-    # Calculate Residual: (Actual - Prediction)
     full_history['Error'] = full_history[Cols.ACTUAL_VAL] - full_history[Cols.PREDICTION]
+    full_history['Abs_Error'] = full_history['Error'].abs()
     
-    # Group by Player and Prop
-    group_cols = [Cols.PLAYER_ID, Cols.PROP_TYPE]
+    full_history['Pct_Error'] = np.where(
+        full_history[Cols.PREDICTION] > 0, 
+        full_history['Error'] / full_history[Cols.PREDICTION], 
+        0.0
+    )
     
-    # Fallback to Name if ID missing in history
-    if Cols.PLAYER_ID not in full_history.columns:
-        if Cols.PLAYER_NAME in full_history.columns:
-            group_cols = [Cols.PLAYER_NAME, Cols.PROP_TYPE]
-        else:
-            return {}
+    full_history['Mapped_Prop'] = full_history[Cols.PROP_TYPE].map(lambda x: cfg.MASTER_PROP_MAP.get(x, x))
+    cat_bias_pct = full_history.groupby('Mapped_Prop')['Pct_Error'].mean().to_dict()
+    cat_mae = full_history.groupby('Mapped_Prop')['Abs_Error'].mean().to_dict()
 
-    bias_series = full_history.groupby(group_cols)['Error'].mean()
-    
-    # Convert to dict for fast lookup
-    return bias_series.to_dict()
+    return cat_bias_pct, cat_mae
 
-def determine_tier(prob_over, proj_val, line, prop_type):
+def determine_confidence_tier(win_prob, pick_type, delta_gap, line, abs_diff, cv, l10_hit_rate, vs_opp_hit_rate, vs_opp_games, s_avg, r_avg):
     """
-    Calculates the confidence Tier (S, A, B, C).
+    Strictly evaluates based on Win Probability, Hit Rates, Volatility, and Edge/Delta.
     """
-    if pd.isna(prob_over) or pd.isna(proj_val) or pd.isna(line) or line == 0:
-        return {'Tier': 'C Tier', 'Best Pick': 'Pass', 'Win_Prob': 0.0, 'Edge': 0.0}
-
-    # 1. Determine Direction & Edge
-    is_over = prob_over >= 0.50
+    tier = 'Pass'
     
-    if is_over:
-        win_prob = prob_over
-        edge_val = proj_val - line
-        pick = 'Over'
-        if proj_val < line:
-            return {'Tier': 'C Tier', 'Best Pick': 'Over', 'Win_Prob': win_prob, 'Edge': 0.0}
+    # Evaluate Hard Passes First
+    if pick_type == 'Over':
+        if cv > cfg.MAX_CV_HARD_PASS_OVER or l10_hit_rate < cfg.MIN_L10_HIT_HARD_PASS_OVER:
+            return 'Pass / Too Volatile'
     else:
-        win_prob = 1.0 - prob_over
-        edge_val = line - proj_val
-        pick = 'Under'
-        if proj_val > line:
-            return {'Tier': 'C Tier', 'Best Pick': 'Under', 'Win_Prob': win_prob, 'Edge': 0.0}
+        # Dynamic CV threshold based on line size for Unders
+        # Low lines (under 10) have a higher CV tolerance since small standard deviations cause huge CV spikes
+        dynamic_cv_threshold = getattr(cfg, 'MAX_CV_HARD_PASS_UNDER_LOW_LINE', 0.85) if line < 10.0 else getattr(cfg, 'MAX_CV_HARD_PASS_UNDER_BASE', 0.45)
+        
+        # Removed the L10 hit rate filter for Unders to account for minutes shifts
+        if cv > dynamic_cv_threshold:
+            return 'Pass / Too Volatile'
 
-    # 2. Assign Tier based on Strength of Signal
-    tier = 'C Tier'
-    edge_pct = (edge_val / line) if line > 0 else 0.0
-    
-    # Tier Thresholds
-    if win_prob > 0.60 and edge_pct > 0.10:
-        tier = 'S Tier'
-    elif win_prob > 0.56 and edge_pct > 0.05:
-        tier = 'A Tier'
-    elif win_prob > 0.53:
+    if win_prob >= cfg.MIN_PROB_FOR_S_TIER and cv < cfg.MAX_CV_FOR_S_TIER and (pick_type != 'Over' or l10_hit_rate >= cfg.MIN_L10_HIT_FOR_S_TIER): 
+        if abs_diff >= (line * 0.08):
+            tier = 'S Tier'
+        else:
+            tier = 'A Tier' 
+    elif win_prob >= cfg.MIN_PROB_FOR_A_TIER and cv < cfg.MAX_CV_FOR_A_TIER: 
+        if abs_diff >= (line * 0.04):
+            tier = 'A Tier'
+        else:
+            tier = 'B Tier'
+    elif win_prob >= cfg.MIN_PROB_FOR_B_TIER and cv < cfg.MAX_CV_FOR_B_TIER: 
         tier = 'B Tier'
+    elif win_prob >= cfg.MIN_PROB_FOR_C_TIER: 
+        tier = 'C Tier'
+    else: 
+        tier = 'Pass'
     
-    if prop_type in ['BLK', 'STL', 'FG3M'] and tier == 'S Tier' and edge_pct < 0.15:
-        tier = 'A Tier'
+    return tier
 
+def evaluate_prop(proj, line, variance, prop_type, delta_gap, cv, l10_over_rate, l10_under_rate, vs_opp_over_rate, vs_opp_under_rate, vs_opp_games, s_avg, r_avg, tweedie_power=1.5):
+    """Evaluates probability of outcome based on distribution modeling."""
+    if line <= 0: return None
+    
+    nbinom_props = ['PTS', 'REB', 'AST', 'STL', 'BLK', 'FG3M', 'PRA', 'PR', 'PA', 'RA']
+    dist_type = 'nbinom' if prop_type in nbinom_props else 'normal'
+    
+    probs_over = get_discrete_probabilities(proj, line, variance, dist_type=dist_type, tweedie_power=tweedie_power)
+    probs_under = {'win': probs_over['loss'], 'loss': probs_over['win'], 'push': probs_over['push']}
+    
+    if probs_over['win'] >= probs_under['win']:
+        pick, win_prob = 'Over', probs_over['win']
+        active_hit_rate = l10_over_rate
+        active_vs_opp_hit_rate = vs_opp_over_rate
+    else:
+        pick, win_prob = 'Under', probs_under['win']
+        active_hit_rate = l10_under_rate
+        active_vs_opp_hit_rate = vs_opp_under_rate 
+        
+    abs_diff = abs(proj - line)
+    tier = determine_confidence_tier(win_prob, pick, delta_gap, line, abs_diff, cv, active_hit_rate, active_vs_opp_hit_rate, vs_opp_games, s_avg, r_avg)
+        
     return {
-        'Tier': tier,
-        'Best Pick': pick,
+        'Pick': pick,
         'Win_Prob': win_prob,
-        'Edge': edge_val
+        'Tier': tier,
+        'Active_Hit_Rate': active_hit_rate,
+        'Active_VS_Opp_Hit_Rate': active_vs_opp_hit_rate
     }
 
+def get_col_safe(df, prop_cat, base_name):
+    if base_name in df.columns: return df[base_name]
+    if f"{prop_cat}_{base_name}" in df.columns: return df[f"{prop_cat}_{base_name}"]
+    return pd.Series(np.nan, index=df.index)
+
 def predict_props(todays_props_df):
-    logging.info(f"Starting batch inference for {len(todays_props_df)} props...")
+    logging.info(f"Starting Probability Inference for {len(todays_props_df)} props...")
     results = []
     
-    if Cols.PROP_TYPE not in todays_props_df.columns:
-        logging.critical(f"Column '{Cols.PROP_TYPE}' not found in input.")
-        return pd.DataFrame()
+    if Cols.PROP_TYPE not in todays_props_df.columns: return pd.DataFrame()
+    
+    try: 
+        _, cat_mae = get_system_learning_maps(days_back=21)
+    except Exception as e: 
+        logging.warning(f"Could not load system learning maps: {e}")
+        cat_mae = {}
 
-    # --- Load Bias Map ---
-    logging.info("Loading recent grading history for Bias Correction...")
-    try:
-        bias_map = get_recent_bias_map(days_back=21)
-        logging.info(f"Loaded bias corrections for {len(bias_map)} player/prop combos.")
-    except Exception as e:
-        logging.warning(f"Failed to load bias map: {e}")
-        bias_map = {}
+    predicted_mins = {}
+    min_artifacts = load_artifacts('MIN')
+    if min_artifacts:
+        logging.info("Standalone Minutes model found. Predicting minutes...")
+        min_model = min_artifacts['model']
+        min_features = min_artifacts['features']
+        min_scaler = min_artifacts['scaler']
+        
+        X_raw_mins = todays_props_df.copy()
+        sanitized_map_mins = {c: re.sub(r'[^\w\s]', '_', str(c)).replace(' ', '_') for c in X_raw_mins.columns}
+        inv_map_mins = {v: k for k, v in sanitized_map_mins.items()}
+        
+        new_features_mins = {}
+        for f in min_features:
+            if f in X_raw_mins.columns: new_features_mins[f] = X_raw_mins[f]
+            elif f in inv_map_mins: new_features_mins[f] = X_raw_mins[inv_map_mins[f]]
+            else: new_features_mins[f] = np.nan 
+            
+        X_min_model = pd.DataFrame(new_features_mins, index=X_raw_mins.index)
+        try:
+            X_min_scaled = min_scaler.transform(X_min_model)
+            X_min_scaled_df = pd.DataFrame(X_min_scaled, columns=X_min_model.columns, index=X_min_model.index)
+            X_raw_mins['PRED_MIN'] = min_model.predict(X_min_scaled_df)
+            predicted_mins = X_raw_mins['PRED_MIN'].to_dict()
+        except Exception as e:
+            logging.warning(f"Failed to predict standalone minutes: {e}")
 
     grouped = todays_props_df.groupby(Cols.PROP_TYPE)
     
     for prop_cat, group in grouped:
-        logging.info(f"Predicting {len(group)} rows for {prop_cat}...")
+        if prop_cat == 'MIN': continue
         
         artifacts = load_artifacts(prop_cat)
-        if not artifacts: continue
+        if not artifacts:
+            logging.warning(f"No trained artifacts found for {prop_cat}. Skipping.")
+            continue
             
-        clf = artifacts['clf']
-        xgb_q20 = artifacts['q20']['xgb']
-        xgb_q80 = artifacts['q80']['xgb']
-        scaler = artifacts['scaler']
-        feature_names = artifacts['features']
+        model, scaler, feature_names = artifacts['model'], artifacts['scaler'], artifacts['features']
+        tweedie_power = artifacts.get('metadata', {}).get('tweedie_variance_power', 1.5)
         
         X_raw = group.copy()
-        X_raw = add_interaction_features(X_raw)
-        X_raw = rename_features_for_model(X_raw, prop_cat)
         
-        X_model = pd.DataFrame(index=X_raw.index)
         sanitized_map = {c: re.sub(r'[^\w\s]', '_', str(c)).replace(' ', '_') for c in X_raw.columns}
         inv_map = {v: k for k, v in sanitized_map.items()}
         
+        new_features = {}
         for f in feature_names:
-            if f in X_raw.columns:
-                X_model[f] = X_raw[f]
-            elif f in inv_map:
-                X_model[f] = X_raw[inv_map[f]]
-            else:
-                X_model[f] = 0.0 
+            if f in X_raw.columns: new_features[f] = X_raw[f]
+            elif f in inv_map: new_features[f] = X_raw[inv_map[f]]
+            else: new_features[f] = np.nan 
+            
+        X_model = pd.DataFrame(new_features, index=X_raw.index)
 
         try:
             X_scaled = scaler.transform(X_model)
+            X_scaled_df = pd.DataFrame(X_scaled, columns=X_model.columns, index=X_model.index)
             
-            # Raw Predictions
-            probs = clf.predict_proba(X_scaled)[:, 1]
-            q20_preds = xgb_q20.predict(X_scaled)
-            q80_preds = xgb_q80.predict(X_scaled)
-            raw_proj_values = (q20_preds + q80_preds) / 2.0
+            raw_projections = model.predict(X_scaled_df)
             
-            # --- STABILIZATION ---
-            szn_avgs = X_raw.get('SZN Avg', pd.Series(np.nan, index=X_raw.index))
-            l5_avgs = X_raw.get('L5 Avg', szn_avgs)
-            vols = X_raw.get('L10_STD_DEV', pd.Series(1.0, index=X_raw.index))
+            szn_avgs = get_col_safe(X_raw, prop_cat, 'SZN_AVG')
+            l5_avgs = get_col_safe(X_raw, prop_cat, 'L5_AVG')
+            stds = get_col_safe(X_raw, prop_cat, 'L10_STD_DEV')
+            cvs = get_col_safe(X_raw, prop_cat, 'L10_CV')
+            games_played_col = get_col_safe(X_raw, prop_cat, 'SEASON_G')
             
-            final_proj_values = []
+            hit_rates_legacy = get_col_safe(X_raw, prop_cat, 'L10_HIT_RATE')
+            hit_rates_over = get_col_safe(X_raw, prop_cat, 'L10_OVER_RATE')
+            hit_rates_under = get_col_safe(X_raw, prop_cat, 'L10_UNDER_RATE')
             
-            for idx, raw_val in enumerate(raw_proj_values):
-                s_avg = float(szn_avgs.iloc[idx]) if not pd.isna(szn_avgs.iloc[idx]) else raw_val
-                r_avg = float(l5_avgs.iloc[idx]) if not pd.isna(l5_avgs.iloc[idx]) else raw_val
-                vol = float(vols.iloc[idx]) if not pd.isna(vols.iloc[idx]) else 1.0
-                
-                smoothed = smooth_projection(raw_val, s_avg, r_avg, vol)
-                final_proj_values.append(smoothed)
+            vs_opp_legacy_rates = get_col_safe(X_raw, prop_cat, 'VS_OPP_HIT_RATE')
+            vs_opp_over_rates = get_col_safe(X_raw, prop_cat, 'VS_OPP_OVER_RATE')
+            vs_opp_under_rates = get_col_safe(X_raw, prop_cat, 'VS_OPP_UNDER_RATE')
+            vs_opp_games_counts = get_col_safe(X_raw, prop_cat, 'VS_OPP_GAMES_COUNT')
             
-            proj_values = np.array(final_proj_values)
+            corr_pr = get_col_safe(X_raw, prop_cat, 'PTS_REB_CORR')
+            corr_pa = get_col_safe(X_raw, prop_cat, 'PTS_AST_CORR')
+            corr_ra = get_col_safe(X_raw, prop_cat, 'REB_AST_CORR')
+            
+            base_stds = {
+                'PTS': get_col_safe(X_raw, 'PTS', 'L10_STD_DEV'),
+                'REB': get_col_safe(X_raw, 'REB', 'L10_STD_DEV'),
+                'AST': get_col_safe(X_raw, 'AST', 'L10_STD_DEV')
+            }
             
             for idx, (orig_idx, row) in enumerate(group.iterrows()):
                 line = float(row[Cols.PROP_LINE])
-                prob = float(probs[idx])
-                proj = float(proj_values[idx])
+                raw_val = raw_projections[idx]
                 
-                # --- Apply Bias Correction ---
-                p_id = row.get(Cols.PLAYER_ID)
-                if pd.isna(p_id):
-                    key = (row.get(Cols.PLAYER_NAME), prop_cat)
-                else:
-                    key = (int(p_id), prop_cat)
+                # CRITICAL FIX: The ML model natively understands minutes shifts via its features.
+                # Double-counting a manual minutes ratio causes high-variance blowups for bench players.
+                # We simply trust the tree model's prediction output directly.
+                pred_min = predicted_mins.get(orig_idx, float(row.get('MIN_SZN_AVG', 36.0)))
+                hist_mins = float(row.get('MIN_L10_AVG', pred_min))
                 
-                bias = bias_map.get(key, 0.0)
-                correction = bias * 0.5
-                proj = proj + correction
-                # -----------------------------
+                adjusted_raw = raw_val
                 
-                analysis = determine_tier(prob, proj, line, prop_cat)
-                
-                diff_pct = 0.0
+                # 2. Market Consensus Anchor 
+                # (If model is drastically deviating from the sportsbook, anchor it heavily toward the line)
                 if line > 0:
-                    diff_pct = (analysis['Edge'] / line) * 100.0
+                    gap = abs(adjusted_raw - line) / line
+                    if gap > 0.10: 
+                        adjusted_raw = (adjusted_raw * 0.35) + (line * 0.65)
+                
+                s_avg = float(szn_avgs.iloc[idx]) if not pd.isna(szn_avgs.iloc[idx]) else adjusted_raw
+                r_avg = float(l5_avgs.iloc[idx]) if not pd.isna(l5_avgs.iloc[idx]) else adjusted_raw
+                raw_std = float(stds.iloc[idx]) if not pd.isna(stds.iloc[idx]) else 1.0
+                
+                # 3. Floor the Standard Deviation to structural NBA baselines (~35% of mean)
+                floor_std = max(line * 0.35, np.sqrt(line))
+                std_dev = max(raw_std, floor_std)
+                
+                cv = float(cvs.iloc[idx]) if not pd.isna(cvs.iloc[idx]) else (std_dev / s_avg if s_avg > 0 else 0.5)
+                
+                l10_hit_legacy = float(hit_rates_legacy.iloc[idx]) if not pd.isna(hit_rates_legacy.iloc[idx]) else 0.50
+                l10_over_rate = float(hit_rates_over.iloc[idx]) if not pd.isna(hit_rates_over.iloc[idx]) else l10_hit_legacy
+                l10_under_rate = float(hit_rates_under.iloc[idx]) if not pd.isna(hit_rates_under.iloc[idx]) else (1.0 - l10_hit_legacy)
+                
+                vs_opp_legacy = float(vs_opp_legacy_rates.iloc[idx]) if not pd.isna(vs_opp_legacy_rates.iloc[idx]) else 0.50
+                vs_opp_over_rate = float(vs_opp_over_rates.iloc[idx]) if not pd.isna(vs_opp_over_rates.iloc[idx]) else vs_opp_legacy
+                vs_opp_under_rate = float(vs_opp_under_rates.iloc[idx]) if not pd.isna(vs_opp_under_rates.iloc[idx]) else (1.0 - vs_opp_legacy)
+                vs_opp_games = int(vs_opp_games_counts.iloc[idx]) if not pd.isna(vs_opp_games_counts.iloc[idx]) else 0
+
+                days_rest = float(row.get(Cols.DAYS_REST, 2.0))
+                min_deviation = abs(pred_min - hist_mins) / hist_mins if hist_mins > 0 else 0
+
+                proj = smooth_projection(adjusted_raw, s_avg, r_avg, std_dev)
+                
+                dynamic_correlations = {
+                    'PTS_REB': float(corr_pr.iloc[idx]) if not pd.isna(corr_pr.iloc[idx]) else 0.25,
+                    'PTS_AST': float(corr_pa.iloc[idx]) if not pd.isna(corr_pa.iloc[idx]) else 0.25,
+                    'REB_AST': float(corr_ra.iloc[idx]) if not pd.isna(corr_ra.iloc[idx]) else 0.25
+                }
+                
+                dynamic_base_stds = {
+                    'PTS': float(base_stds['PTS'].iloc[idx]) if not pd.isna(base_stds['PTS'].iloc[idx]) else (proj*0.2),
+                    'REB': float(base_stds['REB'].iloc[idx]) if not pd.isna(base_stds['REB'].iloc[idx]) else (proj*0.1),
+                    'AST': float(base_stds['AST'].iloc[idx]) if not pd.isna(base_stds['AST'].iloc[idx]) else (proj*0.1)
+                }
+                
+                sample_size = int(games_played_col.iloc[idx]) if not pd.isna(games_played_col.iloc[idx]) else 15
+                variance = estimate_combo_variance(prop_cat, proj, std_dev, base_stds=dynamic_base_stds, correlations=dynamic_correlations, sample_size=sample_size)
+                
+                historic_mae = cat_mae.get(prop_cat, 1.0)
+                if historic_mae > 1.5:  
+                    # Cap the variance multiplier so it doesn't artificially flatten composite prop distributions
+                    variance_multiplier = min(1.0 + (historic_mae * 0.15), 1.5)
+                    variance = variance * variance_multiplier
+
+                delta_gap_final = abs(proj - line) / line if line > 0 else 0
+                
+                eval_res = evaluate_prop(proj, line, variance, prop_cat, delta_gap_final, cv, l10_over_rate, l10_under_rate, vs_opp_over_rate, vs_opp_under_rate, vs_opp_games, s_avg, r_avg, tweedie_power=tweedie_power)
+                if not eval_res: continue
+                
+                if days_rest > 7.0 or min_deviation > 0.30:
+                    tier_ladder = ['S Tier', 'A Tier', 'B Tier', 'C Tier', 'Pass']
+                    if eval_res['Tier'] in tier_ladder:
+                        current_idx = tier_ladder.index(eval_res['Tier'])
+                        if current_idx < len(tier_ladder) - 2: 
+                            eval_res['Tier'] = tier_ladder[current_idx + 1]
+                
+                position = row.get('POSITION', row.get('PLAYER_POSITION', row.get('Position', 'UNK')))
 
                 res_dict = {
                     Cols.PLAYER_NAME: row[Cols.PLAYER_NAME],
                     Cols.TEAM: row.get('TEAM_ABBREVIATION', row.get(Cols.TEAM, 'UNK')),
                     Cols.OPPONENT: row.get(Cols.OPPONENT, 'UNK'),
+                    'Position': position,
                     Cols.DATE: row[Cols.DATE],
                     Cols.PROP_TYPE: prop_cat,
                     Cols.PROP_LINE: line,
                     'Proj': round(proj, 2),
-                    'Prob': round(analysis['Win_Prob'], 3),
-                    'Pick': analysis['Best Pick'],
-                    'Tier': analysis['Tier'],
-                    '_Sort_Diff': diff_pct 
+                    'Prob': round(eval_res['Win_Prob'], 3),
+                    'Pick': eval_res['Pick'],
+                    'Consistency_CV': round(cv, 3), 
+                    'Active_Hit%': round(eval_res['Active_Hit_Rate'] * 100.0, 1), 
+                    'Matchup_Hit%': round(eval_res['Active_VS_Opp_Hit_Rate'] * 100.0, 1) if vs_opp_games > 0 else 'N/A',
+                    'Tier': eval_res['Tier'],
+                    '_Sort_Diff': eval_res['Win_Prob'] 
                 }
                 results.append(res_dict)
 
@@ -255,7 +335,6 @@ def predict_props(todays_props_df):
             continue
 
     final_df = pd.DataFrame(results)
-    if final_df.empty:
-        return pd.DataFrame()
+    if final_df.empty: return pd.DataFrame()
         
     return final_df

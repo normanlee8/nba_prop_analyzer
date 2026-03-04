@@ -1,3 +1,5 @@
+# scripts/run_analysis.py
+
 import sys
 import pandas as pd
 import numpy as np
@@ -12,12 +14,10 @@ from prop_analyzer import config as cfg
 from prop_analyzer.config import Cols
 from prop_analyzer.features import generator
 from prop_analyzer.models import inference
+from prop_analyzer.models.parlay_optimizer import ParlayOptimizer
 from prop_analyzer.utils import common
 
-def save_pretty_excel(df, output_path):
-    """
-    Saves the dataframe to Excel with Autosizing and Conditional Formatting.
-    """
+def save_pretty_excel(df, output_path, sheet_name='High_Prob_Picks'):
     try:
         if df.empty: return
 
@@ -26,47 +26,41 @@ def save_pretty_excel(df, output_path):
             import xlsxwriter
             has_xlsxwriter = True
         except ImportError:
-            logging.warning("XlsxWriter not installed. Saving standard CSV-style Excel.")
+            pass
 
         if has_xlsxwriter:
             writer = pd.ExcelWriter(output_path, engine='xlsxwriter')
-            df.to_excel(writer, sheet_name='Picks', index=False)
+            df.to_excel(writer, sheet_name=sheet_name, index=False)
             workbook = writer.book
-            worksheet = writer.sheets['Picks']
+            worksheet = writer.sheets[sheet_name]
             
-            # Formats
             pct_fmt = workbook.add_format({'num_format': '0.0%'})
+            float_fmt = workbook.add_format({'num_format': '0.00'})
             header_fmt = workbook.add_format({'bold': True, 'bottom': 1, 'bg_color': '#F0F0F0'})
             
-            # Tier Colors
-            s_tier_fmt = workbook.add_format({'bg_color': '#C6EFCE', 'font_color': '#006100'}) # Green
-            a_tier_fmt = workbook.add_format({'bg_color': '#FFEB9C', 'font_color': '#9C6500'}) # Yellow
-            b_tier_fmt = workbook.add_format({'bg_color': '#E0E0E0', 'font_color': '#333333'}) # Grey
-            c_tier_fmt = workbook.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006'}) # Red
+            s_tier_fmt = workbook.add_format({'bg_color': '#C6EFCE', 'font_color': '#006100'})
+            a_tier_fmt = workbook.add_format({'bg_color': '#FFEB9C', 'font_color': '#9C6500'})
+            b_tier_fmt = workbook.add_format({'bg_color': '#E0E0E0', 'font_color': '#333333'})
+            c_tier_fmt = workbook.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006'})
 
-            # Write Headers
             for col_num, value in enumerate(df.columns.values):
                 worksheet.write(0, col_num, value, header_fmt)
 
-            # Auto-fit Columns
             for i, col in enumerate(df.columns):
-                # Calculate width based on max length of data + header
-                # Limit sample to 50 rows for speed optimization
                 sample_values = df[col].astype(str).head(50)
                 max_len = max(sample_values.map(len).max(), len(str(col)))
                 width = min(max_len + 4, 40)
                 
-                if col == 'Prob':
+                if col in ['Prob', 'Win Prob', 'Joint Prob']: 
                     worksheet.set_column(i, i, width, pct_fmt)
-                else:
+                elif col in ['Consistency_CV']: 
+                    worksheet.set_column(i, i, width, float_fmt)
+                else: 
                     worksheet.set_column(i, i, width)
 
-            # Conditional Formatting for Tiers
             tier_col_idx = df.columns.get_loc('Tier') if 'Tier' in df.columns else -1
             if tier_col_idx != -1:
-                # Apply format to the whole column (rows 1 to N)
                 rng = f"{xlsxwriter.utility.xl_col_to_name(tier_col_idx)}2:{xlsxwriter.utility.xl_col_to_name(tier_col_idx)}{len(df)+1}"
-                
                 worksheet.conditional_format(rng, {'type': 'text', 'criteria': 'containing', 'value': 'S Tier', 'format': s_tier_fmt})
                 worksheet.conditional_format(rng, {'type': 'text', 'criteria': 'containing', 'value': 'A Tier', 'format': a_tier_fmt})
                 worksheet.conditional_format(rng, {'type': 'text', 'criteria': 'containing', 'value': 'B Tier', 'format': b_tier_fmt})
@@ -82,24 +76,20 @@ def save_pretty_excel(df, output_path):
         logging.error(f"Failed to save Excel file: {e}")
 
 def print_tier_summary(df):
-    """Logs a summary of findings."""
     if 'Tier' not in df.columns: return
-    
     counts = df['Tier'].value_counts()
-    logging.info("--- ANALYSIS SUMMARY ---")
-    for tier in ['S Tier', 'A Tier', 'B Tier', 'C Tier']:
+    logging.info("--- PROBABILITY ANALYSIS SUMMARY ---")
+    for tier in ['S Tier', 'A Tier', 'B Tier', 'C Tier', 'Pass', 'Pass / Too Volatile', 'Trap / High Variance']:
         count = counts.get(tier, 0)
         logging.info(f"  {tier}: {count} props")
-    logging.info("------------------------")
+    logging.info("------------------------------------")
 
-def print_pretty_table(df, title="TOP 15 DISCOVERED EDGES"):
+def print_pretty_table(df, title="TOP 15 HIGHEST PROBABILITY DISCOVERIES"):
     if df.empty:
-        print("No results to display.")
+        print(f"\nNo results to display for {title}.")
         return
 
-    # Convert to string for display
     df_str = df.astype(str)
-    
     widths = []
     for col in df.columns:
         max_len = max(df_str[col].map(len).max(), len(col))
@@ -122,146 +112,159 @@ def print_pretty_table(df, title="TOP 15 DISCOVERED EDGES"):
     except Exception:
         print(df.head(15))
 
+def print_stacked_parlays(df, title):
+    if df.empty: return
+    
+    print(f"\n{title}")
+    print("=" * 65)
+    
+    for i, (_, row) in enumerate(df.iterrows(), 1):
+        prob = row['Joint Prob']
+        payout = row['Payout']
+        
+        print(f" OPTION {i}  |  Win Prob: {prob}  |  Payout: {payout}")
+        
+        picks = str(row['Picks']).split(' | ')
+        for pick in picks:
+            print(f"   [+] {pick}")
+            
+        print("-" * 65)
+
+def format_parlays_for_output(parlays):
+    rows = []
+    for p in parlays:
+        legs_str = " | ".join([f"{leg['player_name']} {leg['pick']} {leg['line']} {leg['stat_type']}" for leg in p['ticket']])
+        rows.append({
+            'Legs': p['legs'],
+            'Joint Prob': p['joint_prob'],
+            'Payout': f"{p['payout_multiplier']}x",
+            'Picks': legs_str
+        })
+    df = pd.DataFrame(rows)
+    if not df.empty:
+        df = df.sort_values(by=['Joint Prob'], ascending=[False])
+    return df
+
 def main():
     common.setup_logging(name="analysis_pregame")
-    logging.info(">>> STARTING PRE-GAME PROP ANALYSIS <<<")
+    logging.info(">>> STARTING PRE-GAME MAXIMUM PROBABILITY ANALYSIS <<<")
     
     try:
-        # 1. Load Props
         props_path = cfg.PROPS_FILE
         if not props_path.exists():
             logging.critical(f"Props file not found: {props_path}")
-            logging.critical("Please put 'props_today.csv' in the input folder.")
             return
 
-        try:
-            props_df = pd.read_csv(props_path)
-            props_df.columns = props_df.columns.str.strip()
+        props_df = pd.read_csv(props_path)
+        props_df.columns = props_df.columns.str.strip()
+        
+        if Cols.DATE in props_df.columns:
+            props_df[Cols.DATE] = pd.to_datetime(props_df[Cols.DATE], errors='coerce')
+            if props_df[Cols.DATE].isna().any():
+                props_df[Cols.DATE] = props_df[Cols.DATE].fillna(pd.Timestamp.now().normalize())
+        else:
+            props_df[Cols.DATE] = pd.Timestamp.now().normalize()
             
-            # --- Robust Date Parsing ---
-            # Ensure we have valid dates for the time-travel feature generation
-            if Cols.DATE in props_df.columns:
-                props_df[Cols.DATE] = pd.to_datetime(props_df[Cols.DATE], errors='coerce')
-                # Fill missing dates with today (assuming input is for today's games)
-                if props_df[Cols.DATE].isna().any():
-                    today = pd.Timestamp.now().normalize()
-                    props_df[Cols.DATE] = props_df[Cols.DATE].fillna(today)
-            else:
-                logging.warning(f"'{Cols.DATE}' column missing. Assuming today's date.")
-                props_df[Cols.DATE] = pd.Timestamp.now().normalize()
-                
-            logging.info(f"Loaded {len(props_df)} props.")
+        logging.info(f"Loaded {len(props_df)} props.")
 
-            # =========================================================================
-            # NEW: AUTO-SAVE TO HISTORY (Learning Loop)
-            # =========================================================================
-            try:
-                history_path = cfg.MASTER_PROP_HISTORY_FILE
-                
-                # Create a clean copy for storage
-                history_entry = props_df.copy()
-                
-                # Ensure consistent string types for key columns to prevent merge errors
-                if Cols.PLAYER_NAME in history_entry.columns:
-                    history_entry[Cols.PLAYER_NAME] = history_entry[Cols.PLAYER_NAME].astype(str)
-                if Cols.PROP_TYPE in history_entry.columns:
-                    history_entry[Cols.PROP_TYPE] = history_entry[Cols.PROP_TYPE].astype(str)
-                
-                if history_path.exists():
-                    existing_hist = pd.read_parquet(history_path)
-                    combined_hist = pd.concat([existing_hist, history_entry], ignore_index=True)
-                    
-                    # Deduplicate: Keep the LATEST entry for a specific player/date/prop
-                    # This allows you to update lines during the day and keep the final closing line
-                    dedup_cols = [c for c in [Cols.PLAYER_NAME, Cols.DATE, Cols.PROP_TYPE] if c in combined_hist.columns]
-                    if dedup_cols:
-                        combined_hist.drop_duplicates(subset=dedup_cols, keep='last', inplace=True)
-                    
-                    combined_hist.to_parquet(history_path, index=False)
-                    logging.info(f"Updated Prop History. Total records: {len(combined_hist)}")
-                else:
-                    history_entry.to_parquet(history_path, index=False)
-                    logging.info(f"Created new Prop History file at {history_path}")
-                    
-            except Exception as e:
-                # Don't crash the analysis if history saving fails, just warn
-                logging.warning(f"Failed to save prop history (Learning loop will be unaffected for this run): {e}")
-            # =========================================================================
-            
-        except Exception as e:
-            logging.critical(f"Failed to read props file: {e}")
-            return
-
-        # 2. Build Features
         features_df = generator.build_feature_set(props_df)
         if features_df.empty: 
             logging.error("Feature generation returned empty dataframe.")
             return
 
-        # 3. Run Inference
-        logging.info("Running Machine Learning Inference...")
+        logging.info("Running Probabilistic Inference Engine...")
         results_df = inference.predict_props(features_df)
         
         if results_df is None or results_df.empty:
-            logging.warning("No predictions were generated. Check model artifacts or input data.")
+            logging.warning("No predictions generated.")
             return
 
-        # 4. Sorting & Ranking
         if '_Sort_Diff' not in results_df.columns: results_df['_Sort_Diff'] = 0.0
-        if 'Tier' not in results_df.columns: results_df['Tier'] = 'C Tier'
+        if 'Tier' not in results_df.columns: results_df['Tier'] = 'Pass'
         
-        # S Tier = 0, A Tier = 1, etc.
-        tier_map = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3}
+        tier_map = {'S Tier': 0, 'A Tier': 1, 'B Tier': 2, 'C Tier': 3, 'Pass': 4, 'Pass / Too Volatile': 5, 'Trap / High Variance': 6}
         results_df['Tier_Rank'] = results_df['Tier'].map(tier_map).fillna(99)
-        
-        # Sort by Tier (asc) then by Edge Size (desc)
         results_df.sort_values(by=['Tier_Rank', '_Sort_Diff'], ascending=[True, False], inplace=True)
         
-        # Log Summary before formatting destroys numeric types
-        print_tier_summary(results_df)
-
-        # 5. Format Output
-        # Clean Date String for display
         if Cols.DATE in results_df.columns:
             results_df[Cols.DATE] = pd.to_datetime(results_df[Cols.DATE]).dt.strftime('%Y-%m-%d')
 
-        # Rename to Final Output Columns
-        rename_map = {
-            Cols.PLAYER_NAME: 'Player',
-            Cols.PROP_TYPE: 'Prop',
-            Cols.PROP_LINE: 'Line',
-            Cols.DATE: 'Date',
-        }
+        rename_map = {Cols.PLAYER_NAME: 'Player', Cols.PROP_TYPE: 'Prop', Cols.PROP_LINE: 'Line', Cols.DATE: 'Date'}
         results_df.rename(columns=rename_map, inplace=True)
 
-        # Select Columns (Strictly keeping user preferred format)
-        keep_cols = [
-            'Player', 'Team', 'Opponent', 'Prop', 'Line', 
-            'Proj', 'Prob', 'Pick', 'Tier', 
-            'Date'
-        ]
-        
+        print_tier_summary(results_df)
+
+        # --- PARLAY OPTIMIZER INTEGRATION ---
+        logging.info("Initializing Maximum Probability Parlay Optimizer...")
+        try:
+            hist_df = pd.read_parquet(cfg.MASTER_BOX_SCORES_FILE) 
+            optimizer = ParlayOptimizer(historical_data=hist_df)
+            
+            daily_props_for_parlays = []
+            for _, row in results_df.iterrows():
+                prob_val = row['Prob'] 
+                
+                teams = sorted([str(row['Team']), str(row['Opponent'])])
+                game_id = f"{row['Date']}_{teams[0]}_{teams[1]}"
+                
+                daily_props_for_parlays.append({
+                    'player_name': row['Player'],
+                    'team': row['Team'],
+                    'opponent': row['Opponent'],
+                    'game_id': game_id,
+                    'position': row.get('Position', 'UNK'),
+                    'stat_type': row['Prop'],
+                    'win_prob': prob_val,
+                    'pick': row['Pick'],
+                    'line': row['Line'],
+                    'Tier': row['Tier'] 
+                })
+                
+            top_parlays = optimizer.optimize_parlays(daily_props_for_parlays, min_legs=2, max_legs=8, top_n=10)
+            parlays_df = format_parlays_for_output(top_parlays)
+            
+        except Exception as e:
+            logging.error(f"Parlay Optimizer failed: {e}", exc_info=True)
+            parlays_df = pd.DataFrame()
+
+
+        # --- FINAL CONSOLE AND FILE OUTPUTS ---
+        keep_cols = ['Player', 'Team', 'Opponent', 'Prop', 'Line', 'Proj', 'Prob', 'Pick', 'Consistency_CV', 'Active_Hit%', 'Tier', 'Date']
         final_cols = [c for c in keep_cols if c in results_df.columns]
         final_output = results_df[final_cols].copy()
 
-        # 6. Save Files
-        # Save Parquet (System)
         final_output.to_parquet(cfg.PROCESSED_OUTPUT_SYSTEM, index=False)
-        logging.info(f"Saved system results to {cfg.PROCESSED_OUTPUT_SYSTEM}")
+        save_pretty_excel(final_output, cfg.PROCESSED_OUTPUT_XLSX, sheet_name='High_Prob_Picks')
         
-        # Save Excel (User - Pretty)
-        save_pretty_excel(final_output, cfg.PROCESSED_OUTPUT_XLSX)
-        
-        # 7. Console Display
+        if not parlays_df.empty:
+            parlay_output_path = cfg.OUTPUT_DIR / "processed_parlays.csv"
+            parlays_df.to_csv(parlay_output_path, index=False)
+            logging.info(f"Saved {len(parlays_df)} parlay combinations to {parlay_output_path}")
+
         console_output = final_output.copy()
         if 'Prob' in console_output.columns:
-            # Format Prob as % string for console only
-            if pd.api.types.is_numeric_dtype(console_output['Prob']):
-                console_output['Prob'] = console_output['Prob'].apply(lambda x: f"{x*100:.1f}%")
+            console_output['Prob'] = console_output['Prob'].apply(lambda x: f"{x*100:.1f}%" if pd.notna(x) else x)
+        if 'Active_Hit%' in console_output.columns:
+            console_output['Active_Hit%'] = console_output['Active_Hit%'].apply(lambda x: f"{x:.1f}%" if pd.notna(x) else x)
+        if 'Consistency_CV' in console_output.columns:
+            console_output['Consistency_CV'] = console_output['Consistency_CV'].apply(lambda x: f"{x:.2f}" if pd.notna(x) else x)
             
-        print_pretty_table(console_output.head(15))
-
-        logging.info("<<< ANALYSIS COMPLETE >>>")
+        print_pretty_table(console_output.head(15), title="TOP 15 HIGHEST PROBABILITY STRAIGHT PICKS")
+        
+        if not parlays_df.empty:
+            console_parlays = parlays_df.copy()
+            console_parlays['Joint Prob'] = console_parlays['Joint Prob'].apply(lambda x: f"{x*100:.2f}%")
+            
+            print("\n" + "="*80)
+            print(" TOP UNDERDOG PARLAYS BY MAXIMUM WIN PROBABILITY (PER LEG COUNT)")
+            print("="*80)
+            
+            for leg_count in range(2, 9):
+                leg_df = console_parlays[console_parlays['Legs'] == leg_count]
+                if not leg_df.empty:
+                    print_stacked_parlays(leg_df.head(3), title=f"TOP {leg_count}-LEG PARLAYS")
+            
+        logging.info("<<< PROBABILITY ANALYSIS COMPLETE >>>")
         
     except Exception as e:
         logging.critical(f"FATAL ERROR in Analysis Pipeline: {e}", exc_info=True)

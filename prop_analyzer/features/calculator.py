@@ -1,260 +1,208 @@
 import numpy as np
 import pandas as pd
 import logging
-from scipy.stats import nbinom
+import math
+from scipy.stats import nbinom, poisson, norm
+
+# Silence Pandas 2.1.0+ FutureWarnings regarding silent downcasting
+pd.set_option('future.no_silent_downcasting', True)
+
+# ====================================================================
+# HELPERS: FEATURE ENGINEERING & INFERENCE
+# ====================================================================
+
+def winsorize_series(series, limit=0.10):
+    """
+    Caps outlier performances using an expanding window.
+    This completely eliminates lookahead bias (target leakage) by ensuring
+    a player's future performances don't artificially raise their clipping threshold today.
+    """
+    clean = series.dropna()
+    if len(clean) < 5: 
+        return series
+    
+    # Calculate the rolling percentile dynamically (e.g., 90th percentile)
+    # Uses data strictly BEFORE or INCLUDING the current row
+    expanding_thresholds = clean.expanding(min_periods=5).quantile(1.0 - limit)
+    
+    # Prevent clipping the first 4 games by setting their threshold to infinity
+    expanding_thresholds = expanding_thresholds.fillna(float('inf'))
+    
+    # Apply the mathematically honest, time-aware clipping
+    capped = clean.clip(upper=expanding_thresholds).infer_objects(copy=False)
+    
+    # Re-align with the original series index to restore any NaNs properly
+    return capped.reindex(series.index)
+
+def calculate_dynamic_hit_rates(past_performances, benchmark):
+    """
+    Calculates hit rates against a specific historical benchmark over multiple windows.
+    past_performances should be ordered oldest to newest.
+    """
+    if not past_performances or pd.isna(benchmark):
+        return {
+            'L5_HIT_RATE': 0.0, 'L10_HIT_RATE': 0.0, 'L20_HIT_RATE': 0.0, 'SZN_HIT_RATE': 0.0,
+            'L5_OVER_RATE': 0.0, 'L10_OVER_RATE': 0.0, 'L20_OVER_RATE': 0.0, 'SZN_OVER_RATE': 0.0,
+            'L5_UNDER_RATE': 0.0, 'L10_UNDER_RATE': 0.0, 'L20_UNDER_RATE': 0.0, 'SZN_UNDER_RATE': 0.0
+        }
+    
+    # Reverse so index 0 is the most recent game
+    recent = past_performances[::-1]
+    
+    # Legacy hits for Machine Learning Features (Preserves >=)
+    legacy_hits = [1 if x >= benchmark else 0 for x in recent]
+    
+    # Accurate separated Win Rates (Resolves integer line Push logic)
+    over_hits = [1 if x > benchmark else 0 for x in recent]
+    under_hits = [1 if x < benchmark else 0 for x in recent]
+    
+    def safe_mean(lst):
+        return sum(lst) / len(lst) if lst else 0.0
+        
+    return {
+        'L5_HIT_RATE': safe_mean(legacy_hits[:5]),
+        'L10_HIT_RATE': safe_mean(legacy_hits[:10]),
+        'L20_HIT_RATE': safe_mean(legacy_hits[:20]),
+        'SZN_HIT_RATE': safe_mean(legacy_hits),
+        
+        'L5_OVER_RATE': safe_mean(over_hits[:5]),
+        'L10_OVER_RATE': safe_mean(over_hits[:10]),
+        'L20_OVER_RATE': safe_mean(over_hits[:20]),
+        'SZN_OVER_RATE': safe_mean(over_hits),
+        
+        'L5_UNDER_RATE': safe_mean(under_hits[:5]),
+        'L10_UNDER_RATE': safe_mean(under_hits[:10]),
+        'L20_UNDER_RATE': safe_mean(under_hits[:20]),
+        'SZN_UNDER_RATE': safe_mean(under_hits)
+    }
 
 def calculate_bayesian_std(series, method='neg_binomial', shrinkage_param=10.0, dispersion=0.15):
-    """
-    Calculates a blended Standard Deviation that shrinks towards a theoretical 
-    prior (Negative Binomial) when sample size is small.
-    
-    Improvements:
-    - Uses Negative Binomial assumption (Mean < Variance) instead of Poisson (Mean = Variance).
-    - NBA stats are over-dispersed; Poisson underestimates volatility for high-usage players.
-    
-    Formula: 
-        Weight = N / (N + K)
-        Final_Std = (Weight * Actual_Std) + ((1 - Weight) * Theoretical_Std)
-    
-    Args:
-        series (pd.Series): The data to calculate volatility for.
-        method (str): 'neg_binomial' (default) or 'poisson'.
-        shrinkage_param (float): 'K' parameter. Higher values mean we trust the prior longer.
-        dispersion (float): 'alpha' parameter for NegBinomial. 
-                            Var = Mean + (alpha * Mean^2). 
-                            0.15 is a conservative baseline for NBA player props.
-    """
+    """Calculates a blended Standard Deviation shrinking towards a theoretical prior."""
     clean_series = series.dropna()
     n = len(clean_series)
     
-    if n == 0:
-        return 0.0
+    if n == 0: return 0.0
     
-    # 1. Calculate Actual Sample Statistics
     actual_mean = clean_series.mean()
     actual_std = clean_series.std(ddof=1) if n > 1 else 0.0
     
-    if actual_mean <= 0:
-        return 0.0
+    if actual_mean <= 0: return 0.0
 
-    # 2. Calculate Theoretical Prior
     if method == 'poisson':
-        # Old method: Underestimates volatility for stars (Mean = Variance)
         theoretical_std = np.sqrt(actual_mean)
     else:
-        # New method: Negative Binomial (Over-Dispersed)
-        # Variance = Mean + (alpha * Mean^2)
-        # This accurately captures that higher averages come with exponentially higher variance
         theoretical_var = actual_mean + (dispersion * (actual_mean ** 2))
         theoretical_std = np.sqrt(theoretical_var)
     
-    # 3. Calculate Shrinkage Weight (0.0 to 1.0)
-    # As N increases, weight -> 1.0 (Trust Data). As N -> 0, weight -> 0.0 (Trust Prior).
     weight = n / (n + shrinkage_param)
-    
-    # 4. Blend
     final_std = (weight * actual_std) + ((1.0 - weight) * theoretical_std)
     
     return final_std
 
-def calculate_slope(series):
-    """
-    Calculates the slope of the linear regression line for the series.
-    Positive slope = Trending Up. Negative slope = Trending Down.
-    """
-    y = series.dropna().values
-    n = len(y)
-    if n < 2:
-        return 0.0
-    
-    x = np.arange(n)
-    # Simple linear regression slope formula
-    slope = (n * np.sum(x * y) - np.sum(x) * np.sum(y)) / (n * np.sum(x**2) - (np.sum(x))**2)
-    return slope
-
-def calculate_hit_rates(series, lines):
-    """
-    Calculates frequency of hitting Over various lines.
-    
-    Args:
-        series: Historic values.
-        lines: List of thresholds (e.g., [10.5, 15.5]) or single float.
-    
-    Returns:
-        float or dict of Hit Rates.
-    """
-    clean = series.dropna()
-    if len(clean) == 0:
-        return 0.0
-    
-    if isinstance(lines, (list, tuple)):
-        results = {}
-        for line in lines:
-            results[f'hit_{line}'] = (clean > line).mean()
-        return results
-    else:
-        return (clean > lines).mean()
-
-def calculate_player_metrics(history_df, stat_col, timeframe=None):
-    """
-    Core function to generate features for a specific stat column.
-    
-    Args:
-        history_df (pd.DataFrame): Player's game log.
-        stat_col (str): The column to analyze (e.g., 'PTS').
-        timeframe (int): Optional limit (e.g., Last 10 games).
-    
-    Returns:
-        dict: Statistical features.
-    """
-    if history_df is None or history_df.empty or stat_col not in history_df.columns:
-        return {
-            'avg': 0, 'std': 0, 'min': 0, 'max': 0, 'median': 0,
-            'trend_slope': 0, 'last_3_avg': 0
-        }
-    
-    # Apply timeframe filter if provided
-    if timeframe:
-        data = history_df[stat_col].tail(timeframe)
-    else:
-        data = history_df[stat_col]
-        
-    data = data.dropna()
-    if data.empty:
-        return {'avg': 0, 'std': 0}
-
-    # Calculate metrics
-    avg = data.mean()
-    median = data.median()
-    
-    # Use Dynamic Bayesian Blending for Volatility with Negative Binomial Prior
-    # K=8 represents roughly 1/10th of a season
-    std_dev = calculate_bayesian_std(data, shrinkage_param=8.0, method='neg_binomial')
-    
-    # Trend
-    slope = calculate_slope(data)
-    
-    # Recent Form (Exponential Moving Average of last 3 weighted heavily)
-    last_3 = data.tail(3)
-    recent_avg = last_3.mean() if not last_3.empty else avg
-
-    return {
-        'avg': avg,
-        'std': std_dev,
-        'min': data.min(),
-        'max': data.max(),
-        'median': median,
-        'trend_slope': slope,
-        'recent_avg': recent_avg,
-        'count': len(data)
-    }
-
-def calculate_live_vacancy(team_roster_df):
-    """
-    Calculates the 'Vacancy' (Missing Usage/Minutes) for a team based on current injuries.
-    
-    Improvements:
-    1. Uses probabilistic weights for Status (Questionable = 50% impact).
-    2. Aggregates by Position (Guard/Forward/Center) to give context on WHO gets the usage.
-    3. Added safety checks to prevent runaway sums.
-    
-    Args:
-        team_roster_df (pd.DataFrame): Must contain ['STATUS', 'USG%', 'MIN', 'Pos']
-    
-    Returns:
-        dict: {
-            'TEAM_MISSING_USG': float,
-            'TEAM_MISSING_MIN': float,
-            'MISSING_USG_G': float,
-            'MISSING_USG_F': float,
-            'MISSING_USG_C': float
-        }
-    """
-    metrics = {
-        'TEAM_MISSING_USG': 0.0,
-        'TEAM_MISSING_MIN': 0.0,
-        'MISSING_USG_G': 0.0,
-        'MISSING_USG_F': 0.0,
-        'MISSING_USG_C': 0.0
-    }
-    
-    if team_roster_df is None or team_roster_df.empty:
-        return metrics
-    
-    required = ['STATUS', 'USG%', 'MIN']
-    if not all(col in team_roster_df.columns for col in required):
-        return metrics
-
-    # Normalize Status
-    def get_injury_weight(status):
-        s = str(status).upper().strip()
-        if s in ['OUT', 'GTD']: return 1.0  # Treat GTD broadly or check source. Usually OUT/INJURED.
-        if 'DOUBTFUL' in s: return 0.75
-        if 'QUESTIONABLE' in s: return 0.50
-        return 0.0
-
-    # Ensure numeric columns
-    df = team_roster_df.copy()
-    df['USG%'] = pd.to_numeric(df['USG%'], errors='coerce').fillna(0)
-    df['MIN'] = pd.to_numeric(df['MIN'], errors='coerce').fillna(0)
-    
-    # Calculate Impact
-    df['Impact_Weight'] = df['STATUS'].apply(get_injury_weight)
-    
-    # Filter to only rows with impact > 0
-    injured_df = df[df['Impact_Weight'] > 0].copy()
-    
-    if injured_df.empty:
-        return metrics
-
-    # 1. Team Totals
-    # Note: Usage sums can exceed 100 theoretically if we just sum straight values, 
-    # but in context of "missing", simple summation is the standard feature proxy.
-    metrics['TEAM_MISSING_USG'] = (injured_df['USG%'] * injured_df['Impact_Weight']).sum()
-    metrics['TEAM_MISSING_MIN'] = (injured_df['MIN'] * injured_df['Impact_Weight']).sum()
-    
-    # 2. Positional Breakdowns
-    if 'Pos' in df.columns:
-        def categorize_pos(p):
-            p = str(p).upper()
-            if 'G' in p: return 'G'
-            if 'F' in p: return 'F'
-            if 'C' in p: return 'C'
-            return 'X'
-
-        injured_df['Gen_Pos'] = injured_df['Pos'].apply(categorize_pos)
-        
-        # Calculate weighted usage per position group
-        for pos_code in ['G', 'F', 'C']:
-            pos_mask = injured_df['Gen_Pos'] == pos_code
-            val = (injured_df.loc[pos_mask, 'USG%'] * injured_df.loc[pos_mask, 'Impact_Weight']).sum()
-            metrics[f'MISSING_USG_{pos_code}'] = val
-
-    return metrics
-
 def smooth_projection(raw_proj, season_avg, recent_avg, volatility):
-    """
-    Weighted ensemble of the raw model projection and simple baselines 
-    to prevent overfitting on outliers.
-    
-    Logic: If volatility is high, trust the long-term Season Avg more.
-           If volatility is low (consistent player), trust the Model/Recent.
-    """
-    # Defensive checks
     if pd.isna(raw_proj): raw_proj = season_avg
     if pd.isna(recent_avg): recent_avg = season_avg
     if pd.isna(volatility) or volatility <= 0: volatility = 1.0
     
-    # Establish trust weights
-    # High volatility = Lower trust in recent variance/model spikes
-    # Example: Vol=10 (High) -> trust_recent approx 0.3
-    #          Vol=2 (Low)   -> trust_recent approx 0.8
     trust_recent = 1.0 / (1.0 + (volatility / 5.0))
-    
-    # Weighted Average
-    # 50% Model, remaining 50% split between Recent and Season based on trust
-    final_proj = (0.50 * raw_proj) + \
-                 (0.50 * trust_recent * recent_avg) + \
-                 (0.50 * (1 - trust_recent) * season_avg)
-                 
+    # Trust the ML model heavily (90%). Only use averages as a 10% smoothing anchor to prevent extreme edge cases.
+    final_proj = (0.90 * raw_proj) + (0.10 * trust_recent * recent_avg) + (0.10 * (1 - trust_recent) * season_avg)
     return final_proj
+
+# ====================================================================
+# PROBABILISTIC / BETTING FUNCTIONS
+# ====================================================================
+
+def estimate_combo_variance(prop_type, proj, std_dev, base_stds=None, correlations=None, sample_size=15):
+    """Estimates variance for Combo Props using baseline historical covariance matrices and dynamic correlations."""
+    
+    # FIX: Structural NBA Variances are naturally high. 
+    # Use 35% to 45% of the projected mean as the absolute minimum standard deviation.
+    if prop_type in ['PRA', 'PR', 'PA']:
+        base_variance = (proj * 0.40) ** 2
+    elif prop_type in ['PTS', 'REB', 'AST', 'RA']:
+        base_variance = (proj * 0.45) ** 2
+    else:
+        base_variance = (max(proj * 0.35, 1.0)) ** 2
+        
+    # Force minimal overdispersion scaling
+    base_variance = max(base_variance, proj * 1.05)
+    
+    if not correlations:
+        correlations = {'PTS_REB': 0.25, 'PTS_AST': 0.25, 'REB_AST': 0.25}
+        
+    # Calculate Structural Covariance
+    if prop_type in ['PRA', 'PR', 'PA', 'RA'] and base_stds:
+        var_pts = base_stds.get('PTS', proj*0.2)**2
+        var_reb = base_stds.get('REB', proj*0.1)**2
+        var_ast = base_stds.get('AST', proj*0.1)**2
+        
+        cov_pr = correlations.get('PTS_REB', 0.25) * math.sqrt(var_pts * var_reb)
+        cov_pa = correlations.get('PTS_AST', 0.25) * math.sqrt(var_pts * var_ast)
+        cov_ra = correlations.get('REB_AST', 0.25) * math.sqrt(var_reb * var_ast)
+        
+        if prop_type == 'PRA':
+            base_variance = max(base_variance, var_pts + var_reb + var_ast + 2*cov_pr + 2*cov_pa + 2*cov_ra)
+        elif prop_type == 'PR':
+            base_variance = max(base_variance, var_pts + var_reb + 2*cov_pr)
+        elif prop_type == 'PA':
+            base_variance = max(base_variance, var_pts + var_ast + 2*cov_pa)
+        elif prop_type == 'RA':
+            base_variance = max(base_variance, var_reb + var_ast + 2*cov_ra)
+            
+    recent_variance = std_dev ** 2 if not pd.isna(std_dev) and std_dev > 0 else base_variance
+    
+    # Bayesian Shrinkage
+    weight = min(sample_size / 20.0, 0.90)  
+    
+    final_variance = (base_variance * (1.0 - weight)) + (recent_variance * weight)
+        
+    # FIX: Ensure mathematical overdispersion for discrete modeling
+    return max(final_variance, proj * 1.05)
+
+def get_discrete_probabilities(proj, line, historical_variance, dist_type='normal', tweedie_power=1.5):
+    """Calculates probabilities accurately accounting for Tweedie dispersion and whole/half point lines."""
+    if proj > 0 and historical_variance > 0:
+        phi = historical_variance / (proj ** tweedie_power)
+    else:
+        phi = 1.0
+        
+    dynamic_variance = phi * (proj ** tweedie_power)
+    
+    # FIX: Force strict overdispersion so Negative Binomial mathematically functions without collapsing
+    variance = max(dynamic_variance, proj * 1.05)
+    
+    std_dev = math.sqrt(variance)
+    is_whole_line = (line % 1 == 0)
+    
+    loss_threshold = math.floor(line - 0.01)
+    
+    if proj <= 0: return {'win': 0.0, 'push': 0.0, 'loss': 1.0}
+
+    try:
+        if dist_type in ['poisson', 'nbinom']:
+            if variance <= proj:
+                # Fallback to Poisson if mathematically trapped
+                p_loss_strict = poisson.cdf(loss_threshold, proj)
+                p_push = poisson.pmf(int(line), proj) if is_whole_line else 0.0
+            else:
+                p = proj / variance
+                n = (proj ** 2) / (variance - proj)
+                p_loss_strict = nbinom.cdf(loss_threshold, n, p)
+                p_push = nbinom.pmf(int(line), n, p) if is_whole_line else 0.0
+        else:
+            p_loss_strict = norm.cdf(line - 0.5, loc=proj, scale=std_dev) if is_whole_line else norm.cdf(line, loc=proj, scale=std_dev)
+            if is_whole_line:
+                p_push = norm.cdf(line + 0.5, loc=proj, scale=std_dev) - norm.cdf(line - 0.5, loc=proj, scale=std_dev)
+            else:
+                p_push = 0.0
+                
+        p_win = 1.0 - p_loss_strict - p_push
+        return {
+            'win': max(min(p_win, 1.0), 0.0), 
+            'push': max(min(p_push, 1.0), 0.0), 
+            'loss': max(min(p_loss_strict, 1.0), 0.0) 
+        }
+    except Exception as e:
+        logging.warning(f"Error calculating distribution prob: {e}")
+        return {'win': 0.5, 'push': 0.0, 'loss': 0.5}
